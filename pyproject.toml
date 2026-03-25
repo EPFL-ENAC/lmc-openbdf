@@ -1,24 +1,17 @@
 [project]
-name = "frame-cli"
+name = "openbdf"
 dynamic = ["version"]
-description = "Command line interface for managing FRAME hybrid models"
+description = "Command line interface for working with OpenBDF 2.0 files"
 authors = [
-	{ name = "Son Pham-Ba", email = "son.phamba@epfl.ch" },
+	{ name = "Cyprien Lengagne", email = "cyprien.lengagne@epfl.ch" },
 ]
 license = {text = "GPL-3.0-or-later"}
 readme = "README.md"
 requires-python = ">=3.10,<3.14"
 
 dependencies = [
-	"gitpython~=3.1.43",
-	"pip>=25.1.1",
-	"pydantic~=2.11.4",
-	"pygithub>=2.6.1",
-	"python-dotenv~=1.0.1",
-	"pyyaml>=6.0.2",
-	"requests~=2.32.3",
 	"rich~=13.9.3",
-	"sphinx-press-theme>=0.9.1",
+	"sqlmodel>=0.0.37",
 	"typer~=0.15.1",
 ]
 
@@ -44,25 +37,28 @@ doc = [
 ]
 
 [project.urls]
-repository = "https://github.com/CHANGE-EPFL/frame-project-cli"
+repository = "https://github.com/EPFL-ENAC/lmc-openbdf"
 
 [build-system]
 requires = ["setuptools>=76.0.0", "setuptools_scm[toml]>=8.2.0"]
 build-backend = "setuptools.build_meta"
 
+[tool.pytest.ini_options]
+addopts = "--cov=openbdf --cov-report term-missing --cov-report xml --cov-report lcov:lcov.info"
+testpaths = [
+    "tests",
+]
+
 [tool.setuptools]
-packages = ["frame_cli"]
+packages = ["openbdf"]
 
 [tool.setuptools_scm]
 
 [project.scripts]
-frame = "frame_cli.main:app"
+openbdf = "openbdf.main:app"
 
-[tool.pytest.ini_options]
-addopts = "--cov=frame_cli --cov-report term-missing --cov-report xml --cov-report lcov:lcov.info"
-testpaths = [
-    "tests",
-]
+[tool.mypy]
+plugins = ["pydantic.mypy"]
 
 [tool.ruff]
 line-length = 120
@@ -70,9 +66,6 @@ preview = true
 
 [tool.codespell]
 skip = 'uv.lock,docs/_static/custom.css'
-
-[tool.uv.sources]
-frame-api = { git = "https://github.com/CHANGE-EPFL/frame-project", subdirectory = "backend" }
 
 [tool.uv.workspace]
 members = [
