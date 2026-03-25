@@ -1,4 +1,4 @@
-from model.enums.openbdf_enum import OpenBDFEnum
+from .openbdf_enum import OpenBDFEnum
 
 
 class LCAModel(OpenBDFEnum):
