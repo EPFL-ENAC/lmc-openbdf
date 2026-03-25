@@ -56,7 +56,7 @@ packages = ["openbdf"]
 [tool.setuptools_scm]
 
 [project.scripts]
-openbdf = "openbdf_cli.main:app"
+openbdf = "openbdf.main:app"
 
 [tool.mypy]
 plugins = ["pydantic.mypy"]
