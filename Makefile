@@ -9,4 +9,4 @@ build:
 	uv run python -m build
 
 test:
-	uv run pytest
+	uv run --extra dev pytest
