@@ -1,7 +1,7 @@
 import pytest
 from typer.testing import CliRunner
 
-from frame_cli.main import app
+from openbdf_cli.main import app
 
 runner = CliRunner()
 

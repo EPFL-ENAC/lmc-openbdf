@@ -1,42 +1,33 @@
 from __future__ import annotations
 
 from decimal import Decimal
-from typing import TYPE_CHECKING, Optional
+from typing import Optional
 
-from sqlalchemy import Column, Integer, Numeric, String
-from sqlalchemy import Enum as SAEnum
-from sqlmodel import Column, Field, Numeric, Relationship, SQLModel, String
+from sqlmodel import Column, Field, Integer, Numeric, Relationship, SQLModel, String
 from sqlmodel import Enum as SAEnum
 
 # Assuming these enums exist based on the CSV "Categorical (Predefined)" status
-from model.enums.buildings import AboveBelowGround
-from model.enums.element_classifications import OpenBDFBuildingElementClassification
-from model.enums.materials import OpenBDFMaterialClassification
-from model.field_metadata import openbdf_field_metadata
-from model.general_info import ProjectRecord
-
-if TYPE_CHECKING:
-    from model.general_info import ProjectRecord
+from .enums.buildings import AboveBelowGround
+from .enums.element_classifications import OpenBDFBuildingElementClassification
+from .enums.materials import OpenBDFMaterialClassification
+from .field_metadata import openbdf_field_metadata
+from .general_info import ProjectRecord
 
 
 class BuildingBillMaterialsSlimRecordBase(SQLModel):
     floor_level: int = Field(
-        default=None,
-        sa_column=Column(Integer, nullable=True),
+        sa_column=Column(Integer),
         description="Storey of the building element.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Floor level",
             field_code="floor_level",
             description="Storey of the building element.",
-            constraint="dropdown",
-            units="none",
             requirements="Required",
         ),
     )
 
     above_below_ground: AboveBelowGround = Field(
-        default=None,
-        sa_column=Column(SAEnum(AboveBelowGround), nullable=True),
+        sa_column=Column(SAEnum(AboveBelowGround)),
         description="Position of the finished floor level relative to the natural or finished ground elevation.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Above/Below Ground",
@@ -48,8 +39,7 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
     )
 
     bec_custom_tier1: str = Field(
-        default=None,
-        sa_column=Column(String(200), nullable=True),
+        sa_column=Column(String(200)),
         description="Primary (top-level) hierarchical category of the custom or national building element classification.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Element Class (Tier 1)",
@@ -62,8 +52,7 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
     )
 
     bec_custom_tier2: str = Field(
-        default=None,
-        sa_column=Column(String(200), nullable=True),
+        sa_column=Column(String(200)),
         description="Secondary hierarchical category of the custom or national building element classification.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Element Class (Tier 2)",
@@ -158,8 +147,7 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
     )
 
     material_name_custom: str = Field(
-        default=None,
-        sa_column=Column(String(200), nullable=True),
+        sa_column=Column(String(200)),
         description="The specific, user-defined identifier for the material.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Material Name (or ID)",
@@ -269,7 +257,7 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
         ),
     )
 
-    custom_material_weight_kg: Decimal = Field(
+    custom_material_weight_kg: Optional[Decimal] = Field(
         default=None,
         sa_column=Column(Numeric, nullable=True),
         description="The absolute physical mass of the custom material.",
@@ -304,7 +292,7 @@ class BuildingBillMaterialsSlimRecord(BuildingBillMaterialsSlimRecordBase, table
     id: Optional[int] = Field(default=None, primary_key=True)
 
     # Relationship to Project
-    project_id: Optional[int] = Field(default=None, foreign_key="project_record.id", nullable=False)
+    project_id: int = Field(foreign_key="project_record.id", nullable=False)
 
     # Linking back to the Project model
     project: Optional["ProjectRecord"] = Relationship(back_populates="bill_of_materials")

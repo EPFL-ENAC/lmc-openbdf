@@ -1,18 +1,18 @@
-from typing import Any, Optional
+from typing import Any
 
 
 def openbdf_field_metadata(
     *,
-    group: Optional[str] = None,
-    sub_group: Optional[str] = None,
+    group: str | None = None,
+    sub_group: str | None = None,
     attribute_name: str,
     field_code: str,
     description: str,
-    constraint: Optional[str] = None,
-    units: Optional[str] = None,
-    requirements: Optional[str] = None,
-    reference_formats: Optional[dict[str, Any]] = None,
-    example: Optional[str] = None,
+    constraint: str | None = None,
+    units: str | None = None,
+    requirements: str | None = None,
+    reference_formats: dict[str, Any] | None = None,
+    example: str | None = None,
 ) -> dict[str, Any]:
     return {
         "json_schema_extra": {

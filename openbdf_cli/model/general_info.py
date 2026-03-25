@@ -8,29 +8,29 @@ from sqlalchemy import JSON, Column, Date, Integer, Numeric, String
 from sqlalchemy import Enum as SAEnum
 from sqlmodel import Field, Relationship, SQLModel
 
-from model.enums.buildings import (
+from .enums.buildings import (
     BuildingFacingDirection,
     BuildingTypology,
     FoundationType,
     GFAMeasurementMethod,
     GrossFloorAreaStandard,
 )
-from model.enums.countries import Country
-from model.enums.energy import BuildingEnergyClassificationSystem, PrimaryEnergySource
-from model.enums.geography import ASHRAEClimateZone, FEMASeismicActivity, SoilType
-from model.enums.lca import (
+from .enums.countries import Country
+from .enums.energy import BuildingEnergyClassificationSystem, PrimaryEnergySource
+from .enums.geography import ASHRAEClimateZone, FEMASeismicActivity, SoilType
+from .enums.lca import (
     BiogenicCarbonAccounting,
     LCAModel,
     LCATemporalApproach,
     LCIAMethodology,
     LifeCycleStage_ISO14040_44,
 )
-from model.enums.materials import MaterialQuantitiesSource
-from model.enums.project import ConstructionType, ProjectPhase, ProjectUnits
-from model.field_metadata import openbdf_field_metadata
+from .enums.materials import MaterialQuantitiesSource
+from .enums.project import ConstructionType, ProjectPhase, ProjectUnits
+from .field_metadata import openbdf_field_metadata
 
 if TYPE_CHECKING:
-    from model.building_bill_materials_slim import BuildingBillMaterialsSlimRecord
+    from .building_bill_materials_slim import BuildingBillMaterialsSlimRecord
 
 
 class ProjectRecordBase(SQLModel):
@@ -153,7 +153,7 @@ class ProjectRecordBase(SQLModel):
 
     project_state: Optional[str] = Field(
         default=None,
-        sa_column=Column(String(200)),
+        sa_column=Column(String(200), nullable=True),
         description="State, province, or country subdivision.",
         schema_extra=openbdf_field_metadata(
             group="Project",
@@ -301,7 +301,7 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    pooject_certification_date: Optional[date] = Field(
+    project_certification_date: Optional[date] = Field(
         default=None,
         sa_column=Column(Date, nullable=True),
         description="Date of certification application.",
@@ -309,7 +309,7 @@ class ProjectRecordBase(SQLModel):
             group="Project",
             sub_group="Administrative data",
             attribute_name="Certification application date",
-            field_code="pooject_certification_date",
+            field_code="project_certification_date",
             description=("Date of application for the sustainability certification for the project."),
             constraint="ISO date",
             units="#",
@@ -335,9 +335,9 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    project_permit_date: Optional[str] = Field(
+    project_permit_date: Optional[date] = Field(
         default=None,
-        sa_column=Column(String(200), nullable=True),
+        sa_column=Column(Date, nullable=True),
         description="Date of application for construction permit.",
         schema_extra=openbdf_field_metadata(
             group="Project",
@@ -345,7 +345,7 @@ class ProjectRecordBase(SQLModel):
             attribute_name="Project permit application date",
             field_code="project_permit_date",
             description="Date of application for construction permit.",
-            constraint="string < 200 characters",
+            constraint="ISO date",
             units="none",
             requirements="Recommended",
             example="08/02/2026",
@@ -1166,14 +1166,14 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    building_gross_floor_area_definiton: GrossFloorAreaStandard = Field(
+    building_gross_floor_area_definition: GrossFloorAreaStandard = Field(
         sa_column=Column(SAEnum(GrossFloorAreaStandard)),
         description="Definition of GFA according to national standards.",
         schema_extra=openbdf_field_metadata(
             group="Building",
             sub_group="Building data (geometry)",
             attribute_name="Gross floor area (GFA) Definition",
-            field_code="building_gross_floor_area_definiton",
+            field_code="building_gross_floor_area_definition",
             description="Definition according to national standards",
             units="none",
             requirements="Required",
@@ -1294,7 +1294,7 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    Building_enclosed_parking_area: Optional[Decimal] = Field(
+    building_enclosed_parking_area: Optional[Decimal] = Field(
         default=None,
         sa_column=Column(Numeric(18, 4), nullable=True),
         description="Parking area enclosed and/or attached to the building shell.",
@@ -1302,7 +1302,7 @@ class ProjectRecordBase(SQLModel):
             group="Building",
             sub_group="Building data (geometry)",
             attribute_name="Enclosed parking area",
-            field_code="Building_enclosed_parking_area",
+            field_code="building_enclosed_parking_area",
             description=(
                 "Parking area that is enclosed and/or attached to the building "
                 "shell. This measurement excludes surface parking lots or "
@@ -1392,7 +1392,7 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    lca_goal: int = Field(
+    lca_goal: str = Field(
         description="Goal of the study.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
@@ -1400,8 +1400,6 @@ class ProjectRecordBase(SQLModel):
             attribute_name="LCA goal",
             field_code="lca_goal",
             description="Goal of the study",
-            constraint="numerical",
-            units="#",
             requirements="Required",
             example="Permission from municipal corporation",
         ),

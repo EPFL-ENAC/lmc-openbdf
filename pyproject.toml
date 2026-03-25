@@ -1,5 +1,5 @@
 [project]
-name = "openbdf-cli"
+name = "openbdf"
 dynamic = ["version"]
 description = "Command line interface for working with OpenBDF 2.0 files"
 authors = [
@@ -10,10 +10,7 @@ readme = "README.md"
 requires-python = ">=3.10,<3.14"
 
 dependencies = [
-	"eralchemy2>=1.4.1",
-	"pre-commit>=4.0.1",
 	"rich~=13.9.3",
-	"sphinx-press-theme>=0.9.1",
 	"sqlmodel>=0.0.37",
 	"typer~=0.15.1",
 ]
@@ -26,6 +23,7 @@ dev = [
 	"pytest-cov~=5.0.0",
 	"sphinx>=8.1.3",
 	"sphinx-copybutton>=0.5.2",
+	"pre-commit>=4.0.1",
 	"sphinx-press-theme>=0.9.1",
 ]
 test = [
@@ -45,6 +43,20 @@ repository = "https://github.com/EPFL-ENAC/lmc-openbdf"
 [build-system]
 requires = ["setuptools>=76.0.0", "setuptools_scm[toml]>=8.2.0"]
 build-backend = "setuptools.build_meta"
+
+[tool.pytest.ini_options]
+addopts = "--cov=openbdf --cov-report term-missing --cov-report xml --cov-report lcov:lcov.info"
+testpaths = [
+    "tests",
+]
+
+[tool.setuptools]
+packages = ["openbdf"]
+
+[tool.setuptools_scm]
+
+[project.scripts]
+openbdf = "openbdf_cli.main:app"
 
 [tool.mypy]
 plugins = ["pydantic.mypy"]
