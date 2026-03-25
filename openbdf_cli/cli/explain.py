@@ -1,8 +1,8 @@
 from enum import Enum
-from typing import Any, List, Optional, Union, get_args, get_origin
+from typing import Any, Union, get_args, get_origin
 
 import typer
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typer.models import NoneType
 
 # --- Data Models ---
@@ -10,31 +10,32 @@ from typer.models import NoneType
 
 class EnumValue(BaseModel):
     value: str
-    display_name: Optional[str] = None
-    description: Optional[str] = None
+    display_name: str | None = None
+    description: str | None = None
 
 
 class FieldAnalysis(BaseModel):
     field_name: str
     is_optional: bool
     data_type: str
-    attribute_name: Optional[str] = None
-    group_info: Optional[str] = None
-    description: Optional[str] = None
-    requirements: Optional[str] = None
-    constraint: Optional[str] = None
-    units: Optional[str] = None
-    enum_values: List[EnumValue] = []
+    attribute_name: str | None = None
+    group_info: str | None = None
+    description: str | None = None
+    requirements: str | None = None
+    constraint: str | None = None
+    units: str | None = None
+    enum_values: list[EnumValue] = Field(default_factory=list)
 
 
 class ModelAnalysis(BaseModel):
     model_name: str
-    fields: List[FieldAnalysis]
+    fields: list[FieldAnalysis]
 
 
 # --- Logic / Extraction ---
 
 
+# This function checks if the annotation is of the form Optional[T] (i.e., Union[T, None]) and returns T and a boolean indicating optionality.
 def unwrap_optional(annotation: Any) -> tuple[Any, bool]:
     origin = get_origin(annotation)
     args = get_args(annotation)
@@ -45,7 +46,7 @@ def unwrap_optional(annotation: Any) -> tuple[Any, bool]:
     return annotation, False
 
 
-def analyze_model(model_name: str, field_names: List[str] | None = None) -> ModelAnalysis:
+def analyze_model(model_name: str, field_names: list[str] | None = None) -> ModelAnalysis:
     """Extracts metadata from the SQLModel and returns a structured object."""
     from model.building_bill_materials_slim import BuildingBillMaterialsSlimRecord, BuildingBillMaterialsSlimRecordBase
     from model.enums.openbdf_enum import OpenBDFEnum

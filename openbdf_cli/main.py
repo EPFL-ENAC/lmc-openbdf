@@ -1,11 +1,6 @@
-from enum import Enum
 from pathlib import Path
-from typing import Optional
 
 import typer
-from eralchemy2 import render_er
-from model.general_info import SQLModel
-from typing_extensions import Annotated
 
 app = typer.Typer(help="CLI utilities for the project.")
 
@@ -13,21 +8,6 @@ app = typer.Typer(help="CLI utilities for the project.")
 @app.command()
 def hello(name: str):
     print(f"Hello {name}")
-
-
-@app.command()
-def render_model(
-    output: Annotated[
-        Path,
-        typer.Argument(help="Output file path, e.g. schema_graph.png"),
-    ],
-):
-    """
-    Render the SQLModel metadata as an ER diagram.
-    """
-
-    render_er(SQLModel.metadata, str(output))
-    typer.echo(f"ER diagram written to {output}")
 
 
 @app.command(name="explain")
@@ -39,7 +19,7 @@ def explain(
         "-f",
         help="The specific field key(s) to explain. If omitted, all fields are shown.",
     ),
-    output: Optional[Path] = typer.Option(
+    output: Path | None = typer.Option(
         None,
         "--output",
         "-o",
