@@ -6,15 +6,15 @@ import os
 import sys
 from datetime import datetime
 
-import frame_cli
+import openbdf_cli
 
 # -- Project information
 
-project = "FRAME CLI"
+project = "OpenBDF CLI"
 
-copyright = f"2024-{datetime.now().year} EPFL (École Polytechnique Fédérale de Lausanne)"
-author = "Son Pham-Ba"
-__version__ = frame_cli.__version__
+copyright = f"2026-{datetime.now().year} EPFL (École Polytechnique Fédérale de Lausanne)"
+author = "Cyprien Lengagne"
+__version__ = openbdf_cli.__version__
 version = __version__
 release = __version__
 
@@ -42,8 +42,7 @@ autodoc_default_options = {
 html_theme = "press"
 html_theme_options = {
     "external_links": [
-        ("FRAME Library", "https://frame-dev.epfl.ch"),
-        ("GitHub", "https://github.com/CHANGE-EPFL/frame-project"),
+        ("GitHub", "https://github.com/EPFL-ENAC/lmc-openbdf"),
     ]
 }
 html_static_path = ["_static"]
@@ -67,7 +66,7 @@ def run_apidoc(_) -> None:
     cur_dir = os.path.abspath(os.path.dirname(__file__))
 
     for module_dir in [
-        "frame_cli",
+        "openbdf_cli",
     ]:
         module = os.path.join(cur_dir, "..", module_dir)
         output = os.path.join(cur_dir, "auto_source", module_dir)

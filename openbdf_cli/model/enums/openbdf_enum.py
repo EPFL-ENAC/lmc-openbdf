@@ -1,18 +1,19 @@
+from __future__ import annotations
+
 from enum import Enum
-from typing import Optional
 
 
 class OpenBDFEnum(str, Enum):
     display_name: str
     description: str | None
-    parent_category: Optional["OpenBDFEnum"]
+    parent_category: OpenBDFEnum | None
 
     def __new__(
         cls,
         value: str,
         display_name: str,
         description: str | None = None,
-        parent_category: Optional["OpenBDFEnum"] = None,
+        parent_category: OpenBDFEnum | None = None,
     ):
         obj = str.__new__(cls, value)
         obj._value_ = value
@@ -39,7 +40,7 @@ class OpenBDFEnum(str, Enum):
                 "value": item.value,
                 "display_name": item.display_name,
                 "description": item.description,
-                "parent_category": item.parent_category,
+                "parent_category": item.parent_category.value if item.parent_category else None,
             }
             for item in cls
         ]
