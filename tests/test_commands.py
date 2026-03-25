@@ -10,15 +10,7 @@ runner = CliRunner()
     "subcommand",
     [
         "",
-        "check",
-        "version",
-        "update",
-        "init",
-        "validate",
-        "push",
-        "list",
-        "show",
-        "pull",
+        "explain",
     ],
 )
 def test_help(subcommand: str):
