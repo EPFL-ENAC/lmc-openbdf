@@ -1,12 +1,12 @@
 install:
-	pip install -e ".[dev]"
-	pre-commit install
+	uv sync --all-extras
+	uv run pre-commit install
 
 lint:
-	pre-commit run --all-files
+	uv run pre-commit run --all-files
 
 build:
-	python3 -m build
+	uv run python -m build
 
 test:
-	pytest
+	uv run --extra dev pytest
