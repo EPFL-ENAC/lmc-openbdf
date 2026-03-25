@@ -6,7 +6,7 @@ import os
 import sys
 from datetime import datetime
 
-import openbdf_cli
+import openbdf
 
 # -- Project information
 
@@ -14,7 +14,7 @@ project = "OpenBDF CLI"
 
 copyright = f"2026-{datetime.now().year} EPFL (École Polytechnique Fédérale de Lausanne)"
 author = "Cyprien Lengagne"
-__version__ = openbdf_cli.__version__
+__version__ = openbdf.__version__
 version = __version__
 release = __version__
 
@@ -66,7 +66,7 @@ def run_apidoc(_) -> None:
     cur_dir = os.path.abspath(os.path.dirname(__file__))
 
     for module_dir in [
-        "openbdf_cli",
+        "openbdf",
     ]:
         module = os.path.join(cur_dir, "..", module_dir)
         output = os.path.join(cur_dir, "auto_source", module_dir)
