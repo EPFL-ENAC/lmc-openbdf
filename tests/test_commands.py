@@ -1,7 +1,7 @@
 import pytest
 from typer.testing import CliRunner
 
-from frame_cli.main import app
+from openbdf.main import app
 
 runner = CliRunner()
 
@@ -10,15 +10,7 @@ runner = CliRunner()
     "subcommand",
     [
         "",
-        "check",
-        "version",
-        "update",
-        "init",
-        "validate",
-        "push",
-        "list",
-        "show",
-        "pull",
+        "explain",
     ],
 )
 def test_help(subcommand: str):

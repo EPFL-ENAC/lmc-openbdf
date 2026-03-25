@@ -18,6 +18,9 @@ repos:
         additional_dependencies:
          - types-pyyaml
          - types-requests
+         - pydantic      # <--- Required for the pydantic.mypy plugin
+         - sqlmodel      # <--- Required to resolve SQLModel imports
+         - sqlalchemy-stubs # <--- Helps with SQLAlchemy column types
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.14.3
     hooks:
@@ -28,6 +31,7 @@ repos:
     rev: v2.4.1
     hooks:
       - id: codespell
+        exclude: openbdf/model/enums
         additional_dependencies:
           - tomli
   - repo: https://github.com/compilerla/conventional-pre-commit
