@@ -2,10 +2,11 @@ from __future__ import annotations
 
 from datetime import date
 from decimal import Decimal
-from typing import TYPE_CHECKING, Any, List, Optional
+from typing import Any, Optional
 
 from sqlalchemy import JSON, Column, Date, Integer, Numeric, String
 from sqlalchemy import Enum as SAEnum
+from sqlalchemy.orm import relationship
 from sqlmodel import Field, Relationship, SQLModel
 
 from .enums.buildings import (
@@ -23,14 +24,12 @@ from .enums.lca import (
     LCAModel,
     LCATemporalApproach,
     LCIAMethodology,
+    LifeCycleStage_ISO14040_43,
     LifeCycleStage_ISO14040_44,
 )
 from .enums.materials import MaterialQuantitiesSource
 from .enums.project import ConstructionType, ProjectPhase, ProjectUnits
 from .field_metadata import openbdf_field_metadata
-
-if TYPE_CHECKING:
-    from .building_bill_materials_slim import BuildingBillMaterialsSlimRecord
 
 
 class ProjectRecordBase(SQLModel):
@@ -875,14 +874,14 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    building_structure_type: str = Field(
+    building_structure_typology: str = Field(
         sa_column=Column(String(100)),
         description="Overall design and construction method of a building.",
         schema_extra=openbdf_field_metadata(
             group="Building",
             sub_group="Building data (technical)",
             attribute_name="Building structure type",
-            field_code="building_structure_type",
+            field_code="building_structure_typology",
             description=("Overall design and construction method of a building- Massive, Timber, Other"),
             constraint="dropdown",
             units="none",
@@ -1166,14 +1165,14 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    building_gross_floor_area_definition: GrossFloorAreaStandard = Field(
+    building_gross_floor_area_measurement_method: GrossFloorAreaStandard = Field(
         sa_column=Column(SAEnum(GrossFloorAreaStandard)),
         description="Definition of GFA according to national standards.",
         schema_extra=openbdf_field_metadata(
             group="Building",
             sub_group="Building data (geometry)",
             attribute_name="Gross floor area (GFA) Definition",
-            field_code="building_gross_floor_area_definition",
+            field_code="building_gross_floor_area_measurement_method",
             description="Definition according to national standards",
             units="none",
             requirements="Required",
@@ -1419,14 +1418,14 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    lca_required_service_life: str = Field(
+    lca_rsl: str = Field(
         sa_column=Column(String(200)),
         description="Duration over which the environmental impacts of a building are assessed, typically ranging from 50 to 100 years.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="Goal & Scope",
             attribute_name="Required Service Life",
-            field_code="lca_required_service_life",
+            field_code="lca_rsl",
             description=(
                 "Duration over which the environmental impacts of a building are assessed, typically ranging from 50 to 100 years."
             ),
@@ -1447,24 +1446,6 @@ class ProjectRecordBase(SQLModel):
             constraint="string < 200 characters",
             units="none",
             requirements="Recommended",
-        ),
-    )
-
-    lca_rsp: int = Field(
-        description="Reference study period duration in years.",
-        schema_extra=openbdf_field_metadata(
-            group="LCA",
-            sub_group="LCA inventory",
-            attribute_name="Reference Study period",
-            field_code="lca_rsp",
-            description=(
-                "Duration over which the environmental impacts of a building "
-                "are assessed, typically ranging from 50 to 100 years"
-            ),
-            constraint="numerical",
-            units="#",
-            requirements="Required",
-            example="50",
         ),
     )
 
@@ -1603,14 +1584,14 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    lca_stages: LifeCycleStage_ISO14040_44 = Field(
-        sa_column=Column(SAEnum(LifeCycleStage_ISO14040_44)),
-        description="Life cycle stages included in the assessment scope.",
+    lca_cycle_stages: LifeCycleStage_ISO14040_43 = Field(
+        sa_column=Column(SAEnum(LifeCycleStage_ISO14040_43)),
+        description=("Different Life Cycle Assessment (LCA) stages depending on where you start and stop measuring."),
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="Life cycle stages",
-            field_code="lca_cyle_stages",
+            attribute_name="Life Cycle Stages",
+            field_code="lca_cycle_stages",
             description=(
                 "Different Life Cycle Assessment (LCA) stages depending on where you start and stop measuring"
             ),
@@ -1622,25 +1603,26 @@ class ProjectRecordBase(SQLModel):
 
     lcia_methodology: LCIAMethodology = Field(
         sa_column=Column(SAEnum(LCIAMethodology)),
-        description="Impact assessment method.",
+        description="Impact assessment method (for GHG emissions, GWP indicator).",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="LCIA method",
-            field_code="lcia_method",
+            attribute_name="LCIA Methodology",
+            field_code="lcia_methodology",
             description="Impact assessment method (for GHG emissions, GWP indicator)",
+            units="none",
             requirements="Required",
-            example="EN15804+A2, NMD",
+            example="EN 15804+A2 (EF 3.0) - Current EU standard",
         ),
     )
 
     lca_biogenic_carbon: Optional[bool] = Field(
         default=None,
-        description="Whether biogenic carbon is included in the assessment.",
+        description="Biogenic carbon included in assessment.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="Biogenic carbon",
+            attribute_name="Biogenic Carbon",
             field_code="lca_biogenic_carbon",
             description="Biogenic carbon included in assessment",
             units="none",
@@ -1656,7 +1638,7 @@ class ProjectRecordBase(SQLModel):
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="Biogenic carbon accounting method",
+            attribute_name="Biogenic Carbon Accounting Method",
             field_code="lca_biogenic_method",
             description="Method used for biogenic carbon accounting",
             units="none",
@@ -1671,7 +1653,7 @@ class ProjectRecordBase(SQLModel):
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="LCA material quantities source",
+            attribute_name="LCA Material Quantities Source",
             field_code="lca_material_source",
             description="Main source of material quantities",
             units="none",
@@ -1680,28 +1662,350 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    lca_a1_3: bool = Field(
-        description="Whether A1-3 Production stage is included.",
+    lca_gwp_total: bool = Field(
+        description="Life cycle impact included.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="A1-3 Production",
-            field_code="lca_a1_3",
-            description="Life cycle stage included",
+            attribute_name="Global Warming Potential - Total",
+            field_code="lca_gwp_total",
+            description="Life cycle impact included",
             units="none",
             requirements="Required",
             example="Yes",
         ),
     )
 
+    lca_gwp_f_total: bool = Field(
+        description="Life cycle impact included.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA impact assessment",
+            attribute_name="Global Warming Potential - Fossil",
+            field_code="lca_gwp_f_total",
+            description="Life cycle impact included",
+            units="none",
+            requirements="Required",
+            example="Yes",
+        ),
+    )
+
+    lca_gwp_b_total: bool = Field(
+        description="Life cycle impact included.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA impact assessment",
+            attribute_name="Global Warming Potential - Biogenic",
+            field_code="lca_gwp_b_total",
+            description="Life cycle impact included",
+            units="none",
+            requirements="Required",
+            example="Yes",
+        ),
+    )
+
+    lca_gwp_luc_total: bool = Field(
+        description="Life cycle impact included.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA impact assessment",
+            attribute_name=("Global Warming Potential - Land Use and Land Use Change"),
+            field_code="lca_gwp_luc_total",
+            description="Life cycle impact included",
+            units="none",
+            requirements="Required",
+            example="Yes",
+        ),
+    )
+
+    lca_odp_total: bool = Field(
+        description="Life cycle impact included.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA impact assessment",
+            attribute_name="Ozone Depletion Potential (Stratospheric)",
+            field_code="lca_odp_total",
+            description="Life cycle impact included",
+            units="none",
+            requirements="Required",
+            example="Yes",
+        ),
+    )
+
+    lca_ap_total: bool = Field(
+        description="Life cycle impact included.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA impact assessment",
+            attribute_name="Acidification Potential",
+            field_code="lca_ap_total",
+            description="Life cycle impact included",
+            units="none",
+            requirements="Required",
+            example="Yes",
+        ),
+    )
+
+    lca_ep_total: bool = Field(
+        description="Life cycle impact included.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA impact assessment",
+            attribute_name="Eutrophication Potential (Total/Generic)",
+            field_code="lca_ep_total",
+            description="Life cycle impact included",
+            units="none",
+            requirements="Required",
+            example="No",
+        ),
+    )
+
+    lca_ep_af_total: bool = Field(
+        description="Life cycle impact included.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA impact assessment",
+            attribute_name="Eutrophication Potential - Freshwater",
+            field_code="lca_ep_af_total",
+            description="Life cycle impact included",
+            units="none",
+            requirements="Required",
+            example="Yes",
+        ),
+    )
+
+    lca_ep_am_total: bool = Field(
+        description="Life cycle impact included.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA impact assessment",
+            attribute_name="Eutrophication Potential - Marine",
+            field_code="lca_ep_am_total",
+            description="Life cycle impact included",
+            units="none",
+            requirements="Required",
+            example="Yes",
+        ),
+    )
+
+    lca_ep_t_total: bool = Field(
+        description="Life cycle impact included.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA impact assessment",
+            attribute_name="Eutrophication Potential - Terrestrial",
+            field_code="lca_ep_t_total",
+            description="Life cycle impact included",
+            units="none",
+            requirements="Required",
+            example="Yes",
+        ),
+    )
+
+    lca_pocp_total: bool = Field(
+        description="Life cycle impact included.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA impact assessment",
+            attribute_name="Photochemical Ozone Creation Potential",
+            field_code="lca_pocp_total",
+            description="Life cycle impact included",
+            units="none",
+            requirements="Required",
+            example="No",
+        ),
+    )
+
+    lca_sfp_total: bool = Field(
+        description="Life cycle impact included.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA impact assessment",
+            attribute_name="Smog Formation Potential",
+            field_code="lca_sfp_total",
+            description="Life cycle impact included",
+            units="none",
+            requirements="Required",
+            example="No",
+        ),
+    )
+
+    lca_pofp_total: bool = Field(
+        description="Life cycle impact included.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA impact assessment",
+            attribute_name="Photochemical Ozone Formation Potential",
+            field_code="lca_pofp_total",
+            description="Life cycle impact included",
+            units="none",
+            requirements="Required",
+            example="Yes",
+        ),
+    )
+
+    lca_adpmm_total: bool = Field(
+        description="Life cycle impact included.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA impact assessment",
+            attribute_name=("Abiotic Depletion Potential - Minerals and Metals (Non-fossil)"),
+            field_code="lca_adpmm_total",
+            description="Life cycle impact included",
+            units="none",
+            requirements="Required",
+            example="Yes",
+        ),
+    )
+
+    lca_adpf_total: bool = Field(
+        description="Life cycle impact included.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA impact assessment",
+            attribute_name="Abiotic Depletion Potential - Fossil Resources",
+            field_code="lca_adpf_total",
+            description="Life cycle impact included",
+            units="none",
+            requirements="Required",
+            example="Yes",
+        ),
+    )
+
+    lca_wdp_total: bool = Field(
+        description="Life cycle impact included.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA impact assessment",
+            attribute_name="Water Deprivation Potential",
+            field_code="lca_wdp_total",
+            description="Life cycle impact included",
+            units="none",
+            requirements="Required",
+            example="Yes",
+        ),
+    )
+
+    lca_pere_total: bool = Field(
+        description="Life cycle impact included.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA impact assessment",
+            attribute_name=("Primary Energy Renewable (excluding resources used as raw materials)"),
+            field_code="lca_pere_total",
+            description="Life cycle impact included",
+            units="none",
+            requirements="Required",
+            example="Yes",
+        ),
+    )
+
+    lca_penre_total: bool = Field(
+        description="Life cycle impact included.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA impact assessment",
+            attribute_name=("Primary Energy Non-Renewable (excluding resources used as raw materials)"),
+            field_code="lca_penre_total",
+            description="Life cycle impact included",
+            units="none",
+            requirements="Required",
+            example="Yes",
+        ),
+    )
+
+    lca_pert_total: bool = Field(
+        description="Life cycle impact included.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA impact assessment",
+            attribute_name="Primary Energy Renewable - Total",
+            field_code="lca_pert_total",
+            description="Life cycle impact included",
+            units="none",
+            requirements="Required",
+            example="Yes",
+        ),
+    )
+
+    lca_penrt_total: bool = Field(
+        description="Life cycle impact included.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA impact assessment",
+            attribute_name="Primary Energy Non-Renewable - Total",
+            field_code="lca_penrt_total",
+            description="Life cycle impact included",
+            units="none",
+            requirements="Required",
+            example="Yes",
+        ),
+    )
+
+    lca_a1_3: bool = Field(
+        description="Life cycle module included.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA impact assessment",
+            attribute_name="A1-A3: Product Stage",
+            field_code="lca_a1_3",
+            description="Life cycle module included",
+            units="none",
+            requirements="Required",
+            example="Yes",
+        ),
+    )
+
+    lca_a1: bool = Field(
+        description="Life cycle module included.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA impact assessment",
+            attribute_name="A1 Raw Material Supply",
+            field_code="lca_a1",
+            description="Life cycle module included",
+            units="none",
+            requirements="Required",
+            example="No",
+        ),
+    )
+
+    lca_a2: bool = Field(
+        description="Life cycle module included.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA impact assessment",
+            attribute_name="A2 Transport",
+            field_code="lca_a2",
+            description="Life cycle module included",
+            units="none",
+            requirements="Required",
+            example="No",
+        ),
+    )
+
+    lca_a3: bool = Field(
+        description="Life cycle module included.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA impact assessment",
+            attribute_name="A3 Manufacturing",
+            field_code="lca_a3",
+            description="Life cycle module included",
+            units="none",
+            requirements="Required",
+            example="No",
+        ),
+    )
+
     lca_a4: bool = Field(
-        description="Whether A4 Transport stage is included.",
+        description="Life cycle module included.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
             attribute_name="A4 Transport",
             field_code="lca_a4",
-            description="Life cycle stage included",
+            description="Life cycle module included",
             units="none",
             requirements="Required",
             example="Yes",
@@ -1709,13 +2013,13 @@ class ProjectRecordBase(SQLModel):
     )
 
     lca_a5: bool = Field(
-        description="Whether A5 Construction stage is included.",
+        description="Life cycle module included.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="A5 Construction",
+            attribute_name=("A5 Construction/Installation: Installation of the product into the building"),
             field_code="lca_a5",
-            description="Life cycle stage included",
+            description="Life cycle module included",
             units="none",
             requirements="Required",
             example="Yes",
@@ -1723,13 +2027,15 @@ class ProjectRecordBase(SQLModel):
     )
 
     lca_b1: bool = Field(
-        description="Whether B1 Use stage is included.",
+        description="Life cycle module included.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="B1 Use",
+            attribute_name=(
+                "B1 Use: Environmental impacts arising from the product in use (eg, release of substances)"
+            ),
             field_code="lca_b1",
-            description="Life cycle stage included",
+            description="Life cycle module included",
             units="none",
             requirements="Required",
             example="Yes",
@@ -1737,13 +2043,15 @@ class ProjectRecordBase(SQLModel):
     )
 
     lca_b2: bool = Field(
-        description="Whether B2 Maintenance stage is included.",
+        description="Life cycle module included.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="B2 Maintenance",
+            attribute_name=(
+                "B2 Maintenance: Actions to maintain the product's functional quality (cleaning, painting)"
+            ),
             field_code="lca_b2",
-            description="Life cycle stage included",
+            description="Life cycle module included",
             units="none",
             requirements="Required",
             example="Yes",
@@ -1751,13 +2059,13 @@ class ProjectRecordBase(SQLModel):
     )
 
     lca_b3: bool = Field(
-        description="Whether B3 Repair stage is included.",
+        description="Life cycle module included.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="B3 Repair",
+            attribute_name=("B3 Repair: Corrective actions to return the product to a functional state"),
             field_code="lca_b3",
-            description="Life cycle stage included",
+            description="Life cycle module included",
             units="none",
             requirements="Required",
             example="Yes",
@@ -1765,13 +2073,13 @@ class ProjectRecordBase(SQLModel):
     )
 
     lca_b4: bool = Field(
-        description="Whether B4 Replacement stage is included.",
+        description="Life cycle module included.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="B4 Replacement",
+            attribute_name=("B4 Replacement: Replacing the product or parts of it at the end of its service life"),
             field_code="lca_b4",
-            description="Life cycle stage included",
+            description="Life cycle module included",
             units="none",
             requirements="Required",
             example="Yes",
@@ -1779,13 +2087,13 @@ class ProjectRecordBase(SQLModel):
     )
 
     lca_b5: bool = Field(
-        description="Whether B5 Refurbishment stage is included.",
+        description="Life cycle module included.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="B5 Refurbishment",
+            attribute_name=("B5 Refurbishment: Major changes to restore or improve performance"),
             field_code="lca_b5",
-            description="Life cycle stage included",
+            description="Life cycle module included",
             units="none",
             requirements="Required",
             example="Yes",
@@ -1793,13 +2101,16 @@ class ProjectRecordBase(SQLModel):
     )
 
     lca_b6: bool = Field(
-        description="Whether B6 Operational energy use stage is included.",
+        description="Life cycle module included.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="B6 Operational energy use",
+            attribute_name=(
+                "B6 Operational Energy Use: Energy consumption related to the "
+                "building's operation (heating, cooling, lighting)"
+            ),
             field_code="lca_b6",
-            description="Life cycle stage included",
+            description="Life cycle module included",
             units="none",
             requirements="Required",
             example="Yes",
@@ -1807,13 +2118,13 @@ class ProjectRecordBase(SQLModel):
     )
 
     lca_b7: bool = Field(
-        description="Whether B7 Operational water use stage is included.",
+        description="Life cycle module included.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="B7 Operational water use",
+            attribute_name=("B7 Operational Water Use: Water consumption related to the building's operation"),
             field_code="lca_b7",
-            description="Life cycle stage included",
+            description="Life cycle module included",
             units="none",
             requirements="Required",
             example="Yes",
@@ -1821,13 +2132,13 @@ class ProjectRecordBase(SQLModel):
     )
 
     lca_c1: bool = Field(
-        description="Whether C1 De-construction stage is included.",
+        description="Life cycle module included.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="C1 De-construction",
+            attribute_name=("C1 De-construction/Demolition: Dismantling or demolishing the building/product"),
             field_code="lca_c1",
-            description="Life cycle stage included",
+            description="Life cycle module included",
             units="none",
             requirements="Required",
             example="Yes",
@@ -1835,13 +2146,13 @@ class ProjectRecordBase(SQLModel):
     )
 
     lca_c2: bool = Field(
-        description="Whether C2 Transport stage is included.",
+        description="Life cycle module included.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="C2 Transport",
+            attribute_name=("C2 Transport: Transporting the waste to processing or disposal sites"),
             field_code="lca_c2",
-            description="Life cycle stage included",
+            description="Life cycle module included",
             units="none",
             requirements="Required",
             example="Yes",
@@ -1849,13 +2160,13 @@ class ProjectRecordBase(SQLModel):
     )
 
     lca_c3: bool = Field(
-        description="Whether C3 Waste processing stage is included.",
+        description="Life cycle module included.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="C3 Waste processing",
+            attribute_name=("C3 Waste Processing: Processing waste for reuse, recovery, or recycling"),
             field_code="lca_c3",
-            description="Life cycle stage included",
+            description="Life cycle module included",
             units="none",
             requirements="Required",
             example="Yes",
@@ -1863,13 +2174,13 @@ class ProjectRecordBase(SQLModel):
     )
 
     lca_c4: bool = Field(
-        description="Whether C4 Disposal stage is included.",
+        description="Life cycle module included.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="C4 Disposal",
+            attribute_name=("C4 Disposal: Final disposal of waste that cannot be recovered (eg, landfill)"),
             field_code="lca_c4",
-            description="Life cycle stage included",
+            description="Life cycle module included",
             units="none",
             requirements="Required",
             example="Yes",
@@ -1877,29 +2188,47 @@ class ProjectRecordBase(SQLModel):
     )
 
     lca_d: bool = Field(
-        description="Whether stage D is included.",
+        description="Life cycle module included.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="(D) Reuse, recovery, recycling",
+            attribute_name="D Benefits and Loads Beyond the System Boundary",
             field_code="lca_d",
-            description="Life cycle stage included",
+            description="Life cycle module included",
             units="none",
-            requirements="Optional",
+            requirements="Required",
             example="Yes",
         ),
     )
 
-    schema_metadata: dict[str, Any] = Field(
-        default_factory=dict,
-        sa_column=Column(JSON, nullable=False, server_default="{}"),
-        description=("Optional record-level metadata for constraints that are not enforced by SQL types alone."),
+    lca_d1: bool = Field(
+        description="Life cycle module included.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA impact assessment",
+            attribute_name=(
+                "D1 Reuse, Recovery, and Recycling Potential: Net benefits or "
+                "loads resulting from reusing or recycling materials "
+                "(avoided emissions)"
+            ),
+            field_code="lca_d1",
+            description="Life cycle module included",
+            units="none",
+            requirements="Required",
+            example="Yes",
+        ),
     )
 
-
-class ProjectRecord(ProjectRecordBase, table=True):
-    __tablename__ = "project_record"
-
-    id: Optional[int] = Field(default=None, primary_key=True)
-
-    bill_of_materials: List["BuildingBillMaterialsSlimRecord"] = Relationship(back_populates="project")
+    lca_d2: bool = Field(
+        description="Life cycle module included.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA impact assessment",
+            attribute_name="D2 Exported Energy (or Energy Recovery Potential)",
+            field_code="lca_d2",
+            description="Life cycle module included",
+            units="none",
+            requirements="Required",
+            example="Yes",
+        ),
+    )
