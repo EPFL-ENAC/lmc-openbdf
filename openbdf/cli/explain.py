@@ -1,7 +1,8 @@
 from enum import Enum
-from typing import Any, Union, get_args, get_origin
+from typing import Any
 
 import typer
+from lib.types import get_display_type, unwrap_optional
 from pydantic import BaseModel, Field
 from typer.models import NoneType
 
@@ -35,22 +36,12 @@ class ModelAnalysis(BaseModel):
 # --- Logic / Extraction ---
 
 
-# This function checks if the annotation is of the form Optional[T] (i.e., Union[T, None]) and returns T and a boolean indicating optionality.
-def unwrap_optional(annotation: Any) -> tuple[Any, bool]:
-    origin = get_origin(annotation)
-    args = get_args(annotation)
-    if origin is Union and NoneType in args:
-        non_none_args = [arg for arg in args if arg is not NoneType]
-        if len(non_none_args) == 1:
-            return non_none_args[0], True
-    return annotation, False
-
-
 def analyze_model(model_name: str, field_names: list[str] | None = None) -> ModelAnalysis:
     """Extracts metadata from the SQLModel and returns a structured object."""
-    from model.building_bill_materials_slim import BuildingBillMaterialsSlimRecord, BuildingBillMaterialsSlimRecordBase
+    from model.building_bill_materials_slim import BuildingBillMaterialsSlimRecordBase
     from model.enums.openbdf_enum import OpenBDFEnum
-    from model.general_info import ProjectRecord, ProjectRecordBase  # Import inside to avoid circular deps
+    from model.general_info import ProjectRecordBase  # Import inside to avoid circular deps
+    from model.tables import BuildingBillMaterialsSlimRecord, ProjectRecord
 
     registry = {
         "ProjectRecordBase": ProjectRecordBase,
@@ -75,7 +66,7 @@ def analyze_model(model_name: str, field_names: list[str] | None = None) -> Mode
 
         raw_type = field_info.annotation
         data_type, is_optional = unwrap_optional(raw_type)
-        display_type = getattr(data_type, "__name__", str(data_type))
+        display_type = get_display_type(data_type)
         extra = field_info.json_schema_extra
         metadata: dict[str, Any] = {}
         if isinstance(extra, dict):
