@@ -2,12 +2,11 @@ from __future__ import annotations
 
 from datetime import date
 from decimal import Decimal
-from typing import Any, Optional
+from typing import Optional
 
-from sqlalchemy import JSON, Column, Date, Integer, Numeric, String
+from sqlalchemy import Column, Date, Integer, Numeric, String
 from sqlalchemy import Enum as SAEnum
-from sqlalchemy.orm import relationship
-from sqlmodel import Field, Relationship, SQLModel
+from sqlmodel import Field, SQLModel
 
 from .enums.buildings import (
     BuildingFacingDirection,
@@ -25,7 +24,7 @@ from .enums.lca import (
     LCATemporalApproach,
     LCIAMethodology,
     LifeCycleStage_ISO14040_43,
-    LifeCycleStage_ISO14040_44,
+    # LifeCycleStage_ISO14040_44,
 )
 from .enums.materials import MaterialQuantitiesSource
 from .enums.project import ConstructionType, ProjectPhase, ProjectUnits
