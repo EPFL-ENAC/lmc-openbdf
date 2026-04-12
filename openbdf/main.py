@@ -2,6 +2,7 @@ from pathlib import Path
 
 import typer
 
+from openbdf.cli.open import open_openbdf_xlsx
 from openbdf.cli.save import save_openbdf_to_xlsx
 
 app = typer.Typer(help="CLI utilities for the project.")
@@ -52,7 +53,7 @@ def explain(
 def open(
     file: str = typer.Option(..., "--file", "-f", help="The file to open"),
     info_sheet: str = typer.Option(
-        None,
+        "General Info",
         "--info-sheet",
         "-i",
         help="The sheet containing the general info data. Required if opening an Excel file with multiple sheets.",
@@ -64,7 +65,7 @@ def open(
         help="The column index (0-based) of the header in the general info sheet. Default is 0 (the first column).",
     ),
     info_values_col: int = typer.Option(
-        0,
+        1,
         "--info-values-col",
         "-iv",
         help="The column index (0-based) of the values in the general info sheet. Default is 1 (the second column).",
@@ -76,7 +77,7 @@ def open(
         help="The starting row index (0-based) for the bill of materials data in the Excel sheet after the header. Default is 1 (the first row after the header).",
     ),
     bom_sheet: str = typer.Option(
-        None,
+        "Building Bill of Materials",
         "--bom-sheet",
         "-b",
         help="The sheet containing the bill of materials data. Required if opening an Excel file with multiple sheets.",
@@ -117,7 +118,6 @@ def open(
     Usage:
         openbdf open --file data.xlsx --bom-sheet Sheet1
     """
-    from cli.open import open_openbdf_xlsx
 
     project = open_openbdf_xlsx(
         xlsx_path=file,
