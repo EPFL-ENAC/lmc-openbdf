@@ -3,8 +3,7 @@ from __future__ import annotations
 from decimal import Decimal
 from typing import Optional
 
-from sqlalchemy.orm import relationship
-from sqlmodel import Column, Field, Integer, Numeric, Relationship, SQLModel, String
+from sqlmodel import Column, Field, Integer, Numeric, SQLModel, String
 from sqlmodel import Enum as SAEnum
 
 from .enums.buildings import AboveBelowGround

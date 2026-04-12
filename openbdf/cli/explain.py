@@ -2,9 +2,9 @@ from enum import Enum
 from typing import Any
 
 import typer
-from lib.types import get_display_type, unwrap_optional
 from pydantic import BaseModel, Field
-from typer.models import NoneType
+
+from ..lib.types import get_display_type, unwrap_optional
 
 # --- Data Models ---
 
