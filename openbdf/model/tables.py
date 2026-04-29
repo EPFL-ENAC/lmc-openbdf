@@ -1,8 +1,9 @@
 from typing import Optional
 
-from model.building_bill_materials_slim import BuildingBillMaterialsSlimRecordBase
-from model.general_info import ProjectRecordBase
 from sqlmodel import Field, Relationship, SQLModel
+
+from openbdf.model.building_bill_materials_slim import BuildingBillMaterialsSlimRecordBase
+from openbdf.model.general_info import ProjectRecordBase
 
 
 class ProjectRecord(ProjectRecordBase, SQLModel, table=True):
