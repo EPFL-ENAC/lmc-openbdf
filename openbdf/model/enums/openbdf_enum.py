@@ -44,3 +44,34 @@ class OpenBDFEnum(str, Enum):
             }
             for item in cls
         ]
+
+    @classmethod
+    def is_valid(cls, label: str) -> bool:
+        """
+        Check if a string matches any value or display_name in the enum.
+        """
+        return any(
+            label == item.value
+            or label == item.name
+            or str(label).lower() == item.display_name.lower()
+            or str(label).lower() == f"{item.value} {item.display_name}".lower()
+            or str(label).lower() == f"{item.value}: {item.description}".lower()
+            for item in cls
+        )
+
+    @classmethod
+    def find_value(cls, label: str) -> OpenBDFEnum | None:
+        """
+        Return the enum instance matching the value or display_name.
+        """
+        for item in cls:
+            if (
+                label == item.value
+                or label == item.name
+                or str(label).lower() == item.display_name.lower()
+                or str(label).lower() == f"{item.value} {item.display_name}".lower()
+                or str(label).lower() == f"{item.value}: {item.description}".lower()
+            ):
+                return item
+
+        return None
