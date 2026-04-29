@@ -1,11 +1,13 @@
 from pathlib import Path
 
 import pandas as pd
-from lib.converters.dataframe import bom_to_dataframe, project_to_dataframe
-from lib.types import get_display_type, unwrap_optional
-from model.general_info import ProjectRecordBase
-from model.tables import BuildingBillMaterialsSlimRecord, ProjectRecord
 from openpyxl.styles import Alignment, Font, NamedStyle, PatternFill
+from pydantic.fields import FieldInfo
+
+from openbdf.lib.converters.dataframe import bom_to_dataframe, project_to_dataframe
+from openbdf.lib.types import get_display_type, unwrap_optional
+from openbdf.model.general_info import ProjectRecordBase
+from openbdf.model.tables import BuildingBillMaterialsSlimRecord, ProjectRecord
 
 ATTRIBUTES_NAME_STYLE = NamedStyle(
     "AttributeName", font=Font(bold=True, color="FFFFFF"), fill=PatternFill("solid", fgColor="2b5b47")
@@ -16,6 +18,12 @@ REQUIRED_STYLE = NamedStyle("Required", fill=PatternFill("solid", fgColor="a3d3b
 RECOMMENDED_STYLE = NamedStyle("Recommended", fill=PatternFill("solid", fgColor="a9d2f6"))
 OPTIONAL_STYLE = NamedStyle("Optional", fill=PatternFill("solid", fgColor="d8e6e2"))
 ROW_HEADER_STYLE = NamedStyle("RowHeader", font=Font(bold=True), alignment=Alignment(vertical="top"))
+
+
+def get_field_extra(field: FieldInfo) -> dict:
+    """Safely extracts json_schema_extra if it is a dictionary."""
+    extra = field.json_schema_extra
+    return extra if isinstance(extra, dict) else {}
 
 
 def save_openbdf_to_xlsx(
@@ -38,7 +46,10 @@ def info_to_xlsx(writer: pd.ExcelWriter, project: ProjectRecord, sheet_name: str
 
     for cell_row, field_code in enumerate(project_record_fields, start=2):  # xlsx are 1-indexed (ewww)
         metadata = project_record_fields.get(field_code)
-        extra = metadata.json_schema_extra if metadata else {}
+        if not metadata:
+            continue
+
+        extra = get_field_extra(metadata)
         data_type, is_optional = unwrap_optional(metadata.annotation)
         requirements = extra.get("requirements", "Optional" if is_optional else "Required")
 
@@ -130,7 +141,10 @@ def bom_to_xlsx(writer: pd.ExcelWriter, records: list[BuildingBillMaterialsSlimR
     # headers
     for cell_column, field_code in enumerate(df.columns.tolist(), start=2):  # xlsx are 1-indexed (ewww)
         metadata = bom_fields.get(field_code)
-        extra = metadata.json_schema_extra if metadata else {}
+        if not metadata:
+            continue
+
+        extra = get_field_extra(metadata)
         data_type, is_optional = unwrap_optional(metadata.annotation)
         requirements = extra.get("requirements", "Optional" if is_optional else "Required")
 
