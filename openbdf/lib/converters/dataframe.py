@@ -6,11 +6,12 @@ from enum import Enum
 from typing import Any, Optional, Union, cast, get_args, get_origin
 
 import pandas as pd
-from model.building_bill_materials_slim import BuildingBillMaterialsSlimRecordBase
-from model.enums.openbdf_enum import OpenBDFEnum
-from model.general_info import ProjectRecordBase
-from model.tables import BuildingBillMaterialsSlimRecord, ProjectRecord
 from sqlmodel import SQLModel
+
+from openbdf.model.building_bill_materials_slim import BuildingBillMaterialsSlimRecordBase
+from openbdf.model.enums.openbdf_enum import OpenBDFEnum
+from openbdf.model.general_info import ProjectRecordBase
+from openbdf.model.tables import BuildingBillMaterialsSlimRecord, ProjectRecord
 
 PROJECT_EXCLUDED_FIELDS = {"id", "bill_of_materials"}
 BOM_EXCLUDED_FIELDS = {"id", "project_id", "project"}
@@ -177,7 +178,7 @@ def build_field_code_to_name_map(
     return mapping
 
 
-def project_to_dataframe(project: ProjectRecord) -> pd.DataFrame:
+def project_to_dataframe(project: ProjectRecord | ProjectRecordBase) -> pd.DataFrame:
     """
     Convert a ProjectRecord into a dataframe with one row per attribute.
 
@@ -188,7 +189,7 @@ def project_to_dataframe(project: ProjectRecord) -> pd.DataFrame:
     - value
     """
     rows: list[dict[str, Any]] = []
-    fields = ProjectRecord.model_fields
+    fields = ProjectRecordBase.model_fields
 
     for field_name, field_info in fields.items():
         if field_name in PROJECT_EXCLUDED_FIELDS:
@@ -306,10 +307,10 @@ def bom_from_dataframe(bom_df: pd.DataFrame) -> list[BuildingBillMaterialsSlimRe
 
 
 def project_package_to_dataframes(
-    project: ProjectRecordBase,
+    project: ProjectRecord,
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
     """
-    Convert a full ProjectRecordBase package into:
+    Convert a full ProjectRecord package into:
     - project dataframe
     - bill of materials dataframe
     """
@@ -323,7 +324,7 @@ def project_package_from_dataframes(
     bom_df: pd.DataFrame,
 ) -> ProjectRecord:
     """
-    Reconstruct a ProjectRecordBase and attach its bill_of_materials from dataframes.
+    Reconstruct a ProjectRecord and attach its bill_of_materials from dataframes.
     """
 
     project_base = project_from_dataframe(project_df)

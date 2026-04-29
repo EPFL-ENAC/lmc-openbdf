@@ -8,12 +8,7 @@ from openbdf.cli.save import save_openbdf_to_xlsx
 app = typer.Typer(help="CLI utilities for the project.")
 
 
-@app.command()
-def hello(name: str):
-    print(f"Hello {name}")
-
-
-@app.command(name="explain")
+@app.command(name="explain", no_args_is_help=True)
 def explain(
     target: str = typer.Option(..., "--target", "-t", help="The data model class name"),
     field: list[str] = typer.Option(
@@ -49,7 +44,7 @@ def explain(
         print_to_console(analysis)
 
 
-@app.command(name="open")
+@app.command(name="open", no_args_is_help=True)
 def open(
     file: str = typer.Option(..., "--file", "-f", help="The file to open"),
     info_sheet: str = typer.Option(

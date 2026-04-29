@@ -38,10 +38,10 @@ class ModelAnalysis(BaseModel):
 
 def analyze_model(model_name: str, field_names: list[str] | None = None) -> ModelAnalysis:
     """Extracts metadata from the SQLModel and returns a structured object."""
-    from model.building_bill_materials_slim import BuildingBillMaterialsSlimRecordBase
-    from model.enums.openbdf_enum import OpenBDFEnum
-    from model.general_info import ProjectRecordBase  # Import inside to avoid circular deps
-    from model.tables import BuildingBillMaterialsSlimRecord, ProjectRecord
+    from openbdf.model.building_bill_materials_slim import BuildingBillMaterialsSlimRecordBase
+    from openbdf.model.enums.openbdf_enum import OpenBDFEnum
+    from openbdf.model.general_info import ProjectRecordBase  # Import inside to avoid circular deps
+    from openbdf.model.tables import BuildingBillMaterialsSlimRecord, ProjectRecord
 
     registry = {
         "ProjectRecordBase": ProjectRecordBase,
