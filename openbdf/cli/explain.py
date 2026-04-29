@@ -4,6 +4,9 @@ from typing import Any
 import typer
 from pydantic import BaseModel, Field
 
+from openbdf.model.lca_results_full import LCAResultsFullBase
+from openbdf.model.tables import LCAResultsFullRecord
+
 from ..lib.types import get_display_type, unwrap_optional
 
 # --- Data Models ---
@@ -48,6 +51,8 @@ def analyze_model(model_name: str, field_names: list[str] | None = None) -> Mode
         "ProjectRecord": ProjectRecord,
         "BuildingBillMaterialsSlimRecordBase": BuildingBillMaterialsSlimRecordBase,
         "BuildingBillMaterialsSlimRecord": BuildingBillMaterialsSlimRecord,
+        "LCAResultsFullBase": LCAResultsFullBase,
+        "LCAResultsFullRecord": LCAResultsFullRecord,
     }
     model_class = registry.get(model_name)
 

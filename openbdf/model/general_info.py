@@ -283,7 +283,20 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    project_certification: str = Field(
+    project_certification: bool = Field(
+        description="Indicate if a sustainability certification was used for the project.",
+        schema_extra=openbdf_field_metadata(
+            group="Project",
+            sub_group="Administrative data",
+            attribute_name="Certification",
+            field_code="project_certification",
+            description=("Indicate if a sustainability certification was used for the project."),
+            units="none",
+            requirements="Required",
+        ),
+    )
+
+    project_certification_name: Optional[str] = Field(
         default=None,
         sa_column=Column(String(200)),
         description="Sustainability certification applied for the project.",
@@ -726,7 +739,7 @@ class ProjectRecordBase(SQLModel):
         schema_extra=openbdf_field_metadata(
             group="Building",
             sub_group="Building data (general)",
-            attribute_name="Energy classification",
+            attribute_name="Energy classification system",
             field_code="building_energy_classification_system",
             description=(
                 "Energy classifications to assess the building's energy "
