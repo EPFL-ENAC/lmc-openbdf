@@ -13,6 +13,127 @@ class BuildingTypology(OpenBDFEnum):
     OTH = ("oth", "Other non-residential buildings (OTH)")
 
 
+class BuildingElementClassificationTier(OpenBDFEnum):
+    TIER_1 = (
+        "tier_1",
+        "Element Class (Tier 1)",
+        "Primary (top-level) hierarchical category of the custom or national building element classification.",
+    )
+    TIER_2 = (
+        "tier_2",
+        "Element Class (Tier 2)",
+        "Secondary hierarchical category of the custom or national building element classification.",
+    )
+    TIER_3 = (
+        "tier_3",
+        "Element Class (Tier 3)",
+        "The tertiary hierarchical category of the custom or national building element classification.",
+    )
+    TIER_4 = (
+        "tier_4",
+        "Element Class (Tier 4)",
+        "The quaternary (lowest-level) hierarchical category of the custom or national building element classification.",
+    )
+
+
+class BuildingClassificationCode(OpenBDFEnum):
+    US = (
+        "us",
+        "US - OmniClass / UniFormat / MasterFormat (CSI)",
+        "Building element classification for the United States.",
+    )
+    CA = (
+        "ca",
+        "CA - OmniClass",
+        "Building element classification for Canada.",
+    )
+    GB = (
+        "gb",
+        "GB - Uniclass 2015",
+        "Building element classification for the United Kingdom.",
+    )
+    DK = (
+        "dk",
+        "DK - CCS (Cuneco Classification System)",
+        "Building element classification for Denmark.",
+    )
+    SE = (
+        "se",
+        "SE - CoClass",
+        "Building element classification for Sweden.",
+    )
+    FI = (
+        "fi",
+        "FI - Talo 2000",
+        "Building element classification for Finland.",
+    )
+    NO = (
+        "no",
+        "NO - NS 3451",
+        "Building element classification for Norway.",
+    )
+    DE = (
+        "de",
+        "DE - DIN 276",
+        "Building element classification for Germany.",
+    )
+    FR = (
+        "fr",
+        "FR - NF P 03-001",
+        "Building element classification for France.",
+    )
+    CH = (
+        "ch",
+        "CH - eBKP-H",
+        "Building element classification for Switzerland.",
+    )
+    NL = (
+        "nl",
+        "NL - NL-SfB",
+        "Building element classification for the Netherlands.",
+    )
+    AT = (
+        "at",
+        "AT - ÖNORM B 1801",
+        "Building element classification for Austria.",
+    )
+    IT = (
+        "it",
+        "IT - UNI 8290",
+        "Building element classification for Italy.",
+    )
+    ES = (
+        "es",
+        "ES - GuBIMclass",
+        "Building element classification for Spain.",
+    )
+    AU = (
+        "au",
+        "AU - NATSPEC / UniFormat (AU adaptation)",
+        "Building element classification for Australia.",
+    )
+    JP = (
+        "jp",
+        "JP - JCCS (Japan Construction Classification System)",
+        "Building element classification for Japan.",
+    )
+    BR = (
+        "br",
+        "BR - ABNT NBR 15965",
+        "Building element classification for Brazil.",
+    )
+    CZ = (
+        "cz",
+        "CZ - TSKP",
+        "Building element classification for the Czech Republic.",
+    )
+    INT = (
+        "int",
+        "INT - ISO 12006-2 (international framework)",
+        "International framework for classification of construction objects.",
+    )
+
+
 class RoofType(OpenBDFEnum):
     FLAT = ("flat", "Flat roof")
     SINGLE_PITCHED = ("single_pitched", "Single pitched roof")

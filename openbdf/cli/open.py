@@ -1,8 +1,10 @@
 from pathlib import Path
 
 import pandas as pd
-from lib.converters.dataframe import bom_from_dataframe, project_from_dataframe, project_package_from_dataframes
-from model.tables import BuildingBillMaterialsSlimRecord
+
+from openbdf.lib.converters.dataframe import bom_from_dataframe, project_from_dataframe, project_package_from_dataframes
+from openbdf.model.building_bill_materials_slim import BuildingBillMaterialsSlimRecordBase
+from openbdf.model.tables import BuildingBillMaterialsSlimRecord
 
 
 def open_openbdf_xlsx(
@@ -36,7 +38,7 @@ def open_building_bill_of_materials(
     start_col: int = 0,
     end_row: int | None = None,
     end_col: int | None = None,
-) -> list[BuildingBillMaterialsSlimRecord]:
+) -> list[BuildingBillMaterialsSlimRecordBase]:
     """Open a building bill of materials from an Excel file and return a list of BuildingBillMaterialsSlimRecord."""
 
     df = pd.read_excel(xlsx_path, sheet_name=sheet_name, header=header_row)

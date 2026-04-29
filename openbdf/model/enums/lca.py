@@ -1,7 +1,7 @@
 from .openbdf_enum import OpenBDFEnum
 
 
-class LCAModel(OpenBDFEnum):
+class LCIModelingApproach_ISO14040_44(OpenBDFEnum):
     PROCESS_BASED = (
         "process_based",
         "Process-based",
@@ -80,87 +80,87 @@ class LifeCycleModule_ISO14040_44(OpenBDFEnum):
     )
     A2 = (
         "A2",
-        "Transport to Manufacturer",
-        "Transportation of raw materials to the manufacturer.",
+        "Transport to manufacturer",
+        "Transportation of raw materials to the manufacturer",
     )
     A3 = (
         "A3",
         "Manufacturing",
-        "Production of the product itself.",
+        "Production of the product itself",
     )
     A4 = (
         "A4",
-        "Transport to Site",
-        "Transportation of the product to the construction site.",
+        "Transport to site",
+        "Transportation of the product to the construction site",
     )
     A5 = (
         "A5",
         "Construction/Installation",
-        "Installation of the product into the building.",
+        "Installation of the product into the building",
     )
     B1 = (
         "B1",
         "Use",
-        "Environmental impacts arising from the product in use (e.g., release of substances).",
+        "Environmental impacts arising from the product in use (eg, release of substances)",
     )
     B2 = (
         "B2",
         "Maintenance",
-        "Actions to maintain the product's functional quality (cleaning, painting).",
+        "Actions to maintain the product's functional quality (cleaning, painting)",
     )
     B3 = (
         "B3",
         "Repair",
-        "Corrective actions to return the product to a functional state.",
+        "Corrective actions to return the product to a functional state",
     )
     B4 = (
         "B4",
         "Replacement",
-        "Replacing the product or parts of it at the end of its service life.",
+        "Replacing the product or parts of it at the end of its service life",
     )
     B5 = (
         "B5",
         "Refurbishment",
-        "Major changes to restore or improve performance.",
+        "Major changes to restore or improve performance",
     )
     B6 = (
         "B6",
         "Operational Energy Use",
-        "Energy consumption related to the building's operation (heating, cooling, lighting).",
+        "Energy consumption related to the building's operation (heating, cooling, lighting)",
     )
     B7 = (
         "B7",
         "Operational Water Use",
-        "Water consumption related to the building's operation.",
+        "Water consumption related to the building's operation",
     )
     C1 = (
         "C1",
         "De-construction/Demolition",
-        "Dismantling or demolishing the building/product.",
+        "Dismantling or demolishing the building/product",
     )
     C2 = (
         "C2",
-        "Transport to Disposal",
-        "Transporting the waste to processing or disposal sites.",
+        "Transport",
+        "Transporting the waste to processing or disposal sites",
     )
     C3 = (
         "C3",
         "Waste Processing",
-        "Processing waste for reuse, recovery, or recycling.",
+        "Processing waste for reuse, recovery, or recycling",
     )
     C4 = (
         "C4",
         "Disposal",
-        "Final disposal of waste that cannot be recovered (e.g., landfill).",
+        "Final disposal of waste that cannot be recovered (eg, landfill)",
     )
     D1 = (
         "D1",
-        "Reuse, Recovery, Recycling Potential",
-        "Net benefits or loads resulting from reusing or recycling materials (avoided emissions).",
+        "Reuse, Recovery, and Recycling Potential",
+        "Net benefits or loads resulting from reusing or recycling materials (avoided emissions)",
     )
     D2 = (
         "D2",
-        "Benefits and Loads Beyond the System Boundary",
+        "Exported Energy (or Energy Recovery Potential)",
         None,
     )
 
