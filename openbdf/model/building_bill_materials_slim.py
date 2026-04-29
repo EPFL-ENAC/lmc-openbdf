@@ -3,15 +3,13 @@ from __future__ import annotations
 from decimal import Decimal
 from typing import Optional
 
-from sqlmodel import Column, Field, Integer, Numeric, Relationship, SQLModel, String
+from sqlmodel import Column, Field, Integer, Numeric, SQLModel, String
 from sqlmodel import Enum as SAEnum
 
-# Assuming these enums exist based on the CSV "Categorical (Predefined)" status
 from .enums.buildings import AboveBelowGround
 from .enums.element_classifications import OpenBDFBuildingElementClassification
 from .enums.materials import OpenBDFMaterialClassification
 from .field_metadata import openbdf_field_metadata
-from .general_info import ProjectRecord
 
 
 class BuildingBillMaterialsSlimRecordBase(SQLModel):
@@ -179,7 +177,7 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
         description="The nomenclature of the specific Environmental Product Declaration (EPD) dataset used.",
         schema_extra=openbdf_field_metadata(
             attribute_name="EPD Database Name",
-            field_code="lca_dataset",
+            field_code="lca_dataset_name",
             description="The nomenclature of the specific Environmental Product Declaration (EPD) dataset used.",
             constraint="string < 200 characters",
             units="none",
@@ -193,7 +191,7 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
         description="The URL of the specific Environmental Product Declaration (EPD) dataset used.",
         schema_extra=openbdf_field_metadata(
             attribute_name="EPD Database Link",
-            field_code="lca_dataset",
+            field_code="lca_dataset_link",
             description="The URL of the specific Environmental Product Declaration (EPD) dataset used.",
             constraint="string < 200 characters",
             units="none",
@@ -284,15 +282,3 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
             requirements="Recommended",
         ),
     )
-
-
-class BuildingBillMaterialsSlimRecord(BuildingBillMaterialsSlimRecordBase, table=True):
-    __tablename__ = "building_bill_materials_slim_record"
-
-    id: Optional[int] = Field(default=None, primary_key=True)
-
-    # Relationship to Project
-    project_id: int = Field(foreign_key="project_record.id", nullable=False)
-
-    # Linking back to the Project model
-    project: Optional["ProjectRecord"] = Relationship(back_populates="bill_of_materials")
