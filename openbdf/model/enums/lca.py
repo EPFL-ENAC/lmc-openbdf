@@ -27,17 +27,17 @@ class LCAModel(OpenBDFEnum):
 class LifeCycleStage_ISO14040_43(OpenBDFEnum):
     CRADLE_TO_GATE = (
         "cradle_to_gate",
-        "Cradle to Gate",
+        "Cradle to Gate (A1–A3)",
         "Covers modules A1–A3.",
     )
     CRADLE_TO_GATE_WITH_OPTIONS = (
         "cradle_to_gate_options",
-        "Cradle to Gate with Options",
+        "Cradle to Gate with Options (A1–A3 + others)",
         "Covers modules A1–A3 plus others.",
     )
     CRADLE_TO_GRAVE = (
         "cradle_to_grave",
-        "Cradle to Grave",
+        "Cradle to Grave (A1–C4)",
         "Covers modules A1–C4.",
     )
     CRADLE_TO_GRAVE_MODULE_D = (
@@ -201,17 +201,17 @@ class LCATemporalApproach(OpenBDFEnum):
 class LCIAMethodology(OpenBDFEnum):
     EN_15804_A2 = (
         "en_15804_a2",
-        "EN 15804+A2 (EF 3.0)",
+        "EN 15804+A2 (EF 3.0) - Current EU standard",
         "Current EU standard for environmental product declarations.",
     )
     EN_15804_A1 = (
         "en_15804_a1",
-        "EN 15804+A1 (CML 2001)",
+        "EN 15804+A1 (CML 2001) - Older EU standard",
         "Older EU standard for environmental product declarations.",
     )
     TRACI_2_1 = (
         "traci_2_1",
-        "TRACI 2.1",
+        "TRACI 2.1 - Standard for North America/LEED",
         "Standard for North America/LEED (The Tool for Reduction and Assessment of Chemical and Other Environmental Impacts).",
     )
     RECIPE_2016 = (
