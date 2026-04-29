@@ -8,6 +8,7 @@ from typing import Any, Optional, Union, cast, get_args, get_origin
 import pandas as pd
 from sqlmodel import SQLModel
 
+from openbdf.lib.converters.attribute_translator import AttributeTranslator
 from openbdf.model.building_bill_materials_slim import BuildingBillMaterialsSlimRecordBase
 from openbdf.model.enums.openbdf_enum import OpenBDFEnum
 from openbdf.model.general_info import ProjectRecordBase
@@ -230,7 +231,9 @@ def bom_to_dataframe(
     return pd.DataFrame(rows, columns=[field_code for _, _, field_code in included_fields])
 
 
-def project_from_dataframe(project_df: pd.DataFrame) -> ProjectRecordBase:
+def project_from_dataframe(
+    project_df: pd.DataFrame, attribute_translator: AttributeTranslator = AttributeTranslator({})
+) -> ProjectRecordBase:
     """
     Build a ProjectRecordBase from a dataframe produced by project_to_dataframe().
 
@@ -259,7 +262,7 @@ def project_from_dataframe(project_df: pd.DataFrame) -> ProjectRecordBase:
         if pd.isna(field_code):
             continue
 
-        field_code = str(field_code)
+        field_code = attribute_translator.translate(str(field_code))
         field_name = code_to_name.get(field_code)
         if field_name is None:
             continue
@@ -271,7 +274,9 @@ def project_from_dataframe(project_df: pd.DataFrame) -> ProjectRecordBase:
     return ProjectRecordBase(**kwargs)
 
 
-def bom_from_dataframe(bom_df: pd.DataFrame) -> list[BuildingBillMaterialsSlimRecordBase]:
+def bom_from_dataframe(
+    bom_df: pd.DataFrame, attribute_translator: AttributeTranslator = AttributeTranslator({})
+) -> list[BuildingBillMaterialsSlimRecordBase]:
     """
     Build a list of BuildingBillMaterialsSlimRecord from a dataframe produced
     by bom_to_dataframe().
@@ -291,7 +296,7 @@ def bom_from_dataframe(bom_df: pd.DataFrame) -> list[BuildingBillMaterialsSlimRe
         kwargs: dict[str, Any] = {}
 
         for column in bom_df.columns.tolist():
-            field_name = code_to_name.get(str(column))
+            field_name = code_to_name.get(attribute_translator.translate(str(column)))
             if field_name is None:
                 continue
 
@@ -322,13 +327,17 @@ def project_package_to_dataframes(
 def project_package_from_dataframes(
     project_df: pd.DataFrame,
     bom_df: pd.DataFrame,
+    attribute_translator: AttributeTranslator | None = None,
 ) -> ProjectRecord:
     """
     Reconstruct a ProjectRecord and attach its bill_of_materials from dataframes.
     """
 
-    project_base = project_from_dataframe(project_df)
-    bill_of_materials_base = bom_from_dataframe(bom_df)
+    if attribute_translator is None:
+        attribute_translator = AttributeTranslator({})
+
+    project_base = project_from_dataframe(project_df, attribute_translator)
+    bill_of_materials_base = bom_from_dataframe(bom_df, attribute_translator)
 
     project = ProjectRecord(
         **project_base.model_dump(),
@@ -336,3 +345,18 @@ def project_package_from_dataframes(
     )
 
     return project
+
+
+def load_attribute_translator_from_dataframe(
+    df: pd.DataFrame,
+    attribute_name_col: str = "attribute_name",
+    translated_name_col: str = "translated_name",
+) -> AttributeTranslator:
+    """
+    Load an AttributeTranslator from a dataframe containing at least two columns:
+    - attribute_name_col: the original attribute name (e.g. field_code)
+    - translated_name_col: the translated attribute name (e.g. human-readable name)
+    """
+    if attribute_name_col not in df.columns or translated_name_col not in df.columns:
+        raise ValueError(f"Dataframe must contain columns '{attribute_name_col}' and '{translated_name_col}'")
+    return AttributeTranslator.from_dataframe(df, attribute_name_col, translated_name_col)

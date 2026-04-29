@@ -4,17 +4,17 @@ from .openbdf_enum import OpenBDFEnum
 class LCIModelingApproach_ISO14040_44(OpenBDFEnum):
     PROCESS_BASED = (
         "process_based",
-        "Process-based",
+        "Process-based (Typically bottom-up, highly specific data)",
         "Calculates impacts by summing individual process steps.",
     )
     IO_BASED = (
         "io_based",
-        "I-O based",
+        "Environmentally Extended Input-Output (EEIO) (Top-down, based on economic sector averages)",
         "Input-Output based modeling using economic data.",
     )
     HYBRID_BASED = (
         "hybrid_based",
-        "Hybrid-based",
+        "Hybrid (A mix of process data and IO data)",
         "Combines both process-based and I-O based methodologies.",
     )
     OTHER = (

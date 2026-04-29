@@ -30,7 +30,7 @@ def explain(
       openbdf explain --target ProjectRecordBase --field project_name
       openbdf explain --target ProjectRecordBase
     """
-    from cli.explain import analyze_model, generate_markdown, print_to_console
+    from openbdf.cli.explain import analyze_model, generate_markdown, print_to_console
 
     # field will be None if the option is not provided,
     # or a list of strings if one or more are provided.
@@ -107,6 +107,36 @@ def open(
         "-ec",
         help="The ending column index (0-based) for the bill of materials data in the Excel sheet. If not provided, it will read until the last column with data.",
     ),
+    attribute_translator_path: str = typer.Option(
+        None,
+        "--attribute-translator",
+        "-at",
+        help="Optional path to an Excel file containing an attribute translator sheet. If provided, it will be used to translate attribute names from the input dataframes. The sheet should contain at least two columns: one for the original attribute names and one for the translated names.",
+    ),
+    attribute_translator_sheet: str = typer.Option(
+        "Attribute Translator",
+        "--attribute-translator-sheet",
+        "-ats",
+        help="The sheet name in the attribute translator Excel file that contains the translation data. Default is 'Attribute Translator'.",
+    ),
+    attribute_translator_attribute_name_col: str = typer.Option(
+        "attribute_name",
+        "--attribute-translator-attribute-name-col",
+        "-atanc",
+        help="The column name in the attribute translator sheet that contains the original attribute names. Default is 'attribute_name'.",
+    ),
+    attribute_translator_translated_name_col: str = typer.Option(
+        "translated_name",
+        "--attribute-translator-translated-name-col",
+        "-attnc",
+        help="The column name in the attribute translator sheet that contains the translated attribute names. Default is 'translated_name'.",
+    ),
+    attribute_translator_header_row: int = typer.Option(
+        0,
+        "--attribute-translator-header-row",
+        "-athr",
+        help="The row index (0-based) of the header in the attribute translator sheet. Default is 0 (the first row).",
+    ),
 ):
     """
     Open a file and display its contents.
@@ -126,10 +156,15 @@ def open(
         bom_start_col=bom_start_col,
         bom_end_row=bom_end_row,
         bom_end_col=bom_end_col,
+        attribute_translator_path=attribute_translator_path,
+        attribute_translator_sheet=attribute_translator_sheet,
+        attribute_translator_attribute_name_col=attribute_translator_attribute_name_col,
+        attribute_translator_translated_name_col=attribute_translator_translated_name_col,
+        attribute_translator_header_row=attribute_translator_header_row,
     )
 
     save_openbdf_to_xlsx(
-        xlsx_path=Path("../output.xlsx"),
+        xlsx_path=Path("./output.xlsx"),
         project=project,
     )
 
