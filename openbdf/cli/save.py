@@ -4,8 +4,10 @@ import pandas as pd
 from openpyxl.styles import Alignment, Font, NamedStyle, PatternFill
 from pydantic.fields import FieldInfo
 
+from openbdf.lib.converters.attribute_translator import COMMON_CATEGORY_NAMES
 from openbdf.lib.converters.dataframe import bom_to_dataframe, project_to_dataframe
 from openbdf.lib.types import get_display_type, unwrap_optional
+from openbdf.model.enums.openbdf_enum import OpenBDFEnum
 from openbdf.model.general_info import ProjectRecordBase
 from openbdf.model.tables import BuildingBillMaterialsSlimRecord, ProjectRecord
 
@@ -28,7 +30,7 @@ def get_field_extra(field: FieldInfo) -> dict:
 
 def save_openbdf_to_xlsx(
     xlsx_path: str | Path,
-    project: ProjectRecord,
+    project: ProjectRecord | None,
     info_sheet_name: str = "General Info",
     bom_sheet_name: str = "Building Bill of Materials",
 ):
@@ -36,10 +38,10 @@ def save_openbdf_to_xlsx(
 
     with pd.ExcelWriter(xlsx_path, engine="openpyxl") as writer:
         info_to_xlsx(writer, project, info_sheet_name)
-        bom_to_xlsx(writer, project.bill_of_materials, bom_sheet_name)
+        bom_to_xlsx(writer, project.bill_of_materials if project else None, bom_sheet_name)
 
 
-def info_to_xlsx(writer: pd.ExcelWriter, project: ProjectRecord, sheet_name: str):
+def info_to_xlsx(writer: pd.ExcelWriter, project: ProjectRecord | None, sheet_name: str):
     info_sheet = writer.book.create_sheet(sheet_name)
 
     project_record_fields = ProjectRecordBase.model_fields  # Base is on purpose to avoid DB-only fields like ID, etc...
@@ -91,7 +93,7 @@ def info_to_xlsx(writer: pd.ExcelWriter, project: ProjectRecord, sheet_name: str
         else:
             r.style = OPTIONAL_STYLE
 
-        info_sheet.cell(row=cell_row, column=10, value=getattr(project, field_code))
+        info_sheet.cell(row=cell_row, column=10, value=getattr(project, field_code) if project else "")
 
         if requirements == "Required":
             for c in header_cells:
@@ -130,7 +132,9 @@ def info_to_xlsx(writer: pd.ExcelWriter, project: ProjectRecord, sheet_name: str
     info_sheet.column_dimensions["J"].width = 25
 
 
-def bom_to_xlsx(writer: pd.ExcelWriter, records: list[BuildingBillMaterialsSlimRecord], sheet_name: str):
+def bom_to_xlsx(writer: pd.ExcelWriter, records: list[BuildingBillMaterialsSlimRecord] | None, sheet_name: str):
+    if records is None:
+        records = []
     df = bom_to_dataframe(records)
 
     df.to_excel(writer, sheet_name=sheet_name, index=False, header=False, startcol=1, startrow=8)
@@ -219,3 +223,81 @@ def bom_to_xlsx(writer: pd.ExcelWriter, records: list[BuildingBillMaterialsSlimR
     bom_sheet.column_dimensions["U"].width = 25
 
     bom_sheet.row_dimensions[2].height = 15
+
+
+def save_attribute_translator(
+    xlsx_path: str | Path,
+):
+    """Save a template Excel file for the attribute translator."""
+    with pd.ExcelWriter(xlsx_path, engine="openpyxl") as writer:
+        make_attribute_translator_openbdf_pydantic(
+            writer, COMMON_CATEGORY_NAMES["project"], ProjectRecordBase.model_fields
+        )
+        make_attribute_translator_openbdf_pydantic(
+            writer, COMMON_CATEGORY_NAMES["bom"], BuildingBillMaterialsSlimRecord.model_fields
+        )
+        export_all_enums_in_model_to_attribute_translator(writer, ProjectRecordBase.model_fields)
+        export_all_enums_in_model_to_attribute_translator(writer, BuildingBillMaterialsSlimRecord.model_fields)
+
+
+def make_attribute_translator_openbdf_pydantic(writer: pd.ExcelWriter, sheet_name: str, model: dict[str, FieldInfo]):
+    info_sheet = writer.book.create_sheet(sheet_name)
+    info_sheet.cell(row=1, column=1, value="Field code in your format")
+    info_sheet.cell(row=1, column=2, value="OpenBDF field code")
+    info_sheet.cell(row=1, column=3, value="OpenBDF attribute name")
+
+    for cell_row, field_code in enumerate(model, start=2):  # xlsx are 1-indexed (ewww)
+        metadata = model.get(field_code)
+        if not metadata:
+            continue
+
+        extra = get_field_extra(metadata)
+
+        fc = info_sheet.cell(row=cell_row, column=2, value=field_code)
+        fc.style = FIELD_CODE_STYLE
+
+        an = info_sheet.cell(row=cell_row, column=3, value=extra.get("attribute_name", field_code))
+        an.style = ATTRIBUTES_NAME_STYLE
+
+    info_sheet.column_dimensions["A"].width = 30
+    info_sheet.column_dimensions["B"].width = 30
+    info_sheet.column_dimensions["C"].width = 20
+
+
+def export_all_enums_in_model_to_attribute_translator(writer: pd.ExcelWriter, model: dict[str, FieldInfo]):
+    for field in model.values():
+        annotation = field.annotation
+        data_type, _ = unwrap_optional(annotation)
+        if isinstance(data_type, type) and issubclass(data_type, OpenBDFEnum):
+            make_attribute_translator_openbdfenum(writer, data_type.__name__, data_type)
+
+
+def make_attribute_translator_openbdfenum(writer: pd.ExcelWriter, sheet_name: str, enum: type[OpenBDFEnum]):
+    info_sheet = writer.book.create_sheet(sheet_name)
+
+    info_sheet.cell(row=1, column=1, value="Value in your format")
+    info_sheet.cell(row=1, column=2, value="OpenBDF enum value")
+    info_sheet.cell(row=1, column=3, value="OpenBDF value display name")
+    info_sheet.cell(row=1, column=4, value="OpenBDF value description (if any)")
+    info_sheet.cell(row=1, column=5, value="OpenBDF value parent category (if applicable)")
+
+    for cell_row, item in enumerate(enum, start=2):  # xlsx are 1-indexed (ewww)
+        display_name = getattr(item, "display_name", None)
+        description = getattr(item, "description", None)
+        parent_category = getattr(item, "parent_category", None)
+
+        fc = info_sheet.cell(row=cell_row, column=2, value=str(item.value))
+        fc.style = FIELD_CODE_STYLE
+
+        an = info_sheet.cell(row=cell_row, column=3, value=str(display_name) if display_name else str(item.value))
+        an.style = ATTRIBUTES_NAME_STYLE
+
+        d = info_sheet.cell(row=cell_row, column=4, value=str(description) if description else "")
+
+        pc = info_sheet.cell(row=cell_row, column=5, value=str(parent_category[0]) if parent_category else "")
+
+    info_sheet.column_dimensions["A"].width = 30
+    info_sheet.column_dimensions["B"].width = 30
+    info_sheet.column_dimensions["C"].width = 40
+    info_sheet.column_dimensions["D"].width = 140
+    info_sheet.column_dimensions["E"].width = 40

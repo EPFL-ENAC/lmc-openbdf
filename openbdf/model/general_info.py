@@ -303,8 +303,8 @@ class ProjectRecordBase(SQLModel):
         schema_extra=openbdf_field_metadata(
             group="Project",
             sub_group="Administrative data",
-            attribute_name="Certification",
-            field_code="project_certification",
+            attribute_name="Certification name",
+            field_code="project_certification_name",
             description=("Type of sustainability certification being applied for the project."),
             constraint="string < 200 characters",
             units="none",
