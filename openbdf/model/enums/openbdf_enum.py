@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from enum import Enum
 
+from openbdf.lib.converters.attribute_translator import DocumentTranslator
+
 
 class OpenBDFEnum(str, Enum):
     display_name: str
@@ -60,10 +62,13 @@ class OpenBDFEnum(str, Enum):
         )
 
     @classmethod
-    def find_value(cls, label: str) -> OpenBDFEnum | None:
+    def find_value(cls, label: str, translator: DocumentTranslator | None) -> OpenBDFEnum | None:
         """
         Return the enum instance matching the value or display_name.
         """
+        if translator:
+            label = translator.translate(cls.__name__, label)
+
         for item in cls:
             if (
                 label == item.value
