@@ -3,14 +3,13 @@ from __future__ import annotations
 from decimal import Decimal
 from typing import Optional
 
-from sqlmodel import Column, Field, Numeric, SQLModel
+from sqlmodel import Field, SQLModel
 
 from .field_metadata import openbdf_field_metadata
 
 
 class LCAResultsFullBase(SQLModel):
     gwp_total_a1_a3: Decimal = Field(
-        sa_column=Column(Numeric),
         description="Global Warming Potential - Total for module A1-A3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Total (A1-A3)",
@@ -24,7 +23,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_total_a4: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Global Warming Potential - Total for module A4.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Total (A4)",
@@ -38,7 +36,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_total_a5: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Global Warming Potential - Total for module A5.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Total (A5)",
@@ -52,7 +49,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_total_b1: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Global Warming Potential - Total for module B1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Total (B1)",
@@ -66,7 +62,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_total_b2: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Global Warming Potential - Total for module B2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Total (B2)",
@@ -80,7 +75,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_total_b3: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Global Warming Potential - Total for module B3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Total (B3)",
@@ -94,7 +88,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_total_b4: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Global Warming Potential - Total for module B4.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Total (B4)",
@@ -108,7 +101,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_total_b5: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Global Warming Potential - Total for module B5.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Total (B5)",
@@ -122,7 +114,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_total_b6: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Global Warming Potential - Total for module B6.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Total (B6)",
@@ -136,7 +127,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_total_c1: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Global Warming Potential - Total for module C1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Total (C1)",
@@ -150,7 +140,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_total_c2: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Global Warming Potential - Total for module C2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Total (C2)",
@@ -164,7 +153,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_total_c3: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Global Warming Potential - Total for module C3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Total (C3)",
@@ -178,7 +166,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_total_c4: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Global Warming Potential - Total for module C4.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Total (C4)",
@@ -192,7 +179,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_total_d: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Global Warming Potential - Total for module D.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Total (D)",
@@ -206,7 +192,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_total_d1: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Global Warming Potential - Total for module D1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Total (D1)",
@@ -220,7 +205,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_total_d2: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Global Warming Potential - Total for module D2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Total (D2)",
@@ -233,7 +217,6 @@ class LCAResultsFullBase(SQLModel):
     )
 
     gwp_total: Decimal = Field(
-        sa_column=Column(Numeric),
         description="Total Global Warming Potential.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Total Global Warming Potential",
@@ -247,7 +230,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_f_a1_a3: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Global Warming Potential - Fossil for module A1-A3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Fossil (A1-A3)",
@@ -261,7 +243,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_f_a4: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Global Warming Potential - Fossil for module A4.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Fossil (A4)",
@@ -275,7 +256,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_f_a5: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Global Warming Potential - Fossil for module A5.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Fossil (A5)",
@@ -289,7 +269,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_f_b1: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Global Warming Potential - Fossil for module B1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Fossil (B1)",
@@ -303,7 +282,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_f_b2: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Global Warming Potential - Fossil for module B2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Fossil (B2)",
@@ -317,7 +295,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_f_b3: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Global Warming Potential - Fossil for module B3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Fossil (B3)",
@@ -331,7 +308,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_f_b4: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Global Warming Potential - Fossil for module B4.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Fossil (B4)",
@@ -345,7 +321,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_f_b5: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Global Warming Potential - Fossil for module B5.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Fossil (B5)",
@@ -359,7 +334,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_f_b6: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Global Warming Potential - Fossil for module B6.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Fossil (B6)",
@@ -373,7 +347,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_f_c1: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Global Warming Potential - Fossil for module C1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Fossil (C1)",
@@ -387,7 +360,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_f_c2: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Global Warming Potential - Fossil for module C2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Fossil (C2)",
@@ -401,7 +373,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_f_c3: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Global Warming Potential - Fossil for module C3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Fossil (C3)",
@@ -415,7 +386,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_f_c4: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Global Warming Potential - Fossil for module C4.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Fossil (C4)",
@@ -429,7 +399,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_f_d: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Global Warming Potential - Fossil for module D.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Fossil (D)",
@@ -443,7 +412,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_f_d1: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Global Warming Potential - Fossil for module D1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Fossil (D1)",
@@ -457,7 +425,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_f_d2: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Global Warming Potential - Fossil for module D2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Fossil (D2)",
@@ -471,7 +438,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_f_total: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Total Global Warming Potential - Fossil.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Total Global Warming Potential - Fossil",
@@ -485,7 +451,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_b_a1_a3: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Global Warming Potential - Biogenic for module A1-A3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Biogenic (A1-A3)",
@@ -499,7 +464,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_b_a4: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Global Warming Potential - Biogenic for module A4.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Biogenic (A4)",
@@ -513,7 +477,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_b_a5: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Global Warming Potential - Biogenic for module A5.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Biogenic (A5)",
@@ -527,7 +490,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_b_b1: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Global Warming Potential - Biogenic for module B1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Biogenic (B1)",
@@ -541,7 +503,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_b_b2: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Global Warming Potential - Biogenic for module B2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Biogenic (B2)",
@@ -555,7 +516,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_b_b3: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Global Warming Potential - Biogenic for module B3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Biogenic (B3)",
@@ -569,7 +529,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_b_b4: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Global Warming Potential - Biogenic for module B4.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Biogenic (B4)",
@@ -583,7 +542,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_b_b5: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Global Warming Potential - Biogenic for module B5.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Biogenic (B5)",
@@ -597,7 +555,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_b_b6: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Global Warming Potential - Biogenic for module B6.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Biogenic (B6)",
@@ -611,7 +568,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_b_c1: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Global Warming Potential - Biogenic for module C1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Biogenic (C1)",
@@ -625,7 +581,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_b_c2: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Global Warming Potential - Biogenic for module C2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Biogenic (C2)",
@@ -639,7 +594,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_b_c3: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Global Warming Potential - Biogenic for module C3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Biogenic (C3)",
@@ -653,7 +607,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_b_c4: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Global Warming Potential - Biogenic for module C4.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Biogenic (C4)",
@@ -667,7 +620,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_b_d: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Global Warming Potential - Biogenic for module D.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Biogenic (D)",
@@ -681,7 +633,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_b_d1: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Global Warming Potential - Biogenic for module D1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Biogenic (D1)",
@@ -695,7 +646,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_b_d2: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Global Warming Potential - Biogenic for module D2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Biogenic (D2)",
@@ -709,7 +659,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_b_total: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Total Global Warming Potential - Biogenic.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Total Global Warming Potential - Biogenic",
@@ -723,7 +672,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_luc_a1_a3: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description=("Global Warming Potential - Land Use and Land Use Change for module A1-A3."),
         schema_extra=openbdf_field_metadata(
             attribute_name=("Global Warming Potential - Land Use and Land Use Change (A1-A3)"),
@@ -737,7 +685,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_luc_a4: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description=("Global Warming Potential - Land Use and Land Use Change for module A4."),
         schema_extra=openbdf_field_metadata(
             attribute_name=("Global Warming Potential - Land Use and Land Use Change (A4)"),
@@ -751,7 +698,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_luc_a5: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description=("Global Warming Potential - Land Use and Land Use Change for module A5."),
         schema_extra=openbdf_field_metadata(
             attribute_name=("Global Warming Potential - Land Use and Land Use Change (A5)"),
@@ -765,7 +711,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_luc_b1: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description=("Global Warming Potential - Land Use and Land Use Change for module B1."),
         schema_extra=openbdf_field_metadata(
             attribute_name=("Global Warming Potential - Land Use and Land Use Change (B1)"),
@@ -779,7 +724,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_luc_b2: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description=("Global Warming Potential - Land Use and Land Use Change for module B2."),
         schema_extra=openbdf_field_metadata(
             attribute_name=("Global Warming Potential - Land Use and Land Use Change (B2)"),
@@ -793,7 +737,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_luc_b3: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description=("Global Warming Potential - Land Use and Land Use Change for module B3."),
         schema_extra=openbdf_field_metadata(
             attribute_name=("Global Warming Potential - Land Use and Land Use Change (B3)"),
@@ -807,7 +750,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_luc_b4: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description=("Global Warming Potential - Land Use and Land Use Change for module B4."),
         schema_extra=openbdf_field_metadata(
             attribute_name=("Global Warming Potential - Land Use and Land Use Change (B4)"),
@@ -821,7 +763,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_luc_b5: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description=("Global Warming Potential - Land Use and Land Use Change for module B5."),
         schema_extra=openbdf_field_metadata(
             attribute_name=("Global Warming Potential - Land Use and Land Use Change (B5)"),
@@ -835,7 +776,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_luc_b6: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description=("Global Warming Potential - Land Use and Land Use Change for module B6."),
         schema_extra=openbdf_field_metadata(
             attribute_name=("Global Warming Potential - Land Use and Land Use Change (B6)"),
@@ -849,7 +789,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_luc_c1: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description=("Global Warming Potential - Land Use and Land Use Change for module C1."),
         schema_extra=openbdf_field_metadata(
             attribute_name=("Global Warming Potential - Land Use and Land Use Change (C1)"),
@@ -863,7 +802,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_luc_c2: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description=("Global Warming Potential - Land Use and Land Use Change for module C2."),
         schema_extra=openbdf_field_metadata(
             attribute_name=("Global Warming Potential - Land Use and Land Use Change (C2)"),
@@ -877,7 +815,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_luc_c3: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description=("Global Warming Potential - Land Use and Land Use Change for module C3."),
         schema_extra=openbdf_field_metadata(
             attribute_name=("Global Warming Potential - Land Use and Land Use Change (C3)"),
@@ -891,7 +828,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_luc_c4: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description=("Global Warming Potential - Land Use and Land Use Change for module C4."),
         schema_extra=openbdf_field_metadata(
             attribute_name=("Global Warming Potential - Land Use and Land Use Change (C4)"),
@@ -905,7 +841,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_luc_d: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description=("Global Warming Potential - Land Use and Land Use Change for module D."),
         schema_extra=openbdf_field_metadata(
             attribute_name=("Global Warming Potential - Land Use and Land Use Change (D)"),
@@ -919,7 +854,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_luc_d1: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description=("Global Warming Potential - Land Use and Land Use Change for module D1."),
         schema_extra=openbdf_field_metadata(
             attribute_name=("Global Warming Potential - Land Use and Land Use Change (D1)"),
@@ -933,7 +867,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_luc_d2: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description=("Global Warming Potential - Land Use and Land Use Change for module D2."),
         schema_extra=openbdf_field_metadata(
             attribute_name=("Global Warming Potential - Land Use and Land Use Change (D2)"),
@@ -947,7 +880,6 @@ class LCAResultsFullBase(SQLModel):
 
     gwp_luc_total: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description=("Total Global Warming Potential - Land Use and Land Use Change."),
         schema_extra=openbdf_field_metadata(
             attribute_name=("Total Global Warming Potential - Land Use and Land Use Change"),
@@ -961,7 +893,6 @@ class LCAResultsFullBase(SQLModel):
 
     odp_a1_a3: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Ozone Depletion Potential for module A1-A3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Ozone Depletion Potential (A1-A3)",
@@ -975,7 +906,6 @@ class LCAResultsFullBase(SQLModel):
 
     odp_a4: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Ozone Depletion Potential for module A4.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Ozone Depletion Potential (A4)",
@@ -989,7 +919,6 @@ class LCAResultsFullBase(SQLModel):
 
     odp_a5: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Ozone Depletion Potential for module A5.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Ozone Depletion Potential (A5)",
@@ -1003,7 +932,6 @@ class LCAResultsFullBase(SQLModel):
 
     odp_b1: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Ozone Depletion Potential for module B1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Ozone Depletion Potential (B1)",
@@ -1017,7 +945,6 @@ class LCAResultsFullBase(SQLModel):
 
     odp_b2: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Ozone Depletion Potential for module B2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Ozone Depletion Potential (B2)",
@@ -1031,7 +958,6 @@ class LCAResultsFullBase(SQLModel):
 
     odp_b3: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Ozone Depletion Potential for module B3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Ozone Depletion Potential (B3)",
@@ -1045,7 +971,6 @@ class LCAResultsFullBase(SQLModel):
 
     odp_b4: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Ozone Depletion Potential for module B4.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Ozone Depletion Potential (B4)",
@@ -1059,7 +984,6 @@ class LCAResultsFullBase(SQLModel):
 
     odp_b5: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Ozone Depletion Potential for module B5.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Ozone Depletion Potential (B5)",
@@ -1073,7 +997,6 @@ class LCAResultsFullBase(SQLModel):
 
     odp_b6: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Ozone Depletion Potential for module B6.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Ozone Depletion Potential (B6)",
@@ -1087,7 +1010,6 @@ class LCAResultsFullBase(SQLModel):
 
     odp_c1: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Ozone Depletion Potential for module C1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Ozone Depletion Potential (C1)",
@@ -1101,7 +1023,6 @@ class LCAResultsFullBase(SQLModel):
 
     odp_c2: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Ozone Depletion Potential for module C2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Ozone Depletion Potential (C2)",
@@ -1115,7 +1036,6 @@ class LCAResultsFullBase(SQLModel):
 
     odp_c3: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Ozone Depletion Potential for module C3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Ozone Depletion Potential (C3)",
@@ -1129,7 +1049,6 @@ class LCAResultsFullBase(SQLModel):
 
     odp_c4: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Ozone Depletion Potential for module C4.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Ozone Depletion Potential (C4)",
@@ -1143,7 +1062,6 @@ class LCAResultsFullBase(SQLModel):
 
     odp_d: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Ozone Depletion Potential for module D.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Ozone Depletion Potential (D)",
@@ -1157,7 +1075,6 @@ class LCAResultsFullBase(SQLModel):
 
     odp_d1: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Ozone Depletion Potential for module D1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Ozone Depletion Potential (D1)",
@@ -1171,7 +1088,6 @@ class LCAResultsFullBase(SQLModel):
 
     odp_d2: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Ozone Depletion Potential for module D2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Ozone Depletion Potential (D2)",
@@ -1185,7 +1101,6 @@ class LCAResultsFullBase(SQLModel):
 
     odp_total: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Total Ozone Depletion Potential.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Total Ozone Depletion Potential",
@@ -1199,7 +1114,6 @@ class LCAResultsFullBase(SQLModel):
 
     ap_a1_a3: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Acidification Potential for module A1-A3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Acidification Potential (A1-A3)",
@@ -1213,7 +1127,6 @@ class LCAResultsFullBase(SQLModel):
 
     ap_a4: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Acidification Potential for module A4.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Acidification Potential (A4)",
@@ -1227,7 +1140,6 @@ class LCAResultsFullBase(SQLModel):
 
     ap_a5: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Acidification Potential for module A5.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Acidification Potential (A5)",
@@ -1241,7 +1153,6 @@ class LCAResultsFullBase(SQLModel):
 
     ap_b1: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Acidification Potential for module B1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Acidification Potential (B1)",
@@ -1255,7 +1166,6 @@ class LCAResultsFullBase(SQLModel):
 
     ap_b2: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Acidification Potential for module B2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Acidification Potential (B2)",
@@ -1269,7 +1179,6 @@ class LCAResultsFullBase(SQLModel):
 
     ap_b3: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Acidification Potential for module B3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Acidification Potential (B3)",
@@ -1283,7 +1192,6 @@ class LCAResultsFullBase(SQLModel):
 
     ap_b4: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Acidification Potential for module B4.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Acidification Potential (B4)",
@@ -1297,7 +1205,6 @@ class LCAResultsFullBase(SQLModel):
 
     ap_b5: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Acidification Potential for module B5.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Acidification Potential (B5)",
@@ -1311,7 +1218,6 @@ class LCAResultsFullBase(SQLModel):
 
     ap_b6: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Acidification Potential for module B6.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Acidification Potential (B6)",
@@ -1325,7 +1231,6 @@ class LCAResultsFullBase(SQLModel):
 
     ap_c1: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Acidification Potential for module C1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Acidification Potential (C1)",
@@ -1339,7 +1244,6 @@ class LCAResultsFullBase(SQLModel):
 
     ap_c2: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Acidification Potential for module C2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Acidification Potential (C2)",
@@ -1353,7 +1257,6 @@ class LCAResultsFullBase(SQLModel):
 
     ap_c3: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Acidification Potential for module C3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Acidification Potential (C3)",
@@ -1367,7 +1270,6 @@ class LCAResultsFullBase(SQLModel):
 
     ap_c4: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Acidification Potential for module C4.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Acidification Potential (C4)",
@@ -1381,7 +1283,6 @@ class LCAResultsFullBase(SQLModel):
 
     ap_d: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Acidification Potential for module D.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Acidification Potential (D)",
@@ -1395,7 +1296,6 @@ class LCAResultsFullBase(SQLModel):
 
     ap_d1: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Acidification Potential for module D1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Acidification Potential (D1)",
@@ -1409,7 +1309,6 @@ class LCAResultsFullBase(SQLModel):
 
     ap_d2: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Acidification Potential for module D2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Acidification Potential (D2)",
@@ -1423,7 +1322,6 @@ class LCAResultsFullBase(SQLModel):
 
     ap_total: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Total Acidification Potential.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Total Acidification Potential",
@@ -1437,7 +1335,6 @@ class LCAResultsFullBase(SQLModel):
 
     ep_a1_a3: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential for module A1-A3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential (A1-A3)",
@@ -1451,7 +1348,6 @@ class LCAResultsFullBase(SQLModel):
 
     ep_a4: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential for module A4.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential (A4)",
@@ -1465,7 +1361,6 @@ class LCAResultsFullBase(SQLModel):
 
     ep_a5: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential for module A5.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential (A5)",
@@ -1479,7 +1374,6 @@ class LCAResultsFullBase(SQLModel):
 
     ep_b1: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential for module B1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential (B1)",
@@ -1493,7 +1387,6 @@ class LCAResultsFullBase(SQLModel):
 
     ep_b2: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential for module B2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential (B2)",
@@ -1507,7 +1400,6 @@ class LCAResultsFullBase(SQLModel):
 
     ep_b3: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential for module B3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential (B3)",
@@ -1521,7 +1413,6 @@ class LCAResultsFullBase(SQLModel):
 
     ep_b4: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential for module B4.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential (B4)",
@@ -1535,7 +1426,6 @@ class LCAResultsFullBase(SQLModel):
 
     ep_b5: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential for module B5.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential (B5)",
@@ -1549,7 +1439,6 @@ class LCAResultsFullBase(SQLModel):
 
     ep_b6: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential for module B6.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential (B6)",
@@ -1563,7 +1452,6 @@ class LCAResultsFullBase(SQLModel):
 
     ep_c1: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential for module C1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential (C1)",
@@ -1577,7 +1465,6 @@ class LCAResultsFullBase(SQLModel):
 
     ep_c2: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential for module C2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential (C2)",
@@ -1590,7 +1477,6 @@ class LCAResultsFullBase(SQLModel):
     )
     ep_c3: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential for module C3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential (C3)",
@@ -1603,7 +1489,6 @@ class LCAResultsFullBase(SQLModel):
     )
     ep_c4: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential for module C4.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential (C4)",
@@ -1616,7 +1501,6 @@ class LCAResultsFullBase(SQLModel):
     )
     ep_d: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential for module D.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential (D)",
@@ -1629,7 +1513,6 @@ class LCAResultsFullBase(SQLModel):
     )
     ep_d1: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential for module D1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential (D1)",
@@ -1642,7 +1525,6 @@ class LCAResultsFullBase(SQLModel):
     )
     ep_d2: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential for module D2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential (D2)",
@@ -1655,7 +1537,6 @@ class LCAResultsFullBase(SQLModel):
     )
     ep_total: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Total Eutrophication Potential.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Total Eutrophication Potential",
@@ -1668,7 +1549,6 @@ class LCAResultsFullBase(SQLModel):
     )
     ep_af_a1_a3: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential - Aquatic Freshwater for module A1-A3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential - Aquatic Freshwater (A1-A3)",
@@ -1681,7 +1561,6 @@ class LCAResultsFullBase(SQLModel):
     )
     ep_af_a4: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential - Aquatic Freshwater for module A4.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential - Aquatic Freshwater (A4)",
@@ -1694,7 +1573,6 @@ class LCAResultsFullBase(SQLModel):
     )
     ep_af_a5: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential - Aquatic Freshwater for module A5.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential - Aquatic Freshwater (A5)",
@@ -1707,7 +1585,6 @@ class LCAResultsFullBase(SQLModel):
     )
     ep_af_b1: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential - Aquatic Freshwater for module B1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential - Aquatic Freshwater (B1)",
@@ -1720,7 +1597,6 @@ class LCAResultsFullBase(SQLModel):
     )
     ep_af_b2: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential - Aquatic Freshwater for module B2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential - Aquatic Freshwater (B2)",
@@ -1733,7 +1609,6 @@ class LCAResultsFullBase(SQLModel):
     )
     ep_af_b3: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential - Aquatic Freshwater for module B3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential - Aquatic Freshwater (B3)",
@@ -1746,7 +1621,6 @@ class LCAResultsFullBase(SQLModel):
     )
     ep_af_b4: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential - Aquatic Freshwater for module B4.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential - Aquatic Freshwater (B4)",
@@ -1759,7 +1633,6 @@ class LCAResultsFullBase(SQLModel):
     )
     ep_af_b5: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential - Aquatic Freshwater for module B5.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential - Aquatic Freshwater (B5)",
@@ -1772,7 +1645,6 @@ class LCAResultsFullBase(SQLModel):
     )
     ep_af_b6: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential - Aquatic Freshwater for module B6.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential - Aquatic Freshwater (B6)",
@@ -1785,7 +1657,6 @@ class LCAResultsFullBase(SQLModel):
     )
     ep_af_c1: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential - Aquatic Freshwater for module C1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential - Aquatic Freshwater (C1)",
@@ -1798,7 +1669,6 @@ class LCAResultsFullBase(SQLModel):
     )
     ep_af_c2: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential - Aquatic Freshwater for module C2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential - Aquatic Freshwater (C2)",
@@ -1811,7 +1681,6 @@ class LCAResultsFullBase(SQLModel):
     )
     ep_af_c3: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential - Aquatic Freshwater for module C3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential - Aquatic Freshwater (C3)",
@@ -1824,7 +1693,6 @@ class LCAResultsFullBase(SQLModel):
     )
     ep_af_c4: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential - Aquatic Freshwater for module C4.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential - Aquatic Freshwater (C4)",
@@ -1837,7 +1705,6 @@ class LCAResultsFullBase(SQLModel):
     )
     ep_af_d: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential - Aquatic Freshwater for module D.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential - Aquatic Freshwater (D)",
@@ -1850,7 +1717,6 @@ class LCAResultsFullBase(SQLModel):
     )
     ep_af_d1: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential - Aquatic Freshwater for module D1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential - Aquatic Freshwater (D1)",
@@ -1863,7 +1729,6 @@ class LCAResultsFullBase(SQLModel):
     )
     ep_af_d2: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential - Aquatic Freshwater for module D2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential - Aquatic Freshwater (D2)",
@@ -1876,7 +1741,6 @@ class LCAResultsFullBase(SQLModel):
     )
     ep_af_total: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Total Eutrophication Potential - Aquatic Freshwater.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Total Eutrophication Potential - Aquatic Freshwater",
@@ -1889,7 +1753,6 @@ class LCAResultsFullBase(SQLModel):
     )
     ep_am_a1_a3: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential - Aquatic Marine for module A1-A3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential - Aquatic Marine (A1-A3)",
@@ -1902,7 +1765,6 @@ class LCAResultsFullBase(SQLModel):
     )
     ep_am_a4: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential - Aquatic Marine for module A4.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential - Aquatic Marine (A4)",
@@ -1915,7 +1777,6 @@ class LCAResultsFullBase(SQLModel):
     )
     ep_am_a5: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential - Aquatic Marine for module A5.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential - Aquatic Marine (A5)",
@@ -1928,7 +1789,6 @@ class LCAResultsFullBase(SQLModel):
     )
     ep_am_b1: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential - Aquatic Marine for module B1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential - Aquatic Marine (B1)",
@@ -1941,7 +1801,6 @@ class LCAResultsFullBase(SQLModel):
     )
     ep_am_b2: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential - Aquatic Marine for module B2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential - Aquatic Marine (B2)",
@@ -1954,7 +1813,6 @@ class LCAResultsFullBase(SQLModel):
     )
     ep_am_b3: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential - Aquatic Marine for module B3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential - Aquatic Marine (B3)",
@@ -1967,7 +1825,6 @@ class LCAResultsFullBase(SQLModel):
     )
     ep_am_b4: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential - Aquatic Marine for module B4.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential - Aquatic Marine (B4)",
@@ -1980,7 +1837,6 @@ class LCAResultsFullBase(SQLModel):
     )
     ep_am_b5: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential - Aquatic Marine for module B5.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential - Aquatic Marine (B5)",
@@ -1993,7 +1849,6 @@ class LCAResultsFullBase(SQLModel):
     )
     ep_am_b6: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential - Aquatic Marine for module B6.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential - Aquatic Marine (B6)",
@@ -2006,7 +1861,6 @@ class LCAResultsFullBase(SQLModel):
     )
     ep_am_c1: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential - Aquatic Marine for module C1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential - Aquatic Marine (C1)",
@@ -2019,7 +1873,6 @@ class LCAResultsFullBase(SQLModel):
     )
     ep_am_c2: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential - Aquatic Marine for module C2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential - Aquatic Marine (C2)",
@@ -2032,7 +1885,6 @@ class LCAResultsFullBase(SQLModel):
     )
     ep_am_c3: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential - Aquatic Marine for module C3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential - Aquatic Marine (C3)",
@@ -2045,7 +1897,6 @@ class LCAResultsFullBase(SQLModel):
     )
     ep_am_c4: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential - Aquatic Marine for module C4.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential - Aquatic Marine (C4)",
@@ -2058,7 +1909,6 @@ class LCAResultsFullBase(SQLModel):
     )
     ep_am_d: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential - Aquatic Marine for module D.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential - Aquatic Marine (D)",
@@ -2071,7 +1921,6 @@ class LCAResultsFullBase(SQLModel):
     )
     ep_am_d1: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential - Aquatic Marine for module D1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential - Aquatic Marine (D1)",
@@ -2084,7 +1933,6 @@ class LCAResultsFullBase(SQLModel):
     )
     ep_am_d2: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential - Aquatic Marine for module D2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential - Aquatic Marine (D2)",
@@ -2097,7 +1945,6 @@ class LCAResultsFullBase(SQLModel):
     )
     ep_am_total: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Total Eutrophication Potential - Aquatic Marine.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Total Eutrophication Potential - Aquatic Marine",
@@ -2110,7 +1957,6 @@ class LCAResultsFullBase(SQLModel):
     )
     ep_t_a1_a3: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential - Terrestrial for module A1-A3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential - Terrestrial (A1-A3)",
@@ -2123,7 +1969,6 @@ class LCAResultsFullBase(SQLModel):
     )
     ep_t_a4: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential - Terrestrial for module A4.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential - Terrestrial (A4)",
@@ -2136,7 +1981,6 @@ class LCAResultsFullBase(SQLModel):
     )
     ep_t_a5: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential - Terrestrial for module A5.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential - Terrestrial (A5)",
@@ -2149,7 +1993,6 @@ class LCAResultsFullBase(SQLModel):
     )
     ep_t_b1: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential - Terrestrial for module B1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential - Terrestrial (B1)",
@@ -2162,7 +2005,6 @@ class LCAResultsFullBase(SQLModel):
     )
     ep_t_b2: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential - Terrestrial for module B2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential - Terrestrial (B2)",
@@ -2175,7 +2017,6 @@ class LCAResultsFullBase(SQLModel):
     )
     ep_t_b3: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential - Terrestrial for module B3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential - Terrestrial (B3)",
@@ -2188,7 +2029,6 @@ class LCAResultsFullBase(SQLModel):
     )
     ep_t_b4: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential - Terrestrial for module B4.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential - Terrestrial (B4)",
@@ -2201,7 +2041,6 @@ class LCAResultsFullBase(SQLModel):
     )
     ep_t_b5: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential - Terrestrial for module B5.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential - Terrestrial (B5)",
@@ -2214,7 +2053,6 @@ class LCAResultsFullBase(SQLModel):
     )
     ep_t_b6: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential - Terrestrial for module B6.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential - Terrestrial (B6)",
@@ -2227,7 +2065,6 @@ class LCAResultsFullBase(SQLModel):
     )
     ep_t_c1: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential - Terrestrial for module C1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential - Terrestrial (C1)",
@@ -2240,7 +2077,6 @@ class LCAResultsFullBase(SQLModel):
     )
     ep_t_c2: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential - Terrestrial for module C2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential - Terrestrial (C2)",
@@ -2253,7 +2089,6 @@ class LCAResultsFullBase(SQLModel):
     )
     ep_t_c3: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential - Terrestrial for module C3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential - Terrestrial (C3)",
@@ -2266,7 +2101,6 @@ class LCAResultsFullBase(SQLModel):
     )
     ep_t_c4: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential - Terrestrial for module C4.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential - Terrestrial (C4)",
@@ -2279,7 +2113,6 @@ class LCAResultsFullBase(SQLModel):
     )
     ep_t_d: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential - Terrestrial for module D.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential - Terrestrial (D)",
@@ -2292,7 +2125,6 @@ class LCAResultsFullBase(SQLModel):
     )
     ep_t_d1: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential - Terrestrial for module D1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential - Terrestrial (D1)",
@@ -2305,7 +2137,6 @@ class LCAResultsFullBase(SQLModel):
     )
     ep_t_d2: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Eutrophication Potential - Terrestrial for module D2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Eutrophication Potential - Terrestrial (D2)",
@@ -2318,7 +2149,6 @@ class LCAResultsFullBase(SQLModel):
     )
     ep_t_total: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Total Eutrophication Potential - Terrestrial.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Total Eutrophication Potential - Terrestrial",
@@ -2331,7 +2161,6 @@ class LCAResultsFullBase(SQLModel):
     )
     pocp_a1_a3: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Photochemical Ozone Formation Potential for module A1-A3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Photochemical Ozone Formation Potential (A1-A3)",
@@ -2344,7 +2173,6 @@ class LCAResultsFullBase(SQLModel):
     )
     pocp_a4: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Photochemical Ozone Formation Potential for module A4.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Photochemical Ozone Formation Potential (A4)",
@@ -2357,7 +2185,6 @@ class LCAResultsFullBase(SQLModel):
     )
     pocp_a5: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Photochemical Ozone Formation Potential for module A5.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Photochemical Ozone Formation Potential (A5)",
@@ -2370,7 +2197,6 @@ class LCAResultsFullBase(SQLModel):
     )
     pocp_b1: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Photochemical Ozone Formation Potential for module B1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Photochemical Ozone Formation Potential (B1)",
@@ -2383,7 +2209,6 @@ class LCAResultsFullBase(SQLModel):
     )
     pocp_b2: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Photochemical Ozone Formation Potential for module B2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Photochemical Ozone Formation Potential (B2)",
@@ -2396,7 +2221,6 @@ class LCAResultsFullBase(SQLModel):
     )
     pocp_b3: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Photochemical Ozone Formation Potential for module B3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Photochemical Ozone Formation Potential (B3)",
@@ -2409,7 +2233,6 @@ class LCAResultsFullBase(SQLModel):
     )
     pocp_b4: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Photochemical Ozone Formation Potential for module B4.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Photochemical Ozone Formation Potential (B4)",
@@ -2422,7 +2245,6 @@ class LCAResultsFullBase(SQLModel):
     )
     pocp_b5: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Photochemical Ozone Formation Potential for module B5.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Photochemical Ozone Formation Potential (B5)",
@@ -2435,7 +2257,6 @@ class LCAResultsFullBase(SQLModel):
     )
     pocp_b6: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Photochemical Ozone Formation Potential for module B6.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Photochemical Ozone Formation Potential (B6)",
@@ -2448,7 +2269,6 @@ class LCAResultsFullBase(SQLModel):
     )
     pocp_c1: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Photochemical Ozone Formation Potential for module C1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Photochemical Ozone Formation Potential (C1)",
@@ -2461,7 +2281,6 @@ class LCAResultsFullBase(SQLModel):
     )
     pocp_c2: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Photochemical Ozone Formation Potential for module C2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Photochemical Ozone Formation Potential (C2)",
@@ -2474,7 +2293,6 @@ class LCAResultsFullBase(SQLModel):
     )
     pocp_c3: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Photochemical Ozone Formation Potential for module C3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Photochemical Ozone Formation Potential (C3)",
@@ -2487,7 +2305,6 @@ class LCAResultsFullBase(SQLModel):
     )
     pocp_c4: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Photochemical Ozone Formation Potential for module C4.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Photochemical Ozone Formation Potential (C4)",
@@ -2500,7 +2317,6 @@ class LCAResultsFullBase(SQLModel):
     )
     pocp_d: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Photochemical Ozone Formation Potential for module D.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Photochemical Ozone Formation Potential (D)",
@@ -2513,7 +2329,6 @@ class LCAResultsFullBase(SQLModel):
     )
     pocp_d1: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Photochemical Ozone Formation Potential for module D1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Photochemical Ozone Formation Potential (D1)",
@@ -2526,7 +2341,6 @@ class LCAResultsFullBase(SQLModel):
     )
     pocp_d2: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Photochemical Ozone Formation Potential for module D2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Photochemical Ozone Formation Potential (D2)",
@@ -2539,7 +2353,6 @@ class LCAResultsFullBase(SQLModel):
     )
     pocp_total: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Total Photochemical Ozone Formation Potential.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Total Photochemical Ozone Formation Potential",
@@ -2552,7 +2365,6 @@ class LCAResultsFullBase(SQLModel):
     )
     sfp_a1_a3: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Smog Forming Potential for module A1-A3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Smog Forming Potential (A1-A3)",
@@ -2565,7 +2377,6 @@ class LCAResultsFullBase(SQLModel):
     )
     sfp_a4: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Smog Forming Potential for module A4.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Smog Forming Potential (A4)",
@@ -2578,7 +2389,6 @@ class LCAResultsFullBase(SQLModel):
     )
     sfp_a5: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Smog Forming Potential for module A5.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Smog Forming Potential (A5)",
@@ -2591,7 +2401,6 @@ class LCAResultsFullBase(SQLModel):
     )
     sfp_b1: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Smog Forming Potential for module B1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Smog Forming Potential (B1)",
@@ -2604,7 +2413,6 @@ class LCAResultsFullBase(SQLModel):
     )
     sfp_b2: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Smog Forming Potential for module B2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Smog Forming Potential (B2)",
@@ -2617,7 +2425,6 @@ class LCAResultsFullBase(SQLModel):
     )
     sfp_b3: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Smog Forming Potential for module B3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Smog Forming Potential (B3)",
@@ -2630,7 +2437,6 @@ class LCAResultsFullBase(SQLModel):
     )
     sfp_b4: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Smog Forming Potential for module B4.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Smog Forming Potential (B4)",
@@ -2643,7 +2449,6 @@ class LCAResultsFullBase(SQLModel):
     )
     sfp_b5: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Smog Forming Potential for module B5.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Smog Forming Potential (B5)",
@@ -2656,7 +2461,6 @@ class LCAResultsFullBase(SQLModel):
     )
     sfp_b6: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Smog Forming Potential for module B6.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Smog Forming Potential (B6)",
@@ -2669,7 +2473,6 @@ class LCAResultsFullBase(SQLModel):
     )
     sfp_c1: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Smog Forming Potential for module C1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Smog Forming Potential (C1)",
@@ -2682,7 +2485,6 @@ class LCAResultsFullBase(SQLModel):
     )
     sfp_c2: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Smog Forming Potential for module C2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Smog Forming Potential (C2)",
@@ -2695,7 +2497,6 @@ class LCAResultsFullBase(SQLModel):
     )
     sfp_c3: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Smog Forming Potential for module C3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Smog Forming Potential (C3)",
@@ -2708,7 +2509,6 @@ class LCAResultsFullBase(SQLModel):
     )
     sfp_c4: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Smog Forming Potential for module C4.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Smog Forming Potential (C4)",
@@ -2721,7 +2521,6 @@ class LCAResultsFullBase(SQLModel):
     )
     sfp_d: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Smog Forming Potential for module D.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Smog Forming Potential (D)",
@@ -2734,7 +2533,6 @@ class LCAResultsFullBase(SQLModel):
     )
     sfp_d1: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Smog Forming Potential for module D1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Smog Forming Potential (D1)",
@@ -2747,7 +2545,6 @@ class LCAResultsFullBase(SQLModel):
     )
     sfp_d2: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Smog Forming Potential for module D2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Smog Forming Potential (D2)",
@@ -2760,7 +2557,6 @@ class LCAResultsFullBase(SQLModel):
     )
     sfp_total: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Total Smog Forming Potential.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Total Smog Forming Potential",
@@ -2773,7 +2569,6 @@ class LCAResultsFullBase(SQLModel):
     )
     pofp_a1_a3: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Photochemical Ozone Formation Potential for module A1-A3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Photochemical Ozone Formation Potential (A1-A3)",
@@ -2786,7 +2581,6 @@ class LCAResultsFullBase(SQLModel):
     )
     pofp_a4: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Photochemical Ozone Formation Potential for module A4.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Photochemical Ozone Formation Potential (A4)",
@@ -2799,7 +2593,6 @@ class LCAResultsFullBase(SQLModel):
     )
     pofp_a5: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Photochemical Ozone Formation Potential for module A5.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Photochemical Ozone Formation Potential (A5)",
@@ -2812,7 +2605,6 @@ class LCAResultsFullBase(SQLModel):
     )
     pofp_b1: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Photochemical Ozone Formation Potential for module B1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Photochemical Ozone Formation Potential (B1)",
@@ -2825,7 +2617,6 @@ class LCAResultsFullBase(SQLModel):
     )
     pofp_b2: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Photochemical Ozone Formation Potential for module B2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Photochemical Ozone Formation Potential (B2)",
@@ -2838,7 +2629,6 @@ class LCAResultsFullBase(SQLModel):
     )
     pofp_b3: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Photochemical Ozone Formation Potential for module B3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Photochemical Ozone Formation Potential (B3)",
@@ -2851,7 +2641,6 @@ class LCAResultsFullBase(SQLModel):
     )
     pofp_b4: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Photochemical Ozone Formation Potential for module B4.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Photochemical Ozone Formation Potential (B4)",
@@ -2864,7 +2653,6 @@ class LCAResultsFullBase(SQLModel):
     )
     pofp_b5: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Photochemical Ozone Formation Potential for module B5.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Photochemical Ozone Formation Potential (B5)",
@@ -2877,7 +2665,6 @@ class LCAResultsFullBase(SQLModel):
     )
     pofp_b6: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Photochemical Ozone Formation Potential for module B6.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Photochemical Ozone Formation Potential (B6)",
@@ -2890,7 +2677,6 @@ class LCAResultsFullBase(SQLModel):
     )
     pofp_c1: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Photochemical Ozone Formation Potential for module C1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Photochemical Ozone Formation Potential (C1)",
@@ -2903,7 +2689,6 @@ class LCAResultsFullBase(SQLModel):
     )
     pofp_c2: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Photochemical Ozone Formation Potential for module C2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Photochemical Ozone Formation Potential (C2)",
@@ -2916,7 +2701,6 @@ class LCAResultsFullBase(SQLModel):
     )
     pofp_c3: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Photochemical Ozone Formation Potential for module C3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Photochemical Ozone Formation Potential (C3)",
@@ -2929,7 +2713,6 @@ class LCAResultsFullBase(SQLModel):
     )
     pofp_c4: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Photochemical Ozone Formation Potential for module C4.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Photochemical Ozone Formation Potential (C4)",
@@ -2942,7 +2725,6 @@ class LCAResultsFullBase(SQLModel):
     )
     pofp_d: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Photochemical Ozone Formation Potential for module D.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Photochemical Ozone Formation Potential (D)",
@@ -2955,7 +2737,6 @@ class LCAResultsFullBase(SQLModel):
     )
     pofp_d1: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Photochemical Ozone Formation Potential for module D1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Photochemical Ozone Formation Potential (D1)",
@@ -2968,7 +2749,6 @@ class LCAResultsFullBase(SQLModel):
     )
     pofp_d2: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Photochemical Ozone Formation Potential for module D2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Photochemical Ozone Formation Potential (D2)",
@@ -2981,7 +2761,6 @@ class LCAResultsFullBase(SQLModel):
     )
     pofp_total: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Total Photochemical Ozone Formation Potential.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Total Photochemical Ozone Formation Potential",
@@ -2994,7 +2773,6 @@ class LCAResultsFullBase(SQLModel):
     )
     adpmm_a1_a3: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Abiotic Depletion Potential (Minerals and Metals) for module A1-A3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Abiotic Depletion Potential (Minerals and Metals) (A1-A3)",
@@ -3007,7 +2785,6 @@ class LCAResultsFullBase(SQLModel):
     )
     adpmm_a4: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Abiotic Depletion Potential (Minerals and Metals) for module A4.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Abiotic Depletion Potential (Minerals and Metals) (A4)",
@@ -3020,7 +2797,6 @@ class LCAResultsFullBase(SQLModel):
     )
     adpmm_a5: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Abiotic Depletion Potential (Minerals and Metals) for module A5.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Abiotic Depletion Potential (Minerals and Metals) (A5)",
@@ -3033,7 +2809,6 @@ class LCAResultsFullBase(SQLModel):
     )
     adpmm_b1: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Abiotic Depletion Potential (Minerals and Metals) for module B1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Abiotic Depletion Potential (Minerals and Metals) (B1)",
@@ -3047,7 +2822,6 @@ class LCAResultsFullBase(SQLModel):
 
     adpmm_b2: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Abiotic Depletion Potential (Minerals and Metals) for module B2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Abiotic Depletion Potential (Minerals and Metals) (B2)",
@@ -3061,7 +2835,6 @@ class LCAResultsFullBase(SQLModel):
 
     adpmm_b3: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Abiotic Depletion Potential (Minerals and Metals) for module B3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Abiotic Depletion Potential (Minerals and Metals) (B3)",
@@ -3075,7 +2848,6 @@ class LCAResultsFullBase(SQLModel):
 
     adpmm_b4: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Abiotic Depletion Potential (Minerals and Metals) for module B4.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Abiotic Depletion Potential (Minerals and Metals) (B4)",
@@ -3089,7 +2861,6 @@ class LCAResultsFullBase(SQLModel):
 
     adpmm_b5: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Abiotic Depletion Potential (Minerals and Metals) for module B5.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Abiotic Depletion Potential (Minerals and Metals) (B5)",
@@ -3103,7 +2874,6 @@ class LCAResultsFullBase(SQLModel):
 
     adpmm_b6: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Abiotic Depletion Potential (Minerals and Metals) for module B6.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Abiotic Depletion Potential (Minerals and Metals) (B6)",
@@ -3117,7 +2887,6 @@ class LCAResultsFullBase(SQLModel):
 
     adpmm_c1: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Abiotic Depletion Potential (Minerals and Metals) for module C1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Abiotic Depletion Potential (Minerals and Metals) (C1)",
@@ -3131,7 +2900,6 @@ class LCAResultsFullBase(SQLModel):
 
     adpmm_c2: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Abiotic Depletion Potential (Minerals and Metals) for module C2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Abiotic Depletion Potential (Minerals and Metals) (C2)",
@@ -3145,7 +2913,6 @@ class LCAResultsFullBase(SQLModel):
 
     adpmm_c3: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Abiotic Depletion Potential (Minerals and Metals) for module C3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Abiotic Depletion Potential (Minerals and Metals) (C3)",
@@ -3159,7 +2926,6 @@ class LCAResultsFullBase(SQLModel):
 
     adpmm_c4: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Abiotic Depletion Potential (Minerals and Metals) for module C4.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Abiotic Depletion Potential (Minerals and Metals) (C4)",
@@ -3173,7 +2939,6 @@ class LCAResultsFullBase(SQLModel):
 
     adpmm_d: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Abiotic Depletion Potential (Minerals and Metals) for module D.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Abiotic Depletion Potential (Minerals and Metals) (D)",
@@ -3187,7 +2952,6 @@ class LCAResultsFullBase(SQLModel):
 
     adpmm_d1: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Abiotic Depletion Potential (Minerals and Metals) for module D1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Abiotic Depletion Potential (Minerals and Metals) (D1)",
@@ -3201,7 +2965,6 @@ class LCAResultsFullBase(SQLModel):
 
     adpmm_d2: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Abiotic Depletion Potential (Minerals and Metals) for module D2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Abiotic Depletion Potential (Minerals and Metals) (D2)",
@@ -3215,7 +2978,6 @@ class LCAResultsFullBase(SQLModel):
 
     adpmm_total: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Total Abiotic Depletion Potential (Minerals and Metals).",
         schema_extra=openbdf_field_metadata(
             attribute_name="Total Abiotic Depletion Potential (Minerals and Metals)",
@@ -3229,7 +2991,6 @@ class LCAResultsFullBase(SQLModel):
 
     adpf_a1_a3: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Abiotic Depletion Potential (Fossil Fuels) for module A1-A3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Abiotic Depletion Potential (Fossil Fuels) (A1-A3)",
@@ -3243,7 +3004,6 @@ class LCAResultsFullBase(SQLModel):
 
     adpf_a4: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Abiotic Depletion Potential (Fossil Fuels) for module A4.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Abiotic Depletion Potential (Fossil Fuels) (A4)",
@@ -3257,7 +3017,6 @@ class LCAResultsFullBase(SQLModel):
 
     adpf_a5: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Abiotic Depletion Potential (Fossil Fuels) for module A5.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Abiotic Depletion Potential (Fossil Fuels) (A5)",
@@ -3271,7 +3030,6 @@ class LCAResultsFullBase(SQLModel):
 
     adpf_b1: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Abiotic Depletion Potential (Fossil Fuels) for module B1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Abiotic Depletion Potential (Fossil Fuels) (B1)",
@@ -3285,7 +3043,6 @@ class LCAResultsFullBase(SQLModel):
 
     adpf_b2: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Abiotic Depletion Potential (Fossil Fuels) for module B2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Abiotic Depletion Potential (Fossil Fuels) (B2)",
@@ -3299,7 +3056,6 @@ class LCAResultsFullBase(SQLModel):
 
     adpf_b3: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Abiotic Depletion Potential (Fossil Fuels) for module B3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Abiotic Depletion Potential (Fossil Fuels) (B3)",
@@ -3313,7 +3069,6 @@ class LCAResultsFullBase(SQLModel):
 
     adpf_b4: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Abiotic Depletion Potential (Fossil Fuels) for module B4.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Abiotic Depletion Potential (Fossil Fuels) (B4)",
@@ -3327,7 +3082,6 @@ class LCAResultsFullBase(SQLModel):
 
     adpf_b5: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Abiotic Depletion Potential (Fossil Fuels) for module B5.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Abiotic Depletion Potential (Fossil Fuels) (B5)",
@@ -3341,7 +3095,6 @@ class LCAResultsFullBase(SQLModel):
 
     adpf_b6: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Abiotic Depletion Potential (Fossil Fuels) for module B6.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Abiotic Depletion Potential (Fossil Fuels) (B6)",
@@ -3355,7 +3108,6 @@ class LCAResultsFullBase(SQLModel):
 
     adpf_c1: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Abiotic Depletion Potential (Fossil Fuels) for module C1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Abiotic Depletion Potential (Fossil Fuels) (C1)",
@@ -3369,7 +3121,6 @@ class LCAResultsFullBase(SQLModel):
 
     adpf_c2: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Abiotic Depletion Potential (Fossil Fuels) for module C2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Abiotic Depletion Potential (Fossil Fuels) (C2)",
@@ -3383,7 +3134,6 @@ class LCAResultsFullBase(SQLModel):
 
     adpf_c3: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Abiotic Depletion Potential (Fossil Fuels) for module C3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Abiotic Depletion Potential (Fossil Fuels) (C3)",
@@ -3397,7 +3147,6 @@ class LCAResultsFullBase(SQLModel):
 
     adpf_c4: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Abiotic Depletion Potential (Fossil Fuels) for module C4.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Abiotic Depletion Potential (Fossil Fuels) (C4)",
@@ -3411,7 +3160,6 @@ class LCAResultsFullBase(SQLModel):
 
     adpf_d: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Abiotic Depletion Potential (Fossil Fuels) for module D.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Abiotic Depletion Potential (Fossil Fuels) (D)",
@@ -3425,7 +3173,6 @@ class LCAResultsFullBase(SQLModel):
 
     adpf_d1: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Abiotic Depletion Potential (Fossil Fuels) for module D1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Abiotic Depletion Potential (Fossil Fuels) (D1)",
@@ -3439,7 +3186,6 @@ class LCAResultsFullBase(SQLModel):
 
     adpf_d2: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Abiotic Depletion Potential (Fossil Fuels) for module D2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Abiotic Depletion Potential (Fossil Fuels) (D2)",
@@ -3453,7 +3199,6 @@ class LCAResultsFullBase(SQLModel):
 
     adpf_total: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Total Abiotic Depletion Potential (Fossil Fuels).",
         schema_extra=openbdf_field_metadata(
             attribute_name="Total Abiotic Depletion Potential (Fossil Fuels)",
@@ -3467,7 +3212,6 @@ class LCAResultsFullBase(SQLModel):
 
     wdp_a1_a3: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Water Depletion Potential for module A1-A3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Water Depletion Potential (A1-A3)",
@@ -3481,7 +3225,6 @@ class LCAResultsFullBase(SQLModel):
 
     wdp_a4: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Water Depletion Potential for module A4.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Water Depletion Potential (A4)",
@@ -3495,7 +3238,6 @@ class LCAResultsFullBase(SQLModel):
 
     wdp_a5: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Water Depletion Potential for module A5.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Water Depletion Potential (A5)",
@@ -3509,7 +3251,6 @@ class LCAResultsFullBase(SQLModel):
 
     wdp_b1: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Water Depletion Potential for module B1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Water Depletion Potential (B1)",
@@ -3523,7 +3264,6 @@ class LCAResultsFullBase(SQLModel):
 
     wdp_b2: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Water Depletion Potential for module B2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Water Depletion Potential (B2)",
@@ -3537,7 +3277,6 @@ class LCAResultsFullBase(SQLModel):
 
     wdp_b3: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Water Depletion Potential for module B3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Water Depletion Potential (B3)",
@@ -3551,7 +3290,6 @@ class LCAResultsFullBase(SQLModel):
 
     wdp_b4: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Water Depletion Potential for module B4.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Water Depletion Potential (B4)",
@@ -3565,7 +3303,6 @@ class LCAResultsFullBase(SQLModel):
 
     wdp_b5: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Water Depletion Potential for module B5.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Water Depletion Potential (B5)",
@@ -3579,7 +3316,6 @@ class LCAResultsFullBase(SQLModel):
 
     wdp_b6: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Water Depletion Potential for module B6.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Water Depletion Potential (B6)",
@@ -3593,7 +3329,6 @@ class LCAResultsFullBase(SQLModel):
 
     wdp_c1: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Water Depletion Potential for module C1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Water Depletion Potential (C1)",
@@ -3607,7 +3342,6 @@ class LCAResultsFullBase(SQLModel):
 
     wdp_c2: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Water Depletion Potential for module C2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Water Depletion Potential (C2)",
@@ -3621,7 +3355,6 @@ class LCAResultsFullBase(SQLModel):
 
     wdp_c3: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Water Depletion Potential for module C3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Water Depletion Potential (C3)",
@@ -3635,7 +3368,6 @@ class LCAResultsFullBase(SQLModel):
 
     wdp_c4: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Water Depletion Potential for module C4.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Water Depletion Potential (C4)",
@@ -3649,7 +3381,6 @@ class LCAResultsFullBase(SQLModel):
 
     wdp_d: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Water Depletion Potential for module D.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Water Depletion Potential (D)",
@@ -3663,7 +3394,6 @@ class LCAResultsFullBase(SQLModel):
 
     wdp_d1: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Water Depletion Potential for module D1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Water Depletion Potential (D1)",
@@ -3677,7 +3407,6 @@ class LCAResultsFullBase(SQLModel):
 
     wdp_d2: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Water Depletion Potential for module D2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Water Depletion Potential (D2)",
@@ -3691,7 +3420,6 @@ class LCAResultsFullBase(SQLModel):
 
     wdp_total: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Total Water Depletion Potential.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Total Water Depletion Potential",
@@ -3705,7 +3433,6 @@ class LCAResultsFullBase(SQLModel):
 
     pere_a1_a3: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Renewable (Energy resources) for module A1-A3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Renewable (Energy resources) (A1-A3)",
@@ -3719,7 +3446,6 @@ class LCAResultsFullBase(SQLModel):
 
     pere_a4: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Renewable (Energy resources) for module A4.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Renewable (Energy resources) (A4)",
@@ -3733,7 +3459,6 @@ class LCAResultsFullBase(SQLModel):
 
     pere_a5: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Renewable (Energy resources) for module A5.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Renewable (Energy resources) (A5)",
@@ -3747,7 +3472,6 @@ class LCAResultsFullBase(SQLModel):
 
     pere_b1: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Renewable (Energy resources) for module B1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Renewable (Energy resources) (B1)",
@@ -3761,7 +3485,6 @@ class LCAResultsFullBase(SQLModel):
 
     pere_b2: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Renewable (Energy resources) for module B2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Renewable (Energy resources) (B2)",
@@ -3775,7 +3498,6 @@ class LCAResultsFullBase(SQLModel):
 
     pere_b3: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Renewable (Energy resources) for module B3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Renewable (Energy resources) (B3)",
@@ -3789,7 +3511,6 @@ class LCAResultsFullBase(SQLModel):
 
     pere_b4: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Renewable (Energy resources) for module B4.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Renewable (Energy resources) (B4)",
@@ -3803,7 +3524,6 @@ class LCAResultsFullBase(SQLModel):
 
     pere_b5: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Renewable (Energy resources) for module B5.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Renewable (Energy resources) (B5)",
@@ -3817,7 +3537,6 @@ class LCAResultsFullBase(SQLModel):
 
     pere_b6: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Renewable (Energy resources) for module B6.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Renewable (Energy resources) (B6)",
@@ -3831,7 +3550,6 @@ class LCAResultsFullBase(SQLModel):
 
     pere_c1: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Renewable (Energy resources) for module C1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Renewable (Energy resources) (C1)",
@@ -3845,7 +3563,6 @@ class LCAResultsFullBase(SQLModel):
 
     pere_c2: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Renewable (Energy resources) for module C2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Renewable (Energy resources) (C2)",
@@ -3859,7 +3576,6 @@ class LCAResultsFullBase(SQLModel):
 
     pere_c3: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Renewable (Energy resources) for module C3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Renewable (Energy resources) (C3)",
@@ -3873,7 +3589,6 @@ class LCAResultsFullBase(SQLModel):
 
     pere_c4: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Renewable (Energy resources) for module C4.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Renewable (Energy resources) (C4)",
@@ -3887,7 +3602,6 @@ class LCAResultsFullBase(SQLModel):
 
     pere_d: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Renewable (Energy resources) for module D.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Renewable (Energy resources) (D)",
@@ -3901,7 +3615,6 @@ class LCAResultsFullBase(SQLModel):
 
     pere_d1: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Renewable (Energy resources) for module D1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Renewable (Energy resources) (D1)",
@@ -3915,7 +3628,6 @@ class LCAResultsFullBase(SQLModel):
 
     pere_d2: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Renewable (Energy resources) for module D2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Renewable (Energy resources) (D2)",
@@ -3929,7 +3641,6 @@ class LCAResultsFullBase(SQLModel):
 
     pere_total: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Total Primary Energy Renewable (Energy resources).",
         schema_extra=openbdf_field_metadata(
             attribute_name="Total Primary Energy Renewable (Energy resources)",
@@ -3943,7 +3654,6 @@ class LCAResultsFullBase(SQLModel):
 
     penre_a1_a3: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Non-Renewable (Energy resources) for module A1-A3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Non-Renewable (Energy resources) (A1-A3)",
@@ -3957,7 +3667,6 @@ class LCAResultsFullBase(SQLModel):
 
     penre_a4: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Non-Renewable (Energy resources) for module A4.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Non-Renewable (Energy resources) (A4)",
@@ -3971,7 +3680,6 @@ class LCAResultsFullBase(SQLModel):
 
     penre_a5: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Non-Renewable (Energy resources) for module A5.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Non-Renewable (Energy resources) (A5)",
@@ -3985,7 +3693,6 @@ class LCAResultsFullBase(SQLModel):
 
     penre_b1: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Non-Renewable (Energy resources) for module B1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Non-Renewable (Energy resources) (B1)",
@@ -3999,7 +3706,6 @@ class LCAResultsFullBase(SQLModel):
 
     penre_b2: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Non-Renewable (Energy resources) for module B2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Non-Renewable (Energy resources) (B2)",
@@ -4013,7 +3719,6 @@ class LCAResultsFullBase(SQLModel):
 
     penre_b3: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Non-Renewable (Energy resources) for module B3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Non-Renewable (Energy resources) (B3)",
@@ -4027,7 +3732,6 @@ class LCAResultsFullBase(SQLModel):
 
     penre_b4: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Non-Renewable (Energy resources) for module B4.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Non-Renewable (Energy resources) (B4)",
@@ -4041,7 +3745,6 @@ class LCAResultsFullBase(SQLModel):
 
     penre_b5: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Non-Renewable (Energy resources) for module B5.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Non-Renewable (Energy resources) (B5)",
@@ -4055,7 +3758,6 @@ class LCAResultsFullBase(SQLModel):
 
     penre_b6: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Non-Renewable (Energy resources) for module B6.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Non-Renewable (Energy resources) (B6)",
@@ -4069,7 +3771,6 @@ class LCAResultsFullBase(SQLModel):
 
     penre_c1: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Non-Renewable (Energy resources) for module C1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Non-Renewable (Energy resources) (C1)",
@@ -4083,7 +3784,6 @@ class LCAResultsFullBase(SQLModel):
 
     penre_c2: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Non-Renewable (Energy resources) for module C2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Non-Renewable (Energy resources) (C2)",
@@ -4097,7 +3797,6 @@ class LCAResultsFullBase(SQLModel):
 
     penre_c3: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Non-Renewable (Energy resources) for module C3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Non-Renewable (Energy resources) (C3)",
@@ -4111,7 +3810,6 @@ class LCAResultsFullBase(SQLModel):
 
     penre_c4: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Non-Renewable (Energy resources) for module C4.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Non-Renewable (Energy resources) (C4)",
@@ -4125,7 +3823,6 @@ class LCAResultsFullBase(SQLModel):
 
     penre_d: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Non-Renewable (Energy resources) for module D.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Non-Renewable (Energy resources) (D)",
@@ -4139,7 +3836,6 @@ class LCAResultsFullBase(SQLModel):
 
     penre_d1: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Non-Renewable (Energy resources) for module D1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Non-Renewable (Energy resources) (D1)",
@@ -4153,7 +3849,6 @@ class LCAResultsFullBase(SQLModel):
 
     penre_d2: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Non-Renewable (Energy resources) for module D2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Non-Renewable (Energy resources) (D2)",
@@ -4167,7 +3862,6 @@ class LCAResultsFullBase(SQLModel):
 
     penre_total: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Total Primary Energy Non-Renewable (Energy resources).",
         schema_extra=openbdf_field_metadata(
             attribute_name="Total Primary Energy Non-Renewable (Energy resources)",
@@ -4181,7 +3875,6 @@ class LCAResultsFullBase(SQLModel):
 
     pert_a1_a3: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Renewable Total for module A1-A3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Renewable Total (A1-A3)",
@@ -4195,7 +3888,6 @@ class LCAResultsFullBase(SQLModel):
 
     pert_a4: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Renewable Total for module A4.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Renewable Total (A4)",
@@ -4209,7 +3901,6 @@ class LCAResultsFullBase(SQLModel):
 
     pert_a5: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Renewable Total for module A5.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Renewable Total (A5)",
@@ -4223,7 +3914,6 @@ class LCAResultsFullBase(SQLModel):
 
     pert_b1: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Renewable Total for module B1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Renewable Total (B1)",
@@ -4237,7 +3927,6 @@ class LCAResultsFullBase(SQLModel):
 
     pert_b2: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Renewable Total for module B2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Renewable Total (B2)",
@@ -4251,7 +3940,6 @@ class LCAResultsFullBase(SQLModel):
 
     pert_b3: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Renewable Total for module B3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Renewable Total (B3)",
@@ -4265,7 +3953,6 @@ class LCAResultsFullBase(SQLModel):
 
     pert_b4: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Renewable Total for module B4.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Renewable Total (B4)",
@@ -4279,7 +3966,6 @@ class LCAResultsFullBase(SQLModel):
 
     pert_b5: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Renewable Total for module B5.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Renewable Total (B5)",
@@ -4293,7 +3979,6 @@ class LCAResultsFullBase(SQLModel):
 
     pert_b6: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Renewable Total for module B6.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Renewable Total (B6)",
@@ -4307,7 +3992,6 @@ class LCAResultsFullBase(SQLModel):
 
     pert_c1: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Renewable Total for module C1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Renewable Total (C1)",
@@ -4321,7 +4005,6 @@ class LCAResultsFullBase(SQLModel):
 
     pert_c2: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Renewable Total for module C2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Renewable Total (C2)",
@@ -4335,7 +4018,6 @@ class LCAResultsFullBase(SQLModel):
 
     pert_c3: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Renewable Total for module C3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Renewable Total (C3)",
@@ -4349,7 +4031,6 @@ class LCAResultsFullBase(SQLModel):
 
     pert_c4: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Renewable Total for module C4.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Renewable Total (C4)",
@@ -4363,7 +4044,6 @@ class LCAResultsFullBase(SQLModel):
 
     pert_d: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Renewable Total for module D.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Renewable Total (D)",
@@ -4377,7 +4057,6 @@ class LCAResultsFullBase(SQLModel):
 
     pert_d1: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Renewable Total for module D1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Renewable Total (D1)",
@@ -4391,7 +4070,6 @@ class LCAResultsFullBase(SQLModel):
 
     pert_d2: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Renewable Total for module D2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Renewable Total (D2)",
@@ -4405,7 +4083,6 @@ class LCAResultsFullBase(SQLModel):
 
     pert_total: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Total Primary Energy Renewable Total.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Total Primary Energy Renewable Total",
@@ -4419,7 +4096,6 @@ class LCAResultsFullBase(SQLModel):
 
     penrt_a1_a3: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Non-Renewable Total for module A1-A3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Non-Renewable Total (A1-A3)",
@@ -4433,7 +4109,6 @@ class LCAResultsFullBase(SQLModel):
 
     penrt_a4: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Non-Renewable Total for module A4.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Non-Renewable Total (A4)",
@@ -4447,7 +4122,6 @@ class LCAResultsFullBase(SQLModel):
 
     penrt_a5: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Non-Renewable Total for module A5.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Non-Renewable Total (A5)",
@@ -4461,7 +4135,6 @@ class LCAResultsFullBase(SQLModel):
 
     penrt_b1: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Non-Renewable Total for module B1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Non-Renewable Total (B1)",
@@ -4475,7 +4148,6 @@ class LCAResultsFullBase(SQLModel):
 
     penrt_b2: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Non-Renewable Total for module B2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Non-Renewable Total (B2)",
@@ -4489,7 +4161,6 @@ class LCAResultsFullBase(SQLModel):
 
     penrt_b3: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Non-Renewable Total for module B3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Non-Renewable Total (B3)",
@@ -4503,7 +4174,6 @@ class LCAResultsFullBase(SQLModel):
 
     penrt_b4: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Non-Renewable Total for module B4.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Non-Renewable Total (B4)",
@@ -4517,7 +4187,6 @@ class LCAResultsFullBase(SQLModel):
 
     penrt_b5: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Non-Renewable Total for module B5.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Non-Renewable Total (B5)",
@@ -4531,7 +4200,6 @@ class LCAResultsFullBase(SQLModel):
 
     penrt_b6: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Non-Renewable Total for module B6.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Non-Renewable Total (B6)",
@@ -4545,7 +4213,6 @@ class LCAResultsFullBase(SQLModel):
 
     penrt_c1: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Non-Renewable Total for module C1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Non-Renewable Total (C1)",
@@ -4559,7 +4226,6 @@ class LCAResultsFullBase(SQLModel):
 
     penrt_c2: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Non-Renewable Total for module C2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Non-Renewable Total (C2)",
@@ -4573,7 +4239,6 @@ class LCAResultsFullBase(SQLModel):
 
     penrt_c3: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Non-Renewable Total for module C3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Non-Renewable Total (C3)",
@@ -4587,7 +4252,6 @@ class LCAResultsFullBase(SQLModel):
 
     penrt_c4: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Non-Renewable Total for module C4.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Non-Renewable Total (C4)",
@@ -4601,7 +4265,6 @@ class LCAResultsFullBase(SQLModel):
 
     penrt_d: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Non-Renewable Total for module D.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Non-Renewable Total (D)",
@@ -4615,7 +4278,6 @@ class LCAResultsFullBase(SQLModel):
 
     penrt_d1: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Non-Renewable Total for module D1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Non-Renewable Total (D1)",
@@ -4629,7 +4291,6 @@ class LCAResultsFullBase(SQLModel):
 
     penrt_d2: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Primary Energy Non-Renewable Total for module D2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Primary Energy Non-Renewable Total (D2)",
@@ -4643,7 +4304,6 @@ class LCAResultsFullBase(SQLModel):
 
     penrt_total: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric, nullable=True),
         description="Total Primary Energy Non-Renewable Total.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Total Primary Energy Non-Renewable Total",
