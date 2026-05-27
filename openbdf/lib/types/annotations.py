@@ -14,7 +14,3 @@ def unwrap_optional(annotation: Any) -> tuple[Any, bool]:
         if len(non_none_args) == 1:
             return non_none_args[0], True
     return annotation, False
-
-
-def get_display_type(type: Any) -> str:
-    return getattr(type, "__name__", str(type))
