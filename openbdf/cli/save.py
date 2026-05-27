@@ -7,9 +7,9 @@ from openpyxl.utils import get_column_letter
 from pydantic.fields import FieldInfo
 from sqlmodel import SQLModel
 
-from openbdf.lib.converters.attribute_translator import COMMON_CATEGORY_NAMES, SHEETS_PROPERTIES_HEADERS
 from openbdf.lib.converters.dataframe import wide_to_dataframe
 from openbdf.lib.converters.enums_registry import EnumRegistry
+from openbdf.lib.converters.translators import COMMON_CATEGORY_NAMES, SHEETS_PROPERTIES_HEADERS
 from openbdf.lib.types.annotations import unwrap_optional
 from openbdf.lib.types.human_readable import human_readable_constraints, human_readable_type
 from openbdf.lib.types.xlsx import xlsx_validation_from_type

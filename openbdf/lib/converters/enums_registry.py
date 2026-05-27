@@ -22,8 +22,11 @@ class EnumRegistry:
     This allows us to easily retrieve enum metadata (like display names) when generating Excel files.
     """
 
-    _registry: dict[type[OpenBDFEnum], EnumRegistryEntry] = {}
+    _registry: dict[type[OpenBDFEnum], EnumRegistryEntry]
     _sheet_name: str = "TypeDefinitions"
+
+    def __abs__(self):
+        self._registry = {}
 
     def get_entry(self, enum_cls: type[OpenBDFEnum]) -> EnumRegistryEntry:
         item = self._registry.get(enum_cls)
