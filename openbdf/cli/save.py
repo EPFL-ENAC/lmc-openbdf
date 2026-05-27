@@ -10,7 +10,9 @@ from sqlmodel import SQLModel
 from openbdf.lib.converters.attribute_translator import COMMON_CATEGORY_NAMES, SHEETS_PROPERTIES_HEADERS
 from openbdf.lib.converters.dataframe import wide_to_dataframe
 from openbdf.lib.converters.enums_registry import EnumRegistry
-from openbdf.lib.types import get_display_type, human_readable_constraints, unwrap_optional, xlsx_validation_from_type
+from openbdf.lib.types.annotations import unwrap_optional
+from openbdf.lib.types.human_readable import human_readable_constraints, human_readable_type
+from openbdf.lib.types.xlsx import xlsx_validation_from_type
 from openbdf.model.building_bill_materials_slim import BuildingBillMaterialsSlimRecordBase
 from openbdf.model.enums.openbdf_enum import OpenBDFEnum
 from openbdf.model.general_info import ProjectRecordBase
@@ -118,10 +120,10 @@ def info_to_xlsx(writer: pd.ExcelWriter, project: ProjectRecord | None, sheet_na
         )
         header_cells.append(desc)
 
-        dt = info_sheet.cell(row=cell_row, column=6, value=get_display_type(data_type))
+        dt = info_sheet.cell(row=cell_row, column=6, value=human_readable_type(data_type))
         dt.style = INFO_STYLE
 
-        constraints = human_readable_constraints(metadata, data_type)
+        constraints = human_readable_constraints(metadata)
         c = info_sheet.cell(row=cell_row, column=7, value=constraints)
         if constraints:
             c.style = INFO_STYLE
@@ -231,9 +233,9 @@ def wide_to_xlsx(
             desc.style = REQUIRED_STYLE
         desc.alignment = Alignment(wrap_text=True, vertical="top")
 
-        sheet.cell(row=3, column=cell_column, value=get_display_type(data_type))
+        sheet.cell(row=3, column=cell_column, value=human_readable_type(data_type))
 
-        constraints = human_readable_constraints(metadata, data_type)
+        constraints = human_readable_constraints(metadata)
         c = sheet.cell(row=4, column=cell_column, value=constraints)
         if constraints:
             c.style = INFO_STYLE
@@ -380,7 +382,7 @@ def make_attribute_translator_openbdf_pydantic(writer: pd.ExcelWriter, sheet_nam
         an = info_sheet.cell(row=cell_row, column=3, value=extra.get("attribute_name", field_code))
         an.style = ATTRIBUTES_NAME_STYLE
 
-        r = info_sheet.cell(row=cell_row, column=4, value=get_display_type(data_type))
+        r = info_sheet.cell(row=cell_row, column=4, value=human_readable_type(data_type))
         r.style = INFO_STYLE
 
         req = info_sheet.cell(row=cell_row, column=5, value=requirements)

@@ -1,93 +1,11 @@
 from datetime import date, datetime
-from types import NoneType, UnionType
-from typing import Any, Union, get_args, get_origin
+from typing import Any
 
 from openpyxl.worksheet.datavalidation import DataValidation
 from sqlmodel.main import FieldInfo
 
 from openbdf.lib.converters.enums_registry import EnumRegistry
 from openbdf.model.enums.openbdf_enum import OpenBDFEnum
-
-
-def unwrap_optional(annotation: Any) -> tuple[Any, bool]:
-    """
-    Takes a type annotation and returns the annotation stripped from the Optional if needed and True/False if it was an optional
-    This function checks if the annotation is of the form Optional[T] (i.e., Union[T, None]) and returns T and a boolean indicating optionality.
-    """
-    origin = get_origin(annotation)
-    args = get_args(annotation)
-    if origin in (Union, UnionType) and NoneType in args:
-        non_none_args = [arg for arg in args if arg is not NoneType]
-        if len(non_none_args) == 1:
-            return non_none_args[0], True
-    return annotation, False
-
-
-_TYPE_TO_HUMAN_READABLE: dict[Any, str] = {
-    str: "string",
-    int: "integer",
-    float: "float",
-    bool: "boolean",
-    date: "date",
-    datetime: "datetime",
-}
-
-
-def get_display_type(type: Any) -> str:
-    return _TYPE_TO_HUMAN_READABLE.get(type, getattr(type, "__name__", str(type)))
-
-
-from datetime import date, datetime
-from typing import Any
-
-import annotated_types
-
-
-def human_readable_constraints(field: Any, data_type: Any) -> str:
-    constraints = []
-
-    metadata = getattr(field, "metadata", []) or []
-
-    min_len = None
-    max_len = None
-    ge = None
-    gt = None
-    le = None
-    lt = None
-
-    for item in metadata:
-        if isinstance(item, annotated_types.Len):
-            min_len = item.min_length
-            max_len = item.max_length
-        elif isinstance(item, annotated_types.MaxLen):
-            max_len = item.max_length
-        elif isinstance(item, annotated_types.MinLen):
-            min_len = item.min_length
-        elif isinstance(item, annotated_types.Ge):
-            ge = item.ge
-        elif isinstance(item, annotated_types.Gt):
-            gt = item.gt
-        elif isinstance(item, annotated_types.Le):
-            le = item.le
-        elif isinstance(item, annotated_types.Lt):
-            lt = item.lt
-
-    if max_len is not None:
-        constraints.append(f"max {max_len} chars")
-    if min_len is not None:
-        constraints.append(f"min {min_len} chars")
-
-    if le is not None:
-        constraints.append(f"≤ {le}")
-    elif lt is not None:
-        constraints.append(f"< {lt}")
-
-    if ge is not None:
-        constraints.append(f"≥ {ge}")
-    elif gt is not None:
-        constraints.append(f"> {gt}")
-
-    return ", ".join(constraints) if constraints else ""
 
 
 def xlsx_validation_from_type(
