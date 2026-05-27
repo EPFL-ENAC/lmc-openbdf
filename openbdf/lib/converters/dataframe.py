@@ -5,14 +5,16 @@ from typing import Any, Optional, TypeVar
 import pandas as pd
 from sqlmodel import SQLModel
 
-from openbdf.lib.converters.attribute_translator import COMMON_CATEGORY_NAMES, DocumentTranslator
+from openbdf.lib.converters.translators import COMMON_CATEGORY_NAMES, DocumentTranslator
 from openbdf.lib.types.fields import get_field_code
 from openbdf.lib.types.values import parse_value, serialize_value
 from openbdf.model.building_bill_materials_slim import BuildingBillMaterialsSlimRecordBase
 from openbdf.model.general_info import ProjectRecordBase, ProjectRecordBaseDraft
+from openbdf.model.lca_results_full import LCAResultsFullBase
 from openbdf.model.tables import (
     BuildingBillMaterialsSlimRecord,
     BuildingBillMaterialsSlimRecordDraft,
+    LCAResultsFullRecord,
     ProjectRecord,
     ProjectRecordDraft,
 )
@@ -144,7 +146,7 @@ def model_from_vertical_dataframe(
         raise ValueError(f"Project dataframe is missing required columns: {sorted(missing)}")
 
     if document_translator is None:
-        document_translator = DocumentTranslator()
+        document_translator = DocumentTranslator.default_openbdf_translator()
 
     fields = model_cls.model_fields
     code_to_name = build_field_code_to_name_map(
@@ -180,7 +182,7 @@ def model_from_vertical_dataframe(
 
 
 def project_from_dataframe(
-    project_df: pd.DataFrame, document_translator: DocumentTranslator = DocumentTranslator()
+    project_df: pd.DataFrame, document_translator: DocumentTranslator | None = None
 ) -> ProjectRecordBase:
     """
     Build a ProjectRecord from a dataframe produced by project_to_dataframe().
@@ -196,12 +198,12 @@ def project_from_dataframe(
         ProjectRecordBase,
         excluded_fields=PROJECT_EXCLUDED_FIELDS,
         translator_category=COMMON_CATEGORY_NAMES["project"],
-        document_translator=document_translator,
+        document_translator=document_translator or DocumentTranslator(),
     )
 
 
 def project_draft_from_dataframe(
-    project_df: pd.DataFrame, document_translator: DocumentTranslator = DocumentTranslator()
+    project_df: pd.DataFrame, document_translator: DocumentTranslator | None = None
 ) -> ProjectRecordBaseDraft:
     """
     Build a ProjectRecordDraft from a dataframe produced by project_to_dataframe().
@@ -217,12 +219,12 @@ def project_draft_from_dataframe(
         ProjectRecordBaseDraft,
         excluded_fields=PROJECT_EXCLUDED_FIELDS,
         translator_category=COMMON_CATEGORY_NAMES["project"],
-        document_translator=document_translator,
+        document_translator=document_translator or DocumentTranslator(),
     )
 
 
 def bom_from_dataframe(
-    bom_df: pd.DataFrame, document_translator: DocumentTranslator = DocumentTranslator()
+    bom_df: pd.DataFrame, document_translator: DocumentTranslator | None = None
 ) -> list[BuildingBillMaterialsSlimRecordBase]:
     """
     Build a list of BuildingBillMaterialsSlimRecord from a dataframe produced
@@ -231,6 +233,9 @@ def bom_from_dataframe(
     Dataframe columns are interpreted as field_code values.
     Unknown columns are ignored.
     """
+    if document_translator is None:
+        document_translator = DocumentTranslator.default_openbdf_translator()
+
     fields = BuildingBillMaterialsSlimRecordBase.model_fields
     code_to_name = build_field_code_to_name_map(
         BuildingBillMaterialsSlimRecordBase,
@@ -258,6 +263,47 @@ def bom_from_dataframe(
     return items
 
 
+def results_wide_from_dataframe(
+    results_wide_df: pd.DataFrame, document_translator: DocumentTranslator | None = None
+) -> list[LCAResultsFullRecord]:
+    """
+    Build a list of LCAResultsFullRecord from a dataframe produced
+    by results_wide_to_dataframe().
+
+    Dataframe columns are interpreted as field_code values.
+    Unknown columns are ignored.
+    """
+    if document_translator is None:
+        document_translator = DocumentTranslator.default_openbdf_translator()
+
+    fields = LCAResultsFullBase.model_fields
+    code_to_name = build_field_code_to_name_map(
+        LCAResultsFullBase,
+    )
+
+    items: list[LCAResultsFullRecord] = []
+
+    for _, row in results_wide_df.iterrows():
+        kwargs: dict[str, Any] = {}
+
+        for column in results_wide_df.columns.tolist():
+            field_name = code_to_name.get(
+                document_translator.translate(COMMON_CATEGORY_NAMES["results_wide"], str(column))
+            )
+            if field_name is None:
+                continue
+
+            field_info = fields[field_name]
+            annotation = field_info.annotation
+            kwargs[field_name] = parse_value(annotation, row[column], document_translator)
+
+        if any(value is not None for value in kwargs.values()):
+            # we skip completely empty rows to avoid creating empty records
+            items.append(LCAResultsFullRecord(**kwargs))
+
+    return items
+
+
 def project_package_to_dataframes(
     project: ProjectRecord,
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
@@ -274,6 +320,7 @@ def project_package_to_dataframes(
 def project_package_from_dataframes(
     project_df: pd.DataFrame,
     bom_df: pd.DataFrame,
+    results_wide_df: pd.DataFrame | None,
     document_translator: DocumentTranslator | None = None,
 ) -> ProjectRecord:
     """
@@ -281,10 +328,12 @@ def project_package_from_dataframes(
     """
 
     if document_translator is None:
-        document_translator = DocumentTranslator()
+        document_translator = DocumentTranslator.default_openbdf_translator()
 
     project_base = project_from_dataframe(project_df, document_translator)
     bill_of_materials_base = bom_from_dataframe(bom_df, document_translator)
+
+    # TODO: add import of LCAResultsFullRecord when Nicole tells us how to link the entries to the BOM entries
 
     project = ProjectRecord(
         **project_base.model_dump(),
@@ -304,7 +353,7 @@ def project_draft_package_from_dataframes(
     """
 
     if document_translator is None:
-        document_translator = DocumentTranslator()
+        document_translator = DocumentTranslator.default_openbdf_translator()
 
     project_base = (
         project_draft_from_dataframe(project_df, document_translator)

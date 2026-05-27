@@ -49,7 +49,7 @@ def explain(
 def open(
     file: str = typer.Option(..., "--file", "-f", help="The file to open"),
     attribute_translator_path: str = typer.Option(
-        None,
+        "",
         "--attribute-translator",
         "-at",
         help="Optional path to an Excel file containing an attribute translator sheet. If provided, it will be used to translate attribute names from the input dataframes. The sheet should contain at least two columns: one for the original attribute names and one for the translated names.",

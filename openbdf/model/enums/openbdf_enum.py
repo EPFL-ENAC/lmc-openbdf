@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from enum import Enum
 
-from openbdf.lib.converters.attribute_translator import DocumentTranslator
+from openbdf.lib.converters.translators import DocumentTranslator
 
 
 class OpenBDFEnum(str, Enum):
@@ -62,7 +62,7 @@ class OpenBDFEnum(str, Enum):
         )
 
     @classmethod
-    def find_value(cls, label: str, translator: DocumentTranslator | None) -> OpenBDFEnum | None:
+    def find_value(cls, label: str, translator: DocumentTranslator | None = None) -> OpenBDFEnum | None:
         """
         Return the enum instance matching the value or display_name.
         """

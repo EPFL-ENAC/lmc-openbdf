@@ -5,7 +5,7 @@ from typing import Any, cast
 
 import pandas as pd
 
-from openbdf.lib.converters.attribute_translator import DocumentTranslator
+from openbdf.lib.converters.translators import DocumentTranslator
 from openbdf.lib.types.annotations import unwrap_optional
 from openbdf.model.enums.openbdf_enum import OpenBDFEnum
 
