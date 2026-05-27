@@ -2,64 +2,51 @@ from pathlib import Path
 
 import pandas as pd
 
-from openbdf.lib.converters.dataframe import bom_from_dataframe, project_from_dataframe, project_package_from_dataframes
-from openbdf.model.building_bill_materials_slim import BuildingBillMaterialsSlimRecordBase
-from openbdf.model.tables import BuildingBillMaterialsSlimRecord
+from openbdf.lib.converters.dataframe import (
+    project_draft_package_from_dataframes,
+    project_package_from_dataframes,
+)
+from openbdf.lib.converters.translators import COMMON_CATEGORY_NAMES, DocumentTranslator
 
 
 def open_openbdf_xlsx(
     xlsx_path: str | Path,
-    info_sheet_name: str = "Sheet1",
-    info_header_col: int = 0,
-    info_values_col: int = 1,
-    info_start_row: int = 0,
-    bom_sheet_name: str = "Sheet1",
-    bom_header_row: int = 0,
-    bom_start_row: int = 0,
-    bom_start_col: int = 0,
-    bom_end_row: int | None = None,
-    bom_end_col: int | None = None,
+    translator_path: str | Path | None = None,
+    translator_attribute_name_col: int = 0,
+    translator_translated_name_col: int = 1,
+    translator_header_row: int = 0,
+    draft: bool = False,
 ):
-    info_raw_df = pd.read_excel(xlsx_path, sheet_name=info_sheet_name)
-    info_picked = info_raw_df.iloc[info_start_row:, [info_header_col, info_values_col]]
-    info_renamed = info_picked.rename(columns={info_picked.columns[0]: "field_code", info_picked.columns[1]: "value"})
+    xlsx_file = pd.ExcelFile(xlsx_path)
 
-    bom_raw_df = pd.read_excel(xlsx_path, sheet_name=bom_sheet_name, header=bom_header_row)
-    bom_filtered = bom_raw_df.iloc[bom_start_row:bom_end_row, bom_start_col:bom_end_col].reset_index(drop=True)
+    if translator_path:
+        document_translator = DocumentTranslator.from_xlsx(
+            xlsx_path=translator_path,
+            attribute_name_col=translator_attribute_name_col,
+            translated_name_col=translator_translated_name_col,
+            header_row=translator_header_row,
+        )
+    else:
+        document_translator = DocumentTranslator.default_openbdf_translator()
 
-    return project_package_from_dataframes(info_renamed, bom_filtered)
+    info_df = document_translator.get_translated_xlsx_sheet(xlsx_file, COMMON_CATEGORY_NAMES["project"])
+    if info_df is None:
+        return None
 
+    info_df.rename(columns={info_df.columns[0]: "field_code", info_df.columns[1]: "value"}, inplace=True)
 
-def open_building_bill_of_materials(
-    xlsx_path: str | Path,
-    sheet_name: str = "Sheet1",
-    header_row: int = 0,
-    start_row: int = 0,
-    start_col: int = 0,
-    end_row: int | None = None,
-    end_col: int | None = None,
-) -> list[BuildingBillMaterialsSlimRecordBase]:
-    """Open a building bill of materials from an Excel file and return a list of BuildingBillMaterialsSlimRecord."""
+    bom_df = document_translator.get_translated_xlsx_sheet(xlsx_file, COMMON_CATEGORY_NAMES["bom"])
+    if bom_df is None:
+        return None
+    bom_df = bom_df.reset_index(drop=True)
 
-    df = pd.read_excel(xlsx_path, sheet_name=sheet_name, header=header_row)
+    if draft:
+        return project_draft_package_from_dataframes(info_df, bom_df, document_translator=document_translator)
 
-    df = df.iloc[start_row:end_row, start_col:end_col].reset_index(drop=True)
+    results_wide_df = document_translator.get_translated_xlsx_sheet(xlsx_file, COMMON_CATEGORY_NAMES["results_wide"])
+    if results_wide_df is not None:
+        results_wide_df = results_wide_df.reset_index(drop=True)
 
-    print(f"Loaded BOM dataframe with {len(df)} rows and {len(df.columns)} columns.")
-    print(df.head())
-    return bom_from_dataframe(df)
-
-
-def open_project(
-    xlsx_path: str | Path, sheet_name: str = "Sheet1", header_col: int = 0, values_col: int = 1, start_row: int = 0
-):
-    raw_df = pd.read_excel(xlsx_path, sheet_name=sheet_name)
-    print(raw_df)
-
-    picked = raw_df.iloc[start_row:, [header_col, values_col]]
-    print(picked)
-
-    renamed = picked.rename(columns={picked.columns[0]: "field_code", picked.columns[1]: "value"})
-    print(renamed)
-
-    return project_from_dataframe(renamed)
+    return project_package_from_dataframes(
+        info_df, bom_df, results_wide_df=results_wide_df, document_translator=document_translator
+    )
