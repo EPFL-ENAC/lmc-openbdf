@@ -2,21 +2,22 @@ from pathlib import Path
 from typing import TypeVar
 
 import pandas as pd
-from openpyxl.styles import Alignment, Font, NamedStyle, PatternFill, Protection
+from openpyxl.styles import Alignment, Border, Font, NamedStyle, PatternFill, Protection, Side
 from openpyxl.utils import get_column_letter
-from pydantic import BaseModel
 from pydantic.fields import FieldInfo
 from sqlmodel import SQLModel
 
 from openbdf.lib.converters.attribute_translator import COMMON_CATEGORY_NAMES, SHEETS_PROPERTIES_HEADERS
 from openbdf.lib.converters.dataframe import wide_to_dataframe
 from openbdf.lib.converters.enums_registry import EnumRegistry
-from openbdf.lib.types import get_display_type, unwrap_optional, xlsx_validation_from_type
+from openbdf.lib.types import get_display_type, human_readable_constraints, unwrap_optional, xlsx_validation_from_type
 from openbdf.model.building_bill_materials_slim import BuildingBillMaterialsSlimRecordBase
 from openbdf.model.enums.openbdf_enum import OpenBDFEnum
 from openbdf.model.general_info import ProjectRecordBase
 from openbdf.model.lca_results_full import LCAResultsFullBase
 from openbdf.model.tables import ProjectRecord
+
+thin_side = Side(border_style="thin", color="AAAAAA")
 
 ATTRIBUTES_NAME_STYLE = NamedStyle(
     "AttributeName", font=Font(bold=True, color="FFFFFF"), fill=PatternFill("solid", fgColor="2b5b47")
@@ -28,7 +29,14 @@ RECOMMENDED_STYLE = NamedStyle("Recommended", fill=PatternFill("solid", fgColor=
 OPTIONAL_STYLE = NamedStyle("Optional", fill=PatternFill("solid", fgColor="d8e6e2"))
 ROW_HEADER_STYLE = NamedStyle("RowHeader", font=Font(bold=True), alignment=Alignment(vertical="top"))
 EDITABLE_VALUE_STYLE = NamedStyle(
-    "EditableValue", fill=PatternFill("solid", fgColor="feffb3"), protection=Protection(locked=False)
+    "EditableValue",
+    fill=PatternFill("solid", fgColor="feffb3"),
+    border=Border(top=thin_side, left=thin_side, right=thin_side, bottom=thin_side),
+    protection=Protection(locked=False),
+)
+DISABLED_STYLE = NamedStyle(
+    "Disabled",
+    fill=PatternFill("solid", fgColor="d3d3d3"),
 )
 
 ModelT = TypeVar("ModelT", bound=SQLModel)
@@ -113,11 +121,19 @@ def info_to_xlsx(writer: pd.ExcelWriter, project: ProjectRecord | None, sheet_na
         dt = info_sheet.cell(row=cell_row, column=6, value=get_display_type(data_type))
         dt.style = INFO_STYLE
 
-        c = info_sheet.cell(row=cell_row, column=7, value=extra.get("constraint", "none"))
-        c.style = INFO_STYLE
+        constraints = human_readable_constraints(metadata, data_type)
+        c = info_sheet.cell(row=cell_row, column=7, value=constraints)
+        if constraints:
+            c.style = INFO_STYLE
+        else:
+            c.style = DISABLED_STYLE
 
-        u = info_sheet.cell(row=cell_row, column=8, value=extra.get("units", "none"))
-        u.style = INFO_STYLE
+        units = extra.get("units", "")
+        u = info_sheet.cell(row=cell_row, column=8, value=units)
+        if units:
+            u.style = INFO_STYLE
+        else:
+            u.style = DISABLED_STYLE
 
         r = info_sheet.cell(row=cell_row, column=9, value=requirements)
         if requirements == "Required":
@@ -130,7 +146,7 @@ def info_to_xlsx(writer: pd.ExcelWriter, project: ProjectRecord | None, sheet_na
         v = info_sheet.cell(row=cell_row, column=10, value=getattr(project, field_code) if project else "")
         v.style = EDITABLE_VALUE_STYLE
 
-        dv = xlsx_validation_from_type(data_type, is_optional, metadata, enum_registry)
+        dv = xlsx_validation_from_type(data_type, is_optional, metadata, enum_registry)  # type: ignore[arg-type]
         if dv:
             dv.add(v)
             info_sheet.add_data_validation(dv)
@@ -178,6 +194,7 @@ def wide_to_xlsx(
     model_cls: type[ModelT2],
     sheet_name: str,
     enum_registry: EnumRegistry,
+    min_rows: int = 100,
 ):
     if records is None:
         records = []
@@ -216,11 +233,19 @@ def wide_to_xlsx(
 
         sheet.cell(row=3, column=cell_column, value=get_display_type(data_type))
 
-        c = sheet.cell(row=4, column=cell_column, value=extra.get("constraint", "none"))
-        c.style = INFO_STYLE
+        constraints = human_readable_constraints(metadata, data_type)
+        c = sheet.cell(row=4, column=cell_column, value=constraints)
+        if constraints:
+            c.style = INFO_STYLE
+        else:
+            c.style = DISABLED_STYLE
 
-        u = sheet.cell(row=5, column=cell_column, value=extra.get("units", "none"))
-        u.style = INFO_STYLE
+        unit = extra.get("units", "")
+        u = sheet.cell(row=5, column=cell_column, value=unit)
+        if unit:
+            u.style = INFO_STYLE
+        else:
+            u.style = DISABLED_STYLE
 
         r = sheet.cell(row=6, column=cell_column, value=requirements)
         if requirements == "Required":
@@ -233,7 +258,7 @@ def wide_to_xlsx(
         fc = sheet.cell(row=8, column=cell_column, value=field_code)
         fc.style = FIELD_CODE_STYLE
 
-        dv = xlsx_validation_from_type(data_type, is_optional, metadata, enum_registry)
+        dv = xlsx_validation_from_type(data_type, is_optional, metadata, enum_registry)  # type: ignore[arg-type]
         if dv:
             dv.add(
                 f"{column_letter}9:{column_letter}1048576"
@@ -263,12 +288,14 @@ def wide_to_xlsx(
 
     last_col = len(df.columns) + 1
     start_data_row = 9
-    end_data_row = start_data_row + len(df) - 1
-    for col_idx in range(2, last_col + 1):
-        for row_idx in range(start_data_row, end_data_row + 1):
+    end_data_row = start_data_row + max(len(df) - 1, min_rows)
+    for row_idx in range(start_data_row, end_data_row + 1):
+        sheet.cell(row=row_idx, column=1).style = DISABLED_STYLE
+        for col_idx in range(2, last_col + 1):
             sheet.cell(row=row_idx, column=col_idx).style = EDITABLE_VALUE_STYLE
 
     sheet.row_dimensions[2].height = 15
+    sheet.column_dimensions["A"].width = 20
 
 
 def save_attribute_translator(
