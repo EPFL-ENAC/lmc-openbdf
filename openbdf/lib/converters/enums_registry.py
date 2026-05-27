@@ -25,7 +25,7 @@ class EnumRegistry:
     _registry: dict[type[OpenBDFEnum], EnumRegistryEntry]
     _sheet_name: str = "TypeDefinitions"
 
-    def __abs__(self):
+    def __init__(self):
         self._registry = {}
 
     def get_entry(self, enum_cls: type[OpenBDFEnum]) -> EnumRegistryEntry:
