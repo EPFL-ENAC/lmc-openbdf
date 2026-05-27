@@ -33,7 +33,6 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
             attribute_name="Above/Below Ground",
             field_code="above_below_ground",
             description="Position of the finished floor level relative to the natural or finished ground elevation.",
-            units="none",
             requirements="Required",
         ),
     )
@@ -46,8 +45,6 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
             attribute_name="Element Class (Tier 1)",
             field_code="bec_custom_tier1",
             description="Primary (top-level) hierarchical category of the custom or national building element classification.",
-            constraint="string < 200 characters",
-            units="none",
             requirements="Recommended",
         ),
     )
@@ -60,8 +57,6 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
             attribute_name="Element Class (Tier 2)",
             field_code="bec_custom_tier2",
             description="Secondary hierarchical category of the custom or national building element classification.",
-            constraint="string < 200 characters",
-            units="none",
             requirements="Recommended",
         ),
     )
@@ -74,8 +69,6 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
             attribute_name="Element Class (Tier 3)",
             field_code="bec_custom_tier3",
             description="The tertiary hierarchical category of the custom or national building element classification.",
-            constraint="string < 200 characters",
-            units="none",
             requirements="Recommended",
         ),
     )
@@ -88,8 +81,6 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
             attribute_name="Element Class (Tier 4)",
             field_code="bec_custom_tier4",
             description="The quaternary (lowest-level) hierarchical category of the custom or national building element classification.",
-            constraint="string < 200 characters",
-            units="none",
             requirements="Optional",
         ),
     )
@@ -102,8 +93,6 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
             attribute_name="Element Class Description",
             field_code="bec_custom_description",
             description="The Description of the custom or national element class.",
-            constraint="string < 200 characters",
-            units="none",
             requirements="Recommended",
         ),
     )
@@ -116,7 +105,6 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
             attribute_name="OpenBDF Building Element Classification",
             field_code="bec_openbdf_selection",
             description="The highest applicable tier of the building element within the standardized openBDF framework.",
-            units="none",
             requirements="Recommended",
         ),
     )
@@ -129,8 +117,6 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
             attribute_name="Element Name (or ID)",
             field_code="element_name_custom",
             description="The specific, user-defined identifier for the building element.",
-            constraint="string < 200 characters",
-            units="none",
             requirements="Recommended",
         ),
     )
@@ -143,7 +129,6 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
             attribute_name="OpenBDF Common Material Classification",
             field_code="openbdf_material_name",
             description="The corresponding material classification from the standardized openBDF taxonomy.",
-            units="none",
             requirements="Optional",
         ),
     )
@@ -155,8 +140,6 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
             attribute_name="Material Name (or ID)",
             field_code="material_name_custom",
             description="The specific, user-defined identifier for the material.",
-            constraint="string < 200 characters",
-            units="none",
             requirements="Required",
         ),
     )
@@ -169,8 +152,6 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
             attribute_name="Material Name from EPD database",
             field_code="material_name_database",
             description="The precise material designation as cataloged in the associated Environmental Product Declaration (EPD) database.",
-            constraint="dropdown",
-            units="none",
             requirements="Recommended",
         ),
     )
@@ -183,8 +164,6 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
             attribute_name="Material EPD Database Name",
             field_code="lca_dataset_name",
             description="The nomenclature of the specific Environmental Product Declaration (EPD) dataset used.",
-            constraint="string < 200 characters",
-            units="none",
             requirements="Recommended",
         ),
     )
@@ -197,8 +176,6 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
             attribute_name="Material EPD Database Link",
             field_code="lca_dataset_link",
             description="The URL of the specific Environmental Product Declaration (EPD) dataset used.",
-            constraint="string < 200 characters",
-            units="none",
             requirements="Optional",
         ),
     )
@@ -210,8 +187,7 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
             attribute_name="Material Quantity (m3)",
             field_code="custom_material_quantity_m3",
             description="The measured scalar amount (volume) of the custom material.",
-            constraint="numerical",
-            units="#",
+            units="m3",
             requirements="Recommended",
         ),
     )
@@ -223,8 +199,7 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
             attribute_name="Material Quantity (m2)",
             field_code="custom_material_quantity_m2",
             description="The measured scalar amount (area) of the custom material.",
-            constraint="numerical",
-            units="#",
+            units="m2",
             requirements="Recommended",
         ),
     )
@@ -236,8 +211,7 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
             attribute_name="Material Quantity (m)",
             field_code="custom_material_quantity_m",
             description="The measured scalar amount (length) of the custom material.",
-            constraint="numerical",
-            units="#",
+            units="m",
             requirements="Recommended",
         ),
     )
@@ -249,7 +223,6 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
             attribute_name="Material Quantity (count)",
             field_code="custom_material_quantity_count",
             description="The measured scalar amount (count) of the custom material.",
-            constraint="numerical",
             units="#",
             requirements="Recommended",
         ),
@@ -262,7 +235,6 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
             attribute_name="Material Weight (kg)",
             field_code="custom_material_weight_kg",
             description="The absolute physical mass of the custom material.",
-            constraint="numerical",
             units="kg",
             requirements="Required",
         ),
@@ -275,7 +247,6 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
             attribute_name="Density",
             field_code="custom_material_density",
             description="The mass per unit volume of the custom material.",
-            constraint="numerical",
             units="kg/m3",
             requirements="Recommended",
         ),
