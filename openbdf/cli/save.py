@@ -1,25 +1,38 @@
 from pathlib import Path
+from typing import TypeVar
 
 import pandas as pd
-from openpyxl.styles import Alignment, Font, NamedStyle, PatternFill
+from openpyxl.styles import Alignment, Font, NamedStyle, PatternFill, Protection
+from openpyxl.utils import get_column_letter
+from pydantic import BaseModel
 from pydantic.fields import FieldInfo
+from sqlmodel import SQLModel
 
-from openbdf.lib.converters.attribute_translator import COMMON_CATEGORY_NAMES
-from openbdf.lib.converters.dataframe import bom_to_dataframe, project_to_dataframe
-from openbdf.lib.types import get_display_type, unwrap_optional
+from openbdf.lib.converters.attribute_translator import COMMON_CATEGORY_NAMES, SHEETS_PROPERTIES_HEADERS
+from openbdf.lib.converters.dataframe import wide_to_dataframe
+from openbdf.lib.converters.enums_registry import EnumRegistry
+from openbdf.lib.types import get_display_type, unwrap_optional, xlsx_validation_from_type
+from openbdf.model.building_bill_materials_slim import BuildingBillMaterialsSlimRecordBase
 from openbdf.model.enums.openbdf_enum import OpenBDFEnum
 from openbdf.model.general_info import ProjectRecordBase
-from openbdf.model.tables import BuildingBillMaterialsSlimRecord, ProjectRecord
+from openbdf.model.lca_results_full import LCAResultsFullBase
+from openbdf.model.tables import ProjectRecord
 
 ATTRIBUTES_NAME_STYLE = NamedStyle(
     "AttributeName", font=Font(bold=True, color="FFFFFF"), fill=PatternFill("solid", fgColor="2b5b47")
 )
 INFO_STYLE = NamedStyle("Info", font=Font(italic=True))
-FIELD_CODE_STYLE = NamedStyle("FieldCode", font=Font(color="FFFFFF"), fill=PatternFill("solid", fgColor="000000"))
+FIELD_CODE_STYLE = NamedStyle("FieldCode", font=Font(color="FFFFFF"), fill=PatternFill("solid", fgColor="010101"))
 REQUIRED_STYLE = NamedStyle("Required", fill=PatternFill("solid", fgColor="a3d3bd"))
 RECOMMENDED_STYLE = NamedStyle("Recommended", fill=PatternFill("solid", fgColor="a9d2f6"))
 OPTIONAL_STYLE = NamedStyle("Optional", fill=PatternFill("solid", fgColor="d8e6e2"))
 ROW_HEADER_STYLE = NamedStyle("RowHeader", font=Font(bold=True), alignment=Alignment(vertical="top"))
+EDITABLE_VALUE_STYLE = NamedStyle(
+    "EditableValue", fill=PatternFill("solid", fgColor="feffb3"), protection=Protection(locked=False)
+)
+
+ModelT = TypeVar("ModelT", bound=SQLModel)
+ModelT2 = TypeVar("ModelT2", bound=SQLModel)
 
 
 def get_field_extra(field: FieldInfo) -> dict:
@@ -33,16 +46,37 @@ def save_openbdf_to_xlsx(
     project: ProjectRecord | None,
     info_sheet_name: str = "General Info",
     bom_sheet_name: str = "Building Bill of Materials",
+    results_sheet_name: str = "LCA Results",
 ):
     """Save a list of BuildingBillMaterialsSlimRecord to an Excel file."""
 
     with pd.ExcelWriter(xlsx_path, engine="openpyxl") as writer:
-        info_to_xlsx(writer, project, info_sheet_name)
-        bom_to_xlsx(writer, project.bill_of_materials if project else None, bom_sheet_name)
+        enum_registry = EnumRegistry()
+
+        info_to_xlsx(writer, project, info_sheet_name, enum_registry)
+        wide_to_xlsx(
+            writer,
+            project.bill_of_materials if project else None,
+            BuildingBillMaterialsSlimRecordBase,
+            bom_sheet_name,
+            enum_registry,
+        )
+        wide_to_xlsx(
+            writer,
+            [record.lca_results_full_record for record in project.bill_of_materials if record.lca_results_full_record]
+            if project
+            else None,
+            LCAResultsFullBase,
+            results_sheet_name,
+            enum_registry,
+        )
+
+        enum_registry.to_xlsx(writer)
 
 
-def info_to_xlsx(writer: pd.ExcelWriter, project: ProjectRecord | None, sheet_name: str):
+def info_to_xlsx(writer: pd.ExcelWriter, project: ProjectRecord | None, sheet_name: str, enum_registry: EnumRegistry):
     info_sheet = writer.book.create_sheet(sheet_name)
+    info_sheet.protection.sheet = True  # Lock the sheet to prevent accidental edits
 
     project_record_fields = ProjectRecordBase.model_fields  # Base is on purpose to avoid DB-only fields like ID, etc...
 
@@ -93,7 +127,13 @@ def info_to_xlsx(writer: pd.ExcelWriter, project: ProjectRecord | None, sheet_na
         else:
             r.style = OPTIONAL_STYLE
 
-        info_sheet.cell(row=cell_row, column=10, value=getattr(project, field_code) if project else "")
+        v = info_sheet.cell(row=cell_row, column=10, value=getattr(project, field_code) if project else "")
+        v.style = EDITABLE_VALUE_STYLE
+
+        dv = xlsx_validation_from_type(data_type, is_optional, metadata, enum_registry)
+        if dv:
+            dv.add(v)
+            info_sheet.add_data_validation(dv)
 
         if requirements == "Required":
             for c in header_cells:
@@ -132,19 +172,28 @@ def info_to_xlsx(writer: pd.ExcelWriter, project: ProjectRecord | None, sheet_na
     info_sheet.column_dimensions["J"].width = 25
 
 
-def bom_to_xlsx(writer: pd.ExcelWriter, records: list[BuildingBillMaterialsSlimRecord] | None, sheet_name: str):
+def wide_to_xlsx(
+    writer: pd.ExcelWriter,
+    records: list[ModelT] | None,
+    model_cls: type[ModelT2],
+    sheet_name: str,
+    enum_registry: EnumRegistry,
+):
     if records is None:
         records = []
-    df = bom_to_dataframe(records)
 
+    df = wide_to_dataframe(records, model_cls)  # type: ignore[misc]
     df.to_excel(writer, sheet_name=sheet_name, index=False, header=False, startcol=1, startrow=8)
 
-    bom_sheet = writer.sheets[sheet_name]
-    bom_fields = BuildingBillMaterialsSlimRecord.model_fields
+    sheet = writer.sheets[sheet_name]
+    # sheet.protection.sheet = True  # Lock the sheet to prevent accidental edits
+    fields = model_cls.model_fields
 
     # headers
     for cell_column, field_code in enumerate(df.columns.tolist(), start=2):  # xlsx are 1-indexed (ewww)
-        metadata = bom_fields.get(field_code)
+        column_letter = get_column_letter(cell_column)
+
+        metadata = fields.get(field_code)
         if not metadata:
             continue
 
@@ -152,10 +201,11 @@ def bom_to_xlsx(writer: pd.ExcelWriter, records: list[BuildingBillMaterialsSlimR
         data_type, is_optional = unwrap_optional(metadata.annotation)
         requirements = extra.get("requirements", "Optional" if is_optional else "Required")
 
-        an = bom_sheet.cell(row=1, column=cell_column, value=extra.get("attribute_name", field_code))
+        attribute_name = extra.get("attribute_name", field_code)
+        an = sheet.cell(row=1, column=cell_column, value=attribute_name)
         an.style = ATTRIBUTES_NAME_STYLE
 
-        desc = bom_sheet.cell(
+        desc = sheet.cell(
             row=2,
             column=cell_column,
             value=metadata.description if metadata and metadata.description else field_code,
@@ -164,15 +214,15 @@ def bom_to_xlsx(writer: pd.ExcelWriter, records: list[BuildingBillMaterialsSlimR
             desc.style = REQUIRED_STYLE
         desc.alignment = Alignment(wrap_text=True, vertical="top")
 
-        bom_sheet.cell(row=3, column=cell_column, value=get_display_type(data_type))
+        sheet.cell(row=3, column=cell_column, value=get_display_type(data_type))
 
-        c = bom_sheet.cell(row=4, column=cell_column, value=extra.get("constraint", "none"))
+        c = sheet.cell(row=4, column=cell_column, value=extra.get("constraint", "none"))
         c.style = INFO_STYLE
 
-        u = bom_sheet.cell(row=5, column=cell_column, value=extra.get("units", "none"))
+        u = sheet.cell(row=5, column=cell_column, value=extra.get("units", "none"))
         u.style = INFO_STYLE
 
-        r = bom_sheet.cell(row=6, column=cell_column, value=requirements)
+        r = sheet.cell(row=6, column=cell_column, value=requirements)
         if requirements == "Required":
             r.style = REQUIRED_STYLE
         elif requirements == "Recommended":
@@ -180,49 +230,45 @@ def bom_to_xlsx(writer: pd.ExcelWriter, records: list[BuildingBillMaterialsSlimR
         else:
             r.style = OPTIONAL_STYLE
 
-        fc = bom_sheet.cell(row=8, column=cell_column, value=field_code)
+        fc = sheet.cell(row=8, column=cell_column, value=field_code)
         fc.style = FIELD_CODE_STYLE
 
-    a = bom_sheet.cell(row=1, column=1, value="Attribute")
+        dv = xlsx_validation_from_type(data_type, is_optional, metadata, enum_registry)
+        if dv:
+            dv.add(
+                f"{column_letter}9:{column_letter}1048576"
+            )  # Apply validation to the whole column starting from the first data row
+            sheet.add_data_validation(dv)
+
+        sheet.column_dimensions[column_letter].width = max(
+            15, len(attribute_name) + 5
+        )  # Set column width based on header length
+
+    a = sheet.cell(row=1, column=1, value="Attribute")
     a.style = ROW_HEADER_STYLE
-    d = bom_sheet.cell(row=2, column=1, value="Description")
+    d = sheet.cell(row=2, column=1, value="Description")
     d.style = ROW_HEADER_STYLE
-    dt = bom_sheet.cell(row=3, column=1, value="Data Type")
+    dt = sheet.cell(row=3, column=1, value="Data Type")
     dt.style = ROW_HEADER_STYLE
-    c = bom_sheet.cell(row=4, column=1, value="Constraint")
+    c = sheet.cell(row=4, column=1, value="Constraint")
     c.style = ROW_HEADER_STYLE
-    u = bom_sheet.cell(row=5, column=1, value="Units")
+    u = sheet.cell(row=5, column=1, value="Units")
     u.style = ROW_HEADER_STYLE
-    r = bom_sheet.cell(row=6, column=1, value="Requirements")
+    r = sheet.cell(row=6, column=1, value="Requirements")
     r.style = ROW_HEADER_STYLE
-    ui = bom_sheet.cell(row=7, column=1, value="User Instructions")
+    ui = sheet.cell(row=7, column=1, value="User Instructions")
     ui.style = ROW_HEADER_STYLE
-    fc = bom_sheet.cell(row=8, column=1, value="Field Code")
+    fc = sheet.cell(row=8, column=1, value="Field Code")
     fc.style = ROW_HEADER_STYLE
 
-    bom_sheet.column_dimensions["A"].width = 15
-    bom_sheet.column_dimensions["B"].width = 15
-    bom_sheet.column_dimensions["C"].width = 20
-    bom_sheet.column_dimensions["D"].width = 25
-    bom_sheet.column_dimensions["E"].width = 25
-    bom_sheet.column_dimensions["F"].width = 25
-    bom_sheet.column_dimensions["G"].width = 25
-    bom_sheet.column_dimensions["H"].width = 25
-    bom_sheet.column_dimensions["I"].width = 35
-    bom_sheet.column_dimensions["J"].width = 25
-    bom_sheet.column_dimensions["K"].width = 35
-    bom_sheet.column_dimensions["L"].width = 20
-    bom_sheet.column_dimensions["M"].width = 30
-    bom_sheet.column_dimensions["N"].width = 25
-    bom_sheet.column_dimensions["O"].width = 25
-    bom_sheet.column_dimensions["P"].width = 25
-    bom_sheet.column_dimensions["Q"].width = 25
-    bom_sheet.column_dimensions["R"].width = 25
-    bom_sheet.column_dimensions["S"].width = 25
-    bom_sheet.column_dimensions["T"].width = 25
-    bom_sheet.column_dimensions["U"].width = 25
+    last_col = len(df.columns) + 1
+    start_data_row = 9
+    end_data_row = start_data_row + len(df) - 1
+    for col_idx in range(2, last_col + 1):
+        for row_idx in range(start_data_row, end_data_row + 1):
+            sheet.cell(row=row_idx, column=col_idx).style = EDITABLE_VALUE_STYLE
 
-    bom_sheet.row_dimensions[2].height = 15
+    sheet.row_dimensions[2].height = 15
 
 
 def save_attribute_translator(
@@ -230,14 +276,58 @@ def save_attribute_translator(
 ):
     """Save a template Excel file for the attribute translator."""
     with pd.ExcelWriter(xlsx_path, engine="openpyxl") as writer:
+        make_translations_library_template_xlsx(writer, "Translations Library")
         make_attribute_translator_openbdf_pydantic(
             writer, COMMON_CATEGORY_NAMES["project"], ProjectRecordBase.model_fields
         )
         make_attribute_translator_openbdf_pydantic(
-            writer, COMMON_CATEGORY_NAMES["bom"], BuildingBillMaterialsSlimRecord.model_fields
+            writer, COMMON_CATEGORY_NAMES["bom"], BuildingBillMaterialsSlimRecordBase.model_fields
         )
         export_all_enums_in_model_to_attribute_translator(writer, ProjectRecordBase.model_fields)
-        export_all_enums_in_model_to_attribute_translator(writer, BuildingBillMaterialsSlimRecord.model_fields)
+        export_all_enums_in_model_to_attribute_translator(writer, BuildingBillMaterialsSlimRecordBase.model_fields)
+
+
+def make_translations_library_template_xlsx(writer: pd.ExcelWriter, sheet_name: str):
+    info_sheet = writer.book.create_sheet(sheet_name)
+    info_sheet.cell(row=1, column=1, value=SHEETS_PROPERTIES_HEADERS["original_name"])
+    info_sheet.cell(row=1, column=2, value=SHEETS_PROPERTIES_HEADERS["translated_name"])
+    info_sheet.cell(row=1, column=3, value=SHEETS_PROPERTIES_HEADERS["orientation"])
+    info_sheet.cell(row=1, column=4, value=SHEETS_PROPERTIES_HEADERS["header_row"])
+    info_sheet.cell(row=1, column=5, value=SHEETS_PROPERTIES_HEADERS["header_col"])
+    info_sheet.cell(row=1, column=6, value=SHEETS_PROPERTIES_HEADERS["values_col"])
+    info_sheet.cell(row=1, column=7, value=SHEETS_PROPERTIES_HEADERS["start_row"])
+    info_sheet.cell(row=1, column=8, value=SHEETS_PROPERTIES_HEADERS["start_col"])
+    info_sheet.cell(row=1, column=9, value=SHEETS_PROPERTIES_HEADERS["end_row"])
+    info_sheet.cell(row=1, column=10, value=SHEETS_PROPERTIES_HEADERS["end_col"])
+
+    models = [
+        {
+            "name": COMMON_CATEGORY_NAMES["project"],
+            "orientation": "vertical",
+            "header_row": 0,
+        },
+        {
+            "name": COMMON_CATEGORY_NAMES["bom"],
+            "orientation": "horizontal",
+            "header_row": 0,
+        },
+    ]
+
+    for cell_row, model in enumerate(models, start=2):  # xlsx are 1-indexed (ewww)
+        info_sheet.cell(row=cell_row, column=2, value=model["name"])
+        info_sheet.cell(row=cell_row, column=3, value=model["orientation"])
+        info_sheet.cell(row=cell_row, column=4, value=model["header_row"])
+
+    info_sheet.column_dimensions["A"].width = 30
+    info_sheet.column_dimensions["B"].width = 30
+    info_sheet.column_dimensions["C"].width = 30
+    info_sheet.column_dimensions["D"].width = 30
+    info_sheet.column_dimensions["E"].width = 40
+    info_sheet.column_dimensions["F"].width = 40
+    info_sheet.column_dimensions["G"].width = 30
+    info_sheet.column_dimensions["H"].width = 30
+    info_sheet.column_dimensions["I"].width = 30
+    info_sheet.column_dimensions["J"].width = 30
 
 
 def make_attribute_translator_openbdf_pydantic(writer: pd.ExcelWriter, sheet_name: str, model: dict[str, FieldInfo]):
@@ -245,6 +335,8 @@ def make_attribute_translator_openbdf_pydantic(writer: pd.ExcelWriter, sheet_nam
     info_sheet.cell(row=1, column=1, value="Field code in your format")
     info_sheet.cell(row=1, column=2, value="OpenBDF field code")
     info_sheet.cell(row=1, column=3, value="OpenBDF attribute name")
+    info_sheet.cell(row=1, column=4, value="Datatype")
+    info_sheet.cell(row=1, column=5, value="Requirements")
 
     for cell_row, field_code in enumerate(model, start=2):  # xlsx are 1-indexed (ewww)
         metadata = model.get(field_code)
@@ -252,6 +344,8 @@ def make_attribute_translator_openbdf_pydantic(writer: pd.ExcelWriter, sheet_nam
             continue
 
         extra = get_field_extra(metadata)
+        data_type, is_optional = unwrap_optional(metadata.annotation)
+        requirements = extra.get("requirements", "Optional" if is_optional else "Required")
 
         fc = info_sheet.cell(row=cell_row, column=2, value=field_code)
         fc.style = FIELD_CODE_STYLE
@@ -259,9 +353,22 @@ def make_attribute_translator_openbdf_pydantic(writer: pd.ExcelWriter, sheet_nam
         an = info_sheet.cell(row=cell_row, column=3, value=extra.get("attribute_name", field_code))
         an.style = ATTRIBUTES_NAME_STYLE
 
+        r = info_sheet.cell(row=cell_row, column=4, value=get_display_type(data_type))
+        r.style = INFO_STYLE
+
+        req = info_sheet.cell(row=cell_row, column=5, value=requirements)
+        if requirements == "Required":
+            req.style = REQUIRED_STYLE
+        elif requirements == "Recommended":
+            req.style = RECOMMENDED_STYLE
+        else:
+            req.style = OPTIONAL_STYLE
+
     info_sheet.column_dimensions["A"].width = 30
     info_sheet.column_dimensions["B"].width = 30
     info_sheet.column_dimensions["C"].width = 20
+    info_sheet.column_dimensions["D"].width = 40
+    info_sheet.column_dimensions["E"].width = 40
 
 
 def export_all_enums_in_model_to_attribute_translator(writer: pd.ExcelWriter, model: dict[str, FieldInfo]):

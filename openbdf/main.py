@@ -48,66 +48,6 @@ def explain(
 @app.command(name="open", no_args_is_help=True)
 def open(
     file: str = typer.Option(..., "--file", "-f", help="The file to open"),
-    info_sheet: str = typer.Option(
-        "General Info",
-        "--info-sheet",
-        "-i",
-        help="The sheet containing the general info data. Required if opening an Excel file with multiple sheets.",
-    ),
-    info_header_col: int = typer.Option(
-        0,
-        "--info-header-col",
-        "-ih",
-        help="The column index (0-based) of the header in the general info sheet. Default is 0 (the first column).",
-    ),
-    info_values_col: int = typer.Option(
-        1,
-        "--info-values-col",
-        "-iv",
-        help="The column index (0-based) of the values in the general info sheet. Default is 1 (the second column).",
-    ),
-    info_start_row: int = typer.Option(
-        1,
-        "--info-start-row",
-        "-is",
-        help="The starting row index (0-based) for the bill of materials data in the Excel sheet after the header. Default is 1 (the first row after the header).",
-    ),
-    bom_sheet: str = typer.Option(
-        "Building Bill of Materials",
-        "--bom-sheet",
-        "-b",
-        help="The sheet containing the bill of materials data. Required if opening an Excel file with multiple sheets.",
-    ),
-    bom_header_row: int = typer.Option(
-        0,
-        "--bom-header-row",
-        "-hr",
-        help="The row index (0-based) of the header in the bill of materials sheet. Default is 0 (the first row).",
-    ),
-    bom_start_row: int = typer.Option(
-        0,
-        "--bom-start-row",
-        "-s",
-        help="The starting row index (0-based) for the bill of materials data in the Excel sheet after the header. Default is 0 (the first row after the header).",
-    ),
-    bom_start_col: int = typer.Option(
-        0,
-        "--bom-start-col",
-        "-c",
-        help="The starting column index (0-based) for the bill of materials data in the Excel sheet. Default is 0 (the first column).",
-    ),
-    bom_end_row: int | None = typer.Option(
-        None,
-        "--bom-end-row",
-        "-er",
-        help="The ending row index (0-based) for the bill of materials data in the Excel sheet. If not provided, it will read until the last row with data.",
-    ),
-    bom_end_col: int | None = typer.Option(
-        None,
-        "--bom-end-col",
-        "-ec",
-        help="The ending column index (0-based) for the bill of materials data in the Excel sheet. If not provided, it will read until the last column with data.",
-    ),
     attribute_translator_path: str = typer.Option(
         None,
         "--attribute-translator",
@@ -132,6 +72,12 @@ def open(
         "-athr",
         help="The row index (0-based) of the header in the attribute translator sheet. Default is 0 (the first row).",
     ),
+    draft: bool = typer.Option(
+        False,
+        "--draft",
+        "-d",
+        help="Whether to create a draft version of the project. If set, the command will accept missing fields while still validating existing values",
+    ),
 ):
     """
     Open a file and display its contents.
@@ -141,21 +87,16 @@ def open(
 
     project = open_openbdf_xlsx(
         xlsx_path=file,
-        info_sheet_name=info_sheet,
-        info_header_col=info_header_col,
-        info_values_col=info_values_col,
-        info_start_row=info_start_row,
-        bom_sheet_name=bom_sheet,
-        bom_header_row=bom_header_row,
-        bom_start_row=bom_start_row,
-        bom_start_col=bom_start_col,
-        bom_end_row=bom_end_row,
-        bom_end_col=bom_end_col,
         attribute_translator_path=attribute_translator_path,
         attribute_translator_attribute_name_col=attribute_translator_attribute_name_col,
         attribute_translator_translated_name_col=attribute_translator_translated_name_col,
         attribute_translator_header_row=attribute_translator_header_row,
+        draft=draft,
     )
+
+    if project is None:
+        print("Failed to open the file. Please check the provided path and format.")
+        return False
 
     save_openbdf_to_xlsx(
         xlsx_path=Path("./output.xlsx"),
@@ -179,14 +120,14 @@ def save_template(
     )
 
 
-@app.command(name="save-attribute-translator-template", no_args_is_help=True)
-def save_attribute_translator_template(
+@app.command(name="save-translator-template", no_args_is_help=True)
+def save_translator_template(
     path: str = typer.Argument(..., help="The path where the attribute translator template Excel file will be saved"),
 ):
     """
     Save a template Excel file for the attribute translator.
     Usage:
-        openbdf save-attribute-translator-template ./attribute_translator_template.xlsx
+        openbdf save-translator-template ./attribute_translator_template.xlsx
     """
 
     save_attribute_translator(

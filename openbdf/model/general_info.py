@@ -4,9 +4,11 @@ from datetime import date
 from decimal import Decimal
 from typing import Optional
 
-from sqlalchemy import Column, Date, Integer, Numeric, String
+from sqlalchemy import Date
 from sqlalchemy import Enum as SAEnum
 from sqlmodel import Field, SQLModel
+
+from openbdf.model.draft import make_draft_model
 
 from .enums.buildings import (
     BuildingClassificationCode,
@@ -25,7 +27,7 @@ from .enums.lca import (
     LCATemporalApproach,
     LCIAMethodology,
     LCIModelingApproach_ISO14040_44,
-    LifeCycleStage_ISO14040_43,
+    LifeCycleSystemBoundary_ISO14040_43,
     # LifeCycleStage_ISO14040_44,
 )
 from .enums.materials import MaterialQuantitiesSource
@@ -36,7 +38,7 @@ from .field_metadata import openbdf_field_metadata
 class ProjectRecordBase(SQLModel):
     project_id: Optional[str] = Field(
         default=None,
-        sa_column=Column(String(200), nullable=True),
+        max_length=200,
         description="Unique ID assigned to this specific project.",
         schema_extra=openbdf_field_metadata(
             group="Project",
@@ -52,8 +54,8 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    project_units: ProjectUnits = Field(
-        sa_column=Column(SAEnum(ProjectUnits)),
+    project_units: ProjectUnits = Field(  # type: ignore[call-overload]
+        sa_type=SAEnum(ProjectUnits),
         description="Unit system used in the assessment.",
         schema_extra=openbdf_field_metadata(
             group="Project",
@@ -71,7 +73,7 @@ class ProjectRecordBase(SQLModel):
 
     project_name: Optional[str] = Field(
         default=None,
-        sa_column=Column(String(200), nullable=True),
+        max_length=200,
         description="Name of the project.",
         schema_extra=openbdf_field_metadata(
             group="Project",
@@ -89,7 +91,7 @@ class ProjectRecordBase(SQLModel):
 
     project_description: Optional[str] = Field(
         default=None,
-        sa_column=Column(String(500), nullable=True),
+        max_length=500,
         description="General description of the project.",
         schema_extra=openbdf_field_metadata(
             group="Project",
@@ -105,8 +107,8 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    project_construction_type: ConstructionType = Field(
-        sa_column=Column(SAEnum(ConstructionType)),
+    project_construction_type: ConstructionType = Field(  # type: ignore[call-overload]
+        sa_type=SAEnum(ConstructionType),
         description="Construction type of the project.",
         schema_extra=openbdf_field_metadata(
             group="Project",
@@ -120,8 +122,8 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    project_country: Country = Field(
-        sa_column=Column(SAEnum(Country)),
+    project_country: Country = Field(  # type: ignore[call-overload]
+        sa_type=SAEnum(Country),
         description="Country where the project is located.",
         schema_extra=openbdf_field_metadata(
             group="Project",
@@ -135,8 +137,9 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    project_city: str = Field(
-        sa_column=Column(String(200)),
+    project_city: Optional[str] = Field(
+        default=None,
+        max_length=200,
         description="City where the project is located.",
         schema_extra=openbdf_field_metadata(
             group="Project",
@@ -146,14 +149,14 @@ class ProjectRecordBase(SQLModel):
             description="City where the project is located.",
             constraint="string < 200 characters",
             units="none",
-            requirements="Required",
+            requirements="Optional",
             example="Potsdam",
         ),
     )
 
     project_state: Optional[str] = Field(
         default=None,
-        sa_column=Column(String(200), nullable=True),
+        max_length=200,
         description="State, province, or country subdivision.",
         schema_extra=openbdf_field_metadata(
             group="Project",
@@ -170,7 +173,7 @@ class ProjectRecordBase(SQLModel):
 
     project_address: Optional[str] = Field(
         default=None,
-        sa_column=Column(String(200), nullable=True),
+        max_length=200,
         description="Address of the project.",
         schema_extra=openbdf_field_metadata(
             group="Project",
@@ -187,7 +190,7 @@ class ProjectRecordBase(SQLModel):
 
     project_owner_name: Optional[str] = Field(
         default=None,
-        sa_column=Column(String(200), nullable=True),
+        max_length=200,
         description="Individual or entity that owns the project.",
         schema_extra=openbdf_field_metadata(
             group="Project",
@@ -202,8 +205,9 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    project_date_assessment: date = Field(
-        sa_column=Column(Date),
+    project_date_assessment: Optional[date] = Field(
+        default=None,
+        sa_type=Date,
         description="Date of the life-cycle assessment conducted by the assessor.",
         schema_extra=openbdf_field_metadata(
             group="Project",
@@ -213,7 +217,7 @@ class ProjectRecordBase(SQLModel):
             description=("Date of the life-cycle assessment conducted by the assessor."),
             constraint="ISO date",
             units="#",
-            requirements="Required",
+            requirements="Recommended",
             example="11/02/2026",
         ),
     )
@@ -235,7 +239,7 @@ class ProjectRecordBase(SQLModel):
 
     project_third_verifier_name: Optional[str] = Field(
         default=None,
-        sa_column=Column(String(200), nullable=True),
+        max_length=200,
         description="Name of the third-party verifier.",
         schema_extra=openbdf_field_metadata(
             group="Project",
@@ -252,7 +256,7 @@ class ProjectRecordBase(SQLModel):
 
     project_verification_date: Optional[date] = Field(
         default=None,
-        sa_column=Column(Date, nullable=True),
+        sa_type=Date,
         description="Date of third-party verification.",
         schema_extra=openbdf_field_metadata(
             group="Project",
@@ -267,9 +271,9 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    project_gfa_method: Optional[GFAMeasurementMethod] = Field(
+    project_gfa_method: Optional[GFAMeasurementMethod] = Field(  # type: ignore[call-overload]
         default=None,
-        sa_column=Column(SAEnum(GFAMeasurementMethod), nullable=True),
+        sa_type=SAEnum(GFAMeasurementMethod),
         description="Gross Floor Area measurement method.",
         schema_extra=openbdf_field_metadata(
             group="Project",
@@ -283,7 +287,8 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    project_certification: bool = Field(
+    project_certification: Optional[bool] = Field(
+        default=None,
         description="Indicate if a sustainability certification was used for the project.",
         schema_extra=openbdf_field_metadata(
             group="Project",
@@ -292,13 +297,13 @@ class ProjectRecordBase(SQLModel):
             field_code="project_certification",
             description=("Indicate if a sustainability certification was used for the project."),
             units="none",
-            requirements="Required",
+            requirements="Recommended",
         ),
     )
 
     project_certification_name: Optional[str] = Field(
         default=None,
-        sa_column=Column(String(200)),
+        max_length=200,
         description="Sustainability certification applied for the project.",
         schema_extra=openbdf_field_metadata(
             group="Project",
@@ -315,7 +320,7 @@ class ProjectRecordBase(SQLModel):
 
     project_certification_date: Optional[date] = Field(
         default=None,
-        sa_column=Column(Date, nullable=True),
+        sa_type=Date,
         description="Date of certification application.",
         schema_extra=openbdf_field_metadata(
             group="Project",
@@ -332,7 +337,7 @@ class ProjectRecordBase(SQLModel):
 
     project_certification_id: Optional[str] = Field(
         default=None,
-        sa_column=Column(String(200), nullable=True),
+        max_length=200,
         description="Unique ID assigned to the certification application.",
         schema_extra=openbdf_field_metadata(
             group="Project",
@@ -349,7 +354,7 @@ class ProjectRecordBase(SQLModel):
 
     project_permit_date: Optional[date] = Field(
         default=None,
-        sa_column=Column(Date, nullable=True),
+        sa_type=Date,
         description="Date of application for construction permit.",
         schema_extra=openbdf_field_metadata(
             group="Project",
@@ -366,7 +371,7 @@ class ProjectRecordBase(SQLModel):
 
     project_permit_id: Optional[str] = Field(
         default=None,
-        sa_column=Column(String(200), nullable=True),
+        max_length=200,
         description="Unique ID of the project permit.",
         schema_extra=openbdf_field_metadata(
             group="Project",
@@ -383,7 +388,8 @@ class ProjectRecordBase(SQLModel):
 
     project_plot_area: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric(18, 4), nullable=True),
+        max_digits=18,
+        decimal_places=4,
         description="Total plot area of the project.",
         schema_extra=openbdf_field_metadata(
             group="Project",
@@ -413,8 +419,8 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    project_phase: ProjectPhase = Field(
-        sa_column=Column(SAEnum(ProjectPhase)),
+    project_phase: ProjectPhase = Field(  # type: ignore[call-overload]
+        sa_type=SAEnum(ProjectPhase),
         description="Stage of the project when LCA is conducted.",
         schema_extra=openbdf_field_metadata(
             group="Project",
@@ -430,7 +436,7 @@ class ProjectRecordBase(SQLModel):
 
     project_design_start_date: Optional[date] = Field(
         default=None,
-        sa_column=Column(Date, nullable=True),
+        sa_type=Date,
         description="Project design start date.",
         schema_extra=openbdf_field_metadata(
             group="Project",
@@ -447,7 +453,7 @@ class ProjectRecordBase(SQLModel):
 
     project_construction_company_name: Optional[str] = Field(
         default=None,
-        sa_column=Column(String(200), nullable=True),
+        max_length=200,
         description="Name of the company constructing the project.",
         schema_extra=openbdf_field_metadata(
             group="Project",
@@ -464,7 +470,7 @@ class ProjectRecordBase(SQLModel):
 
     project_construction_company_address: Optional[str] = Field(
         default=None,
-        sa_column=Column(String(200), nullable=True),
+        max_length=200,
         description="Physical location of the construction company.",
         schema_extra=openbdf_field_metadata(
             group="Project",
@@ -481,7 +487,7 @@ class ProjectRecordBase(SQLModel):
 
     project_contractor_name: Optional[str] = Field(
         default=None,
-        sa_column=Column(String(200), nullable=True),
+        max_length=200,
         description="Name of the contractor executing the construction.",
         schema_extra=openbdf_field_metadata(
             group="Project",
@@ -498,7 +504,7 @@ class ProjectRecordBase(SQLModel):
 
     project_architect_engineer_name: Optional[str] = Field(
         default=None,
-        sa_column=Column(String(200), nullable=True),
+        max_length=200,
         description="Name of the architect/engineer appointed on the project.",
         schema_extra=openbdf_field_metadata(
             group="Project",
@@ -515,7 +521,7 @@ class ProjectRecordBase(SQLModel):
 
     project_structural_engineer_name: Optional[str] = Field(
         default=None,
-        sa_column=Column(String(200), nullable=True),
+        max_length=200,
         description="Name of the structural engineer appointed on the project.",
         schema_extra=openbdf_field_metadata(
             group="Project",
@@ -532,7 +538,7 @@ class ProjectRecordBase(SQLModel):
 
     project_mep_engineer_name: Optional[str] = Field(
         default=None,
-        sa_column=Column(String(200), nullable=True),
+        max_length=200,
         description="Name of the MEP engineer appointed on the project.",
         schema_extra=openbdf_field_metadata(
             group="Project",
@@ -549,7 +555,7 @@ class ProjectRecordBase(SQLModel):
 
     project_environmental_consultant_company: Optional[str] = Field(
         default=None,
-        sa_column=Column(String(200), nullable=True),
+        max_length=200,
         description="Company conducting the LCA assessment.",
         schema_extra=openbdf_field_metadata(
             group="Project",
@@ -566,7 +572,7 @@ class ProjectRecordBase(SQLModel):
 
     project_environmental_assessor_name: Optional[str] = Field(
         default=None,
-        sa_column=Column(String(200), nullable=True),
+        max_length=200,
         description="Name of the environmental assessor.",
         schema_extra=openbdf_field_metadata(
             group="Project",
@@ -583,7 +589,7 @@ class ProjectRecordBase(SQLModel):
 
     project_environmental_assessor_contact: Optional[str] = Field(
         default=None,
-        sa_column=Column(String(200), nullable=True),
+        max_length=200,
         description="Contact details of the environmental assessor.",
         schema_extra=openbdf_field_metadata(
             group="Project",
@@ -600,7 +606,7 @@ class ProjectRecordBase(SQLModel):
 
     building_id: Optional[str] = Field(
         default=None,
-        sa_column=Column(String(200), nullable=True),
+        max_length=200,
         description="Assigned identifier for the building.",
         schema_extra=openbdf_field_metadata(
             group="Building",
@@ -618,7 +624,7 @@ class ProjectRecordBase(SQLModel):
     # TODO : datatype for this ?
     building_gps_coordinates: Optional[str] = Field(
         default=None,
-        sa_column=Column(String(100), nullable=True),
+        max_length=100,
         description="Latitude and longitude of the building project.",
         schema_extra=openbdf_field_metadata(
             group="Building",
@@ -633,8 +639,8 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    building_geographic_climate_zone: ASHRAEClimateZone = Field(
-        sa_column=Column(SAEnum(ASHRAEClimateZone), nullable=False),
+    building_geographic_climate_zone: ASHRAEClimateZone = Field(  # type: ignore[call-overload]
+        sa_type=SAEnum(ASHRAEClimateZone),
         description="ASHRAE climate zone typology.",
         schema_extra=openbdf_field_metadata(
             group="Building",
@@ -650,7 +656,8 @@ class ProjectRecordBase(SQLModel):
 
     building_altitude: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric(18, 4), nullable=True),
+        max_digits=18,
+        decimal_places=4,
         description="Elevation of the project site above sea level.",
         schema_extra=openbdf_field_metadata(
             group="Building",
@@ -665,9 +672,9 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    building_seismic_zone: Optional[FEMASeismicActivity] = Field(
+    building_seismic_zone: Optional[FEMASeismicActivity] = Field(  # type: ignore[call-overload]
         default=None,
-        sa_column=Column(SAEnum(FEMASeismicActivity), nullable=True),
+        sa_type=SAEnum(FEMASeismicActivity),
         description="Classification of seismic activity level.",
         schema_extra=openbdf_field_metadata(
             group="Building",
@@ -681,8 +688,8 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    building_typology: BuildingTypology = Field(
-        sa_column=Column(SAEnum(BuildingTypology)),
+    building_typology: BuildingTypology = Field(  # type: ignore[call-overload]
+        sa_type=SAEnum(BuildingTypology),
         description="Building category according to national classification.",
         schema_extra=openbdf_field_metadata(
             group="Building",
@@ -701,7 +708,6 @@ class ProjectRecordBase(SQLModel):
 
     building_residential_units: Optional[int] = Field(
         default=None,
-        sa_column=Column(Integer, nullable=True),
         description="Total number of individual residential units.",
         schema_extra=openbdf_field_metadata(
             group="Building",
@@ -717,7 +723,8 @@ class ProjectRecordBase(SQLModel):
 
     building_rooms: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric(18, 4), nullable=True),
+        max_digits=18,
+        decimal_places=4,
         description="Total number of rooms in residential units.",
         schema_extra=openbdf_field_metadata(
             group="Building",
@@ -732,9 +739,9 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    building_energy_classification_system: Optional[BuildingEnergyClassificationSystem] = Field(
+    building_energy_classification_system: Optional[BuildingEnergyClassificationSystem] = Field(  # type: ignore[call-overload]
         default=None,
-        sa_column=Column(SAEnum(BuildingEnergyClassificationSystem), nullable=True),
+        sa_type=SAEnum(BuildingEnergyClassificationSystem),
         description="Energy classification of the building.",
         schema_extra=openbdf_field_metadata(
             group="Building",
@@ -755,7 +762,7 @@ class ProjectRecordBase(SQLModel):
 
     building_construction_start_date: Optional[date] = Field(
         default=None,
-        sa_column=Column(Date, nullable=True),
+        sa_type=Date,
         description="The year/date building construction officially started.",
         schema_extra=openbdf_field_metadata(
             group="Building",
@@ -771,7 +778,7 @@ class ProjectRecordBase(SQLModel):
     )
 
     building_construction_end_date: date = Field(
-        sa_column=Column(Date),
+        sa_type=Date,
         description="The year/date building construction completed.",
         schema_extra=openbdf_field_metadata(
             group="Building",
@@ -788,7 +795,8 @@ class ProjectRecordBase(SQLModel):
 
     building_demolished_area: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric(18, 4), nullable=True),
+        max_digits=18,
+        decimal_places=4,
         description="Floor area dismantled or destroyed in end-of-life phase.",
         schema_extra=openbdf_field_metadata(
             group="Building",
@@ -805,7 +813,8 @@ class ProjectRecordBase(SQLModel):
 
     building_roof_area: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric(18, 4), nullable=True),
+        max_digits=18,
+        decimal_places=4,
         description="Total roof surface area.",
         schema_extra=openbdf_field_metadata(
             group="Building",
@@ -820,8 +829,10 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    building_floors_bg: Decimal = Field(
-        sa_column=Column(Numeric(10, 2)),
+    building_floors_bg: Optional[Decimal] = Field(
+        default=None,
+        max_digits=10,
+        decimal_places=2,
         description="Number of floor levels below ground.",
         schema_extra=openbdf_field_metadata(
             group="Building",
@@ -831,13 +842,15 @@ class ProjectRecordBase(SQLModel):
             description=("Number of floor levels situated below the ground level"),
             constraint="numerical",
             units="#",
-            requirements="Required",
+            requirements="Recommended",
             example="2",
         ),
     )
 
-    building_floors_ag: Decimal = Field(
-        sa_column=Column(Numeric(10, 2)),
+    building_floors_ag: Optional[Decimal] = Field(
+        default=None,
+        max_digits=10,
+        decimal_places=2,
         description="Number of floor levels above ground.",
         schema_extra=openbdf_field_metadata(
             group="Building",
@@ -847,14 +860,15 @@ class ProjectRecordBase(SQLModel):
             description=("Number of floor levels situated above the ground level"),
             constraint="numerical",
             units="#",
-            requirements="Required",
+            requirements="Recommended",
             example="3",
         ),
     )
 
     building_parking_building: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric(10, 2), nullable=True),
+        max_digits=10,
+        decimal_places=2,
         description="Parking spots included in the building perimeter.",
         schema_extra=openbdf_field_metadata(
             group="Building",
@@ -871,7 +885,8 @@ class ProjectRecordBase(SQLModel):
 
     building_parking_dislocated: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric(10, 2), nullable=True),
+        max_digits=10,
+        decimal_places=2,
         description="Parking spots dislocated from the building.",
         schema_extra=openbdf_field_metadata(
             group="Building",
@@ -886,8 +901,9 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    building_element_classification_code_name: BuildingClassificationCode = Field(
-        sa_column=Column(SAEnum(BuildingClassificationCode)),
+    building_element_classification_code_name: Optional[BuildingClassificationCode] = Field(  # type: ignore[call-overload]
+        default=None,
+        sa_type=SAEnum(BuildingClassificationCode),
         description="Name of the custom or national building element classification code utilized.",
         schema_extra=openbdf_field_metadata(
             group="Building",
@@ -896,7 +912,7 @@ class ProjectRecordBase(SQLModel):
             field_code="building_element_classification_code_name",
             description="Name of the custom or national building element classification code utilized",
             units="none",
-            requirements="Required",
+            requirements="Recommended",
         ),
     )
 
@@ -929,7 +945,7 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    building_element_classification_tier: BuildingElementClassificationTier = Field(
+    building_element_classification_tier: Optional[BuildingElementClassificationTier] = Field(
         default=None,
         description="Tiers of the custom or national building element classification covered",
         schema_extra=openbdf_field_metadata(
@@ -944,7 +960,7 @@ class ProjectRecordBase(SQLModel):
     )
 
     building_structure_typology: str = Field(
-        sa_column=Column(String(100)),
+        max_length=100,
         description="Overall design and construction method of a building.",
         schema_extra=openbdf_field_metadata(
             group="Building",
@@ -978,9 +994,9 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    building_soil_data: Optional[SoilType] = Field(
+    building_soil_data: Optional[SoilType] = Field(  # type: ignore[call-overload]
         default=None,
-        sa_column=Column(SAEnum(SoilType), nullable=True),
+        sa_type=SAEnum(SoilType),
         description="Information about the category of soil.",
         schema_extra=openbdf_field_metadata(
             group="Building",
@@ -994,8 +1010,8 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    building_foundation_type: FoundationType = Field(
-        sa_column=Column(SAEnum(FoundationType)),
+    building_foundation_type: FoundationType = Field(  # type: ignore[call-overload]
+        sa_type=SAEnum(FoundationType),
         description="Construction method used to support a building below ground.",
         schema_extra=openbdf_field_metadata(
             group="Building",
@@ -1014,7 +1030,8 @@ class ProjectRecordBase(SQLModel):
 
     building_energy_demand_thermal: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric(18, 4), nullable=True),
+        max_digits=18,
+        decimal_places=4,
         description="Energy demand for thermal space services.",
         schema_extra=openbdf_field_metadata(
             group="Building",
@@ -1031,7 +1048,8 @@ class ProjectRecordBase(SQLModel):
 
     building_energy_demand_electricity: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric(18, 4), nullable=True),
+        max_digits=18,
+        decimal_places=4,
         description="Energy demand for electrical equipment.",
         schema_extra=openbdf_field_metadata(
             group="Building",
@@ -1048,7 +1066,8 @@ class ProjectRecordBase(SQLModel):
 
     building_energy_supply_thermal: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric(18, 4), nullable=True),
+        max_digits=18,
+        decimal_places=4,
         description="Energy supply from local thermal RES.",
         schema_extra=openbdf_field_metadata(
             group="Building",
@@ -1065,7 +1084,8 @@ class ProjectRecordBase(SQLModel):
 
     building_energy_supply_electricity: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric(18, 4), nullable=True),
+        max_digits=18,
+        decimal_places=4,
         description="Energy supply from local electrical RES.",
         schema_extra=openbdf_field_metadata(
             group="Building",
@@ -1080,9 +1100,9 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    building_primary_energy_source: Optional[PrimaryEnergySource] = Field(
+    building_primary_energy_source: Optional[PrimaryEnergySource] = Field(  # type: ignore[call-overload]
         default=None,
-        sa_column=Column(SAEnum(PrimaryEnergySource), nullable=True),
+        sa_type=SAEnum(PrimaryEnergySource),
         description="Primary energy source for heating/cooling/DHW.",
         schema_extra=openbdf_field_metadata(
             group="Building",
@@ -1098,7 +1118,7 @@ class ProjectRecordBase(SQLModel):
 
     building_bipv_description: Optional[str] = Field(
         default=None,
-        sa_column=Column(String(500), nullable=True),
+        max_length=500,
         description="Type and scope of BIPV.",
         schema_extra=openbdf_field_metadata(
             group="Building",
@@ -1116,8 +1136,8 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    building_orientation: BuildingFacingDirection = Field(
-        sa_column=Column(SAEnum(BuildingFacingDirection), nullable=False),
+    building_orientation: BuildingFacingDirection = Field(  # type: ignore[call-overload]
+        sa_type=SAEnum(BuildingFacingDirection),
         description="Orientation of the main façade.",
         schema_extra=openbdf_field_metadata(
             group="Building",
@@ -1133,7 +1153,8 @@ class ProjectRecordBase(SQLModel):
 
     building_footprint: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric(18, 4), nullable=True),
+        max_digits=18,
+        decimal_places=4,
         description="Area covered by the building on the plot.",
         schema_extra=openbdf_field_metadata(
             group="Building",
@@ -1153,7 +1174,8 @@ class ProjectRecordBase(SQLModel):
 
     building_unconditioned_area: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric(18, 4), nullable=True),
+        max_digits=18,
+        decimal_places=4,
         description="Floor area within the building that is not conditioned.",
         schema_extra=openbdf_field_metadata(
             group="Building",
@@ -1174,7 +1196,8 @@ class ProjectRecordBase(SQLModel):
 
     building_conditioned_area: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric(18, 4), nullable=True),
+        max_digits=18,
+        decimal_places=4,
         description="Area used to calculate building zone energy performance.",
         schema_extra=openbdf_field_metadata(
             group="Building",
@@ -1194,7 +1217,8 @@ class ProjectRecordBase(SQLModel):
     )
 
     building_useful_floor_area: Decimal = Field(
-        sa_column=Column(Numeric(18, 4)),
+        max_digits=18,
+        decimal_places=4,
         description="Total area intended for primary use of the building zone.",
         schema_extra=openbdf_field_metadata(
             group="Building",
@@ -1214,7 +1238,8 @@ class ProjectRecordBase(SQLModel):
     )
 
     building_gross_floor_area: Decimal = Field(
-        sa_column=Column(Numeric(18, 4)),
+        max_digits=18,
+        decimal_places=4,
         description="Total gross floor area.",
         schema_extra=openbdf_field_metadata(
             group="Building",
@@ -1233,24 +1258,26 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    building_gross_floor_area_measurement_method: GrossFloorAreaStandard = Field(
-        sa_column=Column(SAEnum(GrossFloorAreaStandard)),
+    building_gross_floor_area_standard: Optional[GrossFloorAreaStandard] = Field(  # type: ignore[call-overload]
+        default=None,
+        sa_type=SAEnum(GrossFloorAreaStandard),
         description="Definition of GFA according to national standards.",
         schema_extra=openbdf_field_metadata(
             group="Building",
             sub_group="Building data (geometry)",
-            attribute_name="Gross floor area (GFA) Definition",
-            field_code="building_gross_floor_area_measurement_method",
+            attribute_name="Gross floor area (GFA) Standard",
+            field_code="building_gross_floor_area_standard",
             description="Definition according to national standards",
             units="none",
-            requirements="Required",
+            requirements="Recommended",
             example="RICS (UK), Type 2: GIA (Gross Internal Area)",
         ),
     )
 
     building_circulation_area: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric(18, 4), nullable=True),
+        max_digits=18,
+        decimal_places=4,
         description="Total circulation area.",
         schema_extra=openbdf_field_metadata(
             group="Building",
@@ -1270,7 +1297,8 @@ class ProjectRecordBase(SQLModel):
 
     building_technical_area: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric(18, 4), nullable=True),
+        max_digits=18,
+        decimal_places=4,
         description="Total area reserved for building services and equipment.",
         schema_extra=openbdf_field_metadata(
             group="Building",
@@ -1290,7 +1318,8 @@ class ProjectRecordBase(SQLModel):
 
     building_built_floor_area: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric(18, 4), nullable=True),
+        max_digits=18,
+        decimal_places=4,
         description="GFA plus parking area located inside the building shell.",
         schema_extra=openbdf_field_metadata(
             group="Building",
@@ -1310,7 +1339,8 @@ class ProjectRecordBase(SQLModel):
 
     building_envelope_area: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric(18, 4), nullable=True),
+        max_digits=18,
+        decimal_places=4,
         description="Total area of the building envelope.",
         schema_extra=openbdf_field_metadata(
             group="Building",
@@ -1327,7 +1357,8 @@ class ProjectRecordBase(SQLModel):
 
     building_window_area: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric(18, 4), nullable=True),
+        max_digits=18,
+        decimal_places=4,
         description="Combined surface area of all windows.",
         schema_extra=openbdf_field_metadata(
             group="Building",
@@ -1344,7 +1375,8 @@ class ProjectRecordBase(SQLModel):
 
     building_wall_area_interior: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric(18, 4), nullable=True),
+        max_digits=18,
+        decimal_places=4,
         description="Total surface area of internal walls.",
         schema_extra=openbdf_field_metadata(
             group="Building",
@@ -1363,7 +1395,8 @@ class ProjectRecordBase(SQLModel):
 
     building_enclosed_parking_area: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric(18, 4), nullable=True),
+        max_digits=18,
+        decimal_places=4,
         description="Parking area enclosed and/or attached to the building shell.",
         schema_extra=openbdf_field_metadata(
             group="Building",
@@ -1383,7 +1416,8 @@ class ProjectRecordBase(SQLModel):
     )
 
     building_height: Decimal = Field(
-        sa_column=Column(Numeric(18, 4), nullable=False),
+        max_digits=18,
+        decimal_places=4,
         description="Total height of the building above finished ground level.",
         schema_extra=openbdf_field_metadata(
             group="Building",
@@ -1400,7 +1434,8 @@ class ProjectRecordBase(SQLModel):
 
     building_floor_height: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric(18, 4), nullable=True),
+        max_digits=18,
+        decimal_places=4,
         description="Average vertical distance between finished floors.",
         schema_extra=openbdf_field_metadata(
             group="Building",
@@ -1420,7 +1455,8 @@ class ProjectRecordBase(SQLModel):
 
     building_volume: Optional[Decimal] = Field(
         default=None,
-        sa_column=Column(Numeric(18, 4), nullable=True),
+        max_digits=18,
+        decimal_places=4,
         description="Gross building volume.",
         schema_extra=openbdf_field_metadata(
             group="Building",
@@ -1438,8 +1474,10 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    building_occupancy_count: Decimal = Field(
-        sa_column=Column(Numeric(18, 4)),
+    building_occupancy_count: Optional[Decimal] = Field(
+        default=None,
+        max_digits=18,
+        decimal_places=4,
         description="Estimated occupancy count.",
         schema_extra=openbdf_field_metadata(
             group="Building",
@@ -1453,7 +1491,7 @@ class ProjectRecordBase(SQLModel):
             ),
             constraint="numerical",
             units="#",
-            requirements="Required",
+            requirements="Recommended",
             example="10",
         ),
     )
@@ -1472,7 +1510,7 @@ class ProjectRecordBase(SQLModel):
     )
 
     lca_reference_unit: str = Field(
-        sa_column=Column(String(200), nullable=False),
+        max_length=200,
         description="Reference unit the results are primarily expressed for.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
@@ -1485,7 +1523,7 @@ class ProjectRecordBase(SQLModel):
     )
 
     lca_rsl: str = Field(
-        sa_column=Column(String(200)),
+        max_length=200,
         description="Duration over which the environmental impacts of a building are assessed, typically ranging from 50 to 100 years.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
@@ -1500,8 +1538,7 @@ class ProjectRecordBase(SQLModel):
     )
 
     lca_functional_unit: str = Field(
-        default=None,
-        sa_column=Column(String(200)),
+        max_length=200,
         description="Functional equivalence specified for the assessment.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
@@ -1516,7 +1553,7 @@ class ProjectRecordBase(SQLModel):
     )
 
     lca_building_regulation_code: str = Field(
-        sa_column=Column(String(200)),
+        max_length=200,
         description="Building regulation and code compliance methodology.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
@@ -1537,7 +1574,7 @@ class ProjectRecordBase(SQLModel):
 
     lca_software_name: Optional[str] = Field(
         default=None,
-        sa_column=Column(String(200), nullable=True),
+        max_length=200,
         description="Details of the software used for LCA calculation.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
@@ -1554,7 +1591,7 @@ class ProjectRecordBase(SQLModel):
 
     lca_software_publisher: Optional[str] = Field(
         default=None,
-        sa_column=Column(String(200), nullable=True),
+        max_length=200,
         description="Company or entity that publishes the software.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
@@ -1571,7 +1608,7 @@ class ProjectRecordBase(SQLModel):
 
     lca_software_version: Optional[str] = Field(
         default=None,
-        sa_column=Column(String(200), nullable=True),
+        max_length=200,
         description="Specific version number of the software being used.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
@@ -1587,7 +1624,7 @@ class ProjectRecordBase(SQLModel):
     )
 
     lca_database_name: str = Field(
-        sa_column=Column(String(200)),
+        max_length=200,
         description="Background database name.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
@@ -1602,8 +1639,9 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    lca_database_version: str = Field(
-        sa_column=Column(String(200)),
+    lca_database_version: Optional[str] = Field(
+        default=None,
+        max_length=200,
         description="Background data version or I-O source.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
@@ -1613,13 +1651,13 @@ class ProjectRecordBase(SQLModel):
             description="Background data version (or I-O source)",
             constraint="string < 200 characters",
             units="none",
-            requirements="Required",
+            requirements="Recommended",
             example="v3.1",
         ),
     )
 
-    lca_temporal_approach: LCATemporalApproach = Field(
-        sa_column=Column(SAEnum(LCATemporalApproach), nullable=False),
+    lca_temporal_approach: LCATemporalApproach = Field(  # type: ignore[call-overload]
+        sa_type=SAEnum(LCATemporalApproach),
         description="Type of LCA (e.g., probabilistic, dynamic, probabilistic, prospective)",
         schema_extra=openbdf_field_metadata(
             group="LCA",
@@ -1632,8 +1670,8 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    lca_lci_modeling_approach: LCIModelingApproach_ISO14040_44 = Field(
-        sa_column=Column(SAEnum(LCIModelingApproach_ISO14040_44), nullable=False),
+    lca_lci_modeling_approach: LCIModelingApproach_ISO14040_44 = Field(  # type: ignore[call-overload]
+        sa_type=SAEnum(LCIModelingApproach_ISO14040_44),
         description="Type of Life Cycle Inventory (LCI) Modeling Approach",
         schema_extra=openbdf_field_metadata(
             group="LCA",
@@ -1647,14 +1685,14 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    lca_cycle_stages: LifeCycleStage_ISO14040_43 = Field(
-        sa_column=Column(SAEnum(LifeCycleStage_ISO14040_43)),
+    lca_cycle_system_boundary: LifeCycleSystemBoundary_ISO14040_43 = Field(  # type: ignore[call-overload]
+        sa_type=SAEnum(LifeCycleSystemBoundary_ISO14040_43),
         description=("Different Life Cycle Assessment (LCA) stages depending on where you start and stop measuring."),
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="Life Cycle Stages",
-            field_code="lca_cycle_stages",
+            attribute_name="Life Cycle System Boundary",
+            field_code="lca_cycle_system_boundary",
             description=(
                 "Different Life Cycle Assessment (LCA) stages depending on where you start and stop measuring"
             ),
@@ -1664,8 +1702,8 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    lcia_methodology: LCIAMethodology = Field(
-        sa_column=Column(SAEnum(LCIAMethodology)),
+    lcia_methodology: LCIAMethodology = Field(  # type: ignore[call-overload]
+        sa_type=SAEnum(LCIAMethodology),
         description="Impact assessment method (for GHG emissions, GWP indicator).",
         schema_extra=openbdf_field_metadata(
             group="LCA",
@@ -1694,9 +1732,9 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    lca_biogenic_method: Optional[BiogenicCarbonAccounting] = Field(
+    lca_biogenic_method: Optional[BiogenicCarbonAccounting] = Field(  # type: ignore[call-overload]
         default=None,
-        sa_column=Column(SAEnum(BiogenicCarbonAccounting), nullable=True),
+        sa_type=SAEnum(BiogenicCarbonAccounting),
         description="Method used for biogenic carbon accounting.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
@@ -1710,8 +1748,8 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    lca_material_source: MaterialQuantitiesSource = Field(
-        sa_column=Column(SAEnum(MaterialQuantitiesSource)),
+    lca_material_source: MaterialQuantitiesSource = Field(  # type: ignore[call-overload]
+        sa_type=SAEnum(MaterialQuantitiesSource),
         description="Main source of material quantities.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
@@ -2295,3 +2333,10 @@ class ProjectRecordBase(SQLModel):
             example="Yes",
         ),
     )
+
+
+_ProjectRecordBaseDraft = make_draft_model(ProjectRecordBase)
+
+
+class ProjectRecordBaseDraft(_ProjectRecordBaseDraft):  # type: ignore[valid-type,misc]
+    pass
