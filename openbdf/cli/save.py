@@ -300,20 +300,18 @@ def wide_to_xlsx(
     sheet.column_dimensions["A"].width = 20
 
 
-def save_attribute_translator(
+def save_translator(
     xlsx_path: str | Path,
 ):
     """Save a template Excel file for the attribute translator."""
     with pd.ExcelWriter(xlsx_path, engine="openpyxl") as writer:
         make_translations_library_template_xlsx(writer, "Translations Library")
-        make_attribute_translator_openbdf_pydantic(
-            writer, COMMON_CATEGORY_NAMES["project"], ProjectRecordBase.model_fields
-        )
-        make_attribute_translator_openbdf_pydantic(
+        make_translator_openbdf_pydantic(writer, COMMON_CATEGORY_NAMES["project"], ProjectRecordBase.model_fields)
+        make_translator_openbdf_pydantic(
             writer, COMMON_CATEGORY_NAMES["bom"], BuildingBillMaterialsSlimRecordBase.model_fields
         )
-        export_all_enums_in_model_to_attribute_translator(writer, ProjectRecordBase.model_fields)
-        export_all_enums_in_model_to_attribute_translator(writer, BuildingBillMaterialsSlimRecordBase.model_fields)
+        export_all_enums_in_model_to_translator(writer, ProjectRecordBase.model_fields)
+        export_all_enums_in_model_to_translator(writer, BuildingBillMaterialsSlimRecordBase.model_fields)
 
 
 def make_translations_library_template_xlsx(writer: pd.ExcelWriter, sheet_name: str):
@@ -359,7 +357,7 @@ def make_translations_library_template_xlsx(writer: pd.ExcelWriter, sheet_name: 
     info_sheet.column_dimensions["J"].width = 30
 
 
-def make_attribute_translator_openbdf_pydantic(writer: pd.ExcelWriter, sheet_name: str, model: dict[str, FieldInfo]):
+def make_translator_openbdf_pydantic(writer: pd.ExcelWriter, sheet_name: str, model: dict[str, FieldInfo]):
     info_sheet = writer.book.create_sheet(sheet_name)
     info_sheet.cell(row=1, column=1, value="Field code in your format")
     info_sheet.cell(row=1, column=2, value="OpenBDF field code")
@@ -400,15 +398,15 @@ def make_attribute_translator_openbdf_pydantic(writer: pd.ExcelWriter, sheet_nam
     info_sheet.column_dimensions["E"].width = 40
 
 
-def export_all_enums_in_model_to_attribute_translator(writer: pd.ExcelWriter, model: dict[str, FieldInfo]):
+def export_all_enums_in_model_to_translator(writer: pd.ExcelWriter, model: dict[str, FieldInfo]):
     for field in model.values():
         annotation = field.annotation
         data_type, _ = unwrap_optional(annotation)
         if isinstance(data_type, type) and issubclass(data_type, OpenBDFEnum):
-            make_attribute_translator_openbdfenum(writer, data_type.__name__, data_type)
+            make_translator_openbdfenum(writer, data_type.__name__, data_type)
 
 
-def make_attribute_translator_openbdfenum(writer: pd.ExcelWriter, sheet_name: str, enum: type[OpenBDFEnum]):
+def make_translator_openbdfenum(writer: pd.ExcelWriter, sheet_name: str, enum: type[OpenBDFEnum]):
     info_sheet = writer.book.create_sheet(sheet_name)
 
     info_sheet.cell(row=1, column=1, value="Value in your format")

@@ -11,20 +11,20 @@ from openbdf.lib.converters.translators import COMMON_CATEGORY_NAMES, DocumentTr
 
 def open_openbdf_xlsx(
     xlsx_path: str | Path,
-    attribute_translator_path: str | Path | None = None,
-    attribute_translator_attribute_name_col: int = 0,
-    attribute_translator_translated_name_col: int = 1,
-    attribute_translator_header_row: int = 0,
+    translator_path: str | Path | None = None,
+    translator_attribute_name_col: int = 0,
+    translator_translated_name_col: int = 1,
+    translator_header_row: int = 0,
     draft: bool = False,
 ):
     xlsx_file = pd.ExcelFile(xlsx_path)
 
-    if attribute_translator_path:
+    if translator_path:
         document_translator = DocumentTranslator.from_xlsx(
-            xlsx_path=attribute_translator_path,
-            attribute_name_col=attribute_translator_attribute_name_col,
-            translated_name_col=attribute_translator_translated_name_col,
-            header_row=attribute_translator_header_row,
+            xlsx_path=translator_path,
+            attribute_name_col=translator_attribute_name_col,
+            translated_name_col=translator_translated_name_col,
+            header_row=translator_header_row,
         )
     else:
         document_translator = DocumentTranslator.default_openbdf_translator()
