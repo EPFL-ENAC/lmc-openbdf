@@ -2,11 +2,11 @@ from pathlib import Path
 
 import pandas as pd
 
-from openbdf.lib.converters.attribute_translator import COMMON_CATEGORY_NAMES, DocumentTranslator
 from openbdf.lib.converters.dataframe import (
     project_draft_package_from_dataframes,
     project_package_from_dataframes,
 )
+from openbdf.lib.converters.translators import COMMON_CATEGORY_NAMES, DocumentTranslator
 
 
 def open_openbdf_xlsx(
@@ -19,7 +19,7 @@ def open_openbdf_xlsx(
 ):
     xlsx_file = pd.ExcelFile(xlsx_path)
 
-    if attribute_translator_path is not None:
+    if attribute_translator_path:
         document_translator = DocumentTranslator.from_xlsx(
             xlsx_path=attribute_translator_path,
             attribute_name_col=attribute_translator_attribute_name_col,
@@ -27,7 +27,7 @@ def open_openbdf_xlsx(
             header_row=attribute_translator_header_row,
         )
     else:
-        document_translator = DocumentTranslator()
+        document_translator = DocumentTranslator.default_openbdf_translator()
 
     info_df = document_translator.get_translated_xlsx_sheet(xlsx_file, COMMON_CATEGORY_NAMES["project"])
     if info_df is None:
@@ -43,4 +43,10 @@ def open_openbdf_xlsx(
     if draft:
         return project_draft_package_from_dataframes(info_df, bom_df, document_translator=document_translator)
 
-    return project_package_from_dataframes(info_df, bom_df, document_translator=document_translator)
+    results_wide_df = document_translator.get_translated_xlsx_sheet(xlsx_file, COMMON_CATEGORY_NAMES["results_wide"])
+    if results_wide_df is not None:
+        results_wide_df = results_wide_df.reset_index(drop=True)
+
+    return project_package_from_dataframes(
+        info_df, bom_df, results_wide_df=results_wide_df, document_translator=document_translator
+    )

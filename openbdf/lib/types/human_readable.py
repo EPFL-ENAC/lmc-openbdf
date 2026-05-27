@@ -49,9 +49,9 @@ def human_readable_constraints(field: SQLModelFieldInfo | PydanticFieldInfo) -> 
             lt = item.lt
 
     if max_len is not None:
-        constraints.append(f"max {max_len} chars")
+        constraints.append(f"max {max_len} characters")
     if min_len is not None:
-        constraints.append(f"min {min_len} chars")
+        constraints.append(f"min {min_len} characters")
 
     if le is not None:
         constraints.append(f"≤ {le}")
