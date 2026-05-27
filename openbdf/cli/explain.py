@@ -4,10 +4,10 @@ from typing import Any
 import typer
 from pydantic import BaseModel, Field
 
+from openbdf.lib.types.annotations import unwrap_optional
+from openbdf.lib.types.human_readable import human_readable_type
 from openbdf.model.lca_results_full import LCAResultsFullBase
 from openbdf.model.tables import LCAResultsFullRecord
-
-from ..lib.types import get_display_type, unwrap_optional
 
 # --- Data Models ---
 
@@ -71,7 +71,7 @@ def analyze_model(model_name: str, field_names: list[str] | None = None) -> Mode
 
         raw_type = field_info.annotation
         data_type, is_optional = unwrap_optional(raw_type)
-        display_type = get_display_type(data_type)
+        display_type = human_readable_type(data_type)
         extra = field_info.json_schema_extra
         metadata: dict[str, Any] = {}
         if isinstance(extra, dict):

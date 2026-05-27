@@ -36,7 +36,7 @@ class SheetTranslation(BaseModel):
     end_row: int | None = None
     end_col: int | None = None
 
-    def __post_init__(self):
+    def model_post_init(self):
         if self.orientation == "vertical":
             if self.header_col is None or self.values_col is None:
                 raise ValueError("For vertical sheets, header_col and values_col must be provided.")
@@ -50,7 +50,7 @@ class SheetTranslation(BaseModel):
         if self.orientation == "vertical":
             return df.iloc[self.header_row :, [self.header_col, self.values_col]]
         elif self.orientation == "horizontal":
-            header = df.iloc[self.header_row or 0, (self.start_col or 0) : self.end_col]  # DEBUG
+            header = df.iloc[self.header_row or 0, (self.start_col or 0) : self.end_col]
             values = df.iloc[(self.start_row or 1) : self.end_row, (self.start_col or 0) : self.end_col]
             return pd.DataFrame(values.values, columns=header.values)
         else:
@@ -174,10 +174,42 @@ class DocumentTranslator:
 
         return translation.translate_df(df)
 
+    @staticmethod
+    def default_openbdf_translator() -> "DocumentTranslator":
+        return DocumentTranslator(
+            library=TranslationsLibrary([
+                SheetTranslation(
+                    original_name=COMMON_CATEGORY_NAMES["project"],
+                    translated_name=COMMON_CATEGORY_NAMES["project"],
+                    orientation="vertical",
+                    header_row=0,
+                    header_col=3,
+                    values_col=9,
+                ),
+                SheetTranslation(
+                    original_name=COMMON_CATEGORY_NAMES["bom"],
+                    translated_name=COMMON_CATEGORY_NAMES["bom"],
+                    orientation="horizontal",
+                    header_row=7,
+                    start_row=8,
+                    start_col=1,
+                ),
+                SheetTranslation(
+                    original_name=COMMON_CATEGORY_NAMES["results_wide"],
+                    translated_name=COMMON_CATEGORY_NAMES["results_wide"],
+                    orientation="horizontal",
+                    header_row=6,
+                    start_row=7,
+                    start_col=1,
+                ),
+            ])
+        )
+
 
 COMMON_CATEGORY_NAMES = {
     "project": "General Information",
     "bom": "Bill of Materials",
+    "results_wide": "LCA Results - Wide Format",
 }
 
 SHEETS_PROPERTIES_HEADERS = {
