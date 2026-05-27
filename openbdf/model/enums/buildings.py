@@ -16,22 +16,22 @@ class BuildingTypology(OpenBDFEnum):
 class BuildingElementClassificationTier(OpenBDFEnum):
     TIER_1 = (
         "tier_1",
-        "Element Class (Tier 1)",
+        "Element Class (Tier 1): The primary (top-level) hierarchical category of the custom or national building element classification.",
         "Primary (top-level) hierarchical category of the custom or national building element classification.",
     )
     TIER_2 = (
         "tier_2",
-        "Element Class (Tier 2)",
+        "Element Class (Tier 2): The secondary hierarchical category of the custom or national building element classification.",
         "Secondary hierarchical category of the custom or national building element classification.",
     )
     TIER_3 = (
         "tier_3",
-        "Element Class (Tier 3)",
+        "Element Class (Tier 3): The tertiary hierarchical category of the custom or national building element classification.",
         "The tertiary hierarchical category of the custom or national building element classification.",
     )
     TIER_4 = (
         "tier_4",
-        "Element Class (Tier 4)",
+        "Element Class (Tier 4): The quaternary (lowest-level) hierarchical category of the custom or national building element classification.",
         "The quaternary (lowest-level) hierarchical category of the custom or national building element classification.",
     )
 
