@@ -5,7 +5,6 @@ import pandas as pd
 from pydantic import BaseModel
 
 
-# TODO : best idea would to make this a global translator, you give the cli a translator file, with a sheet for the attributes names, and one sheet per enum
 class CategoryTranslator:
     _translation_dict: dict[str, str]
 
@@ -19,38 +18,6 @@ class CategoryTranslator:
 
     def translate(self, attribute_name: str) -> str:
         return self._translation_dict.get(attribute_name, attribute_name)
-
-
-class GeneralInfoSheetTranslator(BaseModel):
-    header_row: int = 0
-    values_col: int = 1
-    start_row: int = 0
-
-    @staticmethod
-    def from_dict(config: dict[str, int]) -> "GeneralInfoSheetTranslator":
-        return GeneralInfoSheetTranslator(
-            header_row=config.get("info_header_row", 0),
-            values_col=config.get("info_values_col", 1),
-            start_row=config.get("info_start_row", 0),
-        )
-
-
-class BillOfMaterialsSheetTranslator(BaseModel):
-    header_row: int = 0
-    start_row: int = 0
-    start_col: int = 0
-    end_row: int | None = None
-    end_col: int | None = None
-
-    @staticmethod
-    def from_dict(config: dict[str, int]) -> "BillOfMaterialsSheetTranslator":
-        return BillOfMaterialsSheetTranslator(
-            header_row=config.get("bom_header_row", 0),
-            start_row=config.get("bom_start_row", 0),
-            start_col=config.get("bom_start_col", 0),
-            end_row=config.get("bom_end_row"),
-            end_col=config.get("bom_end_col"),
-        )
 
 
 class SheetTranslation(BaseModel):
@@ -144,9 +111,6 @@ class TranslationsLibrary:
 class DocumentTranslator:
     _translators: dict[str, CategoryTranslator]
     _library: TranslationsLibrary
-
-    general_info_sheet_translator: GeneralInfoSheetTranslator
-    bill_of_materials_sheet_translator: BillOfMaterialsSheetTranslator
 
     def __init__(
         self, library: TranslationsLibrary | None = None, translators: dict[str, CategoryTranslator] | None = None

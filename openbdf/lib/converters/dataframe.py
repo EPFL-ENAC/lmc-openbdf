@@ -1,170 +1,24 @@
 from __future__ import annotations
 
-from datetime import date, datetime
-from decimal import Decimal
-from enum import Enum
-from typing import Any, Optional, TypeVar, Union, cast, get_args, get_origin
+from typing import Any, Optional, TypeVar
 
 import pandas as pd
-from pydantic import BaseModel
 from sqlmodel import SQLModel
 
 from openbdf.lib.converters.attribute_translator import COMMON_CATEGORY_NAMES, DocumentTranslator
+from openbdf.lib.types.fields import get_field_code
+from openbdf.lib.types.values import parse_value, serialize_value
 from openbdf.model.building_bill_materials_slim import BuildingBillMaterialsSlimRecordBase
-from openbdf.model.enums.openbdf_enum import OpenBDFEnum
 from openbdf.model.general_info import ProjectRecordBase, ProjectRecordBaseDraft
 from openbdf.model.tables import (
     BuildingBillMaterialsSlimRecord,
     BuildingBillMaterialsSlimRecordDraft,
-    LCAResultsFullRecord,
     ProjectRecord,
     ProjectRecordDraft,
 )
 
 PROJECT_EXCLUDED_FIELDS = {"id", "bill_of_materials"}
 BOM_EXCLUDED_FIELDS = {"id", "project_id", "project"}
-
-VALUE_ALIASES = {
-    "yes": True,
-    "no": False,
-    "true": True,
-    "false": False,
-    "..": None,
-    "N/A": None,
-    "n/a": None,
-    "null": None,
-    "NULL": None,
-    "none": None,
-    "None": None,
-    "-": None,
-}
-
-
-def unwrap_optional(annotation: Any) -> Any:
-    """
-    Convert Optional[T] / Union[T, None] to T.
-    """
-    origin = get_origin(annotation)
-    if origin is Union:
-        args = [arg for arg in get_args(annotation) if arg is not type(None)]
-        if len(args) == 1:
-            return args[0]
-    return annotation
-
-
-def field_metadata(field_info: Any) -> dict[str, Any]:
-    """
-    Return json schema extra / schema extra metadata from a field.
-    """
-    return getattr(field_info, "json_schema_extra", None) or {}
-
-
-def get_field_code(field_name: str, field_info: Any) -> str:
-    """
-    Prefer the metadata field_code when available, else fallback to field name.
-    """
-    meta = field_metadata(field_info)
-    return meta.get("field_code", field_name)
-
-
-def get_attribute_name(field_name: str, field_info: Any) -> str:
-    """
-    Prefer the metadata attribute_name when available, else fallback to field name.
-    """
-    meta = field_metadata(field_info)
-    return meta.get("attribute_name", field_name)
-
-
-def serialize_value(value: Any) -> Any:
-    """
-    Convert Python values into dataframe-safe scalar values.
-    """
-    if value is None:
-        return None
-
-    if isinstance(value, Enum):
-        return value.value
-
-    if isinstance(value, Decimal):
-        return str(value)
-
-    if isinstance(value, (date, datetime)):
-        return value.isoformat()
-
-    return value
-
-
-def parse_enum(enum_cls: type[Enum], raw_value: Any, translator: DocumentTranslator | None = None) -> Enum:
-    """
-    Parse an enum from either its .value or .name.
-    """
-    if issubclass(enum_cls, OpenBDFEnum):
-        openbdf_cls = cast(type[OpenBDFEnum], enum_cls)
-        found = openbdf_cls.find_value(raw_value, translator)
-        if found is not None:
-            return found
-
-    for member in enum_cls:
-        if raw_value == member.value or raw_value == member.name:
-            return member
-
-    raise ValueError(f"Invalid enum value {raw_value!r} for enum {enum_cls.__name__}")
-
-
-def parse_value(annotation: Any, raw_value: Any, translator: DocumentTranslator | None = None) -> Any:
-    """
-    Convert dataframe scalar values back into typed Python values.
-    """
-
-    if isinstance(raw_value, str):
-        raw_value = raw_value.strip()
-        if raw_value in VALUE_ALIASES:
-            return VALUE_ALIASES[raw_value]
-
-    if raw_value is None:
-        return None
-
-    if pd.isna(raw_value):
-        return None
-
-    if isinstance(raw_value, str) and raw_value.strip() == "":
-        return None
-
-    annotation = unwrap_optional(annotation)
-
-    if isinstance(annotation, type) and issubclass(annotation, Enum):
-        return parse_enum(annotation, raw_value, translator)
-
-    if annotation is Decimal:
-        return Decimal(str(raw_value))
-
-    if annotation is int:
-        return int(raw_value)
-
-    if annotation is float:
-        return float(raw_value)
-
-    if annotation is str:
-        return str(raw_value)
-
-    if annotation is bool:
-        if isinstance(raw_value, bool):
-            return raw_value
-        return str(raw_value).strip().lower() in {"1", "true", "yes"}
-
-    if annotation is date:
-        if isinstance(raw_value, datetime):
-            return raw_value.date()
-        if isinstance(raw_value, date):
-            return raw_value
-        return date.fromisoformat(str(raw_value))
-
-    if annotation is datetime:
-        if isinstance(raw_value, datetime):
-            return raw_value
-        return datetime.fromisoformat(str(raw_value))
-
-    return raw_value
 
 
 def build_field_code_to_name_map(
