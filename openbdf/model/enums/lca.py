@@ -24,7 +24,7 @@ class LCIModelingApproach_ISO14040_44(OpenBDFEnum):
     )
 
 
-class LifeCycleStage_ISO14040_43(OpenBDFEnum):
+class LifeCycleSystemBoundary_ISO14040_43(OpenBDFEnum):
     CRADLE_TO_GATE = (
         "cradle_to_gate",
         "Cradle to Gate (A1–A3)",
