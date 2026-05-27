@@ -3,7 +3,7 @@ from pathlib import Path
 import typer
 
 from openbdf.cli.open import open_openbdf_xlsx
-from openbdf.cli.save import save_attribute_translator, save_openbdf_to_xlsx
+from openbdf.cli.save import save_openbdf_to_xlsx, save_translator
 
 app = typer.Typer(help="CLI utilities for the project.")
 
@@ -48,27 +48,27 @@ def explain(
 @app.command(name="open", no_args_is_help=True)
 def open(
     file: str = typer.Option(..., "--file", "-f", help="The file to open"),
-    attribute_translator_path: str = typer.Option(
+    translator_path: str = typer.Option(
         "",
-        "--attribute-translator",
-        "-at",
-        help="Optional path to an Excel file containing an attribute translator sheet. If provided, it will be used to translate attribute names from the input dataframes. The sheet should contain at least two columns: one for the original attribute names and one for the translated names.",
+        "--translator",
+        "-t",
+        help="Optional path to an Excel file containing a translator sheet. If provided, it will be used to translate attribute names from the input dataframes. The sheet should contain at least two columns: one for the original attribute names and one for the translated names.",
     ),
-    attribute_translator_attribute_name_col: int = typer.Option(
+    translator_attribute_name_col: int = typer.Option(
         0,
-        "--attribute-translator-attribute-name-col",
-        "-atanc",
-        help="The column index (0-based) in the attribute translator sheet that contains the original attribute names. Default is 0.",
+        "--translator-attribute-name-col",
+        "-tanc",
+        help="The column index (0-based) in the translator sheet that contains the original attribute names. Default is 0.",
     ),
-    attribute_translator_translated_name_col: int = typer.Option(
+    translator_translated_name_col: int = typer.Option(
         1,
-        "--attribute-translator-translated-name-col",
-        "-attnc",
+        "--translator-translated-name-col",
+        "-ttnc",
         help="The column index (0-based) in the attribute translator sheet that contains the translated attribute names. Default is 1.",
     ),
-    attribute_translator_header_row: int = typer.Option(
+    translator_header_row: int = typer.Option(
         0,
-        "--attribute-translator-header-row",
+        "--translator-header-row",
         "-athr",
         help="The row index (0-based) of the header in the attribute translator sheet. Default is 0 (the first row).",
     ),
@@ -87,10 +87,10 @@ def open(
 
     project = open_openbdf_xlsx(
         xlsx_path=file,
-        attribute_translator_path=attribute_translator_path,
-        attribute_translator_attribute_name_col=attribute_translator_attribute_name_col,
-        attribute_translator_translated_name_col=attribute_translator_translated_name_col,
-        attribute_translator_header_row=attribute_translator_header_row,
+        translator_path=translator_path,
+        translator_attribute_name_col=translator_attribute_name_col,
+        translator_translated_name_col=translator_translated_name_col,
+        translator_header_row=translator_header_row,
         draft=draft,
     )
 
@@ -122,15 +122,15 @@ def save_template(
 
 @app.command(name="save-translator-template", no_args_is_help=True)
 def save_translator_template(
-    path: str = typer.Argument(..., help="The path where the attribute translator template Excel file will be saved"),
+    path: str = typer.Argument(..., help="The path where the translator template Excel file will be saved"),
 ):
     """
     Save a template Excel file for the attribute translator.
     Usage:
-        openbdf save-translator-template ./attribute_translator_template.xlsx
+        openbdf save-translator-template ./translator_template.xlsx
     """
 
-    save_attribute_translator(
+    save_translator(
         xlsx_path=Path(path),
     )
 
