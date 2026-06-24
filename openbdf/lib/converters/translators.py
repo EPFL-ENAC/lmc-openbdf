@@ -36,7 +36,7 @@ class SheetTranslation(BaseModel):
     end_row: int | None = None
     end_col: int | None = None
 
-    def model_post_init(self):
+    def model_post_init(self, __context: dict) -> None:
         if self.orientation == "vertical":
             if self.header_col is None or self.values_col is None:
                 raise ValueError("For vertical sheets, header_col and values_col must be provided.")
@@ -50,8 +50,14 @@ class SheetTranslation(BaseModel):
         if self.orientation == "vertical":
             return df.iloc[self.header_row :, [self.header_col, self.values_col]]
         elif self.orientation == "horizontal":
-            header = df.iloc[self.header_row or 0, (self.start_col or 0) : self.end_col]
+            header_start_row = self.header_row or 0
+            header_start_col = self.start_col or 0
+            header_end_col = self.end_col
+
+            header = df.iloc[header_start_row, header_start_col:header_end_col]
+
             values = df.iloc[(self.start_row or 1) : self.end_row, (self.start_col or 0) : self.end_col]
+
             return pd.DataFrame(values.values, columns=header.values)
         else:
             raise ValueError("Orientation must be either 'horizontal' or 'vertical'.")
@@ -163,6 +169,8 @@ class DocumentTranslator:
         return translator.translate(attribute_name)
 
     def get_translated_xlsx_sheet(self, xlsx: pd.ExcelFile, translated_sheet_name: str) -> pd.DataFrame | None:
+        print(f"Looking for translated sheet: {translated_sheet_name}")
+        print(self._library._sheets_translations)
         translation = self._library.get_translation_by_translated_name(translated_sheet_name)
         if translation is None:
             return None
@@ -170,7 +178,7 @@ class DocumentTranslator:
         if translation.original_name not in xlsx.sheet_names:
             return None
 
-        df = xlsx.parse(translation.original_name)
+        df = xlsx.parse(translation.original_name, header=None)
 
         return translation.translate_df(df)
 
@@ -209,7 +217,8 @@ class DocumentTranslator:
 COMMON_CATEGORY_NAMES = {
     "project": "General Information",
     "bom": "Bill of Materials",
-    "results_wide": "LCA Results - Wide Format",
+    "results_wide": "LCA Result (Wide)",
+    "results_tall": "LCA Result (Tall)",
 }
 
 SHEETS_PROPERTIES_HEADERS = {
