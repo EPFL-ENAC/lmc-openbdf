@@ -15,6 +15,16 @@ from .field_metadata import openbdf_field_metadata
 
 
 class BuildingBillMaterialsSlimRecordBase(SQLModel):
+    material_id: str = Field(
+        max_length=200,
+        description="The unique identifier for the material within the project context.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Material ID",
+            field_code="material_id",
+            description="The unique identifier for the material within the project context.",
+        ),
+    )
+
     floor_level: Optional[int] = Field(
         default=None,
         description="Storey of the building element.",

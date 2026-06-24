@@ -176,6 +176,39 @@ class LifeCycleModule_ISO14040_44(OpenBDFEnum):
         return mapping.get(stage, [])
 
 
+class LCAStages(OpenBDFEnum):
+    # --- TIER 1 ---
+    A1_A3 = ("A1-A3", "A1-A3 Product stage")
+    A4_A5 = ("A4-A5", "A4-A5 Construction process stage")
+    B1_B7 = ("B1-B7", "B1-B7 Use stage")
+    C1_C4 = ("C1-C4", "C1-C4 End-of-life stage")
+    D_D2 = ("D-D2", "D-D2 Beyond the system boundary")
+
+    # --- TIER 2 ---
+    A1 = ("A1", "A1 Raw material supply", None, A1_A3)
+    A2 = ("A2", "A2 Transport", None, A1_A3)
+    A3 = ("A3", "A3 Manufacturing", None, A1_A3)
+
+    A4 = ("A4", "A4 Transport to site", None, A4_A5)
+    A5 = ("A5", "A5 Construction and installation process", None, A4_A5)
+
+    B1 = ("B1", "B1 Use", None, B1_B7)
+    B2 = ("B2", "B2 Maintenance", None, B1_B7)
+    B3 = ("B3", "B3 Repair", None, B1_B7)
+    B4 = ("B4", "B4 Replacement", None, B1_B7)
+    B5 = ("B5", "B5 Refurbishment", None, B1_B7)
+    B6 = ("B6", "B6 Operational energy use", None, B1_B7)
+    B7 = ("B7", "B7 Operational water use", None, B1_B7)
+
+    C1 = ("C1", "C1 Deconstruction and demolition", None, C1_C4)
+    C2 = ("C2", "C2 Transport", None, C1_C4)
+    C3 = ("C3", "C3 Waste processing", None, C1_C4)
+    C4 = ("C4", "C4 Disposal", None, C1_C4)
+
+    D1 = ("D1", "D1 Reuse, recovery, and recycling potential", None, D_D2)
+    D2 = ("D2", "D2 Net benefits beyond the system boundary", None, D_D2)
+
+
 class BiogenicCarbonAccounting(OpenBDFEnum):
     ZERO_ZERO = ("0/0", "0/0", "Neutral accounting (no sequestration/no emission)")
     MINUS_ONE_PLUS_ONE = (
