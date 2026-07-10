@@ -5,7 +5,7 @@ from typing import Optional
 
 from sqlmodel import Field, SQLModel
 
-from openbdf.model.enums.lca import LCAStages
+from openbdf.model.enums.lca import LCAStageOrModule
 
 from .field_metadata import openbdf_field_metadata
 
@@ -18,6 +18,7 @@ class LCAResultsTallBase(SQLModel):
             attribute_name="Material ID",
             field_code="material_id",
             description="The unique identifier for the material within the project context, referencing the Bill of Materials.",
+            requirements="Required",
         ),
     )
 
@@ -31,11 +32,11 @@ class LCAResultsTallBase(SQLModel):
         ),
     )
 
-    lca_stages: LCAStages = Field(
+    lca_stage_or_module: LCAStageOrModule = Field(
         description="Life cycle assessment stage or module for this result row.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="LCA stages",
-            field_code="lca_stages",
+            attribute_name="LCA stage or module",
+            field_code="lca_stage_or_module",
             description="Life cycle assessment stage or module for this result row.",
             units=None,
             requirements="Required",

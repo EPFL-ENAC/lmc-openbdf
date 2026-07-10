@@ -327,6 +327,10 @@ def save_translator(
         make_translator_openbdf_pydantic(
             writer, COMMON_CATEGORY_NAMES["bom"], BuildingBillMaterialsSlimRecordBase.model_fields
         )
+        make_translator_openbdf_pydantic(
+            writer, COMMON_CATEGORY_NAMES["results_wide"], LCAResultsWideFullBase.model_fields
+        )
+        make_translator_openbdf_pydantic(writer, COMMON_CATEGORY_NAMES["results_tall"], LCAResultsTallBase.model_fields)
         export_all_enums_in_model_to_translator(writer, ProjectRecordBase.model_fields)
         export_all_enums_in_model_to_translator(writer, BuildingBillMaterialsSlimRecordBase.model_fields)
 
@@ -352,6 +356,16 @@ def make_translations_library_template_xlsx(writer: pd.ExcelWriter, sheet_name: 
         },
         {
             "name": COMMON_CATEGORY_NAMES["bom"],
+            "orientation": "horizontal",
+            "header_row": 0,
+        },
+        {
+            "name": COMMON_CATEGORY_NAMES["results_wide"],
+            "orientation": "horizontal",
+            "header_row": 0,
+        },
+        {
+            "name": COMMON_CATEGORY_NAMES["results_tall"],
             "orientation": "horizontal",
             "header_row": 0,
         },
