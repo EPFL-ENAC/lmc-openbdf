@@ -16,6 +16,7 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Material ID",
             field_code="material_id",
             description="The unique identifier for the material within the project context, referencing the Bill of Materials.",
+            requirements="Required",
         ),
     )
 

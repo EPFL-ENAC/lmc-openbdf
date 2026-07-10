@@ -58,7 +58,7 @@ class EnumRegistry:
             header_cell = sheet.cell(row=1, column=entry.column_index, value=enum_cls.__name__)
             header_cell.style = "Headline 1"
             sheet.column_dimensions[entry.column_letter].width = max(
-                (len(enum_cls.__name__) + 2) * 1.5, 15
+                (len(enum_cls.__name__) + 2) * 1.5, 20
             )  # Set column width based on header length
 
             # Write the enum members below

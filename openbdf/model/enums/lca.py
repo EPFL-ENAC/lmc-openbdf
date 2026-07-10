@@ -176,7 +176,7 @@ class LifeCycleModule_ISO14040_44(OpenBDFEnum):
         return mapping.get(stage, [])
 
 
-class LCAStages(OpenBDFEnum):
+class LCAStageOrModule(OpenBDFEnum):
     # --- TIER 1 ---
     A1_A3 = ("A1-A3", "A1-A3 Product stage")
     A4_A5 = ("A4-A5", "A4-A5 Construction process stage")
@@ -205,6 +205,7 @@ class LCAStages(OpenBDFEnum):
     C3 = ("C3", "C3 Waste processing", None, C1_C4)
     C4 = ("C4", "C4 Disposal", None, C1_C4)
 
+    D = ("D", "D Benefits and loads beyond the system boundary", None, D_D2)
     D1 = ("D1", "D1 Reuse, recovery, and recycling potential", None, D_D2)
     D2 = ("D2", "D2 Net benefits beyond the system boundary", None, D_D2)
 

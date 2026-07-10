@@ -61,7 +61,7 @@ def parse_value(annotation: Any, raw_value: Any, translator: DocumentTranslator 
     if isinstance(raw_value, str) and raw_value.strip() == "":
         return None
 
-    annotation = unwrap_optional(annotation)
+    (annotation, _) = unwrap_optional(annotation)
 
     if isinstance(annotation, type) and issubclass(annotation, Enum):
         return parse_enum(annotation, raw_value, translator)
