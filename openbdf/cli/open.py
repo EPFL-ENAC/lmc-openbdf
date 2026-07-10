@@ -18,7 +18,6 @@ def open_openbdf_xlsx(
     draft: bool = False,
 ):
     xlsx_file = pd.ExcelFile(xlsx_path)
-    print(xlsx_file.sheet_names)
 
     if translator_path:
         document_translator = DocumentTranslator.from_xlsx(
@@ -41,15 +40,17 @@ def open_openbdf_xlsx(
         return None
     bom_df = bom_df.reset_index(drop=True)
 
-    if draft:
-        return project_draft_package_from_dataframes(info_df, bom_df, document_translator=document_translator)
-
     results_tall_df = document_translator.get_translated_xlsx_sheet(xlsx_file, COMMON_CATEGORY_NAMES["results_tall"])
     if results_tall_df is not None:
         results_tall_df = results_tall_df.reset_index(drop=True)
     results_wide_df = document_translator.get_translated_xlsx_sheet(xlsx_file, COMMON_CATEGORY_NAMES["results_wide"])
     if results_wide_df is not None:
         results_wide_df = results_wide_df.reset_index(drop=True)
+
+    if draft:
+        return project_draft_package_from_dataframes(
+            info_df, bom_df, results_wide_df, results_tall_df, document_translator=document_translator
+        )
 
     return project_package_from_dataframes(
         info_df,
