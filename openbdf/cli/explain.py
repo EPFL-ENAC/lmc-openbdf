@@ -6,8 +6,8 @@ from pydantic import BaseModel, Field
 
 from openbdf.lib.types.annotations import unwrap_optional
 from openbdf.lib.types.human_readable import human_readable_type
-from openbdf.model.lca_results_full import LCAResultsFullBase
-from openbdf.model.tables import LCAResultsFullRecord
+from openbdf.model.lca_results_full_wide import LCAResultsWideFullBase
+from openbdf.model.tables import LCAResultsWideFullRecord
 
 # --- Data Models ---
 
@@ -51,8 +51,8 @@ def analyze_model(model_name: str, field_names: list[str] | None = None) -> Mode
         "ProjectRecord": ProjectRecord,
         "BuildingBillMaterialsSlimRecordBase": BuildingBillMaterialsSlimRecordBase,
         "BuildingBillMaterialsSlimRecord": BuildingBillMaterialsSlimRecord,
-        "LCAResultsFullBase": LCAResultsFullBase,
-        "LCAResultsFullRecord": LCAResultsFullRecord,
+        "LCAResultsFullBase": LCAResultsWideFullBase,
+        "LCAResultsFullRecord": LCAResultsWideFullRecord,
     }
     model_class = registry.get(model_name)
 
