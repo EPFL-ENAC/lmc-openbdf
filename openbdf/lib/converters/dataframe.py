@@ -8,19 +8,26 @@ from sqlmodel import SQLModel
 from openbdf.lib.converters.translators import COMMON_CATEGORY_NAMES, DocumentTranslator
 from openbdf.lib.types.fields import get_field_code
 from openbdf.lib.types.values import parse_value, serialize_value
-from openbdf.model.building_bill_materials_slim import BuildingBillMaterialsSlimRecordBase
+from openbdf.model.building_bill_materials_slim import (
+    BuildingBillMaterialsSlimRecordBase,
+    BuildingBillMaterialsSlimRecordBaseDraft,
+)
 from openbdf.model.general_info import ProjectRecordBase, ProjectRecordBaseDraft
-from openbdf.model.lca_results_full import LCAResultsFullBase
+from openbdf.model.lca_results_full_wide import LCAResultsWideFullBase
 from openbdf.model.tables import (
     BuildingBillMaterialsSlimRecord,
     BuildingBillMaterialsSlimRecordDraft,
-    LCAResultsFullRecord,
+    LCAResultsTallFullRecord,
+    LCAResultsTallFullRecordDraft,
+    LCAResultsWideFullRecord,
+    LCAResultsWideFullRecordDraft,
     ProjectRecord,
     ProjectRecordDraft,
 )
 
 PROJECT_EXCLUDED_FIELDS = {"id", "bill_of_materials"}
 BOM_EXCLUDED_FIELDS = {"id", "project_id", "project"}
+RESULTS_EXCLUDED_FIELDS = {"id", "building_bill_materials_slim_record_id", "building_bill_materials_slim_record"}
 
 
 def build_field_code_to_name_map(
@@ -97,7 +104,7 @@ def bom_to_dataframe(
 ModelT = TypeVar("ModelT", bound=SQLModel)
 
 
-def wide_to_dataframe(
+def horizontal_to_dataframe(
     items: list[ModelT],
     model_cls: type[ModelT],
 ) -> pd.DataFrame:
@@ -121,6 +128,57 @@ def wide_to_dataframe(
         rows.append(row)
 
     return pd.DataFrame(rows, columns=[field_code for _, _, field_code in included_fields])
+
+
+def horizontal_from_dataframe(
+    df: pd.DataFrame,
+    model_cls: type[ModelT],
+    translator_category: str,
+    *,
+    excluded_fields: set[str] | None = None,
+    document_translator: DocumentTranslator | None = None,
+) -> list[ModelT]:
+    """
+    Build a list of model instances from a horizontal dataframe.
+
+    Dataframe columns are interpreted as field_code values.
+    Unknown columns are ignored.
+    """
+    if document_translator is None:
+        document_translator = DocumentTranslator.default_openbdf_translator()
+
+    fields = model_cls.model_fields
+    code_to_name = build_field_code_to_name_map(
+        model_cls,
+        excluded_fields=excluded_fields,
+    )
+
+    items: list[ModelT] = []
+
+    for _, row in df.iterrows():
+        kwargs: dict[str, Any] = {}
+
+        for column in df.columns.tolist():
+            translated_code = document_translator.translate(
+                translator_category,
+                str(column),
+            )
+            field_name = code_to_name.get(translated_code)
+            if field_name is None:
+                continue
+
+            field_info = fields[field_name]
+            annotation = field_info.annotation
+            kwargs[field_name] = parse_value(
+                annotation,
+                row[column],
+                document_translator,
+            )
+
+        if any(value is not None for value in kwargs.values()):
+            items.append(model_cls(**kwargs))
+
+    return items
 
 
 def model_from_vertical_dataframe(
@@ -223,85 +281,125 @@ def project_draft_from_dataframe(
     )
 
 
+def add_material_id_column_if_missing(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Ensure that the dataframe has a 'material_id' column.
+    If not, add one with default values.
+    """
+    if "material_id" not in df.columns:
+        df = df.copy()
+        df.insert(
+            0,
+            "material_id",
+            [f"MAT-{i + 1}" for i in range(len(df))],
+        )
+    return df
+
+
 def bom_from_dataframe(
-    bom_df: pd.DataFrame, document_translator: DocumentTranslator | None = None
+    bom_df: pd.DataFrame,
+    document_translator: DocumentTranslator | None = None,
 ) -> list[BuildingBillMaterialsSlimRecordBase]:
     """
-    Build a list of BuildingBillMaterialsSlimRecord from a dataframe produced
-    by bom_to_dataframe().
-
-    Dataframe columns are interpreted as field_code values.
-    Unknown columns are ignored.
+    Build a list of BuildingBillMaterialsSlimRecordBase from a dataframe
+    produced by bom_to_dataframe().
     """
-    if document_translator is None:
-        document_translator = DocumentTranslator.default_openbdf_translator()
-
-    fields = BuildingBillMaterialsSlimRecordBase.model_fields
-    code_to_name = build_field_code_to_name_map(
+    bom_df = add_material_id_column_if_missing(bom_df)
+    return horizontal_from_dataframe(
+        bom_df,
         BuildingBillMaterialsSlimRecordBase,
+        COMMON_CATEGORY_NAMES["bom"],
         excluded_fields=BOM_EXCLUDED_FIELDS,
+        document_translator=document_translator,
     )
 
-    items: list[BuildingBillMaterialsSlimRecordBase] = []
 
-    for _, row in bom_df.iterrows():
-        kwargs: dict[str, Any] = {}
-
-        for column in bom_df.columns.tolist():
-            field_name = code_to_name.get(document_translator.translate(COMMON_CATEGORY_NAMES["bom"], str(column)))
-            if field_name is None:
-                continue
-
-            field_info = fields[field_name]
-            annotation = field_info.annotation
-            kwargs[field_name] = parse_value(annotation, row[column], document_translator)
-
-        if any(value is not None for value in kwargs.values()):
-            # we skip completely empty rows to avoid creating empty records
-            items.append(BuildingBillMaterialsSlimRecordBase(**kwargs))
-
-    return items
+def bom_draft_from_dataframe(
+    bom_df: pd.DataFrame,
+    document_translator: DocumentTranslator | None = None,
+) -> list[BuildingBillMaterialsSlimRecordBaseDraft]:
+    """
+    Build a list of BuildingBillMaterialsSlimRecordBaseDraft from a dataframe
+    produced by bom_to_dataframe().
+    """
+    bom_df = add_material_id_column_if_missing(bom_df)
+    return horizontal_from_dataframe(
+        bom_df,
+        BuildingBillMaterialsSlimRecordBaseDraft,
+        COMMON_CATEGORY_NAMES["bom"],
+        excluded_fields=BOM_EXCLUDED_FIELDS,
+        document_translator=document_translator,
+    )
 
 
 def results_wide_from_dataframe(
-    results_wide_df: pd.DataFrame, document_translator: DocumentTranslator | None = None
-) -> list[LCAResultsFullRecord]:
+    results_wide_df: pd.DataFrame,
+    document_translator: DocumentTranslator | None = None,
+) -> list[LCAResultsWideFullRecord]:
     """
-    Build a list of LCAResultsFullRecord from a dataframe produced
+    Build a list of LCAResultsWideFullRecord from a dataframe produced
     by results_wide_to_dataframe().
-
-    Dataframe columns are interpreted as field_code values.
-    Unknown columns are ignored.
     """
-    if document_translator is None:
-        document_translator = DocumentTranslator.default_openbdf_translator()
-
-    fields = LCAResultsFullBase.model_fields
-    code_to_name = build_field_code_to_name_map(
-        LCAResultsFullBase,
+    results_wide_df = add_material_id_column_if_missing(results_wide_df)
+    return horizontal_from_dataframe(
+        results_wide_df,
+        LCAResultsWideFullRecord,
+        COMMON_CATEGORY_NAMES["results_wide"],
+        excluded_fields=RESULTS_EXCLUDED_FIELDS,
+        document_translator=document_translator,
     )
 
-    items: list[LCAResultsFullRecord] = []
 
-    for _, row in results_wide_df.iterrows():
-        kwargs: dict[str, Any] = {}
+def results_wide_draft_from_dataframe(
+    results_wide_draft_df: pd.DataFrame,
+    document_translator: DocumentTranslator | None = None,
+) -> list[LCAResultsWideFullRecordDraft]:
+    """
+    Build a list of LCAResultsWideFullRecordDraft from a dataframe produced
+    by results_wide_to_dataframe().
+    """
+    results_wide_draft_df = add_material_id_column_if_missing(results_wide_draft_df)
+    return horizontal_from_dataframe(
+        results_wide_draft_df,
+        LCAResultsWideFullRecordDraft,
+        COMMON_CATEGORY_NAMES["results_wide"],
+        excluded_fields=RESULTS_EXCLUDED_FIELDS,
+        document_translator=document_translator,
+    )
 
-        for column in results_wide_df.columns.tolist():
-            field_name = code_to_name.get(
-                document_translator.translate(COMMON_CATEGORY_NAMES["results_wide"], str(column))
-            )
-            if field_name is None:
-                continue
 
-            field_info = fields[field_name]
-            annotation = field_info.annotation
-            kwargs[field_name] = parse_value(annotation, row[column], document_translator)
+def results_tall_from_dataframe(
+    results_tall_df: pd.DataFrame,
+    document_translator: DocumentTranslator | None = None,
+) -> list[LCAResultsTallFullRecord]:
+    """
+    Build a list of LCAResultsTallFullRecord from a dataframe produced
+    by results_tall_to_dataframe().
+    """
+    return horizontal_from_dataframe(
+        results_tall_df,
+        LCAResultsTallFullRecord,
+        COMMON_CATEGORY_NAMES["results_tall"],
+        excluded_fields=RESULTS_EXCLUDED_FIELDS,
+        document_translator=document_translator,
+    )
 
-        if any(value is not None for value in kwargs.values()):
-            # we skip completely empty rows to avoid creating empty records
-            items.append(LCAResultsFullRecord(**kwargs))
 
-    return items
+def results_tall_draft_from_dataframe(
+    results_tall_draft_df: pd.DataFrame,
+    document_translator: DocumentTranslator | None = None,
+) -> list[LCAResultsTallFullRecordDraft]:
+    """
+    Build a list of LCAResultsTallFullRecordDraft from a dataframe produced
+    by results_tall_to_dataframe().
+    """
+    return horizontal_from_dataframe(
+        results_tall_draft_df,
+        LCAResultsTallFullRecordDraft,
+        COMMON_CATEGORY_NAMES["results_tall"],
+        excluded_fields=RESULTS_EXCLUDED_FIELDS,
+        document_translator=document_translator,
+    )
 
 
 def project_package_to_dataframes(
@@ -321,6 +419,7 @@ def project_package_from_dataframes(
     project_df: pd.DataFrame,
     bom_df: pd.DataFrame,
     results_wide_df: pd.DataFrame | None,
+    results_tall_df: pd.DataFrame | None,
     document_translator: DocumentTranslator | None = None,
 ) -> ProjectRecord:
     """
@@ -333,11 +432,29 @@ def project_package_from_dataframes(
     project_base = project_from_dataframe(project_df, document_translator)
     bill_of_materials_base = bom_from_dataframe(bom_df, document_translator)
 
-    # TODO: add import of LCAResultsFullRecord when Nicole tells us how to link the entries to the BOM entries
+    bill_of_materials = [BuildingBillMaterialsSlimRecord(**bom.model_dump()) for bom in bill_of_materials_base]
+
+    material_id_to_bom = {bom.material_id: bom for bom in bill_of_materials}
+
+    if results_wide_df is not None:
+        results_wide = results_wide_from_dataframe(results_wide_df, document_translator)
+        for result_wide in results_wide:
+            matching_bom = material_id_to_bom.get(result_wide.material_id, None)
+            if matching_bom is not None:
+                matching_bom.lca_results_full_record = result_wide
+
+    if results_tall_df is not None:
+        results_tall = results_tall_from_dataframe(results_tall_df, document_translator)
+        for result_tall in results_tall:
+            matching_bom = material_id_to_bom.get(result_tall.material_id, None)
+            if matching_bom is not None:
+                matching_bom.lca_results_tall_full_records.append(result_tall)
 
     project = ProjectRecord(
         **project_base.model_dump(),
-        bill_of_materials=[BuildingBillMaterialsSlimRecord(**bom.model_dump()) for bom in bill_of_materials_base],
+        bill_of_materials=bill_of_materials,
+        results_wide=results_wide if results_wide_df is not None else [],
+        results_tall=results_tall if results_tall_df is not None else [],
     )
 
     return project
@@ -346,6 +463,8 @@ def project_package_from_dataframes(
 def project_draft_package_from_dataframes(
     project_df: pd.DataFrame | None,
     bom_df: pd.DataFrame | None,
+    results_wide_df: pd.DataFrame | None,
+    results_tall_df: pd.DataFrame | None,
     document_translator: DocumentTranslator | None = None,
 ) -> ProjectRecordDraft:
     """
@@ -360,11 +479,30 @@ def project_draft_package_from_dataframes(
         if project_df is not None
         else ProjectRecordBaseDraft()
     )
-    bill_of_materials_base = bom_from_dataframe(bom_df, document_translator) if bom_df is not None else []
+    bill_of_materials_base = bom_draft_from_dataframe(bom_df, document_translator) if bom_df is not None else []
+    bill_of_materials = [BuildingBillMaterialsSlimRecordDraft(**bom.model_dump()) for bom in bill_of_materials_base]
+
+    material_id_to_bom = {bom.material_id: bom for bom in bill_of_materials}
+
+    if results_wide_df is not None:
+        results_wide = results_wide_draft_from_dataframe(results_wide_df, document_translator)
+        for result_wide in results_wide:
+            matching_bom = material_id_to_bom.get(result_wide.material_id, None)
+            if matching_bom is not None:
+                matching_bom.lca_results_full_record = result_wide
+
+    if results_tall_df is not None:
+        results_tall = results_tall_draft_from_dataframe(results_tall_df, document_translator)
+        for result_tall in results_tall:
+            matching_bom = material_id_to_bom.get(result_tall.material_id, None)
+            if matching_bom is not None:
+                matching_bom.lca_results_tall_full_records.append(result_tall)
 
     project_draft = ProjectRecordDraft(
         **project_base.model_dump(),
-        bill_of_materials=[BuildingBillMaterialsSlimRecordDraft(**bom.model_dump()) for bom in bill_of_materials_base],
+        bill_of_materials=bill_of_materials,
+        results_wide=results_wide if results_wide_df is not None else [],
+        results_tall=results_tall if results_tall_df is not None else [],
     )
 
     return project_draft
