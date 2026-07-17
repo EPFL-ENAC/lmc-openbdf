@@ -1,3 +1,4 @@
+import itertools
 from pathlib import Path
 from typing import TypeVar
 
@@ -7,7 +8,7 @@ from openpyxl.utils import get_column_letter
 from pydantic.fields import FieldInfo
 from sqlmodel import SQLModel
 
-from openbdf.lib.converters.dataframe import wide_to_dataframe
+from openbdf.lib.converters.dataframe import horizontal_to_dataframe
 from openbdf.lib.converters.enums_registry import EnumRegistry
 from openbdf.lib.converters.translators import COMMON_CATEGORY_NAMES, SHEETS_PROPERTIES_HEADERS
 from openbdf.lib.types.annotations import unwrap_optional
@@ -16,7 +17,8 @@ from openbdf.lib.types.xlsx import xlsx_validation_from_type
 from openbdf.model.building_bill_materials_slim import BuildingBillMaterialsSlimRecordBase
 from openbdf.model.enums.openbdf_enum import OpenBDFEnum
 from openbdf.model.general_info import ProjectRecordBase
-from openbdf.model.lca_results_full import LCAResultsFullBase
+from openbdf.model.lca_results_full_tall import LCAResultsTallBase
+from openbdf.model.lca_results_full_wide import LCAResultsWideFullBase
 from openbdf.model.tables import ProjectRecord
 
 thin_side = Side(border_style="thin", color="AAAAAA")
@@ -54,9 +56,10 @@ def get_field_extra(field: FieldInfo) -> dict:
 def save_openbdf_to_xlsx(
     xlsx_path: str | Path,
     project: ProjectRecord | None,
-    info_sheet_name: str = "General Info",
-    bom_sheet_name: str = "Building Bill of Materials",
-    results_sheet_name: str = "LCA Results",
+    info_sheet_name: str = COMMON_CATEGORY_NAMES["project"],
+    bom_sheet_name: str = COMMON_CATEGORY_NAMES["bom"],
+    results_wide_sheet_name: str = COMMON_CATEGORY_NAMES["results_wide"],
+    results_tall_sheet_name: str = COMMON_CATEGORY_NAMES["results_tall"],
 ):
     """Save a list of BuildingBillMaterialsSlimRecord to an Excel file."""
 
@@ -76,8 +79,22 @@ def save_openbdf_to_xlsx(
             [record.lca_results_full_record for record in project.bill_of_materials if record.lca_results_full_record]
             if project
             else None,
-            LCAResultsFullBase,
-            results_sheet_name,
+            LCAResultsWideFullBase,
+            results_wide_sheet_name,
+            enum_registry,
+        )
+        wide_to_xlsx(
+            writer,
+            [
+                item
+                for record in project.bill_of_materials
+                if record.lca_results_tall_full_records
+                for item in record.lca_results_tall_full_records
+            ]
+            if project
+            else None,
+            LCAResultsTallBase,
+            results_tall_sheet_name,
             enum_registry,
         )
 
@@ -201,7 +218,7 @@ def wide_to_xlsx(
     if records is None:
         records = []
 
-    df = wide_to_dataframe(records, model_cls)  # type: ignore[misc]
+    df = horizontal_to_dataframe(records, model_cls)  # type: ignore[misc]
     df.to_excel(writer, sheet_name=sheet_name, index=False, header=False, startcol=1, startrow=8)
 
     sheet = writer.sheets[sheet_name]
@@ -310,6 +327,10 @@ def save_translator(
         make_translator_openbdf_pydantic(
             writer, COMMON_CATEGORY_NAMES["bom"], BuildingBillMaterialsSlimRecordBase.model_fields
         )
+        make_translator_openbdf_pydantic(
+            writer, COMMON_CATEGORY_NAMES["results_wide"], LCAResultsWideFullBase.model_fields
+        )
+        make_translator_openbdf_pydantic(writer, COMMON_CATEGORY_NAMES["results_tall"], LCAResultsTallBase.model_fields)
         export_all_enums_in_model_to_translator(writer, ProjectRecordBase.model_fields)
         export_all_enums_in_model_to_translator(writer, BuildingBillMaterialsSlimRecordBase.model_fields)
 
@@ -335,6 +356,16 @@ def make_translations_library_template_xlsx(writer: pd.ExcelWriter, sheet_name: 
         },
         {
             "name": COMMON_CATEGORY_NAMES["bom"],
+            "orientation": "horizontal",
+            "header_row": 0,
+        },
+        {
+            "name": COMMON_CATEGORY_NAMES["results_wide"],
+            "orientation": "horizontal",
+            "header_row": 0,
+        },
+        {
+            "name": COMMON_CATEGORY_NAMES["results_tall"],
             "orientation": "horizontal",
             "header_row": 0,
         },

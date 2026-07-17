@@ -8,7 +8,18 @@ from sqlmodel import Field, SQLModel
 from .field_metadata import openbdf_field_metadata
 
 
-class LCAResultsFullBase(SQLModel):
+class LCAResultsWideFullBase(SQLModel):
+    material_id: str = Field(
+        max_length=200,
+        description="The unique identifier for the material within the project context, referencing the Bill of Materials.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Material ID",
+            field_code="material_id",
+            description="The unique identifier for the material within the project context, referencing the Bill of Materials.",
+            requirements="Required",
+        ),
+    )
+
     gwp_total_a1_a3: Decimal = Field(
         description="Global Warming Potential - Total for module A1-A3.",
         schema_extra=openbdf_field_metadata(

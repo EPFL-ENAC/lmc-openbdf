@@ -47,7 +47,7 @@ def explain(
 
 @app.command(name="open", no_args_is_help=True)
 def open(
-    file: str = typer.Option(..., "--file", "-f", help="The file to open"),
+    file: str = typer.Argument(..., help="The file to open"),
     translator_path: str = typer.Option(
         "",
         "--translator",

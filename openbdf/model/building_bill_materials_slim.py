@@ -15,6 +15,17 @@ from .field_metadata import openbdf_field_metadata
 
 
 class BuildingBillMaterialsSlimRecordBase(SQLModel):
+    material_id: str = Field(
+        max_length=200,
+        description="The unique identifier for the material within the project context.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Material ID",
+            field_code="material_id",
+            description="The unique identifier for the material within the project context.",
+            requirements="Required",
+        ),
+    )
+
     floor_level: Optional[int] = Field(
         default=None,
         description="Storey of the building element.",
@@ -37,51 +48,15 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
         ),
     )
 
-    bec_custom_tier1: Optional[str] = Field(
+    bec_custom: Optional[str] = Field(
         default=None,
         max_length=200,
-        description="Primary (top-level) hierarchical category of the custom or national building element classification.",
+        description="Hierarchical category of the custom or national building element classification.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Element Class (Tier 1)",
-            field_code="bec_custom_tier1",
-            description="Primary (top-level) hierarchical category of the custom or national building element classification.",
+            attribute_name="Element Class",
+            field_code="bec_custom",
+            description="Hierarchical category of the custom or national building element classification.",
             requirements="Recommended",
-        ),
-    )
-
-    bec_custom_tier2: Optional[str] = Field(
-        default=None,
-        max_length=200,
-        description="Secondary hierarchical category of the custom or national building element classification.",
-        schema_extra=openbdf_field_metadata(
-            attribute_name="Element Class (Tier 2)",
-            field_code="bec_custom_tier2",
-            description="Secondary hierarchical category of the custom or national building element classification.",
-            requirements="Recommended",
-        ),
-    )
-
-    bec_custom_tier3: Optional[str] = Field(
-        default=None,
-        max_length=200,
-        description="The tertiary hierarchical category of the custom or national building element classification.",
-        schema_extra=openbdf_field_metadata(
-            attribute_name="Element Class (Tier 3)",
-            field_code="bec_custom_tier3",
-            description="The tertiary hierarchical category of the custom or national building element classification.",
-            requirements="Recommended",
-        ),
-    )
-
-    bec_custom_tier4: Optional[str] = Field(
-        default=None,
-        max_length=200,
-        description="The quaternary (lowest-level) hierarchical category of the custom or national building element classification.",
-        schema_extra=openbdf_field_metadata(
-            attribute_name="Element Class (Tier 4)",
-            field_code="bec_custom_tier4",
-            description="The quaternary (lowest-level) hierarchical category of the custom or national building element classification.",
-            requirements="Optional",
         ),
     )
 
@@ -253,4 +228,8 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
     )
 
 
-BuildingBillMaterialsSlimRecordBaseDraft = make_draft_model(BuildingBillMaterialsSlimRecordBase)
+_BuildingBillMaterialsSlimRecordBaseDraft = make_draft_model(BuildingBillMaterialsSlimRecordBase)
+
+
+class BuildingBillMaterialsSlimRecordBaseDraft(_BuildingBillMaterialsSlimRecordBaseDraft):  # type: ignore[valid-type,misc]
+    pass
