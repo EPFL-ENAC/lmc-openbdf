@@ -2,8 +2,10 @@ from pathlib import Path
 
 import typer
 
-from openbdf.cli.open import open_openbdf_xlsx
 from openbdf.cli.save import save_openbdf_to_xlsx, save_translator
+from openbdf.lib.converters.dataframe import project_draft_package_from_tables, project_package_from_tables
+from openbdf.lib.converters.translators import DocumentTranslator
+from openbdf.lib.importer import DuplicateSheetNamesError, ExcelSheetSource, OpenBDFTables
 
 app = typer.Typer(help="CLI utilities for the project.")
 
@@ -47,7 +49,7 @@ def explain(
 
 @app.command(name="open", no_args_is_help=True)
 def open(
-    file: str = typer.Argument(..., help="The file to open"),
+    files: list[Path] = typer.Argument(..., help="One or more Excel files to open as a single document"),
     translator_path: str = typer.Option(
         "",
         "--translator",
@@ -80,25 +82,41 @@ def open(
     ),
 ):
     """
-    Open a file and display its contents.
+    Open one or more Excel files as a single document and display its contents.
     Usage:
-        openbdf open --file data.xlsx --bom-sheet Sheet1
+        openbdf open project.xlsx
+        openbdf open project.xlsx materials.xlsx results.xlsx
     """
 
-    project = open_openbdf_xlsx(
-        xlsx_path=file,
-        translator_path=translator_path,
-        translator_attribute_name_col=translator_attribute_name_col,
-        translator_translated_name_col=translator_translated_name_col,
-        translator_header_row=translator_header_row,
-        draft=draft,
-    )
+    if translator_path:
+        document_translator = DocumentTranslator.from_xlsx(
+            xlsx_path=translator_path,
+            attribute_name_col=translator_attribute_name_col,
+            translated_name_col=translator_translated_name_col,
+            header_row=translator_header_row,
+        )
+    else:
+        document_translator = DocumentTranslator.default_openbdf_translator()
 
-    if project is None:
-        print("Failed to open the file. Please check the provided path and format.")
+    try:
+        with ExcelSheetSource(files) as source:
+            tables = OpenBDFTables.from_source(source, document_translator)
+    except DuplicateSheetNamesError as exc:
+        typer.echo(f"Error: {exc}", err=True)
+        raise typer.Exit(code=1) from exc
+
+    if tables is None:
+        print("Failed to open the files. Please check the provided paths and formats.")
         return False
 
-    save_openbdf_to_xlsx(
+    project = (
+        project_draft_package_from_tables(tables, document_translator)
+        if draft
+        else project_package_from_tables(tables, document_translator)
+    )
+
+    # Draft and strict records expose the same fields used by the existing exporter.
+    save_openbdf_to_xlsx(  # type: ignore[arg-type]
         xlsx_path=Path("./output.xlsx"),
         project=project,
     )
