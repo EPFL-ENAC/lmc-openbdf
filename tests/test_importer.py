@@ -7,7 +7,7 @@ from openbdf.lib.converters.translators import DocumentTranslator, SheetTranslat
 from openbdf.lib.importer import (
     DuplicateSheetNamesError,
     ExcelSheetSource,
-    load_openbdf_tables,
+    OpenBDFTables,
 )
 
 
@@ -69,7 +69,7 @@ def table_translator() -> DocumentTranslator:
     )
 
 
-def test_load_openbdf_tables_uses_only_the_sheet_source_interface():
+def test_openbdf_tables_from_source_uses_only_the_sheet_source_interface():
     source = MemorySheetSource({
         "Project Input": pd.DataFrame([["project_name", "Example project"]]),
         "Materials Input": pd.DataFrame([["material_id"], ["MAT-1"]]),
@@ -77,7 +77,7 @@ def test_load_openbdf_tables_uses_only_the_sheet_source_interface():
         "Tall Input": pd.DataFrame([["material_id"], ["MAT-1"]]),
     })
 
-    tables = load_openbdf_tables(source, table_translator())
+    tables = OpenBDFTables.from_source(source, table_translator())
 
     assert tables is not None
     assert tables.project.to_dict(orient="records") == [{"field_code": "project_name", "value": "Example project"}]
@@ -89,25 +89,25 @@ def test_load_openbdf_tables_uses_only_the_sheet_source_interface():
     assert source.read_sheets == ["Project Input", "Materials Input", "Wide Input", "Tall Input"]
 
 
-def test_load_openbdf_tables_allows_missing_optional_sheets():
+def test_openbdf_tables_from_source_allows_missing_optional_sheets():
     source = MemorySheetSource({
         "Project Input": pd.DataFrame([["project_name", "Example project"]]),
         "Materials Input": pd.DataFrame([["material_id"], ["MAT-1"]]),
     })
 
-    tables = load_openbdf_tables(source, table_translator())
+    tables = OpenBDFTables.from_source(source, table_translator())
 
     assert tables is not None
     assert tables.results_wide is None
     assert tables.results_tall is None
 
 
-def test_load_openbdf_tables_returns_none_when_a_required_sheet_is_missing():
+def test_openbdf_tables_from_source_returns_none_when_a_required_sheet_is_missing():
     source = MemorySheetSource({
         "Project Input": pd.DataFrame([["project_name", "Example project"]]),
     })
 
-    assert load_openbdf_tables(source, table_translator()) is None
+    assert OpenBDFTables.from_source(source, table_translator()) is None
     assert source.read_sheets == ["Project Input"]
 
 
