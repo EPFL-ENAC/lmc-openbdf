@@ -9,7 +9,8 @@ import pandas as pd
 import pytest
 from pydantic import BaseModel
 
-from openbdf.lib.converters.dataframe import project_package_from_dataframes
+from openbdf.lib.converters.dataframe import project_package_from_tables
+from openbdf.lib.openbdf_tables import OpenBDFTables
 from openbdf.lib.types.annotations import unwrap_optional
 from openbdf.lib.types.fields import get_field_code
 from openbdf.model.building_bill_materials_slim import BuildingBillMaterialsSlimRecordBase
@@ -98,13 +99,21 @@ def tall_df(*material_ids: str) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
-def test_project_package_from_dataframes_links_wide_results_to_bom_by_material_id():
-    project = project_package_from_dataframes(
-        project_df(),
-        bom_df("mat-1"),
-        results_wide_df=wide_df("mat-1"),
-        results_tall_df=None,
+def tables(
+    bill_of_materials: pd.DataFrame,
+    results_wide: pd.DataFrame | None = None,
+    results_tall: pd.DataFrame | None = None,
+) -> OpenBDFTables:
+    return OpenBDFTables(
+        project=project_df(),
+        bill_of_materials=bill_of_materials,
+        results_wide=results_wide,
+        results_tall=results_tall,
     )
+
+
+def test_project_package_from_tables_links_wide_results_to_bom_by_material_id():
+    project = project_package_from_tables(tables(bom_df("mat-1"), results_wide=wide_df("mat-1")))
 
     bom_record = project.bill_of_materials[0]
     assert bom_record.lca_results_full_record is not None
@@ -112,13 +121,8 @@ def test_project_package_from_dataframes_links_wide_results_to_bom_by_material_i
     assert bom_record.lca_results_full_record.building_bill_materials_slim_record is bom_record
 
 
-def test_project_package_from_dataframes_links_multiple_tall_results_to_bom_by_material_id():
-    project = project_package_from_dataframes(
-        project_df(),
-        bom_df("mat-1"),
-        results_wide_df=None,
-        results_tall_df=tall_df("mat-1", "mat-1"),
-    )
+def test_project_package_from_tables_links_multiple_tall_results_to_bom_by_material_id():
+    project = project_package_from_tables(tables(bom_df("mat-1"), results_tall=tall_df("mat-1", "mat-1")))
 
     bom_record = project.bill_of_materials[0]
     assert [result.material_id for result in bom_record.lca_results_tall_full_records] == ["mat-1", "mat-1"]
@@ -127,12 +131,13 @@ def test_project_package_from_dataframes_links_multiple_tall_results_to_bom_by_m
     )
 
 
-def test_project_package_from_dataframes_links_results_to_separate_bom_entries():
-    project = project_package_from_dataframes(
-        project_df(),
-        bom_df("mat-1", "mat-2"),
-        results_wide_df=wide_df("mat-2", "mat-1"),
-        results_tall_df=tall_df("mat-2", "mat-1"),
+def test_project_package_from_tables_links_results_to_separate_bom_entries():
+    project = project_package_from_tables(
+        tables(
+            bom_df("mat-1", "mat-2"),
+            results_wide=wide_df("mat-2", "mat-1"),
+            results_tall=tall_df("mat-2", "mat-1"),
+        )
     )
 
     by_material_id = {record.material_id: record for record in project.bill_of_materials}
@@ -144,13 +149,8 @@ def test_project_package_from_dataframes_links_results_to_separate_bom_entries()
     assert [result.material_id for result in by_material_id["mat-2"].lca_results_tall_full_records] == ["mat-2"]
 
 
-def test_project_package_from_dataframes_allows_missing_result_dataframes():
-    project = project_package_from_dataframes(
-        project_df(),
-        bom_df("mat-1"),
-        results_wide_df=None,
-        results_tall_df=None,
-    )
+def test_project_package_from_tables_allows_missing_result_tables():
+    project = project_package_from_tables(tables(bom_df("mat-1")))
 
     bom_record = project.bill_of_materials[0]
     assert bom_record.material_id == "mat-1"
@@ -158,31 +158,16 @@ def test_project_package_from_dataframes_allows_missing_result_dataframes():
     assert bom_record.lca_results_tall_full_records == []
 
 
-def test_project_package_from_dataframes_rejects_unmatched_result_material_id():
+def test_project_package_from_tables_rejects_unmatched_result_material_id():
     with pytest.raises(ValueError, match="does not match any bill of materials entry"):
-        project_package_from_dataframes(
-            project_df(),
-            bom_df("mat-1"),
-            results_wide_df=wide_df("missing"),
-            results_tall_df=None,
-        )
+        project_package_from_tables(tables(bom_df("mat-1"), results_wide=wide_df("missing")))
 
 
-def test_project_package_from_dataframes_rejects_duplicate_bom_material_id():
+def test_project_package_from_tables_rejects_duplicate_bom_material_id():
     with pytest.raises(ValueError, match="Duplicate bill of materials material_id"):
-        project_package_from_dataframes(
-            project_df(),
-            bom_df("mat-1", "mat-1"),
-            results_wide_df=None,
-            results_tall_df=None,
-        )
+        project_package_from_tables(tables(bom_df("mat-1", "mat-1")))
 
 
-def test_project_package_from_dataframes_rejects_duplicate_wide_result_material_id():
+def test_project_package_from_tables_rejects_duplicate_wide_result_material_id():
     with pytest.raises(ValueError, match="Multiple wide LCA results found"):
-        project_package_from_dataframes(
-            project_df(),
-            bom_df("mat-1"),
-            results_wide_df=wide_df("mat-1", "mat-1"),
-            results_tall_df=None,
-        )
+        project_package_from_tables(tables(bom_df("mat-1"), results_wide=wide_df("mat-1", "mat-1")))
