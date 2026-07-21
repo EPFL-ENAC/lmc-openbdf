@@ -5,7 +5,7 @@ import typer
 from openbdf.cli.save import save_openbdf_to_xlsx, save_translator
 from openbdf.lib.converters.dataframe import project_draft_package_from_tables, project_package_from_tables
 from openbdf.lib.converters.translators import DocumentTranslator
-from openbdf.lib.importer import DuplicateSheetNamesError, ExcelSheetSource, load_openbdf_tables
+from openbdf.lib.importer import DuplicateSheetNamesError, ExcelSheetSource, OpenBDFTables
 
 app = typer.Typer(help="CLI utilities for the project.")
 
@@ -100,7 +100,7 @@ def open(
 
     try:
         with ExcelSheetSource(files) as source:
-            tables = load_openbdf_tables(source, document_translator)
+            tables = OpenBDFTables.from_source(source, document_translator)
     except DuplicateSheetNamesError as exc:
         typer.echo(f"Error: {exc}", err=True)
         raise typer.Exit(code=1) from exc
