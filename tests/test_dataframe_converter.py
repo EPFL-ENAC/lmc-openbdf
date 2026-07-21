@@ -10,7 +10,7 @@ import pytest
 from pydantic import BaseModel
 
 from openbdf.lib.converters.dataframe import project_package_from_tables
-from openbdf.lib.importer import OpenBDFTables
+from openbdf.lib.openbdf_tables import OpenBDFTables
 from openbdf.lib.types.annotations import unwrap_optional
 from openbdf.lib.types.fields import get_field_code
 from openbdf.model.building_bill_materials_slim import BuildingBillMaterialsSlimRecordBase
