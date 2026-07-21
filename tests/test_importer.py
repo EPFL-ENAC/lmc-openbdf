@@ -4,11 +4,8 @@ import pandas as pd
 import pytest
 
 from openbdf.lib.converters.translators import DocumentTranslator, SheetTranslation, TranslationsLibrary
-from openbdf.lib.importer import (
-    DuplicateSheetNamesError,
-    ExcelSheetSource,
-    OpenBDFTables,
-)
+from openbdf.lib.openbdf_tables import OpenBDFTables
+from openbdf.lib.sources import DuplicateSheetNamesError, ExcelSheetSource
 
 
 class MemorySheetSource:

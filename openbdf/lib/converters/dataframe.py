@@ -6,7 +6,7 @@ import pandas as pd
 from sqlmodel import SQLModel
 
 from openbdf.lib.converters.translators import COMMON_CATEGORY_NAMES, DocumentTranslator
-from openbdf.lib.importer import OpenBDFTables
+from openbdf.lib.openbdf_tables import OpenBDFTables
 from openbdf.lib.types.fields import get_field_code
 from openbdf.lib.types.values import parse_value, serialize_value
 from openbdf.model.building_bill_materials_slim import (
