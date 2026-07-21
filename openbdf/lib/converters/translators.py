@@ -251,16 +251,15 @@ class DocumentTranslator:
     def from_xlsx(
         xlsx_path: str | Path, attribute_name_col: int, translated_name_col: int, header_row: int = 0
     ) -> "DocumentTranslator":
-        xlsx = pd.ExcelFile(xlsx_path)
+        with pd.ExcelFile(xlsx_path) as xlsx:
+            true_sheets = [sheet for sheet in xlsx.sheet_names if sheet != "Translations Library"]
 
-        true_sheets = [sheet for sheet in xlsx.sheet_names if sheet != "Translations Library"]
-
-        library = (
-            xlsx.parse("Translations Library", header=header_row)
-            if "Translations Library" in xlsx.sheet_names
-            else None
-        )
-        dfs = {sheet_name: xlsx.parse(sheet_name, header=header_row) for sheet_name in true_sheets}
+            library = (
+                xlsx.parse("Translations Library", header=header_row)
+                if "Translations Library" in xlsx.sheet_names
+                else None
+            )
+            dfs = {sheet_name: xlsx.parse(sheet_name, header=header_row) for sheet_name in true_sheets}
 
         return DocumentTranslator.from_dataframes(
             dfs, attribute_name_col, translated_name_col, translation_library_df=library
@@ -272,17 +271,8 @@ class DocumentTranslator:
             return attribute_name
         return translator.translate(attribute_name)
 
-    def get_translated_xlsx_sheet(self, xlsx: pd.ExcelFile, translated_sheet_name: str) -> pd.DataFrame | None:
-        translation = self._library.get_translation_by_translated_name(translated_sheet_name)
-        if translation is None:
-            return None
-
-        if translation.original_name not in xlsx.sheet_names:
-            return None
-
-        df = xlsx.parse(translation.original_name, header=None)
-
-        return translation.translate_df(df)
+    def get_sheet_translation(self, translated_sheet_name: str) -> SheetTranslation | None:
+        return self._library.get_translation_by_translated_name(translated_sheet_name)
 
     @staticmethod
     def default_openbdf_translator() -> "DocumentTranslator":
