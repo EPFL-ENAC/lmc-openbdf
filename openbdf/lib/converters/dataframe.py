@@ -6,6 +6,7 @@ import pandas as pd
 from sqlmodel import SQLModel
 
 from openbdf.lib.converters.translators import COMMON_CATEGORY_NAMES, DocumentTranslator
+from openbdf.lib.openbdf_tables import OpenBDFTables
 from openbdf.lib.types.fields import get_field_code
 from openbdf.lib.types.values import parse_value, serialize_value
 from openbdf.model.building_bill_materials_slim import (
@@ -415,36 +416,33 @@ def project_package_to_dataframes(
     return project_df, bom_df
 
 
-def project_package_from_dataframes(
-    project_df: pd.DataFrame,
-    bom_df: pd.DataFrame,
-    results_wide_df: pd.DataFrame | None,
-    results_tall_df: pd.DataFrame | None,
+def project_package_from_tables(
+    tables: OpenBDFTables,
     document_translator: DocumentTranslator | None = None,
 ) -> ProjectRecord:
     """
-    Reconstruct a ProjectRecord and attach its bill_of_materials from dataframes.
+    Reconstruct a ProjectRecord and attach its bill of materials from logical tables.
     """
 
     if document_translator is None:
         document_translator = DocumentTranslator.default_openbdf_translator()
 
-    project_base = project_from_dataframe(project_df, document_translator)
-    bill_of_materials_base = bom_from_dataframe(bom_df, document_translator)
+    project_base = project_from_dataframe(tables.project, document_translator)
+    bill_of_materials_base = bom_from_dataframe(tables.bill_of_materials, document_translator)
 
     bill_of_materials = [BuildingBillMaterialsSlimRecord(**bom.model_dump()) for bom in bill_of_materials_base]
 
     material_id_to_bom = {bom.material_id: bom for bom in bill_of_materials}
 
-    if results_wide_df is not None:
-        results_wide = results_wide_from_dataframe(results_wide_df, document_translator)
+    if tables.results_wide is not None:
+        results_wide = results_wide_from_dataframe(tables.results_wide, document_translator)
         for result_wide in results_wide:
             matching_bom = material_id_to_bom.get(result_wide.material_id, None)
             if matching_bom is not None:
                 matching_bom.lca_results_full_record = result_wide
 
-    if results_tall_df is not None:
-        results_tall = results_tall_from_dataframe(results_tall_df, document_translator)
+    if tables.results_tall is not None:
+        results_tall = results_tall_from_dataframe(tables.results_tall, document_translator)
         for result_tall in results_tall:
             matching_bom = material_id_to_bom.get(result_tall.material_id, None)
             if matching_bom is not None:
@@ -453,46 +451,39 @@ def project_package_from_dataframes(
     project = ProjectRecord(
         **project_base.model_dump(),
         bill_of_materials=bill_of_materials,
-        results_wide=results_wide if results_wide_df is not None else [],
-        results_tall=results_tall if results_tall_df is not None else [],
+        results_wide=results_wide if tables.results_wide is not None else [],
+        results_tall=results_tall if tables.results_tall is not None else [],
     )
 
     return project
 
 
-def project_draft_package_from_dataframes(
-    project_df: pd.DataFrame | None,
-    bom_df: pd.DataFrame | None,
-    results_wide_df: pd.DataFrame | None,
-    results_tall_df: pd.DataFrame | None,
+def project_draft_package_from_tables(
+    tables: OpenBDFTables,
     document_translator: DocumentTranslator | None = None,
 ) -> ProjectRecordDraft:
     """
-    Reconstruct a ProjectRecordDraft and attach its bill_of_materials from dataframes.
+    Reconstruct a ProjectRecordDraft and attach its bill of materials from logical tables.
     """
 
     if document_translator is None:
         document_translator = DocumentTranslator.default_openbdf_translator()
 
-    project_base = (
-        project_draft_from_dataframe(project_df, document_translator)
-        if project_df is not None
-        else ProjectRecordBaseDraft()
-    )
-    bill_of_materials_base = bom_draft_from_dataframe(bom_df, document_translator) if bom_df is not None else []
+    project_base = project_draft_from_dataframe(tables.project, document_translator)
+    bill_of_materials_base = bom_draft_from_dataframe(tables.bill_of_materials, document_translator)
     bill_of_materials = [BuildingBillMaterialsSlimRecordDraft(**bom.model_dump()) for bom in bill_of_materials_base]
 
     material_id_to_bom = {bom.material_id: bom for bom in bill_of_materials}
 
-    if results_wide_df is not None:
-        results_wide = results_wide_draft_from_dataframe(results_wide_df, document_translator)
+    if tables.results_wide is not None:
+        results_wide = results_wide_draft_from_dataframe(tables.results_wide, document_translator)
         for result_wide in results_wide:
             matching_bom = material_id_to_bom.get(result_wide.material_id, None)
             if matching_bom is not None:
                 matching_bom.lca_results_full_record = result_wide
 
-    if results_tall_df is not None:
-        results_tall = results_tall_draft_from_dataframe(results_tall_df, document_translator)
+    if tables.results_tall is not None:
+        results_tall = results_tall_draft_from_dataframe(tables.results_tall, document_translator)
         for result_tall in results_tall:
             matching_bom = material_id_to_bom.get(result_tall.material_id, None)
             if matching_bom is not None:
@@ -501,8 +492,8 @@ def project_draft_package_from_dataframes(
     project_draft = ProjectRecordDraft(
         **project_base.model_dump(),
         bill_of_materials=bill_of_materials,
-        results_wide=results_wide if results_wide_df is not None else [],
-        results_tall=results_tall if results_tall_df is not None else [],
+        results_wide=results_wide if tables.results_wide is not None else [],
+        results_tall=results_tall if tables.results_tall is not None else [],
     )
 
     return project_draft

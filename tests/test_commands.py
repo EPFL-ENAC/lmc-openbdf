@@ -11,6 +11,7 @@ runner = CliRunner()
     [
         "",
         "explain",
+        "open",
     ],
 )
 def test_help(subcommand: str):
