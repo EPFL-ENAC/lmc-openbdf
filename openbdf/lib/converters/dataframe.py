@@ -5,7 +5,7 @@ from typing import Any, Optional, TypeVar
 import pandas as pd
 from sqlmodel import SQLModel
 
-from openbdf.lib.converters.translators import COMMON_CATEGORY_NAMES, DocumentTranslator
+from openbdf.lib.converters.translators import COMMON_CATEGORY_PROPERTIES, DocumentTranslator
 from openbdf.lib.openbdf_tables import OpenBDFTables
 from openbdf.lib.types.fields import get_field_code
 from openbdf.lib.types.values import parse_value, serialize_value
@@ -186,7 +186,7 @@ def model_from_vertical_dataframe(
     project_df: pd.DataFrame,
     model_cls: type[ModelT],
     excluded_fields: set[str] | None = None,
-    translator_category: str = COMMON_CATEGORY_NAMES["project"],
+    translator_category: str = COMMON_CATEGORY_PROPERTIES["project"]["name"],
     *,
     document_translator: DocumentTranslator | None = None,
 ) -> ModelT:
@@ -256,7 +256,7 @@ def project_from_dataframe(
         project_df,
         ProjectRecordBase,
         excluded_fields=PROJECT_EXCLUDED_FIELDS,
-        translator_category=COMMON_CATEGORY_NAMES["project"],
+        translator_category=COMMON_CATEGORY_PROPERTIES["project"]["name"],
         document_translator=document_translator or DocumentTranslator(),
     )
 
@@ -277,7 +277,7 @@ def project_draft_from_dataframe(
         project_df,
         ProjectRecordBaseDraft,
         excluded_fields=PROJECT_EXCLUDED_FIELDS,
-        translator_category=COMMON_CATEGORY_NAMES["project"],
+        translator_category=COMMON_CATEGORY_PROPERTIES["project"]["name"],
         document_translator=document_translator or DocumentTranslator(),
     )
 
@@ -309,7 +309,7 @@ def bom_from_dataframe(
     return horizontal_from_dataframe(
         bom_df,
         BuildingBillMaterialsSlimRecordBase,
-        COMMON_CATEGORY_NAMES["bom"],
+        COMMON_CATEGORY_PROPERTIES["bom"]["name"],
         excluded_fields=BOM_EXCLUDED_FIELDS,
         document_translator=document_translator,
     )
@@ -327,7 +327,7 @@ def bom_draft_from_dataframe(
     return horizontal_from_dataframe(
         bom_df,
         BuildingBillMaterialsSlimRecordBaseDraft,
-        COMMON_CATEGORY_NAMES["bom"],
+        COMMON_CATEGORY_PROPERTIES["bom"]["name"],
         excluded_fields=BOM_EXCLUDED_FIELDS,
         document_translator=document_translator,
     )
@@ -345,7 +345,7 @@ def results_wide_from_dataframe(
     return horizontal_from_dataframe(
         results_wide_df,
         LCAResultsWideFullRecord,
-        COMMON_CATEGORY_NAMES["results_wide"],
+        COMMON_CATEGORY_PROPERTIES["results_wide"]["name"],
         excluded_fields=RESULTS_EXCLUDED_FIELDS,
         document_translator=document_translator,
     )
@@ -363,7 +363,7 @@ def results_wide_draft_from_dataframe(
     return horizontal_from_dataframe(
         results_wide_draft_df,
         LCAResultsWideFullRecordDraft,
-        COMMON_CATEGORY_NAMES["results_wide"],
+        COMMON_CATEGORY_PROPERTIES["results_wide"]["name"],
         excluded_fields=RESULTS_EXCLUDED_FIELDS,
         document_translator=document_translator,
     )
@@ -380,7 +380,7 @@ def results_tall_from_dataframe(
     return horizontal_from_dataframe(
         results_tall_df,
         LCAResultsTallFullRecord,
-        COMMON_CATEGORY_NAMES["results_tall"],
+        COMMON_CATEGORY_PROPERTIES["results_tall"]["name"],
         excluded_fields=RESULTS_EXCLUDED_FIELDS,
         document_translator=document_translator,
     )
@@ -397,7 +397,7 @@ def results_tall_draft_from_dataframe(
     return horizontal_from_dataframe(
         results_tall_draft_df,
         LCAResultsTallFullRecordDraft,
-        COMMON_CATEGORY_NAMES["results_tall"],
+        COMMON_CATEGORY_PROPERTIES["results_tall"]["name"],
         excluded_fields=RESULTS_EXCLUDED_FIELDS,
         document_translator=document_translator,
     )
