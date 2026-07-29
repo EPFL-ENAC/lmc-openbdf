@@ -10,7 +10,7 @@ from sqlmodel import SQLModel
 
 from openbdf.lib.converters.dataframe import horizontal_to_dataframe
 from openbdf.lib.converters.enums_registry import EnumRegistry
-from openbdf.lib.converters.translators import COMMON_CATEGORY_NAMES, SHEETS_PROPERTIES_HEADERS
+from openbdf.lib.converters.translators import COMMON_CATEGORY_PROPERTIES, SHEETS_PROPERTIES_HEADERS
 from openbdf.lib.types.annotations import unwrap_optional
 from openbdf.lib.types.human_readable import human_readable_constraints, human_readable_type
 from openbdf.lib.types.xlsx import xlsx_validation_from_type
@@ -56,10 +56,10 @@ def get_field_extra(field: FieldInfo) -> dict:
 def save_openbdf_to_xlsx(
     xlsx_path: str | Path,
     project: ProjectRecord | None,
-    info_sheet_name: str = COMMON_CATEGORY_NAMES["project"],
-    bom_sheet_name: str = COMMON_CATEGORY_NAMES["bom"],
-    results_wide_sheet_name: str = COMMON_CATEGORY_NAMES["results_wide"],
-    results_tall_sheet_name: str = COMMON_CATEGORY_NAMES["results_tall"],
+    info_sheet_name: str = COMMON_CATEGORY_PROPERTIES["project"]["name"],
+    bom_sheet_name: str = COMMON_CATEGORY_PROPERTIES["bom"]["name"],
+    results_wide_sheet_name: str = COMMON_CATEGORY_PROPERTIES["results_wide"]["name"],
+    results_tall_sheet_name: str = COMMON_CATEGORY_PROPERTIES["results_tall"]["name"],
 ):
     """Save a list of BuildingBillMaterialsSlimRecord to an Excel file."""
 
@@ -323,14 +323,18 @@ def save_translator(
     """Save a template Excel file for the attribute translator."""
     with pd.ExcelWriter(xlsx_path, engine="openpyxl") as writer:
         make_translations_library_template_xlsx(writer, "Translations Library")
-        make_translator_openbdf_pydantic(writer, COMMON_CATEGORY_NAMES["project"], ProjectRecordBase.model_fields)
         make_translator_openbdf_pydantic(
-            writer, COMMON_CATEGORY_NAMES["bom"], BuildingBillMaterialsSlimRecordBase.model_fields
+            writer, COMMON_CATEGORY_PROPERTIES["project"]["name"], ProjectRecordBase.model_fields
         )
         make_translator_openbdf_pydantic(
-            writer, COMMON_CATEGORY_NAMES["results_wide"], LCAResultsWideFullBase.model_fields
+            writer, COMMON_CATEGORY_PROPERTIES["bom"]["name"], BuildingBillMaterialsSlimRecordBase.model_fields
         )
-        make_translator_openbdf_pydantic(writer, COMMON_CATEGORY_NAMES["results_tall"], LCAResultsTallBase.model_fields)
+        make_translator_openbdf_pydantic(
+            writer, COMMON_CATEGORY_PROPERTIES["results_wide"]["name"], LCAResultsWideFullBase.model_fields
+        )
+        make_translator_openbdf_pydantic(
+            writer, COMMON_CATEGORY_PROPERTIES["results_tall"]["name"], LCAResultsTallBase.model_fields
+        )
         export_all_enums_in_model_to_translator(writer, ProjectRecordBase.model_fields)
         export_all_enums_in_model_to_translator(writer, BuildingBillMaterialsSlimRecordBase.model_fields)
 
@@ -348,33 +352,12 @@ def make_translations_library_template_xlsx(writer: pd.ExcelWriter, sheet_name: 
     info_sheet.cell(row=1, column=9, value=SHEETS_PROPERTIES_HEADERS["end_row"])
     info_sheet.cell(row=1, column=10, value=SHEETS_PROPERTIES_HEADERS["end_col"])
 
-    models = [
-        {
-            "name": COMMON_CATEGORY_NAMES["project"],
-            "orientation": "vertical",
-            "header_row": 0,
-        },
-        {
-            "name": COMMON_CATEGORY_NAMES["bom"],
-            "orientation": "horizontal",
-            "header_row": 0,
-        },
-        {
-            "name": COMMON_CATEGORY_NAMES["results_wide"],
-            "orientation": "horizontal",
-            "header_row": 0,
-        },
-        {
-            "name": COMMON_CATEGORY_NAMES["results_tall"],
-            "orientation": "horizontal",
-            "header_row": 0,
-        },
-    ]
+    models = COMMON_CATEGORY_PROPERTIES.values()
 
     for cell_row, model in enumerate(models, start=2):  # xlsx are 1-indexed (ewww)
         info_sheet.cell(row=cell_row, column=2, value=model["name"])
         info_sheet.cell(row=cell_row, column=3, value=model["orientation"])
-        info_sheet.cell(row=cell_row, column=4, value=model["header_row"])
+        info_sheet.cell(row=cell_row, column=4, value=0)
 
     info_sheet.column_dimensions["A"].width = 30
     info_sheet.column_dimensions["B"].width = 30

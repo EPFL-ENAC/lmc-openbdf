@@ -4,7 +4,7 @@ from dataclasses import dataclass
 
 import pandas as pd
 
-from openbdf.lib.converters.translators import COMMON_CATEGORY_NAMES, DocumentTranslator
+from openbdf.lib.converters.translators import COMMON_CATEGORY_PROPERTIES, DocumentTranslator
 from openbdf.lib.sources.source import SheetSource
 
 
@@ -25,13 +25,14 @@ class OpenBDFTables:
     ) -> OpenBDFTables | None:
         """Load and lay out the logical OpenBDF tables from a sheet source."""
 
-        project = cls._load_table(source, document_translator, COMMON_CATEGORY_NAMES["project"])
-        bill_of_materials = cls._load_table(source, document_translator, COMMON_CATEGORY_NAMES["bom"])
+        project = cls._load_table(source, document_translator, "project")
+        bill_of_materials = cls._load_table(source, document_translator, "bom")
         if project is None or bill_of_materials is None:
             return None
 
-        results_wide = cls._load_table(source, document_translator, COMMON_CATEGORY_NAMES["results_wide"])
-        results_tall = cls._load_table(source, document_translator, COMMON_CATEGORY_NAMES["results_tall"])
+        results_wide = cls._load_table(source, document_translator, "results_wide")
+        print(results_wide)
+        results_tall = cls._load_table(source, document_translator, "results_tall")
 
         return cls(
             project=project.rename(columns={project.columns[0]: "field_code", project.columns[1]: "value"}).reset_index(
@@ -46,10 +47,12 @@ class OpenBDFTables:
     def _load_table(
         source: SheetSource,
         document_translator: DocumentTranslator,
-        translated_sheet_name: str,
+        category: str,
     ) -> pd.DataFrame | None:
-        translation = document_translator.get_sheet_translation(translated_sheet_name)
+        translation = document_translator.get_sheet_translation(COMMON_CATEGORY_PROPERTIES[category]["name"])
         if translation is None or translation.original_name not in source.sheet_names:
             return None
 
-        return translation.translate_df(source.read_sheet(translation.original_name))
+        return translation.translate_df(
+            source.read_sheet(translation.original_name), COMMON_CATEGORY_PROPERTIES[category]["orientation"]
+        )
