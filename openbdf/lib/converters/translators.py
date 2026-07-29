@@ -2,7 +2,7 @@ import operator
 import re
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Callable, Literal
+from typing import Callable, Literal, TypedDict
 
 import pandas as pd
 from pydantic import BaseModel
@@ -119,10 +119,13 @@ class CategoryTranslator:
         return attribute_name
 
 
+SheetOrientation = Literal["horizontal", "vertical"]
+
+
 class SheetTranslation(BaseModel):
     original_name: str
     translated_name: str
-    orientation: Literal["horizontal", "vertical"]
+    orientation: SheetOrientation
     header_row: int = 0
 
     # attributes for vertical sheets
@@ -145,21 +148,25 @@ class SheetTranslation(BaseModel):
         else:
             raise ValueError("Orientation must be either 'horizontal' or 'vertical'.")
 
-    def translate_df(self, df: pd.DataFrame) -> pd.DataFrame:
+    def translate_df(self, df: pd.DataFrame, df_orientation: SheetOrientation | None = None) -> pd.DataFrame:
         if self.orientation == "vertical":
-            return df.iloc[self.header_row :, [self.header_col, self.values_col]]
+            translated_df = df.iloc[self.header_row :, [self.header_col, self.values_col]]
         elif self.orientation == "horizontal":
             header_start_row = self.header_row or 0
             header_start_col = self.start_col or 0
             header_end_col = self.end_col
 
             header = df.iloc[header_start_row, header_start_col:header_end_col]
-
             values = df.iloc[(self.start_row or 1) : self.end_row, (self.start_col or 0) : self.end_col]
 
-            return pd.DataFrame(values.values, columns=header.values)
+            translated_df = pd.DataFrame(values.values, columns=header.values)
         else:
             raise ValueError("Orientation must be either 'horizontal' or 'vertical'.")
+
+        if df_orientation is not None and df_orientation != self.orientation:
+            translated_df = translated_df.transpose().reset_index(drop=False)
+
+        return translated_df
 
 
 class TranslationsLibrary:
@@ -266,7 +273,7 @@ class DocumentTranslator:
         )
 
     def translate(self, category_name: str, attribute_name: str) -> str:
-        translator = self._translators.get(category_name)
+        translator = self._translators.get(category_name, self._translators.get(category_name[:31], None))
         if translator is None:
             return attribute_name
         return translator.translate(attribute_name)
@@ -279,25 +286,25 @@ class DocumentTranslator:
         return DocumentTranslator(
             library=TranslationsLibrary([
                 SheetTranslation(
-                    original_name=COMMON_CATEGORY_NAMES["project"],
-                    translated_name=COMMON_CATEGORY_NAMES["project"],
-                    orientation="vertical",
+                    original_name=COMMON_CATEGORY_PROPERTIES["project"]["name"],
+                    translated_name=COMMON_CATEGORY_PROPERTIES["project"]["name"],
+                    orientation=COMMON_CATEGORY_PROPERTIES["project"]["orientation"],
                     header_row=0,
                     header_col=3,
                     values_col=9,
                 ),
                 SheetTranslation(
-                    original_name=COMMON_CATEGORY_NAMES["bom"],
-                    translated_name=COMMON_CATEGORY_NAMES["bom"],
-                    orientation="horizontal",
+                    original_name=COMMON_CATEGORY_PROPERTIES["bom"]["name"],
+                    translated_name=COMMON_CATEGORY_PROPERTIES["bom"]["name"],
+                    orientation=COMMON_CATEGORY_PROPERTIES["bom"]["orientation"],
                     header_row=7,
                     start_row=8,
                     start_col=1,
                 ),
                 SheetTranslation(
-                    original_name=COMMON_CATEGORY_NAMES["results_wide"],
-                    translated_name=COMMON_CATEGORY_NAMES["results_wide"],
-                    orientation="horizontal",
+                    original_name=COMMON_CATEGORY_PROPERTIES["results_wide"]["name"],
+                    translated_name=COMMON_CATEGORY_PROPERTIES["results_wide"]["name"],
+                    orientation=COMMON_CATEGORY_PROPERTIES["results_wide"]["orientation"],
                     header_row=6,
                     start_row=7,
                     start_col=1,
@@ -306,11 +313,16 @@ class DocumentTranslator:
         )
 
 
-COMMON_CATEGORY_NAMES = {
-    "project": "General Information",
-    "bom": "Bill of Materials",
-    "results_wide": "LCA Result (Wide)",
-    "results_tall": "LCA Result (Tall)",
+class CategoryProperties(TypedDict):
+    name: str
+    orientation: SheetOrientation
+
+
+COMMON_CATEGORY_PROPERTIES: dict[str, CategoryProperties] = {
+    "project": {"name": "General Information", "orientation": "vertical"},
+    "bom": {"name": "Bill of Materials", "orientation": "horizontal"},
+    "results_wide": {"name": "LCA Result (Wide)", "orientation": "horizontal"},
+    "results_tall": {"name": "LCA Result (Tall)", "orientation": "horizontal"},
 }
 
 SHEETS_PROPERTIES_HEADERS = {

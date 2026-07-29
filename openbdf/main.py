@@ -5,7 +5,8 @@ import typer
 from openbdf.cli.save import save_openbdf_to_xlsx, save_translator
 from openbdf.lib.converters.dataframe import project_draft_package_from_tables, project_package_from_tables
 from openbdf.lib.converters.translators import DocumentTranslator
-from openbdf.lib.importer import DuplicateSheetNamesError, ExcelSheetSource, OpenBDFTables
+from openbdf.lib.openbdf_tables import OpenBDFTables
+from openbdf.lib.sources.excel_source import DuplicateSheetNamesError, ExcelSheetSource
 
 app = typer.Typer(help="CLI utilities for the project.")
 
