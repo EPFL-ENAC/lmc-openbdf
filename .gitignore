@@ -8,6 +8,7 @@ dist
 .env*
 lcov.info
 __pycache__
+.autoenv
 
 docs/build
 docs/auto_source
