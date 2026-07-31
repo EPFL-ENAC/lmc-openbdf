@@ -88,7 +88,11 @@ def parse_value(annotation: Any, raw_value: Any, translator: DocumentTranslator 
             return raw_value.date()
         if isinstance(raw_value, date):
             return raw_value
-        return date.fromisoformat(str(raw_value))
+        try:
+            return date.fromisoformat(str(raw_value))
+        except ValueError:
+            pass
+        return date(year=int(raw_value), month=1, day=1)
 
     if annotation is datetime:
         if isinstance(raw_value, datetime):
