@@ -11,6 +11,11 @@ class ASHRAEClimateZone(OpenBDFEnum):
     ZONE_4A = ("4a", "4A (Mixed - Humid)")
     ZONE_4B = ("4b", "4B (Mixed - Dry)")
     ZONE_4C = ("4c", "4C (Mixed - Marine)")
+    ZONE_5A = ("5a", "5A (Cool - Humid)")
+    ZONE_5B = ("5b", "5B (Cool - Dry)")
+    ZONE_5C = ("5c", "5C (Cool - Marine)")
+    ZONE_6A = ("6a", "6A (Cold - Humid)")
+    ZONE_6B = ("6b", "6B (Cold - Dry)")
 
 
 class FEMASeismicActivity(OpenBDFEnum):
