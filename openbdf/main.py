@@ -69,6 +69,12 @@ def open(
         "-ttnc",
         help="The column index (0-based) in the attribute translator sheet that contains the translated attribute names. Default is 1.",
     ),
+    translator_default_value_col: int | None = typer.Option(
+        5,
+        "--translator-default-value-col",
+        "-tdvc",
+        help="The column index (0-based) in the attribute translator sheet that contains the default value for a field. Default is 5. Ignored if the column does not exist.",
+    ),
     translator_header_row: int = typer.Option(
         0,
         "--translator-header-row",
@@ -94,6 +100,7 @@ def open(
             xlsx_path=translator_path,
             attribute_name_col=translator_attribute_name_col,
             translated_name_col=translator_translated_name_col,
+            default_value_col=translator_default_value_col,
             header_row=translator_header_row,
         )
     else:
@@ -146,7 +153,7 @@ def save_translator_template(
     """
     Save a template Excel file for the attribute translator.
     Usage:
-        openbdf save-translator-template ./translator_template.xlsx
+        openbdf save-translator-template translators/translator_template.xlsx
     """
 
     save_translator(
