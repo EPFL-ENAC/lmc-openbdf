@@ -2002,187 +2002,187 @@ class LCAResultsWideFullBase(SQLModel):
     )
     pocp_a1_a3: Optional[Decimal] = Field(
         default=None,
-        description="Photochemical Ozone Formation Potential for module A1-A3.",
+        description="Photochemical Ozone Creation Potential for module A1-A3.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Photochemical Ozone Formation Potential (A1-A3)",
+            attribute_name="Photochemical Ozone Creation Potential (A1-A3)",
             field_code="pocp_a1_a3",
-            description="Photochemical Ozone Formation Potential for module A1-A3.",
+            description="Photochemical Ozone Creation Potential for module A1-A3.",
             units="kg C2H4 eq",
             requirements="Optional",
         ),
     )
     pocp_a4: Optional[Decimal] = Field(
         default=None,
-        description="Photochemical Ozone Formation Potential for module A4.",
+        description="Photochemical Ozone Creation Potential for module A4.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Photochemical Ozone Formation Potential (A4)",
+            attribute_name="Photochemical Ozone Creation Potential (A4)",
             field_code="pocp_a4",
-            description="Photochemical Ozone Formation Potential for module A4.",
+            description="Photochemical Ozone Creation Potential for module A4.",
             units="kg C2H4 eq",
             requirements="Optional",
         ),
     )
     pocp_a5: Optional[Decimal] = Field(
         default=None,
-        description="Photochemical Ozone Formation Potential for module A5.",
+        description="Photochemical Ozone Creation Potential for module A5.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Photochemical Ozone Formation Potential (A5)",
+            attribute_name="Photochemical Ozone Creation Potential (A5)",
             field_code="pocp_a5",
-            description="Photochemical Ozone Formation Potential for module A5.",
+            description="Photochemical Ozone Creation Potential for module A5.",
             units="kg C2H4 eq",
             requirements="Optional",
         ),
     )
     pocp_b1: Optional[Decimal] = Field(
         default=None,
-        description="Photochemical Ozone Formation Potential for module B1.",
+        description="Photochemical Ozone Creation Potential for module B1.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Photochemical Ozone Formation Potential (B1)",
+            attribute_name="Photochemical Ozone Creation Potential (B1)",
             field_code="pocp_b1",
-            description="Photochemical Ozone Formation Potential for module B1.",
+            description="Photochemical Ozone Creation Potential for module B1.",
             units="kg C2H4 eq",
             requirements="Optional",
         ),
     )
     pocp_b2: Optional[Decimal] = Field(
         default=None,
-        description="Photochemical Ozone Formation Potential for module B2.",
+        description="Photochemical Ozone Creation Potential for module B2.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Photochemical Ozone Formation Potential (B2)",
+            attribute_name="Photochemical Ozone Creation Potential (B2)",
             field_code="pocp_b2",
-            description="Photochemical Ozone Formation Potential for module B2.",
+            description="Photochemical Ozone Creation Potential for module B2.",
             units="kg C2H4 eq",
             requirements="Optional",
         ),
     )
     pocp_b3: Optional[Decimal] = Field(
         default=None,
-        description="Photochemical Ozone Formation Potential for module B3.",
+        description="Photochemical Ozone Creation Potential for module B3.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Photochemical Ozone Formation Potential (B3)",
+            attribute_name="Photochemical Ozone Creation Potential (B3)",
             field_code="pocp_b3",
-            description="Photochemical Ozone Formation Potential for module B3.",
+            description="Photochemical Ozone Creation Potential for module B3.",
             units="kg C2H4 eq",
             requirements="Optional",
         ),
     )
     pocp_b4: Optional[Decimal] = Field(
         default=None,
-        description="Photochemical Ozone Formation Potential for module B4.",
+        description="Photochemical Ozone Creation Potential for module B4.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Photochemical Ozone Formation Potential (B4)",
+            attribute_name="Photochemical Ozone Creation Potential (B4)",
             field_code="pocp_b4",
-            description="Photochemical Ozone Formation Potential for module B4.",
+            description="Photochemical Ozone Creation Potential for module B4.",
             units="kg C2H4 eq",
             requirements="Optional",
         ),
     )
     pocp_b5: Optional[Decimal] = Field(
         default=None,
-        description="Photochemical Ozone Formation Potential for module B5.",
+        description="Photochemical Ozone Creation Potential for module B5.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Photochemical Ozone Formation Potential (B5)",
+            attribute_name="Photochemical Ozone Creation Potential (B5)",
             field_code="pocp_b5",
-            description="Photochemical Ozone Formation Potential for module B5.",
+            description="Photochemical Ozone Creation Potential for module B5.",
             units="kg C2H4 eq",
             requirements="Optional",
         ),
     )
     pocp_b6: Optional[Decimal] = Field(
         default=None,
-        description="Photochemical Ozone Formation Potential for module B6.",
+        description="Photochemical Ozone Creation Potential for module B6.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Photochemical Ozone Formation Potential (B6)",
+            attribute_name="Photochemical Ozone Creation Potential (B6)",
             field_code="pocp_b6",
-            description="Photochemical Ozone Formation Potential for module B6.",
+            description="Photochemical Ozone Creation Potential for module B6.",
             units="kg C2H4 eq",
             requirements="Optional",
         ),
     )
     pocp_c1: Optional[Decimal] = Field(
         default=None,
-        description="Photochemical Ozone Formation Potential for module C1.",
+        description="Photochemical Ozone Creation Potential for module C1.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Photochemical Ozone Formation Potential (C1)",
+            attribute_name="Photochemical Ozone Creation Potential (C1)",
             field_code="pocp_c1",
-            description="Photochemical Ozone Formation Potential for module C1.",
+            description="Photochemical Ozone Creation Potential for module C1.",
             units="kg C2H4 eq",
             requirements="Optional",
         ),
     )
     pocp_c2: Optional[Decimal] = Field(
         default=None,
-        description="Photochemical Ozone Formation Potential for module C2.",
+        description="Photochemical Ozone Creation Potential for module C2.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Photochemical Ozone Formation Potential (C2)",
+            attribute_name="Photochemical Ozone Creation Potential (C2)",
             field_code="pocp_c2",
-            description="Photochemical Ozone Formation Potential for module C2.",
+            description="Photochemical Ozone Creation Potential for module C2.",
             units="kg C2H4 eq",
             requirements="Optional",
         ),
     )
     pocp_c3: Optional[Decimal] = Field(
         default=None,
-        description="Photochemical Ozone Formation Potential for module C3.",
+        description="Photochemical Ozone Creation Potential for module C3.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Photochemical Ozone Formation Potential (C3)",
+            attribute_name="Photochemical Ozone Creation Potential (C3)",
             field_code="pocp_c3",
-            description="Photochemical Ozone Formation Potential for module C3.",
+            description="Photochemical Ozone Creation Potential for module C3.",
             units="kg C2H4 eq",
             requirements="Optional",
         ),
     )
     pocp_c4: Optional[Decimal] = Field(
         default=None,
-        description="Photochemical Ozone Formation Potential for module C4.",
+        description="Photochemical Ozone Creation Potential for module C4.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Photochemical Ozone Formation Potential (C4)",
+            attribute_name="Photochemical Ozone Creation Potential (C4)",
             field_code="pocp_c4",
-            description="Photochemical Ozone Formation Potential for module C4.",
+            description="Photochemical Ozone Creation Potential for module C4.",
             units="kg C2H4 eq",
             requirements="Optional",
         ),
     )
     pocp_d: Optional[Decimal] = Field(
         default=None,
-        description="Photochemical Ozone Formation Potential for module D.",
+        description="Photochemical Ozone Creation Potential for module D.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Photochemical Ozone Formation Potential (D)",
+            attribute_name="Photochemical Ozone Creation Potential (D)",
             field_code="pocp_d",
-            description="Photochemical Ozone Formation Potential for module D.",
+            description="Photochemical Ozone Creation Potential for module D.",
             units="kg C2H4 eq",
             requirements="Optional",
         ),
     )
     pocp_d1: Optional[Decimal] = Field(
         default=None,
-        description="Photochemical Ozone Formation Potential for module D1.",
+        description="Photochemical Ozone Creation Potential for module D1.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Photochemical Ozone Formation Potential (D1)",
+            attribute_name="Photochemical Ozone Creation Potential (D1)",
             field_code="pocp_d1",
-            description="Photochemical Ozone Formation Potential for module D1.",
+            description="Photochemical Ozone Creation Potential for module D1.",
             units="kg C2H4 eq",
             requirements="Optional",
         ),
     )
     pocp_d2: Optional[Decimal] = Field(
         default=None,
-        description="Photochemical Ozone Formation Potential for module D2.",
+        description="Photochemical Ozone Creation Potential for module D2.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Photochemical Ozone Formation Potential (D2)",
+            attribute_name="Photochemical Ozone Creation Potential (D2)",
             field_code="pocp_d2",
-            description="Photochemical Ozone Formation Potential for module D2.",
+            description="Photochemical Ozone Creation Potential for module D2.",
             units="kg C2H4 eq",
             requirements="Optional",
         ),
     )
     pocp_total: Optional[Decimal] = Field(
         default=None,
-        description="Total Photochemical Ozone Formation Potential.",
+        description="Total Photochemical Ozone Creation Potential.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Total Photochemical Ozone Formation Potential",
+            attribute_name="Total Photochemical Ozone Creation Potential",
             field_code="pocp_total",
-            description="Total Photochemical Ozone Formation Potential.",
+            description="Total Photochemical Ozone Creation Potential.",
             units="kg C2H4 eq",
             requirements="Optional",
         ),
