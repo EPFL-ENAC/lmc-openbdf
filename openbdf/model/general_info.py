@@ -1467,7 +1467,7 @@ class ProjectRecordBase(SQLModel):
             group="LCA",
             sub_group="Administrative data",
             attribute_name="Building regulation / Code",
-            field_code="project_building_regulation_code",
+            field_code="lca_building_regulation_code",
             description=(
                 "Building regulation and code compliance methodology for "
                 "calculating carbon emissions across the entire building life "
