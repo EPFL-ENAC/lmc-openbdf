@@ -165,11 +165,11 @@ class LCAResultsTallBase(SQLModel):
 
     pocp: Optional[Decimal] = Field(
         default=None,
-        description="Photochemical Ozone Formation Potential.",
+        description="Photochemical Ozone Creation Potential.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Photochemical Ozone Formation Potential",
+            attribute_name="Photochemical Ozone Creation Potential",
             field_code="pocp",
-            description="Photochemical Ozone Formation Potential.",
+            description="Photochemical Ozone Creation Potential.",
             units="kg C2H4 eq",
             requirements="Optional",
         ),
