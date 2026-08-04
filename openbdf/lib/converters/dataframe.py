@@ -176,6 +176,18 @@ def horizontal_from_dataframe(
                 document_translator,
             )
 
+        for field_code, field_name in code_to_name.items():
+            if kwargs.get(field_name) is not None:
+                continue
+            default_value = document_translator.get_default(translator_category, field_code)
+            if default_value is not None:
+                field_info = fields[field_name]
+                kwargs[field_name] = parse_value(
+                    field_info.annotation,
+                    default_value,
+                    document_translator,
+                )
+
         if any(value is not None for value in kwargs.values()):
             items.append(model_cls(**kwargs))
 
@@ -236,6 +248,18 @@ def model_from_vertical_dataframe(
             row["value"],
             document_translator,
         )
+
+    for field_code, field_name in code_to_name.items():
+        if kwargs.get(field_name) is not None:
+            continue
+        default_value = document_translator.get_default(translator_category, field_code)
+        if default_value is not None:
+            field_info = fields[field_name]
+            kwargs[field_name] = parse_value(
+                field_info.annotation,
+                default_value,
+                document_translator,
+            )
 
     return model_cls(**kwargs)
 

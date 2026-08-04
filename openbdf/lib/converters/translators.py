@@ -2,7 +2,7 @@ import operator
 import re
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Callable, Literal, TypedDict
+from typing import Any, Callable, Literal, TypedDict
 
 import pandas as pd
 from pydantic import BaseModel
@@ -73,28 +73,46 @@ class TranslationRule:
         raise ValueError(f"Unsupported rule kind: {kind!r}")
 
 
+def _is_missing(value: Any) -> bool:
+    """Return True for missing/blank default-value cells."""
+    if value is None:
+        return True
+    if pd.isna(value):
+        return True
+    if isinstance(value, str) and value.strip() == "":
+        return True
+    return False
+
+
 class CategoryTranslator:
     _translation_dict: dict[str, str]
     _rules: list[TranslationRule]
+    _default_values: dict[str, str]
 
     def __init__(
         self,
         translation_dict: dict[str, str],
         rules: list[TranslationRule] | None = None,
+        default_values: dict[str, str] | None = None,
     ):
         self._translation_dict = translation_dict
         self._rules = rules or []
+        self._default_values = default_values or {}
 
     @staticmethod
     def from_dataframe(
         df: pd.DataFrame,
         attribute_name_col: int,
         translated_name_col: int,
+        default_value_col: int | None = None,
     ) -> "CategoryTranslator":
         translation_dict: dict[str, str] = {}
         rules: list[TranslationRule] = []
+        default_values: dict[str, str] = {}
 
-        for raw_key, output in zip(df.iloc[:, attribute_name_col], df.iloc[:, translated_name_col]):
+        has_default_col = default_value_col is not None and df.shape[1] > default_value_col
+
+        for idx, (raw_key, output) in enumerate(zip(df.iloc[:, attribute_name_col], df.iloc[:, translated_name_col])):
             raw_key = str(raw_key)
             output = str(output)
 
@@ -103,7 +121,12 @@ class CategoryTranslator:
             else:
                 translation_dict[raw_key] = output
 
-        return CategoryTranslator(translation_dict, rules)
+            if has_default_col:
+                default_value = df.iloc[idx, default_value_col]
+                if not _is_missing(default_value):
+                    default_values[output] = str(default_value)
+
+        return CategoryTranslator(translation_dict, rules, default_values)
 
     def translate(self, attribute_name: str) -> str:
         if attribute_name is None:
@@ -117,6 +140,10 @@ class CategoryTranslator:
                 return rule.output
 
         return attribute_name
+
+    def get_default(self, attribute_name: str) -> str | None:
+        """Return the default value for a translated attribute name, if any."""
+        return self._default_values.get(attribute_name)
 
 
 SheetOrientation = Literal["horizontal", "vertical"]
@@ -240,10 +267,13 @@ class DocumentTranslator:
         dfs: dict[str, pd.DataFrame],
         attribute_name_col: int,
         translated_name_col: int,
+        default_value_col: int | None = None,
         translation_library_df: pd.DataFrame | None = None,
     ) -> "DocumentTranslator":
         translators = {
-            category_name: CategoryTranslator.from_dataframe(df, attribute_name_col, translated_name_col)
+            category_name: CategoryTranslator.from_dataframe(
+                df, attribute_name_col, translated_name_col, default_value_col=default_value_col
+            )
             for category_name, df in dfs.items()
         }
 
@@ -256,7 +286,11 @@ class DocumentTranslator:
 
     @staticmethod
     def from_xlsx(
-        xlsx_path: str | Path, attribute_name_col: int, translated_name_col: int, header_row: int = 0
+        xlsx_path: str | Path,
+        attribute_name_col: int,
+        translated_name_col: int,
+        default_value_col: int | None = None,
+        header_row: int = 0,
     ) -> "DocumentTranslator":
         with pd.ExcelFile(xlsx_path) as xlsx:
             true_sheets = [sheet for sheet in xlsx.sheet_names if sheet != "Translations Library"]
@@ -269,7 +303,11 @@ class DocumentTranslator:
             dfs = {sheet_name: xlsx.parse(sheet_name, header=header_row) for sheet_name in true_sheets}
 
         return DocumentTranslator.from_dataframes(
-            dfs, attribute_name_col, translated_name_col, translation_library_df=library
+            dfs,
+            attribute_name_col,
+            translated_name_col,
+            default_value_col=default_value_col,
+            translation_library_df=library,
         )
 
     def translate(self, category_name: str, attribute_name: str) -> str:
@@ -277,6 +315,12 @@ class DocumentTranslator:
         if translator is None:
             return attribute_name
         return translator.translate(attribute_name)
+
+    def get_default(self, category_name: str, attribute_name: str) -> str | None:
+        translator = self._translators.get(category_name, self._translators.get(category_name[:31], None))
+        if translator is None:
+            return None
+        return translator.get_default(attribute_name)
 
     def get_sheet_translation(self, translated_sheet_name: str) -> SheetTranslation | None:
         return self._library.get_translation_by_translated_name(translated_sheet_name)
