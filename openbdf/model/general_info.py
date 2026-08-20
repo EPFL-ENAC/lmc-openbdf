@@ -706,7 +706,7 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    building_construction_end_date: date = Field(
+    building_construction_end_date: Optional[date] = Field(
         sa_type=Date,
         description="The year/date building construction completed.",
         schema_extra=openbdf_field_metadata(
@@ -715,7 +715,7 @@ class ProjectRecordBase(SQLModel):
             attribute_name="Construction end date",
             field_code="building_construction_end_date",
             description=("The year the building construction was officially completed and started operating."),
-            requirements="Required",
+            requirements="Recommended",
             example="07/02/2026",
         ),
     )
