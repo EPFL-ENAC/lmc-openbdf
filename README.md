@@ -30,5 +30,6 @@ uv run openbdf open \
   path/to/cola_file.xlsx \
   path/to/cola_building_information.xlsx \
   -t translators/translator_cola.xlsx
+  -o output.xslx
 ```
 It will list potential validation errors, that prevent the export. To export anyway in case of errors, append the option `--draft`.
