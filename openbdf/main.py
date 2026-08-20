@@ -87,6 +87,12 @@ def open(
         "-d",
         help="Whether to create a draft version of the project. If set, the command will accept missing fields while still validating existing values",
     ),
+    output_path: Path = typer.Option(
+        Path("./output.xlsx"),
+        "--output-path",
+        "-o",
+        help="File path where the opened document is saved. Defaults to ./output.xlsx.",
+    ),
 ):
     """
     Open one or more Excel files as a single document and display its contents.
@@ -125,7 +131,7 @@ def open(
 
     # Draft and strict records expose the same fields used by the existing exporter.
     save_openbdf_to_xlsx(  # type: ignore[arg-type]
-        xlsx_path=Path("./output.xlsx"),
+        xlsx_path=output_path,
         project=project,
     )
 
