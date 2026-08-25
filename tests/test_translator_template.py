@@ -47,6 +47,18 @@ def test_translator_template_adds_default_and_preprocess_columns(tmp_path):
             assert sheet.cell(row=row, column=6).protection.locked is False
             assert sheet.cell(row=row, column=7).protection.locked is False
 
+    bill_of_materials = workbook[COMMON_CATEGORY_PROPERTIES["bom"]["name"]]
+    service_life_row = next(
+        row for row in bill_of_materials.iter_rows() if row[1].value == "lca_service_life"
+    )
+    assert [cell.value for cell in service_life_row[:5]] == [
+        None,
+        "lca_service_life",
+        "Service life",
+        "Decimal",
+        "Required",
+    ]
+
 
 def test_translator_template_keeps_non_field_sheet_layouts(tmp_path):
     output_path = tmp_path / "translator_template.xlsx"
