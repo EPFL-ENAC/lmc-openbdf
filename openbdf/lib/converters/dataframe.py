@@ -5,6 +5,7 @@ from typing import Any, Optional, TypeVar
 import pandas as pd
 from sqlmodel import SQLModel
 
+from openbdf.lib.converters.lca_results import lca_results_wide_to_tall
 from openbdf.lib.converters.translators import COMMON_CATEGORY_PROPERTIES, DocumentTranslator
 from openbdf.lib.openbdf_tables import OpenBDFTables
 from openbdf.lib.types.fields import get_field_code
@@ -483,6 +484,14 @@ def project_package_from_tables(
             matching_bom = material_id_to_bom.get(result_tall.material_id, None)
             if matching_bom is not None:
                 matching_bom.lca_results_tall_full_records.append(result_tall)
+    elif results_wide is not None:
+        results_tall = []
+        for result_wide in results_wide:
+            matching_bom = material_id_to_bom.get(result_wide.material_id, None)
+            if matching_bom is not None:
+                tall_results = lca_results_wide_to_tall(result_wide, matching_bom)
+                matching_bom.lca_results_tall_full_records.extend(tall_results)
+                results_tall.extend(tall_results)
 
     project = ProjectRecord(
         **project_base.model_dump(),
@@ -524,6 +533,14 @@ def project_draft_package_from_tables(
             matching_bom = material_id_to_bom.get(result_tall.material_id, None)
             if matching_bom is not None:
                 matching_bom.lca_results_tall_full_records.append(result_tall)
+    elif results_wide is not None:
+            results_tall = []
+            for result_wide in results_wide:
+                matching_bom = material_id_to_bom.get(result_wide.material_id, None)
+                if matching_bom is not None:
+                    tall_results = lca_results_wide_to_tall(result_wide, matching_bom)
+                    matching_bom.lca_results_tall_full_records.extend(tall_results)
+                    results_tall.extend(tall_results)
 
     project_draft = ProjectRecordDraft(
         **project_base.model_dump(),

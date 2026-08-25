@@ -155,6 +155,17 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
         ),
     )
 
+    lca_service_life: Decimal = Field(
+        description="Declared reference service life.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Service life",
+            field_code="lca_service_life",
+            description="Declared reference service life.",
+            units="years",
+            requirements="Required",
+        ),
+    )
+
     custom_material_quantity_m3: Optional[Decimal] = Field(
         default=None,
         description="The measured scalar amount (volume) of the custom material.",
