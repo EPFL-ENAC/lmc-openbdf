@@ -1,11 +1,48 @@
 import operator
 import re
 from dataclasses import dataclass
+from math import isfinite
+from numbers import Integral, Real
 from pathlib import Path
 from typing import Any, Callable, Literal, TypedDict
 
 import pandas as pd
 from pydantic import BaseModel
+
+
+@dataclass(frozen=True)
+class PreprocessResult:
+    value: Any
+    valid: bool
+
+
+@dataclass(frozen=True)
+class PreprocessRule:
+    predicate: Callable[[Any], PreprocessResult]
+
+    @staticmethod
+    def fromString(code: str) -> "PreprocessRule":
+        if code.strip() != "@INT":
+            raise ValueError(f"Unsupported preprocess rule syntax: {code!r}")
+
+        def int_filter_predicate(value: Any) -> PreprocessResult:
+            valid = False
+            if isinstance(value, bool):
+                valid = False
+            elif isinstance(value, Integral):
+                valid = True
+            elif isinstance(value, Real):
+                numeric_value = float(value)
+                valid = isfinite(numeric_value) and numeric_value.is_integer()
+            elif isinstance(value, str):
+                valid = bool(re.fullmatch(r"[+-]?\d+", value.strip()))
+
+            return PreprocessResult(value=value, valid=valid)
+
+        return PreprocessRule(predicate=int_filter_predicate)
+
+    def execute(self, value: Any) -> PreprocessResult:
+        return self.predicate(value)
 
 
 @dataclass(frozen=True)
@@ -85,17 +122,20 @@ def _is_missing(value: Any) -> bool:
 
 
 class CategoryTranslator:
-    _translation_dict: dict[str, str]
+    _translation_dict: dict[str, list[str]]
+    _preprocess_rules: dict[str, PreprocessRule]
     _rules: list[TranslationRule]
     _default_values: dict[str, str]
 
     def __init__(
         self,
-        translation_dict: dict[str, str],
+        translation_dict: dict[str, list[str]],
+        preprocess_rules: dict[str, PreprocessRule] | None = None,
         rules: list[TranslationRule] | None = None,
         default_values: dict[str, str] | None = None,
     ):
         self._translation_dict = translation_dict
+        self._preprocess_rules = preprocess_rules or {}
         self._rules = rules or []
         self._default_values = default_values or {}
 
@@ -105,12 +145,15 @@ class CategoryTranslator:
         attribute_name_col: int,
         translated_name_col: int,
         default_value_col: int | None = None,
+        preprocess_rule_col: int | None = None,
     ) -> "CategoryTranslator":
-        translation_dict: dict[str, str] = {}
+        translation_dict: dict[str, list[str]] = {}
+        preprocess_rules: dict[str, PreprocessRule] = {}
         rules: list[TranslationRule] = []
         default_values: dict[str, str] = {}
 
         has_default_col = default_value_col is not None and df.shape[1] > default_value_col
+        has_preprocess_rule_col = preprocess_rule_col is not None and df.shape[1] > preprocess_rule_col
 
         for idx, (raw_key, output) in enumerate(zip(df.iloc[:, attribute_name_col], df.iloc[:, translated_name_col])):
             raw_key = str(raw_key)
@@ -119,31 +162,43 @@ class CategoryTranslator:
             if raw_key.startswith("@"):
                 rules.append(TranslationRule.fromString(raw_key, output))
             else:
-                translation_dict[raw_key] = output
+                if raw_key not in translation_dict:
+                    translation_dict[raw_key] = []
+                translation_dict[raw_key].append(output)
 
             if has_default_col:
                 default_value = df.iloc[idx, default_value_col]
                 if not _is_missing(default_value):
                     default_values[output] = str(default_value)
 
-        return CategoryTranslator(translation_dict, rules, default_values)
+            if has_preprocess_rule_col:
+                preprocess_rule = df.iloc[idx, preprocess_rule_col]
+                if isinstance(preprocess_rule, str) and preprocess_rule.strip():
+                    # Rules are keyed by translated names, rather than source names.
+                    preprocess_rules[output] = PreprocessRule.fromString(preprocess_rule)
 
-    def translate(self, attribute_name: str) -> str:
+        return CategoryTranslator(translation_dict, preprocess_rules, rules, default_values)
+
+    def translate(self, attribute_name: str) -> list[str]:
         if attribute_name is None:
-            return attribute_name
+            return [attribute_name]
 
         if isinstance(attribute_name, str) and attribute_name in self._translation_dict:
-            return self._translation_dict[attribute_name]
+            return self._translation_dict[attribute_name]  # Return all translated names
 
         for rule in self._rules:
             if rule.predicate(attribute_name):
-                return rule.output
+                return [rule.output]
 
-        return attribute_name
+        return [attribute_name]
 
     def get_default(self, attribute_name: str) -> str | None:
         """Return the default value for a translated attribute name, if any."""
         return self._default_values.get(attribute_name)
+
+    def get_preprocess_rule(self, field_name: str) -> PreprocessRule | None:
+        """Return the preprocess rule for a translated field name, if any."""
+        return self._preprocess_rules.get(field_name)
 
 
 SheetOrientation = Literal["horizontal", "vertical"]
@@ -268,11 +323,16 @@ class DocumentTranslator:
         attribute_name_col: int,
         translated_name_col: int,
         default_value_col: int | None = None,
+        preprocess_rule_col: int | None = None,
         translation_library_df: pd.DataFrame | None = None,
     ) -> "DocumentTranslator":
         translators = {
             category_name: CategoryTranslator.from_dataframe(
-                df, attribute_name_col, translated_name_col, default_value_col=default_value_col
+                df,
+                attribute_name_col,
+                translated_name_col,
+                default_value_col=default_value_col,
+                preprocess_rule_col=preprocess_rule_col,
             )
             for category_name, df in dfs.items()
         }
@@ -290,6 +350,7 @@ class DocumentTranslator:
         attribute_name_col: int,
         translated_name_col: int,
         default_value_col: int | None = None,
+        preprocess_rule_col: int | None = None,
         header_row: int = 0,
     ) -> "DocumentTranslator":
         with pd.ExcelFile(xlsx_path) as xlsx:
@@ -307,13 +368,14 @@ class DocumentTranslator:
             attribute_name_col,
             translated_name_col,
             default_value_col=default_value_col,
+            preprocess_rule_col=preprocess_rule_col,
             translation_library_df=library,
         )
 
-    def translate(self, category_name: str, attribute_name: str) -> str:
+    def translate(self, category_name: str, attribute_name: str) -> list[str]:
         translator = self._translators.get(category_name, self._translators.get(category_name[:31], None))
         if translator is None:
-            return attribute_name
+            return [attribute_name]
         return translator.translate(attribute_name)
 
     def get_default(self, category_name: str, attribute_name: str) -> str | None:
@@ -321,6 +383,12 @@ class DocumentTranslator:
         if translator is None:
             return None
         return translator.get_default(attribute_name)
+
+    def get_preprocess_rule(self, category_name: str, attribute_name: str) -> PreprocessRule | None:
+        translator = self._translators.get(category_name, self._translators.get(category_name[:31], None))
+        if translator is None:
+            return None
+        return translator.get_preprocess_rule(attribute_name)
 
     def get_sheet_translation(self, translated_sheet_name: str) -> SheetTranslation | None:
         return self._library.get_translation_by_translated_name(translated_sheet_name)

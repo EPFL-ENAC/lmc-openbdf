@@ -67,7 +67,9 @@ class OpenBDFEnum(str, Enum):
         Return the enum instance matching the value or display_name.
         """
         if translator:
-            label = translator.translate(cls.__name__, label)
+            label = translator.translate(cls.__name__, label)[
+                0
+            ]  # Use the first translated name as enums are a one-to-one mapping
 
         for item in cls:
             if (
