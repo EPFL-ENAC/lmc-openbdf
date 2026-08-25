@@ -160,21 +160,32 @@ def horizontal_from_dataframe(
         kwargs: dict[str, Any] = {}
 
         for column in df.columns.tolist():
-            translated_code = document_translator.translate(
+            translated_codes = document_translator.translate(
                 translator_category,
                 str(column),
             )
-            field_name = code_to_name.get(translated_code)
-            if field_name is None:
-                continue
+            for translated_code in translated_codes:
+                field_name = code_to_name.get(translated_code)
+                if field_name is None:
+                    continue
 
-            field_info = fields[field_name]
-            annotation = field_info.annotation
-            kwargs[field_name] = parse_value(
-                annotation,
-                row[column],
-                document_translator,
-            )
+                field_info = fields[field_name]
+                annotation = field_info.annotation
+
+                raw_value = row[column]
+                preprocess_rule = document_translator.get_preprocess_rule(translator_category, field_name)
+                if preprocess_rule:
+                    result = preprocess_rule.execute(raw_value)
+                    if result.valid:
+                        raw_value = result.value
+                    else:
+                        raw_value = None
+
+                kwargs[field_name] = parse_value(
+                    annotation,
+                    raw_value,
+                    document_translator,
+                )
 
         for field_code, field_name in code_to_name.items():
             if kwargs.get(field_name) is not None:
@@ -233,21 +244,22 @@ def model_from_vertical_dataframe(
         if pd.isna(field_code):
             continue
 
-        field_code = document_translator.translate(
+        field_codes = document_translator.translate(
             translator_category,
             str(field_code),
         )
-        field_name = code_to_name.get(field_code)
-        if field_name is None:
-            continue
+        for field_code in field_codes:
+            field_name = code_to_name.get(field_code)
+            if field_name is None:
+                continue
 
-        field_info = fields[field_name]
-        annotation = field_info.annotation
-        kwargs[field_name] = parse_value(
-            annotation,
-            row["value"],
-            document_translator,
-        )
+            field_info = fields[field_name]
+            annotation = field_info.annotation
+            kwargs[field_name] = parse_value(
+                annotation,
+                row["value"],
+                document_translator,
+            )
 
     for field_code, field_name in code_to_name.items():
         if kwargs.get(field_name) is not None:
