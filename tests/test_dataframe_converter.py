@@ -7,9 +7,9 @@ from typing import Any
 
 import pandas as pd
 import pytest
-from pydantic import BaseModel
+from pydantic import BaseModel, ValidationError
 
-from openbdf.lib.converters.dataframe import project_package_from_tables
+from openbdf.lib.converters.dataframe import bom_draft_from_dataframe, bom_from_dataframe, project_package_from_tables
 from openbdf.lib.openbdf_tables import OpenBDFTables
 from openbdf.lib.types.annotations import unwrap_optional
 from openbdf.lib.types.fields import get_field_code
@@ -110,6 +110,22 @@ def tables(
         results_wide=results_wide,
         results_tall=results_tall,
     )
+
+
+def test_bom_from_dataframe_requires_lca_service_life():
+    dataframe = bom_df("mat-1").drop(columns=["lca_service_life"])
+
+    with pytest.raises(ValidationError, match="lca_service_life"):
+        bom_from_dataframe(dataframe)
+
+
+def test_bom_draft_from_dataframe_allows_missing_lca_service_life():
+    dataframe = bom_df("mat-1").drop(columns=["lca_service_life"])
+
+    records = bom_draft_from_dataframe(dataframe)
+
+    assert len(records) == 1
+    assert records[0].lca_service_life is None
 
 
 def test_project_package_from_tables_links_wide_results_to_bom_by_material_id():
