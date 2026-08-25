@@ -197,3 +197,16 @@ def test_category_translator_reads_default_values():
     assert translator.get_default("General Information", "project_name") == "Default project"
     assert translator.get_default("General Information", "project_id") is None
     assert translator.get_default("General Information", "unknown") is None
+
+
+def test_cola_translator_maps_lca_service_life():
+    translator_path = Path(__file__).parents[1] / "translators" / "translator_cola.xlsx"
+    translator = DocumentTranslator.from_xlsx(
+        translator_path,
+        attribute_name_col=0,
+        translated_name_col=1,
+        default_value_col=5,
+        preprocess_rule_col=6,
+    )
+
+    assert translator.translate("Bill of Materials", "Lebensdauer (Jahre)") == ["lca_service_life"]
