@@ -380,6 +380,8 @@ def make_translator_openbdf_pydantic(writer: pd.ExcelWriter, sheet_name: str, mo
     info_sheet.cell(row=1, column=5, value="Requirements")
     dv = info_sheet.cell(row=1, column=6, value="Default value")
     dv.style = ATTRIBUTES_NAME_STYLE
+    preprocess = info_sheet.cell(row=1, column=7, value="Preprocess rule")
+    preprocess.style = ATTRIBUTES_NAME_STYLE
 
     for cell_row, field_code in enumerate(model, start=2):  # xlsx are 1-indexed (ewww)
         metadata = model.get(field_code)
@@ -409,6 +411,8 @@ def make_translator_openbdf_pydantic(writer: pd.ExcelWriter, sheet_name: str, mo
 
         default_cell = info_sheet.cell(row=cell_row, column=6, value="")
         default_cell.style = EDITABLE_VALUE_STYLE
+        preprocess_cell = info_sheet.cell(row=cell_row, column=7, value="")
+        preprocess_cell.style = EDITABLE_VALUE_STYLE
 
     info_sheet.column_dimensions["A"].width = 30
     info_sheet.column_dimensions["B"].width = 30
@@ -416,6 +420,7 @@ def make_translator_openbdf_pydantic(writer: pd.ExcelWriter, sheet_name: str, mo
     info_sheet.column_dimensions["D"].width = 40
     info_sheet.column_dimensions["E"].width = 40
     info_sheet.column_dimensions["F"].width = 30
+    info_sheet.column_dimensions["G"].width = 30
 
 
 def export_all_enums_in_model_to_translator(writer: pd.ExcelWriter, model: dict[str, FieldInfo]):

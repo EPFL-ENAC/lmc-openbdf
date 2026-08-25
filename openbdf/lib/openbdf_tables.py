@@ -31,7 +31,6 @@ class OpenBDFTables:
             return None
 
         results_wide = cls._load_table(source, document_translator, "results_wide")
-        print(results_wide)
         results_tall = cls._load_table(source, document_translator, "results_tall")
 
         return cls(
