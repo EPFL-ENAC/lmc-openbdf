@@ -75,6 +75,12 @@ def open(
         "-tdvc",
         help="The column index (0-based) in the attribute translator sheet that contains the default value for a field. Default is 5. Ignored if the column does not exist.",
     ),
+    translator_preprocess_rule_col: int | None = typer.Option(
+        6,
+        "--translator-preprocess-rule-col",
+        "-tprc",
+        help="The column index (0-based) in the attribute translator sheet that contains the preprocess rule for a field. Default is 6. Ignored if the column does not exist.",
+    ),
     translator_header_row: int = typer.Option(
         0,
         "--translator-header-row",
@@ -101,6 +107,7 @@ def open(
             attribute_name_col=translator_attribute_name_col,
             translated_name_col=translator_translated_name_col,
             default_value_col=translator_default_value_col,
+            preprocess_rule_col=translator_preprocess_rule_col,
             header_row=translator_header_row,
         )
     else:
