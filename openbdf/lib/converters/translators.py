@@ -35,7 +35,11 @@ class PreprocessRule:
                 numeric_value = float(value)
                 valid = isfinite(numeric_value) and numeric_value.is_integer()
             elif isinstance(value, str):
-                valid = bool(re.fullmatch(r"[+-]?\d+", value.strip()))
+                # Warning: if there is a floating point number, the decimal part will be ignored
+                match = re.search(r"[+-]?\d+", value.strip())
+                if match:
+                    value = int(match.group(0))
+                    valid = True
 
             return PreprocessResult(value=value, valid=valid)
 
