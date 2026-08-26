@@ -64,9 +64,7 @@ def lca_results_wide_to_tall(
     tall_results: list[LCAResultsTallFullRecord] = []
 
     for stage, suffix in STAGES:
-        impact_values = {
-            indicator: getattr(wide_result, f"{indicator}_{suffix}") for indicator in _IMPACT_INDICATORS
-        }
+        impact_values = {indicator: getattr(wide_result, f"{indicator}_{suffix}") for indicator in _IMPACT_INDICATORS}
         if not any(value is not None for value in impact_values.values()):
             continue
 
