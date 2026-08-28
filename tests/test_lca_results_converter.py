@@ -8,7 +8,11 @@ import pytest
 from openbdf.lib.converters.lca_results import STAGES, lca_results_wide_to_tall
 from openbdf.model.enums.buildings import AboveBelowGround
 from openbdf.model.enums.lca import LCAStageOrModule
-from openbdf.model.tables import BuildingBillMaterialsSlimRecord, LCAResultsWideFullRecord
+from openbdf.model.tables import (
+    BuildingBillMaterialsSlimRecord,
+    LCAResultsTallFullRecord,
+    LCAResultsWideFullRecord,
+)
 
 
 def bill_material(
@@ -46,6 +50,7 @@ def test_maps_all_supported_stages_in_stable_order():
     results = lca_results_wide_to_tall(
         wide_result(**stage_values),
         bill_material(lca_service_life=Decimal(60)),
+        LCAResultsTallFullRecord,
     )
 
     assert [result.lca_stage_or_module for result in results] == [stage for stage, _ in STAGES]
@@ -62,6 +67,7 @@ def test_combines_indicators_for_the_same_stage_and_omits_empty_stages():
             ap_c2=Decimal("7.25"),
         ),
         bill_material(lca_service_life=Decimal(75)),
+        LCAResultsTallFullRecord,
     )
 
     assert [result.lca_stage_or_module for result in results] == [
@@ -81,6 +87,7 @@ def test_ignores_overall_summary_fields():
     results = lca_results_wide_to_tall(
         wide_result(odp_total=Decimal(123)),
         bill_material(),
+        LCAResultsTallFullRecord,
     )
 
     assert len(results) == 1
@@ -96,7 +103,7 @@ def test_copies_identifiers_and_service_life_without_attaching_relationships(rec
     wide_before = wide.model_dump()
     bom_before = bom.model_dump()
 
-    results = lca_results_wide_to_tall(wide, bom)
+    results = lca_results_wide_to_tall(wide, bom, LCAResultsTallFullRecord)
 
     assert all(result.material_id == "mat-1" for result in results)
     assert all(result.lca_service_life is service_life for result in results)
@@ -112,4 +119,5 @@ def test_rejects_mismatched_material_ids():
         lca_results_wide_to_tall(
             wide_result(material_id="wide-material"),
             bill_material(material_id="bom-material"),
+            LCAResultsTallFullRecord,
         )

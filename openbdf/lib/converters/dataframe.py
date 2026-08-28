@@ -544,7 +544,11 @@ def project_package_from_tables(
         for result_wide in results_wide:
             matching_bom = material_id_to_bom.get(result_wide.material_id, None)
             if matching_bom is not None:
-                tall_results = lca_results_wide_to_tall(result_wide, matching_bom)
+                tall_results = lca_results_wide_to_tall(
+                    result_wide,
+                    matching_bom,
+                    LCAResultsTallFullRecord,
+                )
                 matching_bom.lca_results_tall_full_records.extend(tall_results)
                 results_tall.extend(tall_results)
 
@@ -605,9 +609,13 @@ def project_draft_package_from_tables(
         for result_wide in results_wide:
             matching_bom = material_id_to_bom.get(result_wide.material_id, None)
             if matching_bom is not None:
-                tall_results = lca_results_wide_to_tall(result_wide, matching_bom)  # type: ignore[arg-type]
-                matching_bom.lca_results_tall_full_records.extend(tall_results)  # type: ignore[arg-type]
-                results_tall.extend(tall_results)  # type: ignore[arg-type]
+                tall_results = lca_results_wide_to_tall(
+                    result_wide,
+                    matching_bom,
+                    LCAResultsTallFullRecordDraft,
+                )
+                matching_bom.lca_results_tall_full_records.extend(tall_results)
+                results_tall.extend(tall_results)
 
     project_draft = ProjectRecordDraft(
         **project_base.model_dump(),
