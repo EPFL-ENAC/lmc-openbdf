@@ -615,6 +615,7 @@ doc = [
 test = [
     { name = "pytest" },
     { name = "pytest-cov" },
+    { name = "ruff" },
 ]
 
 [package.metadata]
@@ -630,6 +631,7 @@ requires-dist = [
     { name = "pytest-cov", marker = "extra == 'test'", specifier = "~=5.0.0" },
     { name = "rich", specifier = "~=13.9.3" },
     { name = "ruff", marker = "extra == 'dev'", specifier = "==0.14.3" },
+    { name = "ruff", marker = "extra == 'test'", specifier = "==0.14.3" },
     { name = "sphinx", marker = "extra == 'dev'", specifier = ">=8.1.3" },
     { name = "sphinx", marker = "extra == 'doc'", specifier = ">=8.1.3" },
     { name = "sphinx-copybutton", marker = "extra == 'dev'", specifier = ">=0.5.2" },
