@@ -707,6 +707,7 @@ class ProjectRecordBase(SQLModel):
     )
 
     building_construction_end_date: Optional[date] = Field(
+        default=None,
         sa_type=Date,
         description="The year/date building construction completed.",
         schema_extra=openbdf_field_metadata(
