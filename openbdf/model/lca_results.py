@@ -30,6 +30,9 @@ class LCAResultIndicator:
 # The suffix becomes the field name suffix, the enum value becomes the display label.
 STAGES: tuple[tuple[LCAStageOrModule, str], ...] = (
     (LCAStageOrModule.A1_A3, "a1_a3"),
+    (LCAStageOrModule.A1, "a1"),
+    (LCAStageOrModule.A2, "a2"),
+    (LCAStageOrModule.A3, "a3"),
     (LCAStageOrModule.A4, "a4"),
     (LCAStageOrModule.A5, "a5"),
     (LCAStageOrModule.B1, "b1"),
