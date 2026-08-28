@@ -93,6 +93,11 @@ def open(
         "-d",
         help="Whether to create a draft version of the project. If set, the command will accept missing fields while still validating existing values",
     ),
+    drop_invalid_materials: bool = typer.Option(
+        False,
+        "--drop-invalid-materials",
+        help="Drop bill of materials lines that miss required fields and print which were dropped.",
+    ),
     output_path: Path = typer.Option(
         Path("./output.xlsx"),
         "--output-path",
@@ -106,7 +111,6 @@ def open(
         openbdf open project.xlsx
         openbdf open project.xlsx materials.xlsx results.xlsx
     """
-
     if translator_path:
         document_translator = DocumentTranslator.from_xlsx(
             xlsx_path=translator_path,
@@ -131,9 +135,9 @@ def open(
         return False
 
     project = (
-        project_draft_package_from_tables(tables, document_translator)
+        project_draft_package_from_tables(tables, document_translator, drop_invalid=drop_invalid_materials)
         if draft
-        else project_package_from_tables(tables, document_translator)
+        else project_package_from_tables(tables, document_translator, drop_invalid=drop_invalid_materials)
     )
 
     # Draft and strict records expose the same fields used by the existing exporter.
