@@ -42,7 +42,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_total_a1",
             description="Global Warming Potential - Total for module A1.",
             units="kg CO₂ eq",
-            requirements="Recommended",
+            requirements="Optional",
         ),
     )
 
@@ -54,7 +54,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_total_a2",
             description="Global Warming Potential - Total for module A2.",
             units="kg CO₂ eq",
-            requirements="Recommended",
+            requirements="Optional",
         ),
     )
 
@@ -66,7 +66,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_total_a3",
             description="Global Warming Potential - Total for module A3.",
             units="kg CO₂ eq",
-            requirements="Recommended",
+            requirements="Optional",
         ),
     )
 
@@ -281,7 +281,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_f_a1",
             description="Global Warming Potential - Fossil for module A1.",
             units="kg CO₂ eq",
-            requirements="Recommended",
+            requirements="Optional",
         ),
     )
 
@@ -293,7 +293,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_f_a2",
             description="Global Warming Potential - Fossil for module A2.",
             units="kg CO₂ eq",
-            requirements="Recommended",
+            requirements="Optional",
         ),
     )
 
@@ -305,7 +305,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_f_a3",
             description="Global Warming Potential - Fossil for module A3.",
             units="kg CO₂ eq",
-            requirements="Recommended",
+            requirements="Optional",
         ),
     )
 
@@ -521,7 +521,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_b_a1",
             description="Global Warming Potential - Biogenic for module A1.",
             units="kg CO₂ eq",
-            requirements="Recommended",
+            requirements="Optional",
         ),
     )
 
@@ -533,7 +533,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_b_a2",
             description="Global Warming Potential - Biogenic for module A2.",
             units="kg CO₂ eq",
-            requirements="Recommended",
+            requirements="Optional",
         ),
     )
 
@@ -545,7 +545,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_b_a3",
             description="Global Warming Potential - Biogenic for module A3.",
             units="kg CO₂ eq",
-            requirements="Recommended",
+            requirements="Optional",
         ),
     )
 
@@ -761,7 +761,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_luc_a1",
             description="Global Warming Potential - Land Use and Land Use Change for module A1.",
             units="kg CO₂ eq",
-            requirements="Recommended",
+            requirements="Optional",
         ),
     )
 
@@ -773,7 +773,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_luc_a2",
             description="Global Warming Potential - Land Use and Land Use Change for module A2.",
             units="kg CO₂ eq",
-            requirements="Recommended",
+            requirements="Optional",
         ),
     )
 
@@ -785,7 +785,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_luc_a3",
             description="Global Warming Potential - Land Use and Land Use Change for module A3.",
             units="kg CO₂ eq",
-            requirements="Recommended",
+            requirements="Optional",
         ),
     )
 
