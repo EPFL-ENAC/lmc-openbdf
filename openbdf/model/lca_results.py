@@ -50,6 +50,8 @@ STAGES: tuple[tuple[LCAStageOrModule, str], ...] = (
     (LCAStageOrModule.D2, "d2"),
 )
 
+OPTIONAL_STAGE_SUFFIXES = ("a1", "a2", "a3")
+
 # Every LCA impact indicator present in the tall and wide models.
 # `gwp_total` is special: its wide total field keeps the bare code name (`gwp_total`) instead of `gwp_total_total`,
 # its `a1_a3` stage field and its total field are required, and its total attribute removes the trailing ` - Total` suffix.
@@ -302,11 +304,17 @@ def _wide_stage_field(
     suffix: str,
 ) -> str:
     required = indicator.required_in_wide and suffix == "a1_a3"
+    if required:
+        requirements = "Required"
+    elif suffix in OPTIONAL_STAGE_SUFFIXES:
+        requirements = "Optional"
+    else:
+        requirements = indicator.requirements
     return _render_field(
         name=f"{indicator.code}_{suffix}",
         type_="Decimal" if required else "Optional[Decimal]",
         default=None if required else "None",
-        requirements="Required" if required else indicator.requirements,
+        requirements=requirements,
         attribute_name=f"{indicator.attribute_name} ({stage.value})",
         field_code=f"{indicator.code}_{suffix}",
         description=f"{indicator.attribute_name} for module {stage.value}.",
