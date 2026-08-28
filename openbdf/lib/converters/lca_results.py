@@ -1,52 +1,10 @@
 from __future__ import annotations
 
-from openbdf.model.enums.lca import LCAStageOrModule
+from openbdf.model.lca_results import INDICATORS, STAGES
 from openbdf.model.tables import (
     BuildingBillMaterialsSlimRecord,
     LCAResultsTallFullRecord,
     LCAResultsWideFullRecord,
-)
-
-STAGES: tuple[tuple[LCAStageOrModule, str], ...] = (
-    (LCAStageOrModule.A1_A3, "a1_a3"),
-    (LCAStageOrModule.A4, "a4"),
-    (LCAStageOrModule.A5, "a5"),
-    (LCAStageOrModule.B1, "b1"),
-    (LCAStageOrModule.B2, "b2"),
-    (LCAStageOrModule.B3, "b3"),
-    (LCAStageOrModule.B4, "b4"),
-    (LCAStageOrModule.B5, "b5"),
-    (LCAStageOrModule.B6, "b6"),
-    (LCAStageOrModule.C1, "c1"),
-    (LCAStageOrModule.C2, "c2"),
-    (LCAStageOrModule.C3, "c3"),
-    (LCAStageOrModule.C4, "c4"),
-    (LCAStageOrModule.D, "d"),
-    (LCAStageOrModule.D1, "d1"),
-    (LCAStageOrModule.D2, "d2"),
-)
-
-_IMPACT_INDICATORS = (
-    "gwp_total",
-    "gwp_f",
-    "gwp_b",
-    "gwp_luc",
-    "odp",
-    "ap",
-    "ep",
-    "ep_af",
-    "ep_am",
-    "ep_t",
-    "pocp",
-    "sfp",
-    "pofp",
-    "adpmm",
-    "adpf",
-    "wdp",
-    "pere",
-    "penre",
-    "pert",
-    "penrt",
 )
 
 
@@ -64,7 +22,7 @@ def lca_results_wide_to_tall(
     tall_results: list[LCAResultsTallFullRecord] = []
 
     for stage, suffix in STAGES:
-        impact_values = {indicator: getattr(wide_result, f"{indicator}_{suffix}") for indicator in _IMPACT_INDICATORS}
+        impact_values = {indicator.code: getattr(wide_result, f"{indicator.code}_{suffix}") for indicator in INDICATORS}
         if not any(value is not None for value in impact_values.values()):
             continue
 
