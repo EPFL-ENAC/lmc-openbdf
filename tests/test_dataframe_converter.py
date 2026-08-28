@@ -119,6 +119,55 @@ def test_bom_from_dataframe_requires_lca_service_life():
         bom_from_dataframe(dataframe)
 
 
+def test_bom_from_dataframe_drop_invalid_drops_missing_required(capsys):
+    valid = bom_df("mat-1")
+    invalid = bom_df("mat-2").drop(columns=["lca_service_life"])
+    dataframe = pd.concat([valid, invalid], ignore_index=True)
+
+    result = bom_from_dataframe(dataframe, drop_invalid=True)
+
+    assert [item.material_id for item in result] == ["mat-1"]
+    captured = capsys.readouterr().out
+    assert "lca_service_life" in captured
+    assert "mat-2" in captured
+
+
+def test_bom_draft_from_dataframe_drop_invalid_drops_missing_required():
+    valid = bom_df("mat-1")
+    invalid = bom_df("mat-2").drop(columns=["lca_service_life"])
+    dataframe = pd.concat([valid, invalid], ignore_index=True)
+
+    result = bom_draft_from_dataframe(dataframe, drop_invalid=True)
+
+    assert [item.material_id for item in result] == ["mat-1"]
+
+
+def test_bom_from_dataframe_drop_invalid_no_drop_when_all_valid():
+    result = bom_from_dataframe(bom_df("mat-1", "mat-2"), drop_invalid=True)
+
+    assert len(result) == 2
+
+
+def test_bom_drop_invalid_blank_rows_not_counted():
+    valid = bom_df("mat-1")
+    blank = pd.DataFrame(index=[0])
+    dataframe = pd.concat([valid, blank], ignore_index=True)
+
+    result = bom_from_dataframe(dataframe, drop_invalid=True)
+
+    assert [item.material_id for item in result] == ["mat-1"]
+
+
+def test_project_package_from_tables_drop_invalid_drops_missing_required():
+    valid = bom_df("mat-1")
+    invalid = bom_df("mat-2").drop(columns=["lca_service_life"])
+    dataframe = pd.concat([valid, invalid], ignore_index=True)
+
+    project = project_package_from_tables(tables(dataframe), drop_invalid=True)
+
+    assert [b.material_id for b in project.bill_of_materials] == ["mat-1"]
+
+
 def test_bom_draft_from_dataframe_allows_missing_lca_service_life():
     dataframe = bom_df("mat-1").drop(columns=["lca_service_life"])
 
