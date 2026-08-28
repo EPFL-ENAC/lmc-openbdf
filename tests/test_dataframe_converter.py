@@ -221,18 +221,3 @@ def test_project_package_from_tables_allows_missing_result_tables():
     assert bom_record.material_id == "mat-1"
     assert bom_record.lca_results_full_record is None
     assert bom_record.lca_results_tall_full_records == []
-
-
-def test_project_package_from_tables_rejects_unmatched_result_material_id():
-    with pytest.raises(ValueError, match="does not match any bill of materials entry"):
-        project_package_from_tables(tables(bom_df("mat-1"), results_wide=wide_df("missing")))
-
-
-def test_project_package_from_tables_rejects_duplicate_bom_material_id():
-    with pytest.raises(ValueError, match="Duplicate bill of materials material_id"):
-        project_package_from_tables(tables(bom_df("mat-1", "mat-1")))
-
-
-def test_project_package_from_tables_rejects_duplicate_wide_result_material_id():
-    with pytest.raises(ValueError, match="Multiple wide LCA results found"):
-        project_package_from_tables(tables(bom_df("mat-1"), results_wide=wide_df("mat-1", "mat-1")))

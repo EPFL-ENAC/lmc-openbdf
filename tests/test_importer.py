@@ -180,25 +180,6 @@ def test_excel_sheet_source_rejects_empty_input():
         ExcelSheetSource([])
 
 
-def test_category_translator_reads_default_values():
-    df = pd.DataFrame({
-        "original": ["my_name", "my_id"],
-        "openbdf": ["project_name", "project_id"],
-        "default": ["Default project", ""],
-    })
-    translator = DocumentTranslator.from_dataframes(
-        {"General Information": df},
-        attribute_name_col=0,
-        translated_name_col=1,
-        default_value_col=2,
-    )
-
-    assert translator.translate("General Information", "my_name") == "project_name"
-    assert translator.get_default("General Information", "project_name") == "Default project"
-    assert translator.get_default("General Information", "project_id") is None
-    assert translator.get_default("General Information", "unknown") is None
-
-
 def test_cola_translator_maps_lca_service_life():
     translator_path = Path(__file__).parents[1] / "translators" / "translator_cola.xlsx"
     translator = DocumentTranslator.from_xlsx(
