@@ -73,7 +73,6 @@ def parse_value(annotation: Any, raw_value: Any, translator: DocumentTranslator 
         try:
             return int(raw_value)
         except ValueError:
-            print(f"Warning: Could not convert {raw_value!r} to int for annotation {annotation}. Returning None.")
             return None
 
     if annotation is float:

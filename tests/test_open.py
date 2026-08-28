@@ -37,8 +37,8 @@ def default_openbdf_sheets() -> dict[str, pd.DataFrame]:
 
 
 def mock_conversion_and_save(monkeypatch, captured_tables: list[Any]) -> None:
-    def convert(tables, document_translator):
-        captured_tables.append(tables)
+    def convert(tables, document_translator, drop_invalid=False):
+        captured_tables.append((tables, drop_invalid))
         return object()
 
     monkeypatch.setattr(main_module, "project_package_from_tables", convert)
@@ -60,7 +60,8 @@ def test_open_command_processes_sheets_split_across_files(tmp_path: Path, monkey
 
     assert result.exit_code == 0
     assert len(captured_tables) == 1
-    tables = captured_tables[0]
+    tables, drop_invalid = captured_tables[0]
+    assert drop_invalid is False
     assert tables.project.to_dict(orient="records") == [{"field_code": "project_name", "value": "Example project"}]
     assert tables.bill_of_materials.to_dict(orient="records") == [{"material_id": "MAT-1"}]
     assert tables.results_wide.to_dict(orient="records") == [{"material_id": "MAT-1"}]
@@ -83,8 +84,8 @@ def test_open_command_uses_draft_conversion(tmp_path: Path, monkeypatch):
     write_workbook(workbook, default_openbdf_sheets())
     captured_tables: list[Any] = []
 
-    def convert_draft(tables, document_translator):
-        captured_tables.append(tables)
+    def convert_draft(tables, document_translator, drop_invalid=False):
+        captured_tables.append((tables, drop_invalid))
         return object()
 
     def convert_strict(*args, **kwargs):
@@ -98,6 +99,42 @@ def test_open_command_uses_draft_conversion(tmp_path: Path, monkeypatch):
 
     assert result.exit_code == 0
     assert len(captured_tables) == 1
+
+
+def test_open_command_drop_invalid_materials_passes_flag(tmp_path: Path, monkeypatch):
+    workbook = tmp_path / "complete.xlsx"
+    write_workbook(workbook, default_openbdf_sheets())
+    captured: list[Any] = []
+
+    def convert_strict(tables, document_translator, drop_invalid=False):
+        captured.append(drop_invalid)
+        return object()
+
+    monkeypatch.setattr(main_module, "project_package_from_tables", convert_strict)
+    monkeypatch.setattr(main_module, "save_openbdf_to_xlsx", lambda **kwargs: None)
+
+    result = runner.invoke(app, ["open", str(workbook), "--drop-invalid-materials"])
+
+    assert result.exit_code == 0
+    assert captured == [True]
+
+
+def test_open_command_drop_invalid_materials_default_is_false(tmp_path: Path, monkeypatch):
+    workbook = tmp_path / "complete.xlsx"
+    write_workbook(workbook, default_openbdf_sheets())
+    captured: list[Any] = []
+
+    def convert_strict(tables, document_translator, drop_invalid=False):
+        captured.append(drop_invalid)
+        return object()
+
+    monkeypatch.setattr(main_module, "project_package_from_tables", convert_strict)
+    monkeypatch.setattr(main_module, "save_openbdf_to_xlsx", lambda **kwargs: None)
+
+    result = runner.invoke(app, ["open", str(workbook)])
+
+    assert result.exit_code == 0
+    assert captured == [False]
 
 
 def test_open_command_reports_duplicate_sheets(tmp_path: Path):
