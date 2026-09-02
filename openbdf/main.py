@@ -51,11 +51,11 @@ def explain(
 @app.command(name="open", no_args_is_help=True)
 def open(
     files: list[Path] = typer.Argument(..., help="One or more Excel files to open as a single document"),
-    translator_path: str = typer.Option(
-        "",
+    translator_paths: list[str] = typer.Option(
+        [],
         "--translator",
         "-t",
-        help="Optional path to an Excel file containing a translator sheet. If provided, it will be used to translate attribute names from the input dataframes. The sheet should contain at least two columns: one for the original attribute names and one for the translated names.",
+        help="Optional path(s) to Excel files containing a translator sheet. Multiple files are merged (category conflicts resolve last-wins). If provided, they will be used to translate attribute names from the input dataframes. Each sheet should contain at least two columns: one for the original attribute names and one for the translated names.",
     ),
     translator_attribute_name_col: int = typer.Option(
         0,
@@ -111,15 +111,17 @@ def open(
         openbdf open project.xlsx
         openbdf open project.xlsx materials.xlsx results.xlsx
     """
-    if translator_path:
-        document_translator = DocumentTranslator.from_xlsx(
-            xlsx_path=translator_path,
-            attribute_name_col=translator_attribute_name_col,
-            translated_name_col=translator_translated_name_col,
-            default_value_col=translator_default_value_col,
-            preprocess_rule_col=translator_preprocess_rule_col,
-            header_row=translator_header_row,
-        )
+    if translator_paths:
+        document_translator = DocumentTranslator()
+        for translator_path in translator_paths:
+            document_translator = document_translator + DocumentTranslator.from_xlsx(
+                xlsx_path=translator_path,
+                attribute_name_col=translator_attribute_name_col,
+                translated_name_col=translator_translated_name_col,
+                default_value_col=translator_default_value_col,
+                preprocess_rule_col=translator_preprocess_rule_col,
+                header_row=translator_header_row,
+            )
     else:
         document_translator = DocumentTranslator.default_openbdf_translator()
 
