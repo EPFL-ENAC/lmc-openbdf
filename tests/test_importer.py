@@ -181,7 +181,7 @@ def test_excel_sheet_source_rejects_empty_input():
 
 
 def test_cola_translator_maps_lca_service_life():
-    translator_path = Path(__file__).parents[1] / "translators" / "translator_cola.xlsx"
+    translator_path = Path(__file__).parents[1] / "translators" / "cola" / "translator.xlsx"
     translator = DocumentTranslator.from_xlsx(
         translator_path,
         attribute_name_col=0,
