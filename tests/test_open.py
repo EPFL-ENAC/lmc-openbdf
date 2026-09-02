@@ -172,3 +172,72 @@ def test_open_command_uses_translator_option(tmp_path: Path, monkeypatch):
     assert result.exit_code == 0
     assert captured_paths == [str(translator_path)]
     assert len(captured_tables) == 1
+
+
+def test_open_command_merges_multiple_translators(tmp_path: Path, monkeypatch):
+    workbook = tmp_path / "complete.xlsx"
+    write_workbook(workbook, default_openbdf_sheets())
+    translator_a = tmp_path / "translator_a.xlsx"
+    translator_b = tmp_path / "translator_b.xlsx"
+
+    from openbdf.lib.converters.translators import (
+        CategoryTranslator,
+        DocumentTranslator,
+        TranslationsLibrary,
+    )
+
+    def make_translator(category: str):
+        extra = DocumentTranslator(
+            library=TranslationsLibrary([]),
+            translators={
+                category: CategoryTranslator({f"src_{category}": [f"dst_{category}"]}),
+            },
+        )
+        return DocumentTranslator.default_openbdf_translator() + extra
+
+    translator_a_obj = make_translator("General Information")
+    translator_b_obj = make_translator("Bill of Materials")
+
+    def load_translator(*, xlsx_path, **kwargs):
+        return translator_a_obj if xlsx_path == str(translator_a) else translator_b_obj
+
+    monkeypatch.setattr(main_module.DocumentTranslator, "from_xlsx", load_translator)
+    captured_translators: list[Any] = []
+
+    def convert(tables, document_translator, drop_invalid=False):
+        captured_translators.append(document_translator)
+        return object()
+
+    monkeypatch.setattr(main_module, "project_package_from_tables", convert)
+    monkeypatch.setattr(main_module, "save_openbdf_to_xlsx", lambda **kwargs: None)
+
+    result = runner.invoke(
+        app,
+        ["open", str(workbook), "-t", str(translator_a), "-t", str(translator_b)],
+    )
+
+    assert result.exit_code == 0
+    assert len(captured_translators) == 1
+    merged = captured_translators[0]
+    assert merged._translators["General Information"] == translator_a_obj._translators["General Information"]
+    assert merged._translators["Bill of Materials"] == translator_b_obj._translators["Bill of Materials"]
+
+
+def test_document_translator_add_last_wins_on_category_conflict():
+    from openbdf.lib.converters.translators import (
+        CategoryTranslator,
+        DocumentTranslator,
+        TranslationsLibrary,
+    )
+
+    first = DocumentTranslator(
+        library=TranslationsLibrary([]),
+        translators={"cat": CategoryTranslator({"src": ["first"]})},
+    )
+    second = DocumentTranslator(
+        library=TranslationsLibrary([]),
+        translators={"cat": CategoryTranslator({"src": ["second"]})},
+    )
+
+    merged = first + second
+    assert merged._translators["cat"].translate("src") == ["second"]

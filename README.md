@@ -29,12 +29,14 @@ To convert project files into an openbdf file (`output.xslx`), run (COLA example
 uv run openbdf open \
   path/to/cola_file.xlsx \
   path/to/cola_building_information.xlsx \
-  -t translators/translator_cola.xlsx
+  -t translators/cola/translator.xlsx
+  -t translators/cola/bec/at.xlsx
   --drop-invalid-materials
   -o output.xslx
 ```
 It will list potential validation errors, that prevent the export. To export anyway in case of errors, append the option `--draft`.
 
+> [!NOTE] Multiple translator files can be merged with a single command, as shown above. When two files translate the same category, the last file wins.
 
 ## LCA results model classes
 
