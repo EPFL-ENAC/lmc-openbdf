@@ -376,6 +376,16 @@ class DocumentTranslator:
             translation_library_df=library,
         )
 
+    def __add__(self, other: "DocumentTranslator") -> "DocumentTranslator":
+        """Merge this translator with another into a single translator.
+
+        Category translators are merged by category name with a last-wins
+        policy (a category present in ``other`` replaces the one from this
+        translator). Sheet translations are concatenated."""
+        translators = {**self._translators, **other._translators}
+        library = TranslationsLibrary(self._library._sheets_translations + other._library._sheets_translations)
+        return DocumentTranslator(library=library, translators=translators)
+
     def translate(self, category_name: str, attribute_name: str) -> list[str]:
         translator = self._translators.get(category_name, self._translators.get(category_name[:31], None))
         if translator is None:
