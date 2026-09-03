@@ -46,6 +46,27 @@ DISABLED_STYLE = NamedStyle(
 ModelT = TypeVar("ModelT", bound=SQLModel)
 ModelT2 = TypeVar("ModelT2", bound=SQLModel)
 
+# Registering named styles once per workbook and assigning cells by name string
+# (cell.style = "EditableValue") avoids openpyxl's expensive
+# Serialisable.__eq__ comparison against every registered style on each call.
+ALL_NAMED_STYLES: list[NamedStyle] = [
+    ATTRIBUTES_NAME_STYLE,
+    INFO_STYLE,
+    FIELD_CODE_STYLE,
+    REQUIRED_STYLE,
+    RECOMMENDED_STYLE,
+    OPTIONAL_STYLE,
+    ROW_HEADER_STYLE,
+    EDITABLE_VALUE_STYLE,
+    DISABLED_STYLE,
+]
+
+
+def register_named_styles(writer: pd.ExcelWriter) -> None:
+    """Register the shared named styles on the workbook once."""
+    for style in ALL_NAMED_STYLES:
+        writer.book.add_named_style(style)
+
 
 def get_field_extra(field: FieldInfo) -> dict:
     """Safely extracts json_schema_extra if it is a dictionary."""
@@ -64,6 +85,7 @@ def save_openbdf_to_xlsx(
     """Save a list of BuildingBillMaterialsSlimRecord to an Excel file."""
 
     with pd.ExcelWriter(xlsx_path, engine="openpyxl") as writer:
+        register_named_styles(writer)
         enum_registry = EnumRegistry()
 
         info_to_xlsx(writer, project, info_sheet_name, enum_registry)
@@ -138,32 +160,32 @@ def info_to_xlsx(writer: pd.ExcelWriter, project: ProjectRecord | None, sheet_na
         header_cells.append(desc)
 
         dt = info_sheet.cell(row=cell_row, column=6, value=human_readable_type(data_type))
-        dt.style = INFO_STYLE
+        dt.style = INFO_STYLE.name
 
         constraints = human_readable_constraints(metadata)
         c = info_sheet.cell(row=cell_row, column=7, value=constraints)
         if constraints:
-            c.style = INFO_STYLE
+            c.style = INFO_STYLE.name
         else:
-            c.style = DISABLED_STYLE
+            c.style = DISABLED_STYLE.name
 
         units = extra.get("units", "")
         u = info_sheet.cell(row=cell_row, column=8, value=units)
         if units:
-            u.style = INFO_STYLE
+            u.style = INFO_STYLE.name
         else:
-            u.style = DISABLED_STYLE
+            u.style = DISABLED_STYLE.name
 
         r = info_sheet.cell(row=cell_row, column=9, value=requirements)
         if requirements == "Required":
-            r.style = REQUIRED_STYLE
+            r.style = REQUIRED_STYLE.name
         elif requirements == "Recommended":
-            r.style = RECOMMENDED_STYLE
+            r.style = RECOMMENDED_STYLE.name
         else:
-            r.style = OPTIONAL_STYLE
+            r.style = OPTIONAL_STYLE.name
 
         v = info_sheet.cell(row=cell_row, column=10, value=getattr(project, field_code) if project else "")
-        v.style = EDITABLE_VALUE_STYLE
+        v.style = EDITABLE_VALUE_STYLE.name
 
         dv = xlsx_validation_from_type(data_type, is_optional, metadata, enum_registry)  # type: ignore[arg-type]
         if dv:
@@ -172,28 +194,28 @@ def info_to_xlsx(writer: pd.ExcelWriter, project: ProjectRecord | None, sheet_na
 
         if requirements == "Required":
             for c in header_cells:
-                c.style = REQUIRED_STYLE
+                c.style = REQUIRED_STYLE.name
 
     a = info_sheet.cell(row=1, column=1, value="Group")
-    a.style = ATTRIBUTES_NAME_STYLE
+    a.style = ATTRIBUTES_NAME_STYLE.name
     d = info_sheet.cell(row=1, column=2, value="Sub-group")
-    d.style = ATTRIBUTES_NAME_STYLE
+    d.style = ATTRIBUTES_NAME_STYLE.name
     dt = info_sheet.cell(row=1, column=3, value="Attribute Name")
-    dt.style = ATTRIBUTES_NAME_STYLE
+    dt.style = ATTRIBUTES_NAME_STYLE.name
     c = info_sheet.cell(row=1, column=4, value="Field Code")
-    c.style = ATTRIBUTES_NAME_STYLE
+    c.style = ATTRIBUTES_NAME_STYLE.name
     u = info_sheet.cell(row=1, column=5, value="Description")
-    u.style = ATTRIBUTES_NAME_STYLE
+    u.style = ATTRIBUTES_NAME_STYLE.name
     r = info_sheet.cell(row=1, column=6, value="Datatype")
-    r.style = ATTRIBUTES_NAME_STYLE
+    r.style = ATTRIBUTES_NAME_STYLE.name
     ui = info_sheet.cell(row=1, column=7, value="Constraint")
-    ui.style = ATTRIBUTES_NAME_STYLE
+    ui.style = ATTRIBUTES_NAME_STYLE.name
     fc = info_sheet.cell(row=1, column=8, value="Units")
-    fc.style = ATTRIBUTES_NAME_STYLE
+    fc.style = ATTRIBUTES_NAME_STYLE.name
     fc = info_sheet.cell(row=1, column=9, value="Requirements")
-    fc.style = ATTRIBUTES_NAME_STYLE
+    fc.style = ATTRIBUTES_NAME_STYLE.name
     fc = info_sheet.cell(row=1, column=10, value="Value")
-    fc.style = ATTRIBUTES_NAME_STYLE
+    fc.style = ATTRIBUTES_NAME_STYLE.name
 
     info_sheet.column_dimensions["A"].width = 10
     info_sheet.column_dimensions["B"].width = 20
@@ -239,7 +261,7 @@ def wide_to_xlsx(
 
         attribute_name = extra.get("attribute_name", field_code)
         an = sheet.cell(row=1, column=cell_column, value=attribute_name)
-        an.style = ATTRIBUTES_NAME_STYLE
+        an.style = ATTRIBUTES_NAME_STYLE.name
 
         desc = sheet.cell(
             row=2,
@@ -247,7 +269,7 @@ def wide_to_xlsx(
             value=metadata.description if metadata and metadata.description else field_code,
         )
         if not is_optional:
-            desc.style = REQUIRED_STYLE
+            desc.style = REQUIRED_STYLE.name
         desc.alignment = Alignment(wrap_text=True, vertical="top")
 
         sheet.cell(row=3, column=cell_column, value=human_readable_type(data_type))
@@ -255,27 +277,27 @@ def wide_to_xlsx(
         constraints = human_readable_constraints(metadata)
         c = sheet.cell(row=4, column=cell_column, value=constraints)
         if constraints:
-            c.style = INFO_STYLE
+            c.style = INFO_STYLE.name
         else:
-            c.style = DISABLED_STYLE
+            c.style = DISABLED_STYLE.name
 
         unit = extra.get("units", "")
         u = sheet.cell(row=5, column=cell_column, value=unit)
         if unit:
-            u.style = INFO_STYLE
+            u.style = INFO_STYLE.name
         else:
-            u.style = DISABLED_STYLE
+            u.style = DISABLED_STYLE.name
 
         r = sheet.cell(row=6, column=cell_column, value=requirements)
         if requirements == "Required":
-            r.style = REQUIRED_STYLE
+            r.style = REQUIRED_STYLE.name
         elif requirements == "Recommended":
-            r.style = RECOMMENDED_STYLE
+            r.style = RECOMMENDED_STYLE.name
         else:
-            r.style = OPTIONAL_STYLE
+            r.style = OPTIONAL_STYLE.name
 
         fc = sheet.cell(row=8, column=cell_column, value=field_code)
-        fc.style = FIELD_CODE_STYLE
+        fc.style = FIELD_CODE_STYLE.name
 
         dv = xlsx_validation_from_type(data_type, is_optional, metadata, enum_registry)  # type: ignore[arg-type]
         if dv:
@@ -289,29 +311,29 @@ def wide_to_xlsx(
         )  # Set column width based on header length
 
     a = sheet.cell(row=1, column=1, value="Attribute")
-    a.style = ROW_HEADER_STYLE
+    a.style = ROW_HEADER_STYLE.name
     d = sheet.cell(row=2, column=1, value="Description")
-    d.style = ROW_HEADER_STYLE
+    d.style = ROW_HEADER_STYLE.name
     dt = sheet.cell(row=3, column=1, value="Data Type")
-    dt.style = ROW_HEADER_STYLE
+    dt.style = ROW_HEADER_STYLE.name
     c = sheet.cell(row=4, column=1, value="Constraint")
-    c.style = ROW_HEADER_STYLE
+    c.style = ROW_HEADER_STYLE.name
     u = sheet.cell(row=5, column=1, value="Units")
-    u.style = ROW_HEADER_STYLE
+    u.style = ROW_HEADER_STYLE.name
     r = sheet.cell(row=6, column=1, value="Requirements")
-    r.style = ROW_HEADER_STYLE
+    r.style = ROW_HEADER_STYLE.name
     ui = sheet.cell(row=7, column=1, value="User Instructions")
-    ui.style = ROW_HEADER_STYLE
+    ui.style = ROW_HEADER_STYLE.name
     fc = sheet.cell(row=8, column=1, value="Field Code")
-    fc.style = ROW_HEADER_STYLE
+    fc.style = ROW_HEADER_STYLE.name
 
     last_col = len(df.columns) + 1
     start_data_row = 9
     end_data_row = start_data_row + max(len(df) - 1, min_rows)
     for row_idx in range(start_data_row, end_data_row + 1):
-        sheet.cell(row=row_idx, column=1).style = DISABLED_STYLE
+        sheet.cell(row=row_idx, column=1).style = DISABLED_STYLE.name
         for col_idx in range(2, last_col + 1):
-            sheet.cell(row=row_idx, column=col_idx).style = EDITABLE_VALUE_STYLE
+            sheet.cell(row=row_idx, column=col_idx).style = EDITABLE_VALUE_STYLE.name
 
     sheet.row_dimensions[2].height = 15
     sheet.column_dimensions["A"].width = 20
@@ -322,6 +344,7 @@ def save_translator(
 ):
     """Save a template Excel file for the attribute translator."""
     with pd.ExcelWriter(xlsx_path, engine="openpyxl") as writer:
+        register_named_styles(writer)
         make_translations_library_template_xlsx(writer, "Translations Library")
         make_translator_openbdf_pydantic(
             writer, COMMON_CATEGORY_PROPERTIES["project"]["name"], ProjectRecordBase.model_fields
@@ -379,9 +402,9 @@ def make_translator_openbdf_pydantic(writer: pd.ExcelWriter, sheet_name: str, mo
     info_sheet.cell(row=1, column=4, value="Datatype")
     info_sheet.cell(row=1, column=5, value="Requirements")
     dv = info_sheet.cell(row=1, column=6, value="Default value")
-    dv.style = ATTRIBUTES_NAME_STYLE
+    dv.style = ATTRIBUTES_NAME_STYLE.name
     preprocess = info_sheet.cell(row=1, column=7, value="Preprocess rule")
-    preprocess.style = ATTRIBUTES_NAME_STYLE
+    preprocess.style = ATTRIBUTES_NAME_STYLE.name
 
     for cell_row, field_code in enumerate(model, start=2):  # xlsx are 1-indexed (ewww)
         metadata = model.get(field_code)
@@ -393,26 +416,26 @@ def make_translator_openbdf_pydantic(writer: pd.ExcelWriter, sheet_name: str, mo
         requirements = extra.get("requirements", "Optional" if is_optional else "Required")
 
         fc = info_sheet.cell(row=cell_row, column=2, value=field_code)
-        fc.style = FIELD_CODE_STYLE
+        fc.style = FIELD_CODE_STYLE.name
 
         an = info_sheet.cell(row=cell_row, column=3, value=extra.get("attribute_name", field_code))
-        an.style = ATTRIBUTES_NAME_STYLE
+        an.style = ATTRIBUTES_NAME_STYLE.name
 
         r = info_sheet.cell(row=cell_row, column=4, value=human_readable_type(data_type))
-        r.style = INFO_STYLE
+        r.style = INFO_STYLE.name
 
         req = info_sheet.cell(row=cell_row, column=5, value=requirements)
         if requirements == "Required":
-            req.style = REQUIRED_STYLE
+            req.style = REQUIRED_STYLE.name
         elif requirements == "Recommended":
-            req.style = RECOMMENDED_STYLE
+            req.style = RECOMMENDED_STYLE.name
         else:
-            req.style = OPTIONAL_STYLE
+            req.style = OPTIONAL_STYLE.name
 
         default_cell = info_sheet.cell(row=cell_row, column=6, value="")
-        default_cell.style = EDITABLE_VALUE_STYLE
+        default_cell.style = EDITABLE_VALUE_STYLE.name
         preprocess_cell = info_sheet.cell(row=cell_row, column=7, value="")
-        preprocess_cell.style = EDITABLE_VALUE_STYLE
+        preprocess_cell.style = EDITABLE_VALUE_STYLE.name
 
     info_sheet.column_dimensions["A"].width = 30
     info_sheet.column_dimensions["B"].width = 30
@@ -446,10 +469,10 @@ def make_translator_openbdfenum(writer: pd.ExcelWriter, sheet_name: str, enum: t
         parent_category = getattr(item, "parent_category", None)
 
         fc = info_sheet.cell(row=cell_row, column=2, value=str(item.value))
-        fc.style = FIELD_CODE_STYLE
+        fc.style = FIELD_CODE_STYLE.name
 
         an = info_sheet.cell(row=cell_row, column=3, value=str(display_name) if display_name else str(item.value))
-        an.style = ATTRIBUTES_NAME_STYLE
+        an.style = ATTRIBUTES_NAME_STYLE.name
 
         d = info_sheet.cell(row=cell_row, column=4, value=str(description) if description else "")
 
