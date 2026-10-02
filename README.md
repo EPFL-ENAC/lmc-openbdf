@@ -28,9 +28,9 @@ To convert project files into an openbdf file (`output.xslx`), run (COLA example
 ```
 uv run openbdf open \
   path/to/cola_file.xlsx \
-  path/to/cola_building_information.xlsx \
-  -t translators/cola/translator.xlsx
-  -t translators/cola/bec/at.xlsx
+  path/to/cola_general_info.xlsx \
+  -t translators/translator_at_v2.0.0.xlsx
+  -t translators/translator_bec_at_v2.0.0.xlsx
   --drop-invalid-materials
   -o output.xslx
 ```
