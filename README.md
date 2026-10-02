@@ -31,6 +31,7 @@ uv run openbdf open \
   path/to/cola_general_info.xlsx \
   -t translators/translator_at_v2.0.0.xlsx
   -t translators/translator_bec_at_v2.0.0.xlsx
+  -t translators/translator_bmc_at_v2.0.0.xlsx
   --drop-invalid-materials
   -o output.xslx
 ```
