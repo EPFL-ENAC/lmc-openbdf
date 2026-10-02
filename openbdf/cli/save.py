@@ -1,9 +1,12 @@
 import itertools
+from copy import copy
 from pathlib import Path
 from typing import TypeVar
 
+import numpy as np
 import pandas as pd
 from openpyxl.styles import Alignment, Border, Font, NamedStyle, PatternFill, Protection, Side
+from openpyxl.styles.cell_style import StyleArray
 from openpyxl.utils import get_column_letter
 from pydantic.fields import FieldInfo
 from sqlmodel import SQLModel
@@ -66,6 +69,16 @@ def register_named_styles(writer: pd.ExcelWriter) -> None:
     """Register the shared named styles on the workbook once."""
     for style in ALL_NAMED_STYLES:
         writer.book.add_named_style(style)
+
+
+def named_style_arrays(writer: pd.ExcelWriter) -> dict[str, StyleArray]:
+    """Resolved style arrays for the named styles registered on the workbook.
+
+    A copy of one of these arrays assigned to cell._style is what openpyxl
+    itself stores for cell.style = name, but without the named-style lookup
+    that rebuilds the style name list on every call.
+    """
+    return {style.name: style._style for style in writer.book._named_styles}
 
 
 def get_field_extra(field: FieldInfo) -> dict:
@@ -241,9 +254,11 @@ def wide_to_xlsx(
         records = []
 
     df = horizontal_to_dataframe(records, model_cls)  # type: ignore[misc]
-    df.to_excel(writer, sheet_name=sheet_name, index=False, header=False, startcol=1, startrow=8)
+    style_arrays = named_style_arrays(writer)
+    editable_array = style_arrays[EDITABLE_VALUE_STYLE.name]
+    disabled_array = style_arrays[DISABLED_STYLE.name]
 
-    sheet = writer.sheets[sheet_name]
+    sheet = writer.book.create_sheet(sheet_name)
     # sheet.protection.sheet = True  # Lock the sheet to prevent accidental edits
     fields = model_cls.model_fields
 
@@ -330,10 +345,21 @@ def wide_to_xlsx(
     last_col = len(df.columns) + 1
     start_data_row = 9
     end_data_row = start_data_row + max(len(df) - 1, min_rows)
+
+    rows = df.itertuples(index=False, name=None)
     for row_idx in range(start_data_row, end_data_row + 1):
-        sheet.cell(row=row_idx, column=1).style = DISABLED_STYLE.name
+        sheet.cell(row=row_idx, column=1)._style = copy(disabled_array)
+        row_values = next(rows, None)
         for col_idx in range(2, last_col + 1):
-            sheet.cell(row=row_idx, column=col_idx).style = EDITABLE_VALUE_STYLE.name
+            cell = sheet.cell(row=row_idx, column=col_idx)
+            cell._style = copy(editable_array)
+            if row_values is not None:
+                value = row_values[col_idx - 2]
+                if isinstance(value, np.generic):
+                    value = value.item()
+                if value is None or value != value:  # None and NaN are written as empty strings
+                    value = ""
+                cell.value = value
 
     sheet.row_dimensions[2].height = 15
     sheet.column_dimensions["A"].width = 20
