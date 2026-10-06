@@ -1,6 +1,6 @@
 # OpenBDF
 
-_Schema and parser for GBDI's OpenBDF format_
+_Schema and parser for the Open Building Data Format (OpenBDF) developed by GBDI_
 
 
 # 🐇 Quick start
