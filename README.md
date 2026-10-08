@@ -56,3 +56,13 @@ make check-lca-results-classes
 ```
 
 The test `tests/test_generated_lca_results_classes.py` also checks that the committed generated files stay in sync with the registry.
+
+
+## Export templates
+
+To export the OpenBDF and attribute translator Excel templates, run:
+
+```bash
+openbdf save-template openbdf_template_v2.0.0.xlsx
+openbdf save-translator-template translators/templates/translator_template_v2.0.0.xlsx
+```
