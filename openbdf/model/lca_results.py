@@ -24,6 +24,7 @@ class LCAResultIndicator:
     units: str
     requirements: str
     required_in_wide: bool = False
+    criticality: str = "SHOULD"
 
 
 # Every LCA stage or module present in the wide model, as (enum, suffix) pairs.
@@ -218,6 +219,7 @@ def _render_field(
     type_: str,
     default: str | None,
     requirements: str | None,
+    criticality: str,
     attribute_name: str,
     field_code: str,
     description: str,
@@ -238,6 +240,7 @@ def _render_field(
         lines.append(f"            units={_q(units)},")
     if requirements is not None:
         lines.append(f"            requirements={_q(requirements)},")
+    lines.append(f"            criticality={_q(criticality)},")
     lines.append("        ),")
     lines.append("    )")
     return "\n".join(lines)
@@ -249,6 +252,7 @@ def _material_id_field() -> str:
         type_="str",
         default=None,
         requirements="Required",
+        criticality="SHOULD",
         attribute_name="Material ID",
         field_code="material_id",
         description=(
@@ -265,6 +269,7 @@ def _lca_service_life_field() -> str:
         type_="Decimal",
         default=None,
         requirements=None,
+        criticality="SHOULD",
         attribute_name="Service life",
         field_code="lca_service_life",
         description="Declared reference service life.",
@@ -278,6 +283,7 @@ def _lca_stage_or_module_field() -> str:
         type_="LCAStageOrModule",
         default=None,
         requirements="Required",
+        criticality="SHOULD",
         attribute_name="LCA stage or module",
         field_code="lca_stage_or_module",
         description="Life cycle assessment stage or module for this result row.",
@@ -291,6 +297,7 @@ def _tall_indicator_field(indicator: LCAResultIndicator) -> str:
         type_="Optional[Decimal]",
         default="None",
         requirements=indicator.requirements,
+        criticality=indicator.criticality,
         attribute_name=indicator.attribute_name,
         field_code=indicator.code,
         description=f"{indicator.attribute_name}.",
@@ -315,6 +322,7 @@ def _wide_stage_field(
         type_="Decimal" if required else "Optional[Decimal]",
         default=None if required else "None",
         requirements=requirements,
+        criticality=indicator.criticality,
         attribute_name=f"{indicator.attribute_name} ({stage.value})",
         field_code=f"{indicator.code}_{suffix}",
         description=f"{indicator.attribute_name} for module {stage.value}.",
@@ -331,6 +339,7 @@ def _wide_total_field(indicator: LCAResultIndicator) -> str:
         type_="Decimal" if required else "Optional[Decimal]",
         default=None if required else "None",
         requirements="Required" if required else indicator.requirements,
+        criticality=indicator.criticality,
         attribute_name=total_attribute,
         field_code=total_name,
         description=f"{total_attribute}.",

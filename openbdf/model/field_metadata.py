@@ -11,6 +11,7 @@ def openbdf_field_metadata(
     constraint: str | None = None,
     units: str | None = None,
     requirements: str | None = None,
+    criticality: str = "SHOULD",
     reference_formats: dict[str, Any] | None = None,
     example: str | None = None,
 ) -> dict[str, Any]:
@@ -24,6 +25,7 @@ def openbdf_field_metadata(
             "constraint": constraint,
             "units": units,
             "requirements": requirements,
+            "criticality": criticality,
             "reference_formats": reference_formats or {},
             "example": example,
         }

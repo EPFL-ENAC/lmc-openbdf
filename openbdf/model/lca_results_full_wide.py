@@ -20,6 +20,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="material_id",
             description="The unique identifier for the material within the project context, referencing the Bill of Materials.",
             requirements="Required",
+            criticality="SHOULD",
         ),
     )
 
@@ -31,6 +32,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Total for module A1-A3.",
             units="kg CO₂ eq",
             requirements="Required",
+            criticality="SHOULD",
         ),
     )
 
@@ -43,6 +45,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Total for module A1.",
             units="kg CO₂ eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -55,6 +58,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Total for module A2.",
             units="kg CO₂ eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -67,6 +71,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Total for module A3.",
             units="kg CO₂ eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -79,6 +84,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Total for module A4.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -91,6 +97,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Total for module A5.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -103,6 +110,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Total for module B1.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -115,6 +123,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Total for module B2.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -127,6 +136,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Total for module B3.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -139,6 +149,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Total for module B4.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -151,6 +162,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Total for module B5.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -163,6 +175,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Total for module B6.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -175,6 +188,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Total for module C1.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -187,6 +201,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Total for module C2.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -199,6 +214,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Total for module C3.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -211,6 +227,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Total for module C4.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -223,6 +240,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Total for module D.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -235,6 +253,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Total for module D1.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -247,6 +266,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Total for module D2.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -258,6 +278,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Total Global Warming Potential.",
             units="kg CO₂ eq",
             requirements="Required",
+            criticality="SHOULD",
         ),
     )
 
@@ -270,6 +291,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Fossil for module A1-A3.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -282,6 +304,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Fossil for module A1.",
             units="kg CO₂ eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -294,6 +317,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Fossil for module A2.",
             units="kg CO₂ eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -306,6 +330,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Fossil for module A3.",
             units="kg CO₂ eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -318,6 +343,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Fossil for module A4.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -330,6 +356,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Fossil for module A5.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -342,6 +369,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Fossil for module B1.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -354,6 +382,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Fossil for module B2.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -366,6 +395,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Fossil for module B3.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -378,6 +408,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Fossil for module B4.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -390,6 +421,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Fossil for module B5.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -402,6 +434,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Fossil for module B6.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -414,6 +447,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Fossil for module C1.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -426,6 +460,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Fossil for module C2.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -438,6 +473,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Fossil for module C3.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -450,6 +486,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Fossil for module C4.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -462,6 +499,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Fossil for module D.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -474,6 +512,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Fossil for module D1.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -486,6 +525,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Fossil for module D2.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -498,6 +538,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Total Global Warming Potential - Fossil.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -510,6 +551,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Biogenic for module A1-A3.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -522,6 +564,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Biogenic for module A1.",
             units="kg CO₂ eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -534,6 +577,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Biogenic for module A2.",
             units="kg CO₂ eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -546,6 +590,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Biogenic for module A3.",
             units="kg CO₂ eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -558,6 +603,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Biogenic for module A4.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -570,6 +616,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Biogenic for module A5.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -582,6 +629,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Biogenic for module B1.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -594,6 +642,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Biogenic for module B2.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -606,6 +655,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Biogenic for module B3.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -618,6 +668,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Biogenic for module B4.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -630,6 +681,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Biogenic for module B5.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -642,6 +694,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Biogenic for module B6.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -654,6 +707,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Biogenic for module C1.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -666,6 +720,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Biogenic for module C2.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -678,6 +733,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Biogenic for module C3.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -690,6 +746,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Biogenic for module C4.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -702,6 +759,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Biogenic for module D.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -714,6 +772,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Biogenic for module D1.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -726,6 +785,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Biogenic for module D2.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -738,6 +798,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Total Global Warming Potential - Biogenic.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -750,6 +811,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Land Use and Land Use Change for module A1-A3.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -762,6 +824,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Land Use and Land Use Change for module A1.",
             units="kg CO₂ eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -774,6 +837,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Land Use and Land Use Change for module A2.",
             units="kg CO₂ eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -786,6 +850,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Land Use and Land Use Change for module A3.",
             units="kg CO₂ eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -798,6 +863,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Land Use and Land Use Change for module A4.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -810,6 +876,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Land Use and Land Use Change for module A5.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -822,6 +889,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Land Use and Land Use Change for module B1.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -834,6 +902,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Land Use and Land Use Change for module B2.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -846,6 +915,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Land Use and Land Use Change for module B3.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -858,6 +928,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Land Use and Land Use Change for module B4.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -870,6 +941,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Land Use and Land Use Change for module B5.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -882,6 +954,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Land Use and Land Use Change for module B6.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -894,6 +967,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Land Use and Land Use Change for module C1.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -906,6 +980,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Land Use and Land Use Change for module C2.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -918,6 +993,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Land Use and Land Use Change for module C3.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -930,6 +1006,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Land Use and Land Use Change for module C4.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -942,6 +1019,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Land Use and Land Use Change for module D.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -954,6 +1032,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Land Use and Land Use Change for module D1.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -966,6 +1045,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Land Use and Land Use Change for module D2.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -978,6 +1058,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Total Global Warming Potential - Land Use and Land Use Change.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -990,6 +1071,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Ozone Depletion Potential for module A1-A3.",
             units="kg R11 eq / kg CFC-11 eq.",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1002,6 +1084,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Ozone Depletion Potential for module A1.",
             units="kg R11 eq / kg CFC-11 eq.",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1014,6 +1097,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Ozone Depletion Potential for module A2.",
             units="kg R11 eq / kg CFC-11 eq.",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1026,6 +1110,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Ozone Depletion Potential for module A3.",
             units="kg R11 eq / kg CFC-11 eq.",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1038,6 +1123,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Ozone Depletion Potential for module A4.",
             units="kg R11 eq / kg CFC-11 eq.",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1050,6 +1136,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Ozone Depletion Potential for module A5.",
             units="kg R11 eq / kg CFC-11 eq.",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1062,6 +1149,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Ozone Depletion Potential for module B1.",
             units="kg R11 eq / kg CFC-11 eq.",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1074,6 +1162,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Ozone Depletion Potential for module B2.",
             units="kg R11 eq / kg CFC-11 eq.",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1086,6 +1175,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Ozone Depletion Potential for module B3.",
             units="kg R11 eq / kg CFC-11 eq.",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1098,6 +1188,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Ozone Depletion Potential for module B4.",
             units="kg R11 eq / kg CFC-11 eq.",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1110,6 +1201,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Ozone Depletion Potential for module B5.",
             units="kg R11 eq / kg CFC-11 eq.",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1122,6 +1214,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Ozone Depletion Potential for module B6.",
             units="kg R11 eq / kg CFC-11 eq.",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1134,6 +1227,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Ozone Depletion Potential for module C1.",
             units="kg R11 eq / kg CFC-11 eq.",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1146,6 +1240,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Ozone Depletion Potential for module C2.",
             units="kg R11 eq / kg CFC-11 eq.",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1158,6 +1253,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Ozone Depletion Potential for module C3.",
             units="kg R11 eq / kg CFC-11 eq.",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1170,6 +1266,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Ozone Depletion Potential for module C4.",
             units="kg R11 eq / kg CFC-11 eq.",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1182,6 +1279,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Ozone Depletion Potential for module D.",
             units="kg R11 eq / kg CFC-11 eq.",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1194,6 +1292,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Ozone Depletion Potential for module D1.",
             units="kg R11 eq / kg CFC-11 eq.",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1206,6 +1305,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Ozone Depletion Potential for module D2.",
             units="kg R11 eq / kg CFC-11 eq.",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1218,6 +1318,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Total Ozone Depletion Potential.",
             units="kg R11 eq / kg CFC-11 eq.",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1230,6 +1331,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Acidification Potential for module A1-A3.",
             units="kg SO₂ eq.",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1242,6 +1344,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Acidification Potential for module A1.",
             units="kg SO₂ eq.",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1254,6 +1357,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Acidification Potential for module A2.",
             units="kg SO₂ eq.",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1266,6 +1370,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Acidification Potential for module A3.",
             units="kg SO₂ eq.",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1278,6 +1383,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Acidification Potential for module A4.",
             units="kg SO₂ eq.",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1290,6 +1396,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Acidification Potential for module A5.",
             units="kg SO₂ eq.",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1302,6 +1409,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Acidification Potential for module B1.",
             units="kg SO₂ eq.",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1314,6 +1422,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Acidification Potential for module B2.",
             units="kg SO₂ eq.",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1326,6 +1435,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Acidification Potential for module B3.",
             units="kg SO₂ eq.",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1338,6 +1448,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Acidification Potential for module B4.",
             units="kg SO₂ eq.",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1350,6 +1461,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Acidification Potential for module B5.",
             units="kg SO₂ eq.",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1362,6 +1474,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Acidification Potential for module B6.",
             units="kg SO₂ eq.",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1374,6 +1487,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Acidification Potential for module C1.",
             units="kg SO₂ eq.",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1386,6 +1500,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Acidification Potential for module C2.",
             units="kg SO₂ eq.",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1398,6 +1513,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Acidification Potential for module C3.",
             units="kg SO₂ eq.",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1410,6 +1526,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Acidification Potential for module C4.",
             units="kg SO₂ eq.",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1422,6 +1539,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Acidification Potential for module D.",
             units="kg SO₂ eq.",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1434,6 +1552,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Acidification Potential for module D1.",
             units="kg SO₂ eq.",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1446,6 +1565,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Acidification Potential for module D2.",
             units="kg SO₂ eq.",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1458,6 +1578,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Total Acidification Potential.",
             units="kg SO₂ eq.",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1470,6 +1591,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential for module A1-A3.",
             units="kg N eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1482,6 +1604,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential for module A1.",
             units="kg N eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1494,6 +1617,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential for module A2.",
             units="kg N eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1506,6 +1630,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential for module A3.",
             units="kg N eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1518,6 +1643,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential for module A4.",
             units="kg N eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1530,6 +1656,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential for module A5.",
             units="kg N eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1542,6 +1669,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential for module B1.",
             units="kg N eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1554,6 +1682,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential for module B2.",
             units="kg N eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1566,6 +1695,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential for module B3.",
             units="kg N eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1578,6 +1708,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential for module B4.",
             units="kg N eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1590,6 +1721,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential for module B5.",
             units="kg N eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1602,6 +1734,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential for module B6.",
             units="kg N eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1614,6 +1747,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential for module C1.",
             units="kg N eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1626,6 +1760,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential for module C2.",
             units="kg N eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1638,6 +1773,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential for module C3.",
             units="kg N eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1650,6 +1786,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential for module C4.",
             units="kg N eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1662,6 +1799,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential for module D.",
             units="kg N eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1674,6 +1812,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential for module D1.",
             units="kg N eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1686,6 +1825,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential for module D2.",
             units="kg N eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1698,6 +1838,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Total Eutrophication Potential.",
             units="kg N eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1710,6 +1851,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Freshwater for module A1-A3.",
             units="kg PO4 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1722,6 +1864,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Freshwater for module A1.",
             units="kg PO4 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1734,6 +1877,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Freshwater for module A2.",
             units="kg PO4 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1746,6 +1890,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Freshwater for module A3.",
             units="kg PO4 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1758,6 +1903,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Freshwater for module A4.",
             units="kg PO4 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1770,6 +1916,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Freshwater for module A5.",
             units="kg PO4 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1782,6 +1929,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Freshwater for module B1.",
             units="kg PO4 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1794,6 +1942,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Freshwater for module B2.",
             units="kg PO4 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1806,6 +1955,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Freshwater for module B3.",
             units="kg PO4 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1818,6 +1968,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Freshwater for module B4.",
             units="kg PO4 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1830,6 +1981,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Freshwater for module B5.",
             units="kg PO4 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1842,6 +1994,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Freshwater for module B6.",
             units="kg PO4 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1854,6 +2007,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Freshwater for module C1.",
             units="kg PO4 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1866,6 +2020,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Freshwater for module C2.",
             units="kg PO4 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1878,6 +2033,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Freshwater for module C3.",
             units="kg PO4 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1890,6 +2046,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Freshwater for module C4.",
             units="kg PO4 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1902,6 +2059,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Freshwater for module D.",
             units="kg PO4 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1914,6 +2072,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Freshwater for module D1.",
             units="kg PO4 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1926,6 +2085,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Freshwater for module D2.",
             units="kg PO4 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1938,6 +2098,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Total Eutrophication Potential - Aquatic Freshwater.",
             units="kg PO4 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1950,6 +2111,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Marine for module A1-A3.",
             units="kg N eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1962,6 +2124,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Marine for module A1.",
             units="kg N eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1974,6 +2137,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Marine for module A2.",
             units="kg N eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1986,6 +2150,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Marine for module A3.",
             units="kg N eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -1998,6 +2163,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Marine for module A4.",
             units="kg N eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2010,6 +2176,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Marine for module A5.",
             units="kg N eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2022,6 +2189,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Marine for module B1.",
             units="kg N eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2034,6 +2202,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Marine for module B2.",
             units="kg N eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2046,6 +2215,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Marine for module B3.",
             units="kg N eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2058,6 +2228,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Marine for module B4.",
             units="kg N eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2070,6 +2241,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Marine for module B5.",
             units="kg N eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2082,6 +2254,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Marine for module B6.",
             units="kg N eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2094,6 +2267,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Marine for module C1.",
             units="kg N eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2106,6 +2280,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Marine for module C2.",
             units="kg N eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2118,6 +2293,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Marine for module C3.",
             units="kg N eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2130,6 +2306,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Marine for module C4.",
             units="kg N eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2142,6 +2319,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Marine for module D.",
             units="kg N eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2154,6 +2332,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Marine for module D1.",
             units="kg N eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2166,6 +2345,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Marine for module D2.",
             units="kg N eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2178,6 +2358,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Total Eutrophication Potential - Aquatic Marine.",
             units="kg N eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2190,6 +2371,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Terrestrial for module A1-A3.",
             units="mol Ne eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2202,6 +2384,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Terrestrial for module A1.",
             units="mol Ne eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2214,6 +2397,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Terrestrial for module A2.",
             units="mol Ne eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2226,6 +2410,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Terrestrial for module A3.",
             units="mol Ne eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2238,6 +2423,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Terrestrial for module A4.",
             units="mol Ne eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2250,6 +2436,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Terrestrial for module A5.",
             units="mol Ne eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2262,6 +2449,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Terrestrial for module B1.",
             units="mol Ne eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2274,6 +2462,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Terrestrial for module B2.",
             units="mol Ne eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2286,6 +2475,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Terrestrial for module B3.",
             units="mol Ne eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2298,6 +2488,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Terrestrial for module B4.",
             units="mol Ne eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2310,6 +2501,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Terrestrial for module B5.",
             units="mol Ne eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2322,6 +2514,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Terrestrial for module B6.",
             units="mol Ne eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2334,6 +2527,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Terrestrial for module C1.",
             units="mol Ne eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2346,6 +2540,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Terrestrial for module C2.",
             units="mol Ne eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2358,6 +2553,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Terrestrial for module C3.",
             units="mol Ne eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2370,6 +2566,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Terrestrial for module C4.",
             units="mol Ne eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2382,6 +2579,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Terrestrial for module D.",
             units="mol Ne eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2394,6 +2592,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Terrestrial for module D1.",
             units="mol Ne eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2406,6 +2605,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Terrestrial for module D2.",
             units="mol Ne eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2418,6 +2618,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Total Eutrophication Potential - Terrestrial.",
             units="mol Ne eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2430,6 +2631,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Creation Potential for module A1-A3.",
             units="kg C2H4 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2442,6 +2644,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Creation Potential for module A1.",
             units="kg C2H4 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2454,6 +2657,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Creation Potential for module A2.",
             units="kg C2H4 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2466,6 +2670,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Creation Potential for module A3.",
             units="kg C2H4 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2478,6 +2683,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Creation Potential for module A4.",
             units="kg C2H4 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2490,6 +2696,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Creation Potential for module A5.",
             units="kg C2H4 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2502,6 +2709,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Creation Potential for module B1.",
             units="kg C2H4 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2514,6 +2722,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Creation Potential for module B2.",
             units="kg C2H4 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2526,6 +2735,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Creation Potential for module B3.",
             units="kg C2H4 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2538,6 +2748,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Creation Potential for module B4.",
             units="kg C2H4 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2550,6 +2761,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Creation Potential for module B5.",
             units="kg C2H4 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2562,6 +2774,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Creation Potential for module B6.",
             units="kg C2H4 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2574,6 +2787,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Creation Potential for module C1.",
             units="kg C2H4 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2586,6 +2800,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Creation Potential for module C2.",
             units="kg C2H4 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2598,6 +2813,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Creation Potential for module C3.",
             units="kg C2H4 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2610,6 +2826,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Creation Potential for module C4.",
             units="kg C2H4 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2622,6 +2839,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Creation Potential for module D.",
             units="kg C2H4 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2634,6 +2852,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Creation Potential for module D1.",
             units="kg C2H4 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2646,6 +2865,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Creation Potential for module D2.",
             units="kg C2H4 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2658,6 +2878,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Total Photochemical Ozone Creation Potential.",
             units="kg C2H4 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2670,6 +2891,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Smog Forming Potential for module A1-A3.",
             units="kg O3 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2682,6 +2904,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Smog Forming Potential for module A1.",
             units="kg O3 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2694,6 +2917,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Smog Forming Potential for module A2.",
             units="kg O3 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2706,6 +2930,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Smog Forming Potential for module A3.",
             units="kg O3 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2718,6 +2943,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Smog Forming Potential for module A4.",
             units="kg O3 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2730,6 +2956,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Smog Forming Potential for module A5.",
             units="kg O3 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2742,6 +2969,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Smog Forming Potential for module B1.",
             units="kg O3 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2754,6 +2982,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Smog Forming Potential for module B2.",
             units="kg O3 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2766,6 +2995,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Smog Forming Potential for module B3.",
             units="kg O3 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2778,6 +3008,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Smog Forming Potential for module B4.",
             units="kg O3 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2790,6 +3021,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Smog Forming Potential for module B5.",
             units="kg O3 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2802,6 +3034,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Smog Forming Potential for module B6.",
             units="kg O3 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2814,6 +3047,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Smog Forming Potential for module C1.",
             units="kg O3 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2826,6 +3060,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Smog Forming Potential for module C2.",
             units="kg O3 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2838,6 +3073,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Smog Forming Potential for module C3.",
             units="kg O3 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2850,6 +3086,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Smog Forming Potential for module C4.",
             units="kg O3 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2862,6 +3099,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Smog Forming Potential for module D.",
             units="kg O3 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2874,6 +3112,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Smog Forming Potential for module D1.",
             units="kg O3 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2886,6 +3125,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Smog Forming Potential for module D2.",
             units="kg O3 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2898,6 +3138,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Total Smog Forming Potential.",
             units="kg O3 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2910,6 +3151,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Formation Potential for module A1-A3.",
             units="kg NMVOC eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2922,6 +3164,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Formation Potential for module A1.",
             units="kg NMVOC eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2934,6 +3177,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Formation Potential for module A2.",
             units="kg NMVOC eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2946,6 +3190,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Formation Potential for module A3.",
             units="kg NMVOC eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2958,6 +3203,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Formation Potential for module A4.",
             units="kg NMVOC eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2970,6 +3216,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Formation Potential for module A5.",
             units="kg NMVOC eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2982,6 +3229,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Formation Potential for module B1.",
             units="kg NMVOC eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -2994,6 +3242,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Formation Potential for module B2.",
             units="kg NMVOC eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3006,6 +3255,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Formation Potential for module B3.",
             units="kg NMVOC eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3018,6 +3268,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Formation Potential for module B4.",
             units="kg NMVOC eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3030,6 +3281,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Formation Potential for module B5.",
             units="kg NMVOC eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3042,6 +3294,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Formation Potential for module B6.",
             units="kg NMVOC eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3054,6 +3307,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Formation Potential for module C1.",
             units="kg NMVOC eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3066,6 +3320,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Formation Potential for module C2.",
             units="kg NMVOC eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3078,6 +3333,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Formation Potential for module C3.",
             units="kg NMVOC eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3090,6 +3346,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Formation Potential for module C4.",
             units="kg NMVOC eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3102,6 +3359,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Formation Potential for module D.",
             units="kg NMVOC eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3114,6 +3372,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Formation Potential for module D1.",
             units="kg NMVOC eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3126,6 +3385,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Formation Potential for module D2.",
             units="kg NMVOC eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3138,6 +3398,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Total Photochemical Ozone Formation Potential.",
             units="kg NMVOC eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3150,6 +3411,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Abiotic Depletion Potential (Minerals and Metals) for module A1-A3.",
             units="kg Sb eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3162,6 +3424,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Abiotic Depletion Potential (Minerals and Metals) for module A1.",
             units="kg Sb eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3174,6 +3437,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Abiotic Depletion Potential (Minerals and Metals) for module A2.",
             units="kg Sb eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3186,6 +3450,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Abiotic Depletion Potential (Minerals and Metals) for module A3.",
             units="kg Sb eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3198,6 +3463,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Abiotic Depletion Potential (Minerals and Metals) for module A4.",
             units="kg Sb eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3210,6 +3476,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Abiotic Depletion Potential (Minerals and Metals) for module A5.",
             units="kg Sb eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3222,6 +3489,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Abiotic Depletion Potential (Minerals and Metals) for module B1.",
             units="kg Sb eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3234,6 +3502,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Abiotic Depletion Potential (Minerals and Metals) for module B2.",
             units="kg Sb eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3246,6 +3515,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Abiotic Depletion Potential (Minerals and Metals) for module B3.",
             units="kg Sb eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3258,6 +3528,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Abiotic Depletion Potential (Minerals and Metals) for module B4.",
             units="kg Sb eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3270,6 +3541,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Abiotic Depletion Potential (Minerals and Metals) for module B5.",
             units="kg Sb eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3282,6 +3554,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Abiotic Depletion Potential (Minerals and Metals) for module B6.",
             units="kg Sb eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3294,6 +3567,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Abiotic Depletion Potential (Minerals and Metals) for module C1.",
             units="kg Sb eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3306,6 +3580,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Abiotic Depletion Potential (Minerals and Metals) for module C2.",
             units="kg Sb eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3318,6 +3593,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Abiotic Depletion Potential (Minerals and Metals) for module C3.",
             units="kg Sb eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3330,6 +3606,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Abiotic Depletion Potential (Minerals and Metals) for module C4.",
             units="kg Sb eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3342,6 +3619,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Abiotic Depletion Potential (Minerals and Metals) for module D.",
             units="kg Sb eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3354,6 +3632,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Abiotic Depletion Potential (Minerals and Metals) for module D1.",
             units="kg Sb eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3366,6 +3645,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Abiotic Depletion Potential (Minerals and Metals) for module D2.",
             units="kg Sb eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3378,6 +3658,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Total Abiotic Depletion Potential (Minerals and Metals).",
             units="kg Sb eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3390,6 +3671,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Abiotic Depletion Potential (Fossil Fuels) for module A1-A3.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3402,6 +3684,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Abiotic Depletion Potential (Fossil Fuels) for module A1.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3414,6 +3697,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Abiotic Depletion Potential (Fossil Fuels) for module A2.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3426,6 +3710,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Abiotic Depletion Potential (Fossil Fuels) for module A3.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3438,6 +3723,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Abiotic Depletion Potential (Fossil Fuels) for module A4.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3450,6 +3736,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Abiotic Depletion Potential (Fossil Fuels) for module A5.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3462,6 +3749,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Abiotic Depletion Potential (Fossil Fuels) for module B1.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3474,6 +3762,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Abiotic Depletion Potential (Fossil Fuels) for module B2.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3486,6 +3775,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Abiotic Depletion Potential (Fossil Fuels) for module B3.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3498,6 +3788,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Abiotic Depletion Potential (Fossil Fuels) for module B4.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3510,6 +3801,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Abiotic Depletion Potential (Fossil Fuels) for module B5.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3522,6 +3814,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Abiotic Depletion Potential (Fossil Fuels) for module B6.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3534,6 +3827,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Abiotic Depletion Potential (Fossil Fuels) for module C1.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3546,6 +3840,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Abiotic Depletion Potential (Fossil Fuels) for module C2.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3558,6 +3853,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Abiotic Depletion Potential (Fossil Fuels) for module C3.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3570,6 +3866,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Abiotic Depletion Potential (Fossil Fuels) for module C4.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3582,6 +3879,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Abiotic Depletion Potential (Fossil Fuels) for module D.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3594,6 +3892,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Abiotic Depletion Potential (Fossil Fuels) for module D1.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3606,6 +3905,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Abiotic Depletion Potential (Fossil Fuels) for module D2.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3618,6 +3918,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Total Abiotic Depletion Potential (Fossil Fuels).",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3630,6 +3931,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Water Depletion Potential for module A1-A3.",
             units="m3 world eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3642,6 +3944,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Water Depletion Potential for module A1.",
             units="m3 world eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3654,6 +3957,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Water Depletion Potential for module A2.",
             units="m3 world eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3666,6 +3970,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Water Depletion Potential for module A3.",
             units="m3 world eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3678,6 +3983,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Water Depletion Potential for module A4.",
             units="m3 world eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3690,6 +3996,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Water Depletion Potential for module A5.",
             units="m3 world eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3702,6 +4009,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Water Depletion Potential for module B1.",
             units="m3 world eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3714,6 +4022,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Water Depletion Potential for module B2.",
             units="m3 world eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3726,6 +4035,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Water Depletion Potential for module B3.",
             units="m3 world eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3738,6 +4048,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Water Depletion Potential for module B4.",
             units="m3 world eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3750,6 +4061,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Water Depletion Potential for module B5.",
             units="m3 world eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3762,6 +4074,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Water Depletion Potential for module B6.",
             units="m3 world eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3774,6 +4087,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Water Depletion Potential for module C1.",
             units="m3 world eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3786,6 +4100,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Water Depletion Potential for module C2.",
             units="m3 world eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3798,6 +4113,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Water Depletion Potential for module C3.",
             units="m3 world eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3810,6 +4126,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Water Depletion Potential for module C4.",
             units="m3 world eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3822,6 +4139,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Water Depletion Potential for module D.",
             units="m3 world eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3834,6 +4152,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Water Depletion Potential for module D1.",
             units="m3 world eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3846,6 +4165,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Water Depletion Potential for module D2.",
             units="m3 world eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3858,6 +4178,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Total Water Depletion Potential.",
             units="m3 world eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3870,6 +4191,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Renewable (Energy resources) for module A1-A3.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3882,6 +4204,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Renewable (Energy resources) for module A1.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3894,6 +4217,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Renewable (Energy resources) for module A2.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3906,6 +4230,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Renewable (Energy resources) for module A3.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3918,6 +4243,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Renewable (Energy resources) for module A4.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3930,6 +4256,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Renewable (Energy resources) for module A5.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3942,6 +4269,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Renewable (Energy resources) for module B1.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3954,6 +4282,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Renewable (Energy resources) for module B2.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3966,6 +4295,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Renewable (Energy resources) for module B3.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3978,6 +4308,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Renewable (Energy resources) for module B4.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -3990,6 +4321,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Renewable (Energy resources) for module B5.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4002,6 +4334,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Renewable (Energy resources) for module B6.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4014,6 +4347,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Renewable (Energy resources) for module C1.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4026,6 +4360,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Renewable (Energy resources) for module C2.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4038,6 +4373,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Renewable (Energy resources) for module C3.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4050,6 +4386,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Renewable (Energy resources) for module C4.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4062,6 +4399,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Renewable (Energy resources) for module D.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4074,6 +4412,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Renewable (Energy resources) for module D1.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4086,6 +4425,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Renewable (Energy resources) for module D2.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4098,6 +4438,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Total Primary Energy Renewable (Energy resources).",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4110,6 +4451,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Non-Renewable (Energy resources) for module A1-A3.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4122,6 +4464,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Non-Renewable (Energy resources) for module A1.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4134,6 +4477,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Non-Renewable (Energy resources) for module A2.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4146,6 +4490,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Non-Renewable (Energy resources) for module A3.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4158,6 +4503,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Non-Renewable (Energy resources) for module A4.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4170,6 +4516,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Non-Renewable (Energy resources) for module A5.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4182,6 +4529,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Non-Renewable (Energy resources) for module B1.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4194,6 +4542,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Non-Renewable (Energy resources) for module B2.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4206,6 +4555,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Non-Renewable (Energy resources) for module B3.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4218,6 +4568,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Non-Renewable (Energy resources) for module B4.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4230,6 +4581,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Non-Renewable (Energy resources) for module B5.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4242,6 +4594,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Non-Renewable (Energy resources) for module B6.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4254,6 +4607,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Non-Renewable (Energy resources) for module C1.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4266,6 +4620,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Non-Renewable (Energy resources) for module C2.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4278,6 +4633,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Non-Renewable (Energy resources) for module C3.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4290,6 +4646,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Non-Renewable (Energy resources) for module C4.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4302,6 +4659,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Non-Renewable (Energy resources) for module D.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4314,6 +4672,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Non-Renewable (Energy resources) for module D1.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4326,6 +4685,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Non-Renewable (Energy resources) for module D2.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4338,6 +4698,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Total Primary Energy Non-Renewable (Energy resources).",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4350,6 +4711,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Renewable Total for module A1-A3.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4362,6 +4724,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Renewable Total for module A1.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4374,6 +4737,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Renewable Total for module A2.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4386,6 +4750,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Renewable Total for module A3.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4398,6 +4763,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Renewable Total for module A4.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4410,6 +4776,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Renewable Total for module A5.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4422,6 +4789,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Renewable Total for module B1.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4434,6 +4802,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Renewable Total for module B2.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4446,6 +4815,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Renewable Total for module B3.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4458,6 +4828,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Renewable Total for module B4.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4470,6 +4841,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Renewable Total for module B5.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4482,6 +4854,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Renewable Total for module B6.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4494,6 +4867,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Renewable Total for module C1.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4506,6 +4880,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Renewable Total for module C2.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4518,6 +4893,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Renewable Total for module C3.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4530,6 +4906,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Renewable Total for module C4.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4542,6 +4919,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Renewable Total for module D.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4554,6 +4932,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Renewable Total for module D1.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4566,6 +4945,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Renewable Total for module D2.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4578,6 +4958,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Total Primary Energy Renewable Total.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4590,6 +4971,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Non-Renewable Total for module A1-A3.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4602,6 +4984,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Non-Renewable Total for module A1.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4614,6 +4997,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Non-Renewable Total for module A2.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4626,6 +5010,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Non-Renewable Total for module A3.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4638,6 +5023,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Non-Renewable Total for module A4.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4650,6 +5036,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Non-Renewable Total for module A5.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4662,6 +5049,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Non-Renewable Total for module B1.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4674,6 +5062,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Non-Renewable Total for module B2.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4686,6 +5075,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Non-Renewable Total for module B3.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4698,6 +5088,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Non-Renewable Total for module B4.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4710,6 +5101,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Non-Renewable Total for module B5.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4722,6 +5114,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Non-Renewable Total for module B6.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4734,6 +5127,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Non-Renewable Total for module C1.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4746,6 +5140,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Non-Renewable Total for module C2.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4758,6 +5153,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Non-Renewable Total for module C3.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4770,6 +5166,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Non-Renewable Total for module C4.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4782,6 +5179,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Non-Renewable Total for module D.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4794,6 +5192,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Non-Renewable Total for module D1.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4806,6 +5205,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Non-Renewable Total for module D2.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -4818,5 +5218,6 @@ class LCAResultsWideFullBase(SQLModel):
             description="Total Primary Energy Non-Renewable Total.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
