@@ -1,6 +1,6 @@
 from openpyxl import load_workbook
 
-from openbdf.cli.save import save_translator
+from openbdf.cli.save import save_openbdf_to_xlsx, save_translator
 from openbdf.lib.converters.translators import (
     COMMON_CATEGORY_PROPERTIES,
     SHEETS_PROPERTIES_HEADERS,
@@ -56,6 +56,28 @@ def test_translator_template_adds_default_and_preprocess_columns(tmp_path):
         "Decimal",
         "Required",
     ]
+
+
+def test_openbdf_template_includes_criticality_metadata(tmp_path):
+    output_path = tmp_path / "openbdf_template.xlsx"
+    save_openbdf_to_xlsx(output_path, None)
+
+    workbook = load_workbook(output_path)
+    info = workbook["General Information"]
+    assert [info.cell(row=1, column=column).value for column in range(9, 12)] == [
+        "Requirements",
+        "Criticality",
+        "Value",
+    ]
+    assert info.cell(row=2, column=10).value == "SHOULD"
+
+    for sheet_name in FIELD_SHEET_NAMES[1:]:
+        sheet = workbook[sheet_name]
+        assert sheet["A6"].value == "Requirements"
+        assert sheet["A7"].value == "Criticality"
+        assert sheet["A8"].value == "User Instructions"
+        assert sheet["A9"].value == "Field Code"
+        assert sheet.cell(row=7, column=2).value == "SHOULD"
 
 
 def test_translator_template_keeps_non_field_sheet_layouts(tmp_path):
