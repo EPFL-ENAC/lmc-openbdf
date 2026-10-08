@@ -1,3 +1,4 @@
+import importlib.resources
 import itertools
 from copy import copy
 from pathlib import Path
@@ -13,7 +14,11 @@ from sqlmodel import SQLModel
 
 from openbdf.lib.converters.dataframe import horizontal_to_dataframe
 from openbdf.lib.converters.enums_registry import EnumRegistry
-from openbdf.lib.converters.translators import COMMON_CATEGORY_PROPERTIES, SHEETS_PROPERTIES_HEADERS
+from openbdf.lib.converters.translators import (
+    ABOUT_SHEET_NAME,
+    COMMON_CATEGORY_PROPERTIES,
+    SHEETS_PROPERTIES_HEADERS,
+)
 from openbdf.lib.types.annotations import unwrap_optional
 from openbdf.lib.types.human_readable import human_readable_constraints, human_readable_type
 from openbdf.lib.types.xlsx import xlsx_validation_from_type
@@ -87,6 +92,13 @@ def get_field_extra(field: FieldInfo) -> dict:
     return extra if isinstance(extra, dict) else {}
 
 
+def about_to_xlsx(writer: pd.ExcelWriter) -> None:
+    about_text = importlib.resources.files("openbdf").joinpath("about.txt").read_text(encoding="utf-8")
+    about_sheet = writer.book.create_sheet(ABOUT_SHEET_NAME)
+    for cell_row, line in enumerate(about_text.splitlines(), start=1):
+        about_sheet.cell(row=cell_row, column=1, value=line)
+
+
 def save_openbdf_to_xlsx(
     xlsx_path: str | Path,
     project: ProjectRecord | None,
@@ -101,6 +113,7 @@ def save_openbdf_to_xlsx(
         register_named_styles(writer)
         enum_registry = EnumRegistry()
 
+        about_to_xlsx(writer)
         info_to_xlsx(writer, project, info_sheet_name, enum_registry)
         wide_to_xlsx(
             writer,
@@ -371,6 +384,7 @@ def save_translator(
     """Save a template Excel file for the attribute translator."""
     with pd.ExcelWriter(xlsx_path, engine="openpyxl") as writer:
         register_named_styles(writer)
+        about_to_xlsx(writer)
         make_translations_library_template_xlsx(writer, "Translations Library")
         make_translator_openbdf_pydantic(
             writer, COMMON_CATEGORY_PROPERTIES["project"]["name"], ProjectRecordBase.model_fields
