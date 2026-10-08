@@ -17,17 +17,17 @@ def write_workbook(path: Path, sheets: dict[str, pd.DataFrame]) -> None:
 
 
 def default_openbdf_sheets() -> dict[str, pd.DataFrame]:
-    project = pd.DataFrame([[None] * 10])
+    project = pd.DataFrame([[None] * 11])
     project.iloc[0, 3] = "project_name"
-    project.iloc[0, 9] = "Example project"
+    project.iloc[0, 10] = "Example project"
 
-    bill_of_materials = pd.DataFrame([[None] * 2 for _ in range(9)])
-    bill_of_materials.iloc[7, 1] = "material_id"
-    bill_of_materials.iloc[8, 1] = "MAT-1"
+    bill_of_materials = pd.DataFrame([[None] * 2 for _ in range(10)])
+    bill_of_materials.iloc[8, 1] = "material_id"
+    bill_of_materials.iloc[9, 1] = "MAT-1"
 
-    results_wide = pd.DataFrame([[None] * 2 for _ in range(8)])
-    results_wide.iloc[6, 1] = "material_id"
-    results_wide.iloc[7, 1] = "MAT-1"
+    results_wide = pd.DataFrame([[None] * 2 for _ in range(9)])
+    results_wide.iloc[7, 1] = "material_id"
+    results_wide.iloc[8, 1] = "MAT-1"
 
     return {
         "General Information": project,
