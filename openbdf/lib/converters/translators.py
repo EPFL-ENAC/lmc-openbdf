@@ -9,6 +9,8 @@ from typing import Any, Callable, Literal, TypedDict
 import pandas as pd
 from pydantic import BaseModel
 
+ABOUT_SHEET_NAME = "About"
+
 
 @dataclass(frozen=True)
 class PreprocessResult:
@@ -358,7 +360,9 @@ class DocumentTranslator:
         header_row: int = 0,
     ) -> "DocumentTranslator":
         with pd.ExcelFile(xlsx_path) as xlsx:
-            true_sheets = [sheet for sheet in xlsx.sheet_names if sheet != "Translations Library"]
+            true_sheets = [
+                sheet for sheet in xlsx.sheet_names if sheet not in ("Translations Library", ABOUT_SHEET_NAME)
+            ]
 
             library = (
                 xlsx.parse("Translations Library", header=header_row)
