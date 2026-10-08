@@ -210,7 +210,10 @@ def info_to_xlsx(writer: pd.ExcelWriter, project: ProjectRecord | None, sheet_na
         else:
             r.style = OPTIONAL_STYLE.name
 
-        v = info_sheet.cell(row=cell_row, column=10, value=getattr(project, field_code) if project else "")
+        criticality = extra.get("criticality", "SHOULD")
+        info_sheet.cell(row=cell_row, column=10, value=criticality)
+
+        v = info_sheet.cell(row=cell_row, column=11, value=getattr(project, field_code) if project else "")
         v.style = EDITABLE_VALUE_STYLE.name
 
         dv = xlsx_validation_from_type(data_type, is_optional, metadata, enum_registry)  # type: ignore[arg-type]
@@ -240,7 +243,9 @@ def info_to_xlsx(writer: pd.ExcelWriter, project: ProjectRecord | None, sheet_na
     fc.style = ATTRIBUTES_NAME_STYLE.name
     fc = info_sheet.cell(row=1, column=9, value="Requirements")
     fc.style = ATTRIBUTES_NAME_STYLE.name
-    fc = info_sheet.cell(row=1, column=10, value="Value")
+    fc = info_sheet.cell(row=1, column=10, value="Criticality")
+    fc.style = ATTRIBUTES_NAME_STYLE.name
+    fc = info_sheet.cell(row=1, column=11, value="Value")
     fc.style = ATTRIBUTES_NAME_STYLE.name
 
     info_sheet.column_dimensions["A"].width = 10
@@ -252,7 +257,8 @@ def info_to_xlsx(writer: pd.ExcelWriter, project: ProjectRecord | None, sheet_na
     info_sheet.column_dimensions["G"].width = 25
     info_sheet.column_dimensions["H"].width = 15
     info_sheet.column_dimensions["I"].width = 15
-    info_sheet.column_dimensions["J"].width = 25
+    info_sheet.column_dimensions["J"].width = 15
+    info_sheet.column_dimensions["K"].width = 25
 
 
 def wide_to_xlsx(
@@ -324,13 +330,16 @@ def wide_to_xlsx(
         else:
             r.style = OPTIONAL_STYLE.name
 
-        fc = sheet.cell(row=8, column=cell_column, value=field_code)
+        criticality = extra.get("criticality", "SHOULD")
+        sheet.cell(row=7, column=cell_column, value=criticality)
+
+        fc = sheet.cell(row=9, column=cell_column, value=field_code)
         fc.style = FIELD_CODE_STYLE.name
 
         dv = xlsx_validation_from_type(data_type, is_optional, metadata, enum_registry)  # type: ignore[arg-type]
         if dv:
             dv.add(
-                f"{column_letter}9:{column_letter}1048576"
+                f"{column_letter}10:{column_letter}1048576"
             )  # Apply validation to the whole column starting from the first data row
             sheet.add_data_validation(dv)
 
@@ -350,13 +359,15 @@ def wide_to_xlsx(
     u.style = ROW_HEADER_STYLE.name
     r = sheet.cell(row=6, column=1, value="Requirements")
     r.style = ROW_HEADER_STYLE.name
-    ui = sheet.cell(row=7, column=1, value="User Instructions")
+    cr = sheet.cell(row=7, column=1, value="Criticality")
+    cr.style = ROW_HEADER_STYLE.name
+    ui = sheet.cell(row=8, column=1, value="User Instructions")
     ui.style = ROW_HEADER_STYLE.name
-    fc = sheet.cell(row=8, column=1, value="Field Code")
+    fc = sheet.cell(row=9, column=1, value="Field Code")
     fc.style = ROW_HEADER_STYLE.name
 
     last_col = len(df.columns) + 1
-    start_data_row = 9
+    start_data_row = 10
     end_data_row = start_data_row + max(len(df) - 1, min_rows)
 
     rows = df.itertuples(index=False, name=None)

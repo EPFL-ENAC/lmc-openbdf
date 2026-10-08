@@ -22,6 +22,7 @@ class LCAResultsTallBase(SQLModel):
             field_code="material_id",
             description="The unique identifier for the material within the project context, referencing the Bill of Materials.",
             requirements="Required",
+            criticality="SHOULD",
         ),
     )
 
@@ -32,6 +33,7 @@ class LCAResultsTallBase(SQLModel):
             field_code="lca_service_life",
             description="Declared reference service life.",
             units="years",
+            criticality="SHOULD",
         ),
     )
 
@@ -42,6 +44,7 @@ class LCAResultsTallBase(SQLModel):
             field_code="lca_stage_or_module",
             description="Life cycle assessment stage or module for this result row.",
             requirements="Required",
+            criticality="SHOULD",
         ),
     )
 
@@ -54,6 +57,7 @@ class LCAResultsTallBase(SQLModel):
             description="Global Warming Potential - Total.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -66,6 +70,7 @@ class LCAResultsTallBase(SQLModel):
             description="Global Warming Potential - Fossil.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -78,6 +83,7 @@ class LCAResultsTallBase(SQLModel):
             description="Global Warming Potential - Biogenic.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -90,6 +96,7 @@ class LCAResultsTallBase(SQLModel):
             description="Global Warming Potential - Land Use and Land Use Change.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="SHOULD",
         ),
     )
 
@@ -102,6 +109,7 @@ class LCAResultsTallBase(SQLModel):
             description="Ozone Depletion Potential.",
             units="kg R11 eq / kg CFC-11 eq.",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -114,6 +122,7 @@ class LCAResultsTallBase(SQLModel):
             description="Acidification Potential.",
             units="kg SO₂ eq.",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -126,6 +135,7 @@ class LCAResultsTallBase(SQLModel):
             description="Eutrophication Potential.",
             units="kg N eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -138,6 +148,7 @@ class LCAResultsTallBase(SQLModel):
             description="Eutrophication Potential - Aquatic Freshwater.",
             units="kg PO4 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -150,6 +161,7 @@ class LCAResultsTallBase(SQLModel):
             description="Eutrophication Potential - Aquatic Marine.",
             units="kg N eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -162,6 +174,7 @@ class LCAResultsTallBase(SQLModel):
             description="Eutrophication Potential - Terrestrial.",
             units="mol Ne eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -174,6 +187,7 @@ class LCAResultsTallBase(SQLModel):
             description="Photochemical Ozone Creation Potential.",
             units="kg C2H4 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -186,6 +200,7 @@ class LCAResultsTallBase(SQLModel):
             description="Smog Forming Potential.",
             units="kg O3 eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -198,6 +213,7 @@ class LCAResultsTallBase(SQLModel):
             description="Photochemical Ozone Formation Potential.",
             units="kg NMVOC eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -210,6 +226,7 @@ class LCAResultsTallBase(SQLModel):
             description="Abiotic Depletion Potential (Minerals and Metals).",
             units="kg Sb eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -222,6 +239,7 @@ class LCAResultsTallBase(SQLModel):
             description="Abiotic Depletion Potential (Fossil Fuels).",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -234,6 +252,7 @@ class LCAResultsTallBase(SQLModel):
             description="Water Depletion Potential.",
             units="m3 world eq",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -246,6 +265,7 @@ class LCAResultsTallBase(SQLModel):
             description="Primary Energy Renewable (Energy resources).",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -258,6 +278,7 @@ class LCAResultsTallBase(SQLModel):
             description="Primary Energy Non-Renewable (Energy resources).",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -270,6 +291,7 @@ class LCAResultsTallBase(SQLModel):
             description="Primary Energy Renewable Total.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
 
@@ -282,5 +304,6 @@ class LCAResultsTallBase(SQLModel):
             description="Primary Energy Non-Renewable Total.",
             units="MJ",
             requirements="Optional",
+            criticality="SHOULD",
         ),
     )
