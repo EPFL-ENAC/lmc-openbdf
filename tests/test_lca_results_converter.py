@@ -53,7 +53,7 @@ def test_maps_all_supported_stages_in_stable_order():
         LCAResultsTallFullRecord,
     )
 
-    assert [result.lca_stage_or_module for result in results] == [stage for stage, _ in STAGES]
+    assert [result.lca_stage_module_submodule for result in results] == [stage for stage, _ in STAGES]
     assert [result.gwp_f for result in results] == [Decimal(index) for index in range(1, len(STAGES) + 1)]
 
 
@@ -70,7 +70,7 @@ def test_combines_indicators_for_the_same_stage_and_omits_empty_stages():
         LCAResultsTallFullRecord,
     )
 
-    assert [result.lca_stage_or_module for result in results] == [
+    assert [result.lca_stage_module_submodule for result in results] == [
         LCAStageOrModuleOrSubModule.A1_A3,
         LCAStageOrModuleOrSubModule.A4,
         LCAStageOrModuleOrSubModule.B6,
@@ -91,22 +91,20 @@ def test_ignores_overall_summary_fields():
     )
 
     assert len(results) == 1
-    assert results[0].lca_stage_or_module is LCAStageOrModuleOrSubModule.A1_A3
+    assert results[0].lca_stage_module_submodule is LCAStageOrModuleOrSubModule.A1_A3
     assert results[0].odp is None
 
 
 @pytest.mark.parametrize("record_id", [42, None])
-def test_copies_identifiers_and_service_life_without_attaching_relationships(record_id: int | None):
+def test_copies_identifiers_without_attaching_relationships(record_id: int | None):
     wide = wide_result()
-    service_life = Decimal("80.00")
-    bom = bill_material(record_id=record_id, lca_service_life=service_life)
+    bom = bill_material(record_id=record_id)
     wide_before = wide.model_dump()
     bom_before = bom.model_dump()
 
     results = lca_results_wide_to_tall(wide, bom, LCAResultsTallFullRecord)
 
     assert all(result.material_id == "mat-1" for result in results)
-    assert all(result.lca_service_life is service_life for result in results)
     assert all(result.building_bill_materials_slim_record_id == record_id for result in results)
     assert all(result.building_bill_materials_slim_record is None for result in results)
     assert bom.lca_results_tall_full_records == []
