@@ -11,42 +11,42 @@ class MainStructureType(OpenBDFEnum):
 
 class OpenBDFMaterialClassification(OpenBDFEnum):
     # Bio-based materials
-    WOOD = ("1.1", "Wood", "Bio-based materials")
-    BIO_INSULATION = ("1.2", "Bio-based insulation", "Bio-based materials")
-    BIO_OTHER = ("1.0", "Other bio-based materials", "Bio-based materials")
+    WOOD = ("1.1", "1.1 Wood", "Bio-based materials")
+    BIO_INSULATION = ("1.2", "1.2 Bio-based insulation", "Bio-based materials")
+    BIO_OTHER = ("1.0", "1.0 Other bio-based materials", "Bio-based materials")
 
     # Fossil-based materials
     PLASTICS = (
         "2.1",
-        "Plastics (PC, PE, PP, PU, PVC)",
+        "2.1 Plastics (PC, PE, PP, PVC)",
         "Fossil-based materials",
     )
     FOSSIL_INSULATION = (
         "2.2",
-        "Fossil-based insulation",
+        "2.2 Fossil-based insulation",
         "Fossil-based materials",
     )
     FOSSIL_OTHER = (
         "2.0",
-        "Other fossil energy materials",
+        "2.0 Other fossil energy materials",
         "Fossil-based materials",
     )
 
     # Metal materials
-    ALUMINUM = ("3.1", "Aluminum", "Metal materials")
-    STEEL = ("3.2", "Steel", "Metal materials")
-    BRASS_COPPER = ("3.3", "Brass, copper", "Metal materials")
-    METAL_OTHER = ("3.0", "Other metal materials", "Metal materials")
+    ALUMINUM = ("3.1", "3.1 Aluminum", "Metal materials")
+    STEEL = ("3.2", "3.2 Steel", "Metal materials")
+    BRASS_COPPER = ("3.3", "3.3 Brass, copper", "Metal materials")
+    METAL_OTHER = ("3.0", "3.0 Other metal materials", "Metal materials")
 
     # Non-metallic minerals
-    BRICK = ("4.1", "Brick", "Non-metallic minerals")
-    CONCRETE = ("4.2", "Concrete", "Non-metallic minerals")
-    GLASS = ("4.3", "Glass", "Non-metallic minerals")
-    MINERAL_INSULATION = ("4.4", "Mineral insulation", "Non-metallic minerals")
-    MINERAL_OTHER = ("4.0", "Other non-metallic minerals", "Non-metallic minerals")
+    BRICK = ("4.1", "4.1 Brick", "Non-metallic minerals")
+    CONCRETE = ("4.2", "4.2 Concrete", "Non-metallic minerals")
+    GLASS = ("4.3", "4.3 Glass", "Non-metallic minerals")
+    MINERAL_INSULATION = ("4.4", "4.4 Mineral insulation", "Non-metallic minerals")
+    MINERAL_OTHER = ("4.0", "4.0 Other non-metallic minerals", "Non-metallic minerals")
 
     # Undefined
-    UNDEFINED = ("0.0", "Undefined materials", "Undefined materials")
+    UNDEFINED = ("0.0", "0.0 Undefined materials", "Undefined materials")
 
 
 class Material(OpenBDFEnum):
@@ -104,3 +104,150 @@ class MaterialQuantitiesUnits(OpenBDFEnum):
     M3 = ("m3", "Volume (m³)")
     MASS_KG = ("mass_kg", "Mass (kg)")
     kWH = ("kwh", "Energy (kWh)")
+
+
+class ReplacementCountMethod(OpenBDFEnum):
+    INTEGER = (
+        "integer",
+        "integer (whole replacements only)",
+        "whole replacements only",
+    )
+    DECIMAL = (
+        "decimal",
+        "decimal (fractional replacements allowed)",
+        "fractional replacements allowed",
+    )
+    UNKNOWN = (
+        "unknown",
+        "unknown (rule not declared)",
+        "rule not declared",
+    )
+
+
+class MaterialDataType(OpenBDFEnum):
+    CPR_DOPC = (
+        "cpr_dopc",
+        "cpr dopc (declaration of performance and conformity under the Construction Products Regulation)",
+        "declaration of performance and conformity under the Construction Products Regulation",
+    )
+    ECODESIGN = (
+        "ecodesign",
+        "ecodesign (data issued under ecodesign or energy labelling legislation)",
+        "data issued under ecodesign or energy labelling legislation",
+    )
+    PROJECT_SPECIFIC = (
+        "project_specific",
+        "project specific (assessment of this project, not issued under those rules)",
+        "assessment of this project, not issued under those rules",
+    )
+    PRODUCT_SPECIFIC = (
+        "product_specific",
+        "product specific (assessment of this product, not issued under those rules)",
+        "assessment of this product, not issued under those rules",
+    )
+    PRODUCT_GROUP_AVERAGE = (
+        "product_group_average",
+        "product group average (sectoral or industry average)",
+        "sectoral or industry average",
+    )
+    GENERIC = (
+        "generic",
+        "generic (background database value)",
+        "background database value",
+    )
+    DEFAULT_VALUE = (
+        "default_value",
+        "default value (conservative national default)",
+        "conservative national default",
+    )
+
+
+class MaterialEPDMatch(OpenBDFEnum):
+    IDENTICAL = (
+        "identical",
+        "identical (the declaration describes this product)",
+        "the declaration describes this product",
+    )
+    SAME_PRODUCT_GROUP = (
+        "same_product_group",
+        "same product group (a sectoral average covering it)",
+        "a sectoral average covering it",
+    )
+    PROXY_TECHNOLOGICAL = (
+        "proxy_technological",
+        "proxy technological (a different product used as a stand-in)",
+        "a different product used as a stand-in",
+    )
+    PROXY_GEOGRAPHICAL = (
+        "proxy_geographical",
+        "proxy geographical (the same product, another region)",
+        "the same product, another region",
+    )
+    PROXY_TEMPORAL = (
+        "proxy_temporal",
+        "proxy temporal (the same product, outside the validity of its declaration)",
+        "the same product, outside the validity of its declaration",
+    )
+    REFERENCE_ONLY = (
+        "reference_only",
+        "reference only (a broad reference, not a match)",
+        "a broad reference, not a match",
+    )
+    UNKNOWN = (
+        "unknown",
+        "unknown (the relationship cannot be established)",
+        "the relationship cannot be established",
+    )
+
+
+class DeclaredUnit(OpenBDFEnum):
+    KG = ("kg", "kg")
+    T = ("t", "t")
+    M3 = ("m3", "m3")
+    M2 = ("m2", "m2")
+    M = ("m", "m")
+    PIECE = ("piece", "piece")
+    L = ("L", "L")
+
+
+class MaterialFlowType(OpenBDFEnum):
+    PROCESS = (
+        "process",
+        "process (an activity without a material flow)",
+        "an activity without a material flow",
+    )
+    MATERIAL_IN = (
+        "material_in",
+        "material in (material entering the building)",
+        "material entering the building",
+    )
+    MATERIAL_OUT = (
+        "material_out",
+        "material out (material leaving the building)",
+        "material leaving the building",
+    )
+    MATERIAL_LOSS_IN = (
+        "material_loss_in",
+        "material loss in (losses during installation)",
+        "losses during installation",
+    )
+    MATERIAL_LOSS_OUT = (
+        "material_loss_out",
+        "material loss out (losses during removal)",
+        "losses during removal",
+    )
+    TRANSPORT_TO_SITE = (
+        "transport_to_site",
+        "transport to site (delivery of the product)",
+        "delivery of the product",
+    )
+    TRANSPORT_END_OF_LIFE = (
+        "transport_end_of_life",
+        "transport end of life (removal from site)",
+        "removal from site",
+    )
+    ENERGY_IN = (
+        "energy_in",
+        "energy in (energy consumed by the process)",
+        "energy consumed by the process",
+    )
