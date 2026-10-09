@@ -23,8 +23,9 @@ class LCAResultIndicator:
     attribute_name: str
     units: str
     requirements: str
+    description: str | None = None
     required_in_wide: bool = False
-    criticality: str = "SHOULD"
+    criticality: str = "MAY"
 
 
 # Every LCA stage or module present in the wide model, as (enum, suffix) pairs.
@@ -87,6 +88,7 @@ INDICATORS: tuple[LCAResultIndicator, ...] = (
         attribute_name="Ozone Depletion Potential",
         units="kg R11 eq / kg CFC-11 eq.",
         requirements="Optional",
+        description="Ozone Depletion Potential",
     ),
     LCAResultIndicator(
         code="ap",
@@ -102,39 +104,45 @@ INDICATORS: tuple[LCAResultIndicator, ...] = (
     ),
     LCAResultIndicator(
         code="ep_af",
-        attribute_name="Eutrophication Potential - Aquatic Freshwater",
+        attribute_name="Eutrophication potential, freshwater",
         units="kg PO4 eq",
         requirements="Optional",
+        description="Eutrophication Potential - Aquatic Freshwater.",
     ),
     LCAResultIndicator(
         code="ep_am",
-        attribute_name="Eutrophication Potential - Aquatic Marine",
+        attribute_name="Eutrophication potential, marine",
         units="kg N eq",
         requirements="Optional",
+        description="Eutrophication Potential - Aquatic Marine.",
     ),
     LCAResultIndicator(
         code="ep_t",
-        attribute_name="Eutrophication Potential - Terrestrial",
-        units="mol Ne eq",
+        attribute_name="Eutrophication potential, terrestrial",
+        units="mol N eq",
         requirements="Optional",
+        description="Eutrophication Potential - Terrestrial.",
     ),
     LCAResultIndicator(
         code="pocp",
-        attribute_name="Photochemical Ozone Creation Potential",
+        attribute_name="Formation potential of tropospheric ozone",
         units="kg C2H4 eq",
         requirements="Optional",
+        description="Photochemical Ozone Creation Potential.",
     ),
     LCAResultIndicator(
         code="sfp",
-        attribute_name="Smog Forming Potential",
+        attribute_name="Smog formation potential",
         units="kg O3 eq",
         requirements="Optional",
+        description="Smog Forming Potential.",
     ),
     LCAResultIndicator(
         code="pofp",
-        attribute_name="Photochemical Ozone Formation Potential",
+        attribute_name="Formation potential of tropospheric ozone",
         units="kg NMVOC eq",
         requirements="Optional",
+        description="Photochemical Ozone Formation Potential.",
     ),
     LCAResultIndicator(
         code="adpmm",
@@ -177,6 +185,48 @@ INDICATORS: tuple[LCAResultIndicator, ...] = (
         attribute_name="Primary Energy Non-Renewable Total",
         units="MJ",
         requirements="Optional",
+    ),
+    LCAResultIndicator(
+        code="pm",
+        attribute_name="Particulate matter emissions",
+        units="disease incidence",
+        requirements="Optional",
+        description="Particulate matter emissions",
+    ),
+    LCAResultIndicator(
+        code="irp",
+        attribute_name="Ionising radiation, human health",
+        units="kBq U235 eq",
+        requirements="Optional",
+        description="Ionising radiation, human health",
+    ),
+    LCAResultIndicator(
+        code="etp_fw",
+        attribute_name="Ecotoxicity, freshwater",
+        units="CTUe",
+        requirements="Optional",
+        description="Ecotoxicity, freshwater",
+    ),
+    LCAResultIndicator(
+        code="htp_c",
+        attribute_name="Human toxicity, cancer effects",
+        units="CTUh",
+        requirements="Optional",
+        description="Human toxicity, cancer effects",
+    ),
+    LCAResultIndicator(
+        code="htp_nc",
+        attribute_name="Human toxicity, non-cancer effects",
+        units="CTUh",
+        requirements="Optional",
+        description="Human toxicity, non-cancer effects",
+    ),
+    LCAResultIndicator(
+        code="sqp",
+        attribute_name="Soil quality index",
+        units="-",
+        requirements="Optional",
+        description="Soil quality index",
     ),
 )
 
@@ -252,7 +302,7 @@ def _material_id_field() -> str:
         type_="str",
         default=None,
         requirements="Required",
-        criticality="SHOULD",
+        criticality="MUST",
         attribute_name="Material ID",
         field_code="material_id",
         description=(
@@ -263,31 +313,115 @@ def _material_id_field() -> str:
     )
 
 
-def _lca_service_life_field() -> str:
+def _lca_stage_module_submodule_field() -> str:
     return _render_field(
-        name="lca_service_life",
-        type_="Decimal",
-        default=None,
-        requirements=None,
-        criticality="SHOULD",
-        attribute_name="Service life",
-        field_code="lca_service_life",
-        description="Declared reference service life.",
-        units="years",
-    )
-
-
-def _lca_stage_or_module_field() -> str:
-    return _render_field(
-        name="lca_stage_or_module",
+        name="lca_stage_module_submodule",
         type_="LCAStageOrModuleOrSubModule",
         default=None,
         requirements="Required",
-        criticality="SHOULD",
-        attribute_name="LCA stage or module",
-        field_code="lca_stage_or_module",
-        description="Life cycle assessment stage or module for this result row.",
+        criticality="MUST",
+        attribute_name="Life cycle stage or module or submodule",
+        field_code="lca_stage_module_submodule",
+        description="Life-cycle stage or module or submodule of this result row, such as A1-A3 or A5 or A5.1 ",
         units=None,
+    )
+
+
+def _lca_stage_field() -> str:
+    return _render_field(
+        name="lca_stage",
+        type_="Optional[LCAStageOrModuleOrSubModule]",
+        default="None",
+        requirements="Automatic",
+        criticality="MAY",
+        attribute_name="Life cycle stage",
+        field_code="lca_stage",
+        description="Life-cycle stage of the module, derived by the parser from Life cycle module.",
+        units=None,
+    )
+
+
+def _lca_module_field() -> str:
+    return _render_field(
+        name="lca_module",
+        type_="Optional[LCAStageOrModuleOrSubModule]",
+        default="None",
+        requirements="Automatic",
+        criticality="MAY",
+        attribute_name="Life cycle module",
+        field_code="lca_module",
+        description="Life-cycle of the module, derived by the parser from Life cycle module.",
+        units=None,
+    )
+
+
+def _lca_submodule_field() -> str:
+    return _render_field(
+        name="lca_submodule",
+        type_="Optional[LCAStageOrModuleOrSubModule]",
+        default="None",
+        requirements="Automatic",
+        criticality="MAY",
+        attribute_name="Life cycle sub-module",
+        field_code="lca_submodule",
+        description="Sub-module where the standard defines one.",
+        units=None,
+    )
+
+
+def _process_year_field() -> str:
+    return _render_field(
+        name="process_year",
+        type_="Optional[int]",
+        default="None",
+        requirements="Recommended",
+        criticality="MAY",
+        attribute_name="Process year",
+        field_code="process_year",
+        description="Year in which the activity occurs.",
+        units="year",
+    )
+
+
+def _material_flow_type_field() -> str:
+    return _render_field(
+        name="material_flow_type",
+        type_="Optional[MaterialFlowType]",
+        default="None",
+        requirements="Recommended",
+        criticality="MAY",
+        attribute_name="Material flow type",
+        field_code="material_flow_type",
+        description="Type of flow at this row.",
+        units="None",
+    )
+
+
+def _material_flow_mass_kg_field() -> str:
+    return _render_field(
+        name="material_flow_mass_kg",
+        type_="Optional[Decimal]",
+        default="None",
+        requirements="Recommended",
+        criticality="MAY",
+        attribute_name="Material Flow Mass (kg)",
+        field_code="material_flow_mass_kg",
+        description="Mass carried by the flow at this row.",
+        units="kg",
+    )
+
+
+def _scenario_label_field() -> str:
+    return _render_field(
+        name="scenario_label",
+        type_="Optional[str]",
+        default="None",
+        requirements="Recommended",
+        criticality="MAY",
+        attribute_name="Scenario label",
+        field_code="scenario_label",
+        description="Scenario the result belongs to.",
+        units="None",
     )
 
 
@@ -300,7 +434,7 @@ def _tall_indicator_field(indicator: LCAResultIndicator) -> str:
         criticality=indicator.criticality,
         attribute_name=indicator.attribute_name,
         field_code=indicator.code,
-        description=f"{indicator.attribute_name}.",
+        description=(indicator.description if indicator.description is not None else f"{indicator.attribute_name}."),
         units=indicator.units,
     )
 
@@ -322,7 +456,7 @@ def _wide_stage_field(
         type_="Decimal" if required else "Optional[Decimal]",
         default=None if required else "None",
         requirements=requirements,
-        criticality=indicator.criticality,
+        criticality="SHOULD" if required else "MAY",
         attribute_name=f"{indicator.attribute_name} ({stage.value})",
         field_code=f"{indicator.code}_{suffix}",
         description=f"{indicator.attribute_name} for module {stage.value}.",
@@ -339,7 +473,7 @@ def _wide_total_field(indicator: LCAResultIndicator) -> str:
         type_="Decimal" if required else "Optional[Decimal]",
         default=None if required else "None",
         requirements="Required" if required else indicator.requirements,
-        criticality=indicator.criticality,
+        criticality="SHOULD" if required else "MAY",
         attribute_name=total_attribute,
         field_code=total_name,
         description=f"{total_attribute}.",
@@ -352,7 +486,8 @@ _TALL_IMPORTS = (
     "from decimal import Decimal\n"
     "from typing import Optional\n\n"
     "from sqlmodel import Field, SQLModel\n\n"
-    "from openbdf.model.enums.lca import LCAStageOrModuleOrSubModule\n\n"
+    "from openbdf.model.enums.lca import LCAStageOrModuleOrSubModule\n"
+    "from openbdf.model.enums.materials import MaterialFlowType\n\n"
     "from .field_metadata import openbdf_field_metadata\n\n\n"
 )
 
@@ -369,8 +504,14 @@ def render_tall_module() -> str:
     """Render the source of the LCAResultsTallBase model module."""
     blocks: list[str] = [
         _material_id_field(),
-        _lca_service_life_field(),
-        _lca_stage_or_module_field(),
+        _lca_stage_module_submodule_field(),
+        _lca_stage_field(),
+        _lca_module_field(),
+        _lca_submodule_field(),
+        _process_year_field(),
+        _material_flow_type_field(),
+        _material_flow_mass_kg_field(),
+        _scenario_label_field(),
     ]
     blocks.extend(_tall_indicator_field(indicator) for indicator in INDICATORS)
     body = "\n\n".join(blocks)
