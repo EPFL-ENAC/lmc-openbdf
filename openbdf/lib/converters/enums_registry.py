@@ -68,7 +68,7 @@ class EnumRegistry:
         sheet.protection.sheet = True  # Lock the sheet to prevent accidental edits
 
         corner = sheet.cell(row=1, column=1, value="Datatype Name")
-        corner.style = "Headline 1"
+        corner.style = "AttributeName"
         sheet.column_dimensions["A"].width = 20
 
         for entry in self._registry.values():
@@ -76,7 +76,7 @@ class EnumRegistry:
 
             # Write the type name as a header
             header_cell = sheet.cell(row=1, column=entry.column_index, value=enum_cls.__name__)
-            header_cell.style = "Headline 1"
+            header_cell.style = "AttributeName"
             sheet.column_dimensions[entry.column_letter].width = max(
                 (len(enum_cls.__name__) + 2) * 1.5, 20
             )  # Set column width based on header length
