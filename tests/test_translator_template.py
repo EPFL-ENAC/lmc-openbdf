@@ -89,6 +89,16 @@ def test_openbdf_template_includes_criticality_metadata(tmp_path):
         expected_criticality = "SHOULD" if sheet_name == bom_sheet_name else "MUST"
         assert sheet.cell(row=8, column=2).value == expected_criticality
 
+    type_definitions = workbook["TypeDefinitions"]
+    assert type_definitions["A1"].style == "AttributeName"
+    assert type_definitions["B1"].style == "AttributeName"
+
+    theme = workbook.loaded_theme
+    assert b'<a:latin typeface="Calibri"/>' in theme
+    assert b"Cambria" not in theme
+
+    assert all(font.name == "Calibri" for font in workbook._fonts)
+
 
 def test_translator_template_keeps_non_field_sheet_layouts(tmp_path):
     output_path = tmp_path / "translator_template.xlsx"

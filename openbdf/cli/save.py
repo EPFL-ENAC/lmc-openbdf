@@ -9,6 +9,7 @@ import pandas as pd
 from openpyxl.styles import Alignment, Border, Font, NamedStyle, PatternFill, Protection, Side
 from openpyxl.styles.cell_style import StyleArray
 from openpyxl.utils import get_column_letter
+from openpyxl.writer.theme import theme_xml
 from pydantic.fields import FieldInfo
 from sqlmodel import SQLModel
 
@@ -78,22 +79,26 @@ from openbdf.model.tables import ProjectRecord
 thin_side = Side(border_style="thin", color="AAAAAA")
 
 ATTRIBUTES_NAME_STYLE = NamedStyle(
-    "AttributeName", font=Font(bold=True, color="FFFFFF"), fill=PatternFill("solid", fgColor="2b5b47")
+    "AttributeName", font=Font(name="Calibri", bold=True, color="FFFFFF"), fill=PatternFill("solid", fgColor="2b5b47")
 )
-INFO_STYLE = NamedStyle("Info", font=Font(italic=True))
-FIELD_CODE_STYLE = NamedStyle("FieldCode", font=Font(color="FFFFFF"), fill=PatternFill("solid", fgColor="010101"))
-REQUIRED_STYLE = NamedStyle("Required", fill=PatternFill("solid", fgColor="a3d3bd"))
-RECOMMENDED_STYLE = NamedStyle("Recommended", fill=PatternFill("solid", fgColor="a9d2f6"))
-OPTIONAL_STYLE = NamedStyle("Optional", fill=PatternFill("solid", fgColor="d8e6e2"))
-ROW_HEADER_STYLE = NamedStyle("RowHeader", font=Font(bold=True), alignment=Alignment(vertical="top"))
+INFO_STYLE = NamedStyle("Info", font=Font(name="Calibri", italic=True))
+FIELD_CODE_STYLE = NamedStyle(
+    "FieldCode", font=Font(name="Calibri", color="FFFFFF"), fill=PatternFill("solid", fgColor="010101")
+)
+REQUIRED_STYLE = NamedStyle("Required", font=Font(name="Calibri"), fill=PatternFill("solid", fgColor="a3d3bd"))
+RECOMMENDED_STYLE = NamedStyle("Recommended", font=Font(name="Calibri"), fill=PatternFill("solid", fgColor="a9d2f6"))
+OPTIONAL_STYLE = NamedStyle("Optional", font=Font(name="Calibri"), fill=PatternFill("solid", fgColor="d8e6e2"))
+ROW_HEADER_STYLE = NamedStyle("RowHeader", font=Font(name="Calibri", bold=True), alignment=Alignment(vertical="top"))
 EDITABLE_VALUE_STYLE = NamedStyle(
     "EditableValue",
+    font=Font(name="Calibri"),
     fill=PatternFill("solid", fgColor="feffb3"),
     border=Border(top=thin_side, left=thin_side, right=thin_side, bottom=thin_side),
     protection=Protection(locked=False),
 )
 DISABLED_STYLE = NamedStyle(
     "Disabled",
+    font=Font(name="Calibri"),
     fill=PatternFill("solid", fgColor="d3d3d3"),
 )
 
@@ -172,6 +177,11 @@ def register_named_styles(writer: pd.ExcelWriter) -> None:
         writer.book.add_named_style(style)
 
 
+def set_theme_fonts(writer: pd.ExcelWriter) -> None:
+    """Pin the theme major font to Calibri to match the minor font."""
+    writer.book.loaded_theme = theme_xml.replace('<a:latin typeface="Cambria"/>', '<a:latin typeface="Calibri"/>')
+
+
 def named_style_arrays(writer: pd.ExcelWriter) -> dict[str, StyleArray]:
     """Resolved style arrays for the named styles registered on the workbook.
 
@@ -207,6 +217,7 @@ def save_openbdf_to_xlsx(
 
     with pd.ExcelWriter(xlsx_path, engine="openpyxl") as writer:
         register_named_styles(writer)
+        set_theme_fonts(writer)
         enum_registry = EnumRegistry()
         enum_registry.register(*TEMPLATE_TYPE_DEFINITIONS)
 
@@ -495,6 +506,7 @@ def save_translator(
     """Save a template Excel file for the attribute translator."""
     with pd.ExcelWriter(xlsx_path, engine="openpyxl") as writer:
         register_named_styles(writer)
+        set_theme_fonts(writer)
         about_to_xlsx(writer)
         make_translations_library_template_xlsx(writer, "Translations Library")
         make_translator_openbdf_pydantic(
