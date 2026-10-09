@@ -79,7 +79,7 @@ def wide_df(*material_ids: str) -> pd.DataFrame:
             LCAResultsWideFullBase,
             material_id=material_id,
             gwp_total_a1_a3=str(index),
-            gwp_total=str(index * 10),
+            gwp_total_total=str(index * 10),
         )
         for index, material_id in enumerate(material_ids, start=1)
     ]

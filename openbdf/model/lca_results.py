@@ -26,6 +26,13 @@ class LCAResultIndicator:
     description: str | None = None
     required_in_wide: bool = False
     criticality: str = "MAY"
+    # Wide-sheet label and description overrides reproduced from the target workbook:
+    # some indicators label every stage column (and the total column) with a fixed
+    # attribute instead of '<attribute> (<stage>)', and some use a fixed description.
+    wide_attribute: str | None = None
+    wide_total_attribute: str | None = None
+    wide_constant_description: str | None = None
+    wide_b7_b8_attribute: str | None = None
 
 
 # Every LCA stage or module present in the wide model, as (enum, suffix) pairs.
@@ -43,6 +50,8 @@ STAGES: tuple[tuple[LCAStageOrModuleOrSubModule, str], ...] = (
     (LCAStageOrModuleOrSubModule.B4, "b4"),
     (LCAStageOrModuleOrSubModule.B5, "b5"),
     (LCAStageOrModuleOrSubModule.B6, "b6"),
+    (LCAStageOrModuleOrSubModule.B7, "b7"),
+    (LCAStageOrModuleOrSubModule.B8, "b8"),
     (LCAStageOrModuleOrSubModule.C1, "c1"),
     (LCAStageOrModuleOrSubModule.C2, "c2"),
     (LCAStageOrModuleOrSubModule.C3, "c3"),
@@ -52,11 +61,74 @@ STAGES: tuple[tuple[LCAStageOrModuleOrSubModule, str], ...] = (
     (LCAStageOrModuleOrSubModule.D2, "d2"),
 )
 
-OPTIONAL_STAGE_SUFFIXES = ("a1", "a2", "a3")
+OPTIONAL_STAGE_SUFFIXES = (
+    "a1",
+    "a2",
+    "a3",
+    "b7",
+    "b8",
+    # Sub-module columns are always optional.
+    "a5_1",
+    "a5_2",
+    "a5_3",
+    "a5_4",
+    "b1_1",
+    "b1_2",
+    "b6_1",
+    "b6_2",
+    "b6_3",
+    "b7_1",
+    "b7_2",
+    "b7_3",
+    "b8_1",
+    "b8_2",
+    "b8_3",
+)
+
+# Stage columns of the gwp_total indicator, which additionally carries the sub-module
+# columns of the target workbook, inserted directly after their parent module.
+GWP_TOTAL_STAGES: tuple[tuple[LCAStageOrModuleOrSubModule, str], ...] = (
+    (LCAStageOrModuleOrSubModule.A1_A3, "a1_a3"),
+    (LCAStageOrModuleOrSubModule.A1, "a1"),
+    (LCAStageOrModuleOrSubModule.A2, "a2"),
+    (LCAStageOrModuleOrSubModule.A3, "a3"),
+    (LCAStageOrModuleOrSubModule.A4, "a4"),
+    (LCAStageOrModuleOrSubModule.A5, "a5"),
+    (LCAStageOrModuleOrSubModule.A5_1, "a5_1"),
+    (LCAStageOrModuleOrSubModule.A5_2, "a5_2"),
+    (LCAStageOrModuleOrSubModule.A5_3, "a5_3"),
+    (LCAStageOrModuleOrSubModule.A5_4, "a5_4"),
+    (LCAStageOrModuleOrSubModule.B1, "b1"),
+    (LCAStageOrModuleOrSubModule.B1_1, "b1_1"),
+    (LCAStageOrModuleOrSubModule.B1_2, "b1_2"),
+    (LCAStageOrModuleOrSubModule.B2, "b2"),
+    (LCAStageOrModuleOrSubModule.B3, "b3"),
+    (LCAStageOrModuleOrSubModule.B4, "b4"),
+    (LCAStageOrModuleOrSubModule.B5, "b5"),
+    (LCAStageOrModuleOrSubModule.B6, "b6"),
+    (LCAStageOrModuleOrSubModule.B6_1, "b6_1"),
+    (LCAStageOrModuleOrSubModule.B6_2, "b6_2"),
+    (LCAStageOrModuleOrSubModule.B6_3, "b6_3"),
+    (LCAStageOrModuleOrSubModule.B7, "b7"),
+    (LCAStageOrModuleOrSubModule.B7_1, "b7_1"),
+    (LCAStageOrModuleOrSubModule.B7_2, "b7_2"),
+    (LCAStageOrModuleOrSubModule.B7_3, "b7_3"),
+    (LCAStageOrModuleOrSubModule.B8, "b8"),
+    (LCAStageOrModuleOrSubModule.B8_1, "b8_1"),
+    (LCAStageOrModuleOrSubModule.B8_2, "b8_2"),
+    (LCAStageOrModuleOrSubModule.B8_3, "b8_3"),
+    (LCAStageOrModuleOrSubModule.C1, "c1"),
+    (LCAStageOrModuleOrSubModule.C2, "c2"),
+    (LCAStageOrModuleOrSubModule.C3, "c3"),
+    (LCAStageOrModuleOrSubModule.C4, "c4"),
+    (LCAStageOrModuleOrSubModule.D, "d"),
+    (LCAStageOrModuleOrSubModule.D1, "d1"),
+    (LCAStageOrModuleOrSubModule.D2, "d2"),
+)
 
 # Every LCA impact indicator present in the tall and wide models.
-# `gwp_total` is special: its wide total field keeps the bare code name (`gwp_total`) instead of `gwp_total_total`,
-# its `a1_a3` stage field and its total field are required, and its total attribute removes the trailing ` - Total` suffix.
+# `gwp_total` is special: it carries the sub-module stage columns (GWP_TOTAL_STAGES) and
+# its `a1_a3` stage field is required.
 INDICATORS: tuple[LCAResultIndicator, ...] = (
     LCAResultIndicator(
         code="gwp_total",
@@ -95,12 +167,15 @@ INDICATORS: tuple[LCAResultIndicator, ...] = (
         attribute_name="Acidification Potential",
         units="kg SO₂ eq.",
         requirements="Optional",
+        wide_attribute="Acidification potential",
     ),
     LCAResultIndicator(
         code="ep",
         attribute_name="Eutrophication Potential",
         units="kg N eq",
         requirements="Optional",
+        wide_attribute="Eutrophication potential",
+        wide_b7_b8_attribute="Total Acidification Potential",
     ),
     LCAResultIndicator(
         code="ep_af",
@@ -108,6 +183,8 @@ INDICATORS: tuple[LCAResultIndicator, ...] = (
         units="kg PO4 eq",
         requirements="Optional",
         description="Eutrophication Potential - Aquatic Freshwater.",
+        wide_attribute="Eutrophication potential, freshwater, EN 15804+A2",
+        wide_b7_b8_attribute="Eutrophication Potential",
     ),
     LCAResultIndicator(
         code="ep_am",
@@ -115,6 +192,8 @@ INDICATORS: tuple[LCAResultIndicator, ...] = (
         units="kg N eq",
         requirements="Optional",
         description="Eutrophication Potential - Aquatic Marine.",
+        wide_attribute="Eutrophication potential, marine, EN 15804+A2",
+        wide_b7_b8_attribute="Eutrophication Potential - Aquatic Freshwater",
     ),
     LCAResultIndicator(
         code="ep_t",
@@ -122,6 +201,8 @@ INDICATORS: tuple[LCAResultIndicator, ...] = (
         units="mol N eq",
         requirements="Optional",
         description="Eutrophication Potential - Terrestrial.",
+        wide_attribute="Eutrophication potential, terrestrial, EN 15804+A2",
+        wide_b7_b8_attribute="Eutrophication Potential - Aquatic Marine",
     ),
     LCAResultIndicator(
         code="pocp",
@@ -129,6 +210,8 @@ INDICATORS: tuple[LCAResultIndicator, ...] = (
         units="kg C2H4 eq",
         requirements="Optional",
         description="Photochemical Ozone Creation Potential.",
+        wide_attribute="Formation potential of tropospheric ozone, EN 15804+A1",
+        wide_b7_b8_attribute="Eutrophication Potential - Aquatic Marine",
     ),
     LCAResultIndicator(
         code="sfp",
@@ -136,6 +219,8 @@ INDICATORS: tuple[LCAResultIndicator, ...] = (
         units="kg O3 eq",
         requirements="Optional",
         description="Smog Forming Potential.",
+        wide_attribute="Smog formation potential",
+        wide_b7_b8_attribute="Photochemical Ozone Creation Potential",
     ),
     LCAResultIndicator(
         code="pofp",
@@ -143,48 +228,57 @@ INDICATORS: tuple[LCAResultIndicator, ...] = (
         units="kg NMVOC eq",
         requirements="Optional",
         description="Photochemical Ozone Formation Potential.",
+        wide_attribute="Formation potential of tropospheric ozone, EN 15804+A2",
+        wide_b7_b8_attribute="Smog Forming Potential",
     ),
     LCAResultIndicator(
         code="adpmm",
         attribute_name="Abiotic Depletion Potential (Minerals and Metals)",
         units="kg Sb eq",
         requirements="Optional",
+        wide_b7_b8_attribute="Photochemical Ozone Formation Potential",
     ),
     LCAResultIndicator(
         code="adpf",
         attribute_name="Abiotic Depletion Potential (Fossil Fuels)",
         units="MJ",
         requirements="Optional",
+        wide_b7_b8_attribute="Abiotic Depletion Potential (Minerals and Metals)",
     ),
     LCAResultIndicator(
         code="wdp",
         attribute_name="Water Depletion Potential",
         units="m3 world eq",
         requirements="Optional",
+        wide_b7_b8_attribute="Abiotic Depletion Potential (Fossil Fuels)",
     ),
     LCAResultIndicator(
         code="pere",
         attribute_name="Primary Energy Renewable (Energy resources)",
         units="MJ",
         requirements="Optional",
+        wide_b7_b8_attribute="Water Depletion Potential",
     ),
     LCAResultIndicator(
         code="penre",
         attribute_name="Primary Energy Non-Renewable (Energy resources)",
         units="MJ",
         requirements="Optional",
+        wide_b7_b8_attribute="Total Water Depletion Potential",
     ),
     LCAResultIndicator(
         code="pert",
         attribute_name="Primary Energy Renewable Total",
         units="MJ",
         requirements="Optional",
+        wide_b7_b8_attribute="Primary Energy Renewable (Energy resources)",
     ),
     LCAResultIndicator(
         code="penrt",
         attribute_name="Primary Energy Non-Renewable Total",
         units="MJ",
         requirements="Optional",
+        wide_b7_b8_attribute="Primary Energy Non-Renewable (Energy resources)",
     ),
     LCAResultIndicator(
         code="pm",
@@ -192,6 +286,9 @@ INDICATORS: tuple[LCAResultIndicator, ...] = (
         units="disease incidence",
         requirements="Optional",
         description="Particulate matter emissions",
+        wide_constant_description="Particulate matter emissions",
+        wide_total_attribute="Particulate matter emissions (total)",
+        wide_b7_b8_attribute="Primary Energy Renewable Total",
     ),
     LCAResultIndicator(
         code="irp",
@@ -199,6 +296,9 @@ INDICATORS: tuple[LCAResultIndicator, ...] = (
         units="kBq U235 eq",
         requirements="Optional",
         description="Ionising radiation, human health",
+        wide_constant_description="Ionising radiation, human health",
+        wide_total_attribute="Ionising radiation, human health (total)",
+        wide_b7_b8_attribute="Primary Energy Non-Renewable (Energy resources)",
     ),
     LCAResultIndicator(
         code="etp_fw",
@@ -206,6 +306,9 @@ INDICATORS: tuple[LCAResultIndicator, ...] = (
         units="CTUe",
         requirements="Optional",
         description="Ecotoxicity, freshwater",
+        wide_constant_description="Ecotoxicity, freshwater",
+        wide_total_attribute="Ecotoxicity, freshwater (total)",
+        wide_b7_b8_attribute="Particulate matter emissions",
     ),
     LCAResultIndicator(
         code="htp_c",
@@ -213,6 +316,9 @@ INDICATORS: tuple[LCAResultIndicator, ...] = (
         units="CTUh",
         requirements="Optional",
         description="Human toxicity, cancer effects",
+        wide_constant_description="Human toxicity, cancer effects",
+        wide_total_attribute="Human toxicity, cancer effects (total)",
+        wide_b7_b8_attribute="Ionising radiation, human health",
     ),
     LCAResultIndicator(
         code="htp_nc",
@@ -220,6 +326,9 @@ INDICATORS: tuple[LCAResultIndicator, ...] = (
         units="CTUh",
         requirements="Optional",
         description="Human toxicity, non-cancer effects",
+        wide_constant_description="Human toxicity, non-cancer effects",
+        wide_total_attribute="Human toxicity, non-cancer effects (total)",
+        wide_b7_b8_attribute="Ecotoxicity, freshwater",
     ),
     LCAResultIndicator(
         code="sqp",
@@ -227,6 +336,9 @@ INDICATORS: tuple[LCAResultIndicator, ...] = (
         units="-",
         requirements="Optional",
         description="Soil quality index",
+        wide_constant_description="Soil quality index",
+        wide_total_attribute="Soil quality index (total)",
+        wide_b7_b8_attribute="Human toxicity, cancer effects",
     ),
 )
 
@@ -242,6 +354,24 @@ _HEADER = (
 
 _TRAILING_TOTAL_SUFFIX = " - Total"
 
+# Row-1 attribute labels of the wide sheet reproduced verbatim from the target workbook:
+# the target keeps a stray 'UPDATED Criticality (RFC 2119)' header on the gwp_total_b4 column.
+_WIDE_ATTRIBUTE_OVERRIDES: dict[str, str] = {
+    "gwp_total_b4": "UPDATED Criticality (RFC 2119)",
+}
+
+# Descriptions of the gwp_total sub-module columns, from the target workbook.
+_GWP_TOTAL_SUBMODULE_DESCRIPTIONS: dict[str, str] = {
+    "a5_1": "Pre-construction demolition.",
+    "a5_2": "Construction activities.",
+    "a5_3": "Waste and waste management.",
+    "a5_4": "Worker transport.",
+}
+
+# The target workbook labels the descriptions of the B7 and B8 columns 'module B6'
+# (carried over from the B6 columns). Reproduced verbatim.
+_DESC_MODULE_B6_SUFFIXES = frozenset({"b7", "b8", "b7_1", "b7_2", "b7_3", "b8_1", "b8_2", "b8_3"})
+
 
 def _q(value: str) -> str:
     """Wrap a string in double quotes for source emission."""
@@ -250,17 +380,55 @@ def _q(value: str) -> str:
 
 def _total_code(code: str) -> str:
     """Field code of the wide total field for an indicator."""
-    if code.endswith("_total"):
-        return code
     return f"{code}_total"
 
 
 def _total_attribute_name(attribute_name: str) -> str:
-    """Attribute name of the wide total field for an indicator."""
-    base = attribute_name
+    """Attribute name of the wide total field for an indicator.
+
+    The target keeps a trailing ' - Total' suffix on the attribute
+    ('Total Global Warming Potential - Total').
+    """
+    return f"Total {attribute_name}"
+
+
+def _total_description(indicator: LCAResultIndicator) -> str:
+    """Description of the wide total field for an indicator."""
+    base = indicator.description if indicator.description is not None else indicator.attribute_name
+    if base.endswith("."):
+        base = base[:-1]
     if base.endswith(_TRAILING_TOTAL_SUFFIX):
         base = base[: -len(_TRAILING_TOTAL_SUFFIX)]
-    return f"Total {base}"
+    return f"Total {base}."
+
+
+def _wide_stage_description(indicator: LCAResultIndicator, stage: LCAStageOrModuleOrSubModule, suffix: str) -> str:
+    """Description of one wide stage field for an indicator."""
+    if indicator.wide_constant_description is not None:
+        return indicator.wide_constant_description
+    base = indicator.description if indicator.description is not None else indicator.attribute_name
+    if base.endswith("."):
+        base = base[:-1]
+    if suffix in _DESC_MODULE_B6_SUFFIXES:
+        module = "B6"
+    elif "." in stage.value:
+        # Sub-module columns describe their parent module ('B1.1' describes module B1).
+        module = stage.value.split(".")[0]
+    else:
+        module = stage.value
+    return f"{base} for module {module}."
+
+
+def _wide_stage_attribute(indicator: LCAResultIndicator, stage: LCAStageOrModuleOrSubModule, suffix: str) -> str:
+    """Attribute name of one wide stage field for an indicator."""
+    if suffix in ("b7", "b8"):
+        base = (
+            indicator.wide_b7_b8_attribute if indicator.wide_b7_b8_attribute is not None else indicator.attribute_name
+        )
+        return f"{base} ({stage.value})"
+    if indicator.wide_attribute is not None:
+        return indicator.wide_attribute
+    return f"{indicator.attribute_name} ({stage.value})"
 
 
 def _render_field(
@@ -451,32 +619,41 @@ def _wide_stage_field(
         requirements = "Optional"
     else:
         requirements = indicator.requirements
+    field_code = f"{indicator.code}_{suffix}"
     return _render_field(
-        name=f"{indicator.code}_{suffix}",
+        name=field_code,
         type_="Decimal" if required else "Optional[Decimal]",
         default=None if required else "None",
         requirements=requirements,
         criticality="SHOULD" if required else "MAY",
-        attribute_name=f"{indicator.attribute_name} ({stage.value})",
-        field_code=f"{indicator.code}_{suffix}",
-        description=f"{indicator.attribute_name} for module {stage.value}.",
+        attribute_name=_WIDE_ATTRIBUTE_OVERRIDES.get(field_code, _wide_stage_attribute(indicator, stage, suffix)),
+        field_code=field_code,
+        description=_GWP_TOTAL_SUBMODULE_DESCRIPTIONS.get(suffix, _wide_stage_description(indicator, stage, suffix)),
         units=indicator.units,
     )
 
 
 def _wide_total_field(indicator: LCAResultIndicator) -> str:
-    required = indicator.required_in_wide
     total_name = _total_code(indicator.code)
-    total_attribute = _total_attribute_name(indicator.attribute_name)
+    if indicator.wide_total_attribute is not None:
+        total_attribute = indicator.wide_total_attribute
+    elif indicator.wide_attribute is not None:
+        total_attribute = indicator.wide_attribute
+    else:
+        total_attribute = _total_attribute_name(indicator.attribute_name)
+    if indicator.wide_constant_description is not None:
+        total_description = indicator.wide_constant_description
+    else:
+        total_description = _total_description(indicator)
     return _render_field(
         name=total_name,
-        type_="Decimal" if required else "Optional[Decimal]",
-        default=None if required else "None",
-        requirements="Required" if required else indicator.requirements,
-        criticality="SHOULD" if required else "MAY",
+        type_="Optional[Decimal]",
+        default="None",
+        requirements=indicator.requirements,
+        criticality="MAY",
         attribute_name=total_attribute,
         field_code=total_name,
-        description=f"{total_attribute}.",
+        description=total_description,
         units=indicator.units,
     )
 
@@ -522,7 +699,8 @@ def render_wide_module() -> str:
     """Render the source of the LCAResultsWideFullBase model module."""
     blocks: list[str] = [_material_id_field()]
     for indicator in INDICATORS:
-        for stage, suffix in STAGES:
+        stages = GWP_TOTAL_STAGES if indicator.code == "gwp_total" else STAGES
+        for stage, suffix in stages:
             blocks.append(_wide_stage_field(indicator, stage, suffix))
         blocks.append(_wide_total_field(indicator))
     body = "\n\n".join(blocks)
