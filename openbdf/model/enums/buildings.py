@@ -257,7 +257,7 @@ class FoundationType(OpenBDFEnum):
 class GFAMeasurementMethod(OpenBDFEnum):
     IPMS = (
         "ipms",
-        "IPMS",
+        "IPMS (International Property Measurement Standards)",
         "International Property Measurement Standards. Global standard used to unify how buildings are measured worldwide.",
     )
     RICS = (
@@ -290,6 +290,84 @@ class GFAMeasurementMethod(OpenBDFEnum):
         "Plan-Based Measurement",
         "Practical methods used globally: measuring onsite or using architectural floor plans to calculate GFA.",
     )
+    ISO_9836 = ("iso_9836", "ISO 9836")
+    IPMS_1 = ("ipms_1", "IPMS 1 (whole building including external walls)")
+    IPMS_2 = ("ipms_2", "IPMS 2 (building excluding external walls)")
+    IPMS_3_1 = ("ipms_3_1", "IPMS 3.1 (occupier level, external)")
+    IPMS_3_2 = ("ipms_3_2", "IPMS 3.2 (occupier level, internal)")
+
+
+class BuildingStructureType(OpenBDFEnum):
+    CONCRETE = ("Concrete", "Concrete")
+    CONCRETE_IN_SITU = ("Concrete_InSitu", "Concrete_InSitu")
+    CONCRETE_PRECAST = ("Concrete_Precast", "Concrete_Precast")
+    CONCRETE_POST_TENSIONED = ("Concrete_PostTensioned", "Concrete_PostTensioned")
+    CONCRETE_FRAME = ("Concrete_Frame", "Concrete_Frame")
+    CONCRETE_MASS = ("Concrete_Mass", "Concrete_Mass")
+    STEEL = ("Steel", "Steel")
+    STEEL_FRAME = ("Steel_Frame", "Steel_Frame")
+    STEEL_COMPOSITE = ("Steel_Composite", "Steel_Composite")
+    STEEL_PRECAST = ("Steel_Precast", "Steel_Precast")
+    TIMBER = ("Timber", "Timber")
+    TIMBER_FRAME = ("Timber_Frame", "Timber_Frame")
+    TIMBER_MASSIVE = ("Timber_Massive", "Timber_Massive")
+    TIMBER_CLT = ("Timber_CLT", "Timber_CLT")
+    TIMBER_GLULAM = ("Timber_Glulam", "Timber_Glulam")
+    MASONRY = ("Masonry", "Masonry")
+    MASONRY_MASSIVE_BRICK = ("Masonry_MassiveBrick", "Masonry_MassiveBrick")
+    MASONRY_MIXED = ("Masonry_Mixed", "Masonry_Mixed")
+    MIXED_CONCRETE_STEEL = ("Mixed_ConcreteSteel", "Mixed_ConcreteSteel")
+    MIXED_CONCRETE_TIMBER = ("Mixed_ConcreteTimber", "Mixed_ConcreteTimber")
+    MIXED_STEEL_TIMBER = ("Mixed_SteelTimber", "Mixed_SteelTimber")
+    MIXED_CONCRETE_MASONRY = ("Mixed_ConcreteMasonry", "Mixed_ConcreteMasonry")
+    MIXED_OTHER = ("Mixed_Other", "Mixed_Other")
+    OTHER_UNKNOWN = ("Other_Unknown", "Other_Unknown")
+
+
+class SharedComponentAllocationRule(OpenBDFEnum):
+    NOT_APPLICABLE = (
+        "not_applicable",
+        "not_applicable (the submission covers a single building)",
+        "the submission covers a single building",
+    )
+    SINGLE_ASSESSMENT = (
+        "single_assessment",
+        "single_assessment (the whole complex of buildings constitutes one single assessment)",
+        "the whole complex of buildings constitutes one single assessment",
+    )
+    BUILDING_UNITS = (
+        "building_units",
+        "building_units (the total is divided proportionately between the owner building units)",
+        "the total is divided proportionately between the owner building units",
+    )
+    PARKING_SPACES = (
+        "parking_spaces",
+        "parking_spaces (allocated on the basis of the relative shares of parking spaces designated to each building)",
+        "allocated on the basis of the relative shares of parking spaces designated to each building",
+    )
+    OTHER = (
+        "other",
+        "other (a national rule, stated in the assessor note)",
+        "a national rule, stated in the assessor note",
+    )
+
+
+class FloorAreaInclusions(OpenBDFEnum):
+    ENCLOSED_PARKING = (
+        "enclosed_parking",
+        "Enclosed parking (shares structure, inside envelope)",
+        "shares structure, inside envelope",
+    )
+    DETACHED_PARKING = (
+        "detached_parking",
+        "Detached parking (structurally independent)",
+        "structurally independent",
+    )
+    UNCONDITIONED_SPACE = ("unconditioned_space", "Unconditioned space")
+    CIRCULATION = ("circulation", "Circulation")
+    TECHNICAL_SPACE = ("technical_space", "Technical space")
+    ANCILLARY_EXTERNAL_BUILDINGS = ("ancillary_external_buildings", "Ancillary external buildings")
+    NONE_OF_THE_ABOVE = ("none_of_the_above", "None of the above")
 
 
 class GrossFloorAreaStandard(OpenBDFEnum):

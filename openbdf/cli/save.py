@@ -13,7 +13,7 @@ from pydantic.fields import FieldInfo
 from sqlmodel import SQLModel
 
 from openbdf.lib.converters.dataframe import horizontal_to_dataframe
-from openbdf.lib.converters.enums_registry import EnumRegistry
+from openbdf.lib.converters.enums_registry import Boolean, EnumRegistry
 from openbdf.lib.converters.translators import (
     ABOUT_SHEET_NAME,
     COMMON_CATEGORY_PROPERTIES,
@@ -23,7 +23,53 @@ from openbdf.lib.types.annotations import unwrap_optional
 from openbdf.lib.types.human_readable import human_readable_constraints, human_readable_type
 from openbdf.lib.types.xlsx import xlsx_validation_from_type
 from openbdf.model.building_bill_materials_slim import BuildingBillMaterialsSlimRecordBase
+from openbdf.model.enums.buildings import (
+    AboveBelowGround,
+    BuildingClassificationCode,
+    BuildingElementClassificationTier,
+    BuildingFacingDirection,
+    BuildingStructureType,
+    BuildingTypology,
+    FloorAreaInclusions,
+    FoundationType,
+    GFAMeasurementMethod,
+    GrossFloorAreaStandard,
+    SharedComponentAllocationRule,
+)
+from openbdf.model.enums.countries import Country
+from openbdf.model.enums.element_classifications import OpenBDFBuildingElementClassification
+from openbdf.model.enums.energy import (
+    BuildingEnergyClassificationSystem,
+    BuildingEnergyCodeSystem,
+    EmissionFactorScenario,
+    OnSiteRenewableAllocationApproach,
+    PrimaryEnergySource,
+)
+from openbdf.model.enums.geography import ClimateZone, ExtendedDefaultDataBasis, FEMASeismicActivity, SoilType
+from openbdf.model.enums.lca import (
+    AssessmentType_EN15978,
+    BiogenicCarbonAccounting,
+    DataWeightingBasis,
+    LCADatabase,
+    LCADatabaseSystemModel,
+    LCAStageOrModuleOrSubModule,
+    LCATemporalApproach,
+    LCIAMethodology,
+    LCIModelingApproach,
+    LifeCycleSystemBoundary,
+    LimitValueScopeReduction,
+)
+from openbdf.model.enums.materials import (
+    DeclaredUnit,
+    MaterialDataType,
+    MaterialEPDMatch,
+    MaterialFlowType,
+    MaterialQuantitiesSource,
+    OpenBDFMaterialClassification,
+    ReplacementCountMethod,
+)
 from openbdf.model.enums.openbdf_enum import OpenBDFEnum
+from openbdf.model.enums.project import ConstructionType, ProjectPhase, ProjectPhaseCommon, ProjectUnits, RecordType
 from openbdf.model.general_info import ProjectRecordBase
 from openbdf.model.lca_results_full_tall import LCAResultsTallBase
 from openbdf.model.lca_results_full_wide import LCAResultsWideFullBase
@@ -53,6 +99,56 @@ DISABLED_STYLE = NamedStyle(
 
 ModelT = TypeVar("ModelT", bound=SQLModel)
 ModelT2 = TypeVar("ModelT2", bound=SQLModel)
+
+# Canonical TypeDefinitions column order for the template export.
+TEMPLATE_TYPE_DEFINITIONS: tuple[type, ...] = (
+    RecordType,
+    ProjectUnits,
+    ConstructionType,
+    Country,
+    GFAMeasurementMethod,
+    ProjectPhase,
+    ProjectPhaseCommon,
+    ClimateZone,
+    FEMASeismicActivity,
+    BuildingTypology,
+    BuildingEnergyClassificationSystem,
+    BuildingEnergyCodeSystem,
+    BuildingClassificationCode,
+    BuildingElementClassificationTier,
+    BuildingStructureType,
+    SoilType,
+    FoundationType,
+    PrimaryEnergySource,
+    BuildingFacingDirection,
+    GrossFloorAreaStandard,
+    FloorAreaInclusions,
+    ReplacementCountMethod,
+    LCADatabase,
+    LCADatabaseSystemModel,
+    DataWeightingBasis,
+    LCATemporalApproach,
+    LCIAMethodology,
+    BiogenicCarbonAccounting,
+    MaterialQuantitiesSource,
+    AboveBelowGround,
+    OpenBDFBuildingElementClassification,
+    OpenBDFMaterialClassification,
+    MaterialDataType,
+    MaterialEPDMatch,
+    DeclaredUnit,
+    MaterialFlowType,
+    LCAStageOrModuleOrSubModule,
+    LCIModelingApproach,
+    LifeCycleSystemBoundary,
+    AssessmentType_EN15978,
+    OnSiteRenewableAllocationApproach,
+    Boolean,
+    SharedComponentAllocationRule,
+    ExtendedDefaultDataBasis,
+    LimitValueScopeReduction,
+    EmissionFactorScenario,
+)
 
 # Registering named styles once per workbook and assigning cells by name string
 # (cell.style = "EditableValue") avoids openpyxl's expensive
@@ -112,6 +208,7 @@ def save_openbdf_to_xlsx(
     with pd.ExcelWriter(xlsx_path, engine="openpyxl") as writer:
         register_named_styles(writer)
         enum_registry = EnumRegistry()
+        enum_registry.register(*TEMPLATE_TYPE_DEFINITIONS)
 
         about_to_xlsx(writer)
         info_to_xlsx(writer, project, info_sheet_name, enum_registry)

@@ -8,7 +8,7 @@ from typing import Optional
 
 from sqlmodel import Field, SQLModel
 
-from openbdf.model.enums.lca import LCAStageOrModule
+from openbdf.model.enums.lca import LCAStageOrModuleOrSubModule
 
 from .field_metadata import openbdf_field_metadata
 
@@ -37,7 +37,7 @@ class LCAResultsTallBase(SQLModel):
         ),
     )
 
-    lca_stage_or_module: LCAStageOrModule = Field(
+    lca_stage_or_module: LCAStageOrModuleOrSubModule = Field(
         description="Life cycle assessment stage or module for this result row.",
         schema_extra=openbdf_field_metadata(
             attribute_name="LCA stage or module",
