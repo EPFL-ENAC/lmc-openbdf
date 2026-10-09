@@ -28,7 +28,7 @@ def test_tall_module_has_static_fields():
     tall = _formatted("lca_results_full_tall.py")
     assert "material_id: str = Field(" in tall
     assert "lca_service_life: Decimal = Field(" in tall
-    assert "lca_stage_or_module: LCAStageOrModule = Field(" in tall
+    assert "lca_stage_or_module: LCAStageOrModuleOrSubModule = Field(" in tall
 
 
 def test_wide_module_gwp_total_special_cases():

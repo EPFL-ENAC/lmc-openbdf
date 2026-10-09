@@ -21,13 +21,13 @@ from .enums.buildings import (
 )
 from .enums.countries import Country
 from .enums.energy import BuildingEnergyClassificationSystem, PrimaryEnergySource
-from .enums.geography import ASHRAEClimateZone, FEMASeismicActivity, SoilType
+from .enums.geography import ClimateZone, FEMASeismicActivity, SoilType
 from .enums.lca import (
     BiogenicCarbonAccounting,
     LCATemporalApproach,
     LCIAMethodology,
-    LCIModelingApproach_ISO14040_44,
-    LifeCycleSystemBoundary_ISO14040_43,
+    LCIModelingApproach,
+    LifeCycleSystemBoundary,
     # LifeCycleStage_ISO14040_44,
 )
 from .enums.materials import MaterialQuantitiesSource
@@ -577,8 +577,8 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    building_geographic_climate_zone: ASHRAEClimateZone = Field(  # type: ignore[call-overload]
-        sa_type=SAEnum(ASHRAEClimateZone),
+    building_geographic_climate_zone: ClimateZone = Field(  # type: ignore[call-overload]
+        sa_type=SAEnum(ClimateZone),
         description="ASHRAE climate zone typology.",
         schema_extra=openbdf_field_metadata(
             group="Building",
@@ -1567,8 +1567,8 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    lca_lci_modeling_approach: LCIModelingApproach_ISO14040_44 = Field(  # type: ignore[call-overload]
-        sa_type=SAEnum(LCIModelingApproach_ISO14040_44),
+    lca_lci_modeling_approach: LCIModelingApproach = Field(  # type: ignore[call-overload]
+        sa_type=SAEnum(LCIModelingApproach),
         description="Type of Life Cycle Inventory (LCI) Modeling Approach",
         schema_extra=openbdf_field_metadata(
             group="LCA",
@@ -1581,8 +1581,8 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    lca_cycle_system_boundary: LifeCycleSystemBoundary_ISO14040_43 = Field(  # type: ignore[call-overload]
-        sa_type=SAEnum(LifeCycleSystemBoundary_ISO14040_43),
+    lca_cycle_system_boundary: LifeCycleSystemBoundary = Field(  # type: ignore[call-overload]
+        sa_type=SAEnum(LifeCycleSystemBoundary),
         description=("Different Life Cycle Assessment (LCA) stages depending on where you start and stop measuring."),
         schema_extra=openbdf_field_metadata(
             group="LCA",
