@@ -3,6 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from openbdf.model import lca_results
+from openbdf.model.enums.materials import MaterialFlowType
 
 _MODEL_DIR = Path(lca_results.__file__).resolve().parent
 
@@ -27,8 +28,15 @@ def test_generated_classes_are_in_sync_with_the_registry():
 def test_tall_module_has_static_fields():
     tall = _formatted("lca_results_full_tall.py")
     assert "material_id: str = Field(" in tall
-    assert "lca_service_life: Decimal = Field(" in tall
-    assert "lca_stage_or_module: LCAStageOrModuleOrSubModule = Field(" in tall
+    assert "lca_stage_module_submodule: LCAStageOrModuleOrSubModule = Field(" in tall
+    assert "lca_stage: Optional[LCAStageOrModuleOrSubModule] = Field(" in tall
+    assert "lca_module: Optional[LCAStageOrModuleOrSubModule] = Field(" in tall
+    assert "lca_submodule: Optional[LCAStageOrModuleOrSubModule] = Field(" in tall
+    assert "process_year: Optional[int] = Field(" in tall
+    assert "material_flow_type: Optional[MaterialFlowType] = Field(" in tall
+    assert "material_flow_mass_kg: Optional[Decimal] = Field(" in tall
+    assert "scenario_label: Optional[str] = Field(" in tall
+    assert "lca_service_life" not in tall
 
 
 def test_wide_module_gwp_total_special_cases():
