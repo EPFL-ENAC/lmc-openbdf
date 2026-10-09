@@ -272,7 +272,7 @@ def info_to_xlsx(writer: pd.ExcelWriter, project: ProjectRecord | None, sheet_na
         an = info_sheet.cell(row=cell_row, column=3, value=extra.get("attribute_name", field_code))
         header_cells.append(an)
 
-        fc = info_sheet.cell(row=cell_row, column=4, value=field_code)
+        fc = info_sheet.cell(row=cell_row, column=4, value=extra.get("field_code", field_code))
         header_cells.append(fc)
 
         desc = info_sheet.cell(
@@ -285,7 +285,7 @@ def info_to_xlsx(writer: pd.ExcelWriter, project: ProjectRecord | None, sheet_na
         dt = info_sheet.cell(row=cell_row, column=6, value=human_readable_type(data_type))
         dt.style = INFO_STYLE.name
 
-        constraints = human_readable_constraints(metadata)
+        constraints = extra.get("constraint")
         c = info_sheet.cell(row=cell_row, column=7, value=constraints)
         if constraints:
             c.style = INFO_STYLE.name
@@ -356,6 +356,8 @@ def info_to_xlsx(writer: pd.ExcelWriter, project: ProjectRecord | None, sheet_na
     info_sheet.column_dimensions["I"].width = 15
     info_sheet.column_dimensions["J"].width = 15
     info_sheet.column_dimensions["K"].width = 25
+    # Reference alignment position (v2.0.0): column stays present but empty.
+    info_sheet.column_dimensions["L"].width = 20
 
 
 def wide_to_xlsx(
