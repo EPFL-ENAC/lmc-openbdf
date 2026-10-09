@@ -71,13 +71,23 @@ def test_openbdf_template_includes_criticality_metadata(tmp_path):
     ]
     assert info.cell(row=2, column=10).value == "SHOULD"
 
+    bom_sheet_name = FIELD_SHEET_NAMES[1]
     for sheet_name in FIELD_SHEET_NAMES[1:]:
         sheet = workbook[sheet_name]
-        assert sheet["A6"].value == "Requirements"
-        assert sheet["A7"].value == "Criticality"
-        assert sheet["A8"].value == "User Instructions"
-        assert sheet["A9"].value == "Field Code"
-        assert sheet.cell(row=7, column=2).value == "SHOULD"
+        assert sheet["A2"].value == "Field Code"
+        assert sheet["A3"].value == "Description"
+        assert sheet["A4"].value == "Data Type"
+        assert sheet["A5"].value == "Constraint"
+        assert sheet["A6"].value == "Units"
+        assert sheet["A7"].value == "Requirements"
+        assert sheet["A8"].value == "Criticality"
+        # Reference alignment position (v2.0.0): row 9 stays present but empty.
+        assert sheet["A9"].value is None
+        assert sheet.cell(row=2, column=2).value == "material_id"
+        # The BOM material_id keeps its SHOULD export default; the LCA results
+        # material_id is MUST in format v2.0.0.
+        expected_criticality = "SHOULD" if sheet_name == bom_sheet_name else "MUST"
+        assert sheet.cell(row=8, column=2).value == expected_criticality
 
 
 def test_translator_template_keeps_non_field_sheet_layouts(tmp_path):

@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from decimal import Decimal
 from typing import Any, Protocol, TypeVar
 
 from openbdf.model.lca_results import INDICATORS, STAGES
@@ -12,7 +11,6 @@ class BillMaterialLike(Protocol):
     """Structural type for a bill of materials record used by wide-to-tall conversion."""
 
     material_id: str
-    lca_service_life: Decimal
     id: int | None
 
 
@@ -40,8 +38,7 @@ def lca_results_wide_to_tall(
 
         record_values: dict[str, Any] = {
             "material_id": wide_result.material_id,
-            "lca_service_life": bill_material.lca_service_life,
-            "lca_stage_or_module": stage,
+            "lca_stage_module_submodule": stage,
             **impact_values,
         }
         if bill_material.id is not None:

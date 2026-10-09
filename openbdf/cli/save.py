@@ -396,8 +396,11 @@ def wide_to_xlsx(
         an = sheet.cell(row=1, column=cell_column, value=attribute_name)
         an.style = ATTRIBUTES_NAME_STYLE.name
 
+        fc = sheet.cell(row=2, column=cell_column, value=field_code)
+        fc.style = FIELD_CODE_STYLE.name
+
         desc = sheet.cell(
-            row=2,
+            row=3,
             column=cell_column,
             value=metadata.description if metadata and metadata.description else field_code,
         )
@@ -405,23 +408,23 @@ def wide_to_xlsx(
             desc.style = REQUIRED_STYLE.name
         desc.alignment = Alignment(wrap_text=True, vertical="top")
 
-        sheet.cell(row=3, column=cell_column, value=human_readable_type(data_type))
+        sheet.cell(row=4, column=cell_column, value=human_readable_type(data_type))
 
         constraints = human_readable_constraints(metadata)
-        c = sheet.cell(row=4, column=cell_column, value=constraints)
+        c = sheet.cell(row=5, column=cell_column, value=constraints)
         if constraints:
             c.style = INFO_STYLE.name
         else:
             c.style = DISABLED_STYLE.name
 
         unit = extra.get("units", "")
-        u = sheet.cell(row=5, column=cell_column, value=unit)
+        u = sheet.cell(row=6, column=cell_column, value=unit)
         if unit:
             u.style = INFO_STYLE.name
         else:
             u.style = DISABLED_STYLE.name
 
-        r = sheet.cell(row=6, column=cell_column, value=requirements)
+        r = sheet.cell(row=7, column=cell_column, value=requirements)
         if requirements == "Required":
             r.style = REQUIRED_STYLE.name
         elif requirements == "Recommended":
@@ -430,10 +433,9 @@ def wide_to_xlsx(
             r.style = OPTIONAL_STYLE.name
 
         criticality = extra.get("criticality", "SHOULD")
-        sheet.cell(row=7, column=cell_column, value=criticality)
+        sheet.cell(row=8, column=cell_column, value=criticality)
 
-        fc = sheet.cell(row=9, column=cell_column, value=field_code)
-        fc.style = FIELD_CODE_STYLE.name
+        # Reference alignment position (v2.0.0): row 9 stays present but empty.
 
         dv = xlsx_validation_from_type(data_type, is_optional, metadata, enum_registry)  # type: ignore[arg-type]
         if dv:
@@ -448,22 +450,21 @@ def wide_to_xlsx(
 
     a = sheet.cell(row=1, column=1, value="Attribute")
     a.style = ROW_HEADER_STYLE.name
-    d = sheet.cell(row=2, column=1, value="Description")
+    d = sheet.cell(row=2, column=1, value="Field Code")
     d.style = ROW_HEADER_STYLE.name
-    dt = sheet.cell(row=3, column=1, value="Data Type")
+    dt = sheet.cell(row=3, column=1, value="Description")
     dt.style = ROW_HEADER_STYLE.name
-    c = sheet.cell(row=4, column=1, value="Constraint")
+    c = sheet.cell(row=4, column=1, value="Data Type")
     c.style = ROW_HEADER_STYLE.name
-    u = sheet.cell(row=5, column=1, value="Units")
+    u = sheet.cell(row=5, column=1, value="Constraint")
     u.style = ROW_HEADER_STYLE.name
-    r = sheet.cell(row=6, column=1, value="Requirements")
+    r = sheet.cell(row=6, column=1, value="Units")
     r.style = ROW_HEADER_STYLE.name
-    cr = sheet.cell(row=7, column=1, value="Criticality")
+    cr = sheet.cell(row=7, column=1, value="Requirements")
     cr.style = ROW_HEADER_STYLE.name
-    ui = sheet.cell(row=8, column=1, value="User Instructions")
-    ui.style = ROW_HEADER_STYLE.name
-    fc = sheet.cell(row=9, column=1, value="Field Code")
-    fc.style = ROW_HEADER_STYLE.name
+    ct = sheet.cell(row=8, column=1, value="Criticality")
+    ct.style = ROW_HEADER_STYLE.name
+    # Reference alignment position (v2.0.0): row 9 stays present but empty.
 
     last_col = len(df.columns) + 1
     start_data_row = 10
