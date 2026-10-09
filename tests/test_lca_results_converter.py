@@ -7,7 +7,7 @@ import pytest
 
 from openbdf.lib.converters.lca_results import STAGES, lca_results_wide_to_tall
 from openbdf.model.enums.buildings import AboveBelowGround
-from openbdf.model.enums.lca import LCAStageOrModule
+from openbdf.model.enums.lca import LCAStageOrModuleOrSubModule
 from openbdf.model.tables import (
     BuildingBillMaterialsSlimRecord,
     LCAResultsTallFullRecord,
@@ -71,10 +71,10 @@ def test_combines_indicators_for_the_same_stage_and_omits_empty_stages():
     )
 
     assert [result.lca_stage_or_module for result in results] == [
-        LCAStageOrModule.A1_A3,
-        LCAStageOrModule.A4,
-        LCAStageOrModule.B6,
-        LCAStageOrModule.C2,
+        LCAStageOrModuleOrSubModule.A1_A3,
+        LCAStageOrModuleOrSubModule.A4,
+        LCAStageOrModuleOrSubModule.B6,
+        LCAStageOrModuleOrSubModule.C2,
     ]
     assert results[1].gwp_f is exact_value
     assert results[1].odp == Decimal("0.003")
@@ -91,7 +91,7 @@ def test_ignores_overall_summary_fields():
     )
 
     assert len(results) == 1
-    assert results[0].lca_stage_or_module is LCAStageOrModule.A1_A3
+    assert results[0].lca_stage_or_module is LCAStageOrModuleOrSubModule.A1_A3
     assert results[0].odp is None
 
 

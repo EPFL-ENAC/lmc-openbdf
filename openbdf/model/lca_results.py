@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable
 
-from openbdf.model.enums.lca import LCAStageOrModule
+from openbdf.model.enums.lca import LCAStageOrModuleOrSubModule
 
 
 @dataclass(frozen=True)
@@ -29,26 +29,26 @@ class LCAResultIndicator:
 
 # Every LCA stage or module present in the wide model, as (enum, suffix) pairs.
 # The suffix becomes the field name suffix, the enum value becomes the display label.
-STAGES: tuple[tuple[LCAStageOrModule, str], ...] = (
-    (LCAStageOrModule.A1_A3, "a1_a3"),
-    (LCAStageOrModule.A1, "a1"),
-    (LCAStageOrModule.A2, "a2"),
-    (LCAStageOrModule.A3, "a3"),
-    (LCAStageOrModule.A4, "a4"),
-    (LCAStageOrModule.A5, "a5"),
-    (LCAStageOrModule.B1, "b1"),
-    (LCAStageOrModule.B2, "b2"),
-    (LCAStageOrModule.B3, "b3"),
-    (LCAStageOrModule.B4, "b4"),
-    (LCAStageOrModule.B5, "b5"),
-    (LCAStageOrModule.B6, "b6"),
-    (LCAStageOrModule.C1, "c1"),
-    (LCAStageOrModule.C2, "c2"),
-    (LCAStageOrModule.C3, "c3"),
-    (LCAStageOrModule.C4, "c4"),
-    (LCAStageOrModule.D, "d"),
-    (LCAStageOrModule.D1, "d1"),
-    (LCAStageOrModule.D2, "d2"),
+STAGES: tuple[tuple[LCAStageOrModuleOrSubModule, str], ...] = (
+    (LCAStageOrModuleOrSubModule.A1_A3, "a1_a3"),
+    (LCAStageOrModuleOrSubModule.A1, "a1"),
+    (LCAStageOrModuleOrSubModule.A2, "a2"),
+    (LCAStageOrModuleOrSubModule.A3, "a3"),
+    (LCAStageOrModuleOrSubModule.A4, "a4"),
+    (LCAStageOrModuleOrSubModule.A5, "a5"),
+    (LCAStageOrModuleOrSubModule.B1, "b1"),
+    (LCAStageOrModuleOrSubModule.B2, "b2"),
+    (LCAStageOrModuleOrSubModule.B3, "b3"),
+    (LCAStageOrModuleOrSubModule.B4, "b4"),
+    (LCAStageOrModuleOrSubModule.B5, "b5"),
+    (LCAStageOrModuleOrSubModule.B6, "b6"),
+    (LCAStageOrModuleOrSubModule.C1, "c1"),
+    (LCAStageOrModuleOrSubModule.C2, "c2"),
+    (LCAStageOrModuleOrSubModule.C3, "c3"),
+    (LCAStageOrModuleOrSubModule.C4, "c4"),
+    (LCAStageOrModuleOrSubModule.D, "d"),
+    (LCAStageOrModuleOrSubModule.D1, "d1"),
+    (LCAStageOrModuleOrSubModule.D2, "d2"),
 )
 
 OPTIONAL_STAGE_SUFFIXES = ("a1", "a2", "a3")
@@ -280,7 +280,7 @@ def _lca_service_life_field() -> str:
 def _lca_stage_or_module_field() -> str:
     return _render_field(
         name="lca_stage_or_module",
-        type_="LCAStageOrModule",
+        type_="LCAStageOrModuleOrSubModule",
         default=None,
         requirements="Required",
         criticality="SHOULD",
@@ -307,7 +307,7 @@ def _tall_indicator_field(indicator: LCAResultIndicator) -> str:
 
 def _wide_stage_field(
     indicator: LCAResultIndicator,
-    stage: LCAStageOrModule,
+    stage: LCAStageOrModuleOrSubModule,
     suffix: str,
 ) -> str:
     required = indicator.required_in_wide and suffix == "a1_a3"
@@ -352,7 +352,7 @@ _TALL_IMPORTS = (
     "from decimal import Decimal\n"
     "from typing import Optional\n\n"
     "from sqlmodel import Field, SQLModel\n\n"
-    "from openbdf.model.enums.lca import LCAStageOrModule\n\n"
+    "from openbdf.model.enums.lca import LCAStageOrModuleOrSubModule\n\n"
     "from .field_metadata import openbdf_field_metadata\n\n\n"
 )
 
