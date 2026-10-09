@@ -14,24 +14,51 @@ from .enums.buildings import (
     BuildingClassificationCode,
     BuildingElementClassificationTier,
     BuildingFacingDirection,
+    BuildingStructureType,
     BuildingTypology,
+    FloorAreaInclusions,
     FoundationType,
     GFAMeasurementMethod,
     GrossFloorAreaStandard,
+    SharedComponentAllocationRule,
 )
 from .enums.countries import Country
-from .enums.energy import BuildingEnergyClassificationSystem, PrimaryEnergySource
-from .enums.geography import ClimateZone, FEMASeismicActivity, SoilType
+from .enums.energy import (
+    BuildingEnergyClassificationSystem,
+    BuildingEnergyCodeSystem,
+    EmissionFactorScenario,
+    OnSiteRenewableAllocationApproach,
+    PrimaryEnergySource,
+)
+from .enums.geography import (
+    ClimateZone,
+    ExtendedDefaultDataBasis,
+    FEMASeismicActivity,
+    SoilType,
+)
 from .enums.lca import (
+    AssessmentType_EN15978,
     BiogenicCarbonAccounting,
+    DataWeightingBasis,
+    LCADatabase,
+    LCADatabaseSystemModel,
     LCATemporalApproach,
     LCIAMethodology,
     LCIModelingApproach,
     LifeCycleSystemBoundary,
-    # LifeCycleStage_ISO14040_44,
+    LimitValueScopeReduction,
 )
-from .enums.materials import MaterialQuantitiesSource
-from .enums.project import ConstructionType, ProjectPhase, ProjectUnits
+from .enums.materials import (
+    MaterialQuantitiesSource,
+    ReplacementCountMethod,
+)
+from .enums.project import (
+    ConstructionType,
+    ProjectPhase,
+    ProjectPhaseCommon,
+    ProjectUnits,
+    RecordType,
+)
 from .field_metadata import openbdf_field_metadata
 
 
@@ -46,9 +73,39 @@ class ProjectRecordBase(SQLModel):
             attribute_name="Project ID",
             field_code="project_id",
             description="Unique ID assigned to this specific project.",
-            requirements="Recommended",
+            constraint="max 200 characters",
+            requirements="Automatic",
+            criticality="SHOULD",
             reference_formats={"echo": True, "carbenmats": True, "clf": False},
             example="ABC1234",
+        ),
+    )
+
+    project_custom_id: Optional[str] = Field(
+        default=None,
+        description="Unique custom ID assigned to this specific project.",
+        schema_extra=openbdf_field_metadata(
+            group="Project",
+            sub_group="Administrative data",
+            attribute_name="Project ID custom",
+            field_code="project_custom_id ",
+            description="Unique custom ID assigned to this specific project.",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    record_type: RecordType = Field(  # type: ignore[call-overload]
+        sa_type=SAEnum(RecordType),
+        description="Kind of object the submission describes",
+        schema_extra=openbdf_field_metadata(
+            group="Project",
+            sub_group="Administrative data",
+            attribute_name="Record type",
+            field_code="record_type",
+            description="Kind of object the submission describes",
+            requirements="Required",
+            criticality="MUST",
         ),
     )
 
@@ -60,10 +117,9 @@ class ProjectRecordBase(SQLModel):
             sub_group="Administrative data",
             attribute_name="Project Unit System",
             field_code="project_units",
-            description=(
-                "Unit system used in the assessment (Imperial Units System (IP, USA); International Units System (SI))."
-            ),
+            description="Unit system used in the assessment.",
             requirements="Required",
+            criticality="MUST",
             example="Metric, International Units System (SI)",
         ),
     )
@@ -77,8 +133,10 @@ class ProjectRecordBase(SQLModel):
             sub_group="Administrative data",
             attribute_name="Project name",
             field_code="project_name",
-            description="Name of the project (can be anonymized).",
+            description="Name of the project.",
+            constraint="max 200 characters",
             requirements="Recommended",
+            criticality="MAY",
             reference_formats={"echo": True, "carbenmats": False, "clf": True},
             example="Brilliant Group Hotel",
         ),
@@ -93,8 +151,10 @@ class ProjectRecordBase(SQLModel):
             sub_group="Administrative data",
             attribute_name="Project description",
             field_code="project_description",
-            description=("A general description of the project focusing on its use, function, and extent of work."),
+            description="General description of the project.",
+            constraint="max 500 characters",
             requirements="Optional",
+            criticality="MAY",
             reference_formats={"echo": False, "carbenmats": False, "clf": True},
             example="A new hotel on the harbour",
         ),
@@ -108,8 +168,9 @@ class ProjectRecordBase(SQLModel):
             sub_group="Administrative data",
             attribute_name="Project construction type",
             field_code="project_construction_type",
-            description="New construction, Minor renovation, Major renovation",
+            description="Construction type of the project.",
             requirements="Required",
+            criticality="SHOULD",
             example="New construction",
         ),
     )
@@ -124,6 +185,7 @@ class ProjectRecordBase(SQLModel):
             field_code="project_country",
             description="Country where the project is located.",
             requirements="Required",
+            criticality="SHOULD",
             example="Afghanistan",
         ),
     )
@@ -138,7 +200,9 @@ class ProjectRecordBase(SQLModel):
             attribute_name="City",
             field_code="project_city",
             description="City where the project is located.",
+            constraint="max 200 characters",
             requirements="Optional",
+            criticality="MAY",
             example="Potsdam",
         ),
     )
@@ -152,8 +216,10 @@ class ProjectRecordBase(SQLModel):
             sub_group="Administrative data",
             attribute_name="State",
             field_code="project_state",
-            description=("State, province, or country subdivision where the project is located."),
+            description="State, province, or country subdivision.",
+            constraint="max 200 characters",
             requirements="Recommended",
+            criticality="MAY",
             example="Brandenburg",
         ),
     )
@@ -168,7 +234,9 @@ class ProjectRecordBase(SQLModel):
             attribute_name="Address",
             field_code="project_address",
             description="Address of the project.",
+            constraint="max 200 characters",
             requirements="Recommended",
+            criticality="MAY",
             example="Voorstrasse 20, 1417 Potsdam",
         ),
     )
@@ -180,148 +248,81 @@ class ProjectRecordBase(SQLModel):
         schema_extra=openbdf_field_metadata(
             group="Project",
             sub_group="Administrative data",
-            attribute_name="Owner / Client name",
+            attribute_name="Owner/client name",
             field_code="project_owner_name",
             description="Individual or entity that owns the project.",
+            constraint="max 200 characters",
             requirements="Optional",
+            criticality="MAY",
             example="Mr. Brown Alter",
         ),
     )
 
-    project_date_assessment: Optional[date] = Field(
-        default=None,
-        sa_type=Date,
-        description="Date of the life-cycle assessment conducted by the assessor.",
-        schema_extra=openbdf_field_metadata(
-            group="Project",
-            sub_group="Administrative data",
-            attribute_name="Date of assessment",
-            field_code="project_date_assessment",
-            description=("Date of the life-cycle assessment conducted by the assessor."),
-            requirements="Recommended",
-            example="11/02/2026",
-        ),
-    )
-
-    project_third_verified: bool = Field(
-        description="Whether the project LCA is verified by a third party.",
-        schema_extra=openbdf_field_metadata(
-            group="Project",
-            sub_group="Administrative data",
-            attribute_name="Third party verified",
-            field_code="project_third_verified",
-            description="Is the project LCA verified by a third-party?",
-            requirements="Recommended",
-            example="True",
-        ),
-    )
-
-    project_third_verifier_name: Optional[str] = Field(
-        default=None,
-        max_length=200,
-        description="Name of the third-party verifier.",
-        schema_extra=openbdf_field_metadata(
-            group="Project",
-            sub_group="Administrative data",
-            attribute_name="Third party verifier name",
-            field_code="project_third_verifier_name",
-            description=("Name of the third-party verification person/organisation."),
-            requirements="Recommended",
-            example="Pullmann Consultants, Zurich",
-        ),
-    )
-
-    project_verification_date: Optional[date] = Field(
-        default=None,
-        sa_type=Date,
-        description="Date of third-party verification.",
-        schema_extra=openbdf_field_metadata(
-            group="Project",
-            sub_group="Administrative data",
-            attribute_name="Verification date",
-            field_code="project_verification_date",
-            description="Date of the verification of the assessment by third-party.",
-            requirements="Optional",
-            example="07/02/2026",
-        ),
-    )
-
-    project_gfa_method: Optional[GFAMeasurementMethod] = Field(  # type: ignore[call-overload]
-        default=None,
-        sa_type=SAEnum(GFAMeasurementMethod),
-        description="Gross Floor Area measurement method.",
-        schema_extra=openbdf_field_metadata(
-            group="Project",
-            sub_group="Administrative data",
-            attribute_name="GFA measurement method",
-            field_code="project_gfa_method",
-            description=("Gross Floor Area measurement method applied to the project (e.g., ASHRAE, LEED, IPMS)"),
-            requirements="Recommended",
-            example="IPMS – International Property Measurement Standards",
-        ),
-    )
-
-    project_certification: Optional[bool] = Field(
+    project_sustainability_certification: Optional[bool] = Field(
         default=None,
         description="Indicate if a sustainability certification was used for the project.",
         schema_extra=openbdf_field_metadata(
             group="Project",
             sub_group="Administrative data",
-            attribute_name="Certification",
-            field_code="project_certification",
-            description=("Indicate if a sustainability certification was used for the project."),
+            attribute_name="Sustainability certification",
+            field_code="project_sustainability_certification",
+            description="Indicate if a sustainability certification was used for the project.",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
-    project_certification_name: Optional[str] = Field(
+    project_sustainability_certification_name: Optional[str] = Field(
         default=None,
         max_length=200,
         description="Sustainability certification applied for the project.",
         schema_extra=openbdf_field_metadata(
             group="Project",
             sub_group="Administrative data",
-            attribute_name="Certification name",
-            field_code="project_certification_name",
-            description=("Type of sustainability certification being applied for the project."),
+            attribute_name="Sustainability certification Name",
+            field_code="project_sustainability_certification_name",
+            description="Sustainability certification applied for the project.",
+            constraint="max 200 characters",
             requirements="Recommended",
+            criticality="MAY",
             example="LEED",
         ),
     )
 
-    project_certification_date: Optional[date] = Field(
+    project_sustainability_certification_date: Optional[date] = Field(
         default=None,
-        sa_type=Date,
         description="Date of certification application.",
         schema_extra=openbdf_field_metadata(
             group="Project",
             sub_group="Administrative data",
-            attribute_name="Certification application date",
-            field_code="project_certification_date",
-            description=("Date of application for the sustainability certification for the project."),
+            attribute_name="Sustainability certification application date",
+            field_code="project_sustainability_certification_date",
+            description="Date of certification application.",
             requirements="Recommended",
+            criticality="MAY",
             example="08/02/2026",
         ),
     )
 
-    project_certification_id: Optional[str] = Field(
+    project_sustainability_certification_id: Optional[str] = Field(
         default=None,
         max_length=200,
         description="Unique ID assigned to the certification application.",
         schema_extra=openbdf_field_metadata(
             group="Project",
             sub_group="Administrative data",
-            attribute_name="Certification application ID",
-            field_code="project_certification_id",
+            attribute_name="Sustainability certification application ID",
+            field_code="project_sustainability_certification_id",
             description="Unique ID assigned to the certification application.",
+            constraint="max 200 characters",
             requirements="Optional",
+            criticality="MAY",
             example="ABC1234",
         ),
     )
 
     project_permit_date: Optional[date] = Field(
         default=None,
-        sa_type=Date,
         description="Date of application for construction permit.",
         schema_extra=openbdf_field_metadata(
             group="Project",
@@ -330,6 +331,7 @@ class ProjectRecordBase(SQLModel):
             field_code="project_permit_date",
             description="Date of application for construction permit.",
             requirements="Recommended",
+            criticality="MAY",
             example="08/02/2026",
         ),
     )
@@ -344,8 +346,233 @@ class ProjectRecordBase(SQLModel):
             attribute_name="Project permit ID",
             field_code="project_permit_id",
             description="Unique ID of the project permit.",
+            constraint="max 200 characters",
             requirements="Recommended",
+            criticality="MAY",
             example="ABC1234",
+        ),
+    )
+
+    project_no_of_buildings: int = Field(
+        description="Total number of buildings in the project.",
+        schema_extra=openbdf_field_metadata(
+            group="Project",
+            sub_group="Administrative data",
+            attribute_name="No. of buildings",
+            field_code="project_no_of_buildings",
+            description="Total number of buildings in the project.",
+            requirements="Required",
+            criticality="SHOULD",
+            example="5",
+        ),
+    )
+
+    project_phase: ProjectPhase = Field(  # type: ignore[call-overload]
+        sa_type=SAEnum(ProjectPhase),
+        description="Stage of the project when LCA is conducted.",
+        schema_extra=openbdf_field_metadata(
+            group="Project",
+            sub_group="Administrative data",
+            attribute_name="Project phase at time of assessment",
+            field_code="project_phase",
+            description="Stage of the project when LCA is conducted.",
+            requirements="Required",
+            criticality="SHOULD",
+            example="Preliminary studies",
+        ),
+    )
+
+    project_phase_common: Optional[ProjectPhaseCommon] = Field(  # type: ignore[call-overload]
+        default=None,
+        sa_type=SAEnum(ProjectPhaseCommon),
+        description="Project phase mapped to the common definition of design steps and project phases.",
+        schema_extra=openbdf_field_metadata(
+            group="Project",
+            sub_group="Administrative data",
+            attribute_name="Project phase, common definition",
+            field_code="project_phase_common",
+            description="Project phase mapped to the common definition of design steps and project phases.",
+            requirements="Automatic",
+            criticality="MAY",
+        ),
+    )
+
+    project_assessment_type: AssessmentType_EN15978 = Field(  # type: ignore[call-overload]
+        sa_type=SAEnum(AssessmentType_EN15978),
+        description="Granularity of the building model behind the assessment",
+        schema_extra=openbdf_field_metadata(
+            group="Project",
+            sub_group="Administrative data",
+            attribute_name="Assessment type",
+            field_code="project_assessment_type",
+            description="Granularity of the building model behind the assessment",
+            requirements="Required",
+            criticality="MUST",
+        ),
+    )
+
+    project_design_start_date: Optional[date] = Field(
+        default=None,
+        description="Project design start date.",
+        schema_extra=openbdf_field_metadata(
+            group="Project",
+            sub_group="Administrative data",
+            attribute_name="Project design start date",
+            field_code="project_design_start_date",
+            description="Project design start date.",
+            requirements="Recommended",
+            criticality="MAY",
+            example="08/02/2026",
+        ),
+    )
+
+    project_construction_company_name: Optional[str] = Field(
+        default=None,
+        max_length=200,
+        description="Name of the company constructing the project.",
+        schema_extra=openbdf_field_metadata(
+            group="Project",
+            sub_group="Administrative data",
+            attribute_name="Construction company name",
+            field_code="project_construction_company_name",
+            description="Name of the company constructing the project.",
+            constraint="max 200 characters",
+            requirements="Optional",
+            criticality="MAY",
+            example="Terranova Construction Company",
+        ),
+    )
+
+    project_construction_company_address: Optional[str] = Field(
+        default=None,
+        max_length=200,
+        description="Physical location of the construction company.",
+        schema_extra=openbdf_field_metadata(
+            group="Project",
+            sub_group="Administrative data",
+            attribute_name="Construction company address",
+            field_code="project_construction_company_address",
+            description="Physical location of the construction company.",
+            constraint="max 200 characters",
+            requirements="Optional",
+            criticality="MAY",
+            example="Seebachstrasse 21, 5100 Zurich",
+        ),
+    )
+
+    project_contractor_name: Optional[str] = Field(
+        default=None,
+        max_length=200,
+        description="Name of the contractor executing the construction.",
+        schema_extra=openbdf_field_metadata(
+            group="Project",
+            sub_group="Administrative data",
+            attribute_name="Contractor name",
+            field_code="project_contractor_name",
+            description="Name of the contractor executing the construction.",
+            constraint="max 200 characters",
+            requirements="Optional",
+            criticality="MAY",
+            example="Regionale Contractors",
+        ),
+    )
+
+    project_architect_engineer_name: Optional[str] = Field(
+        default=None,
+        max_length=200,
+        description="Name of the architect/engineer appointed on the project.",
+        schema_extra=openbdf_field_metadata(
+            group="Project",
+            sub_group="Administrative data",
+            attribute_name="Architect/engineer name",
+            field_code="project_architect_engineer_name",
+            description="Name of the architect/engineer appointed on the project.",
+            constraint="max 200 characters",
+            requirements="Optional",
+            criticality="MAY",
+            example="Peter Sylon",
+        ),
+    )
+
+    project_structural_engineer_name: Optional[str] = Field(
+        default=None,
+        max_length=200,
+        description="Name of the structural engineer appointed on the project.",
+        schema_extra=openbdf_field_metadata(
+            group="Project",
+            sub_group="Administrative data",
+            attribute_name="Structural engineer name",
+            field_code="project_structural_engineer_name",
+            description="Name of the structural engineer appointed on the project.",
+            constraint="max 200 characters",
+            requirements="Optional",
+            criticality="MAY",
+            example="Peter Sylon",
+        ),
+    )
+
+    project_mep_engineer_name: Optional[str] = Field(
+        default=None,
+        max_length=200,
+        description="Name of the MEP engineer appointed on the project.",
+        schema_extra=openbdf_field_metadata(
+            group="Project",
+            sub_group="Administrative data",
+            attribute_name="MEP engineer name",
+            field_code="project_mep_engineer_name",
+            description="Name of the MEP engineer appointed on the project.",
+            constraint="max 200 characters",
+            requirements="Optional",
+            criticality="MAY",
+            example="Peter Sylon",
+        ),
+    )
+
+    project_environmental_consultant_company_name: Optional[str] = Field(
+        default=None,
+        max_length=200,
+        description="Company conducting the LCA assessment.",
+        schema_extra=openbdf_field_metadata(
+            group="Project",
+            sub_group="Administrative data",
+            attribute_name="Environmental consultant company name",
+            field_code="project_environmental_consultant_company_name",
+            description="Company conducting the LCA assessment.",
+            constraint="max 200 characters",
+            requirements="Optional",
+            criticality="MAY",
+            example="Environmental Design Consultants",
+        ),
+    )
+
+    project_environmental_assessor_name: Optional[str] = Field(
+        default=None,
+        max_length=200,
+        description="Name of the environmental assessor.",
+        schema_extra=openbdf_field_metadata(
+            group="Project",
+            sub_group="Administrative data",
+            attribute_name="Environmental assessor name",
+            field_code="project_environmental_assessor_name",
+            description="Name of the environmental assessor.",
+            constraint="max 200 characters",
+            requirements="Optional",
+            criticality="MAY",
+            example="Thomas Casper",
+        ),
+    )
+
+    building_age_class: Optional[str] = Field(
+        default=None,
+        description="Construction period of the archetype, as given in the source stock dataset.",
+        schema_extra=openbdf_field_metadata(
+            group="Building",
+            sub_group="Administrative data",
+            attribute_name="Building age class",
+            field_code="building_age_class",
+            description="Construction period of the archetype, as given in the source stock dataset.",
+            requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -359,189 +586,26 @@ class ProjectRecordBase(SQLModel):
             sub_group="Administrative data",
             attribute_name="Project total plot area",
             field_code="project_plot_area",
-            description=("Total plot area of the project according to national standard."),
-            constraint="numerical",
+            description="Total plot area of the project.",
             units="m2",
             requirements="Recommended",
+            criticality="MAY",
             example="500",
         ),
     )
 
-    project_no_of_buildings: int = Field(
-        description="Total number of buildings in the project.",
+    project_gfa_method: GFAMeasurementMethod = Field(  # type: ignore[call-overload]
+        sa_type=SAEnum(GFAMeasurementMethod),
+        description="Gross Floor Area measurement method.",
         schema_extra=openbdf_field_metadata(
             group="Project",
             sub_group="Administrative data",
-            attribute_name="No. of buildings",
-            field_code="project_no_of_buildings",
-            description="Total number of buildings in the project.",
-            constraint="numerical",
+            attribute_name="GFA measurement method",
+            field_code="project_gfa_method",
+            description="Gross Floor Area measurement method.",
             requirements="Required",
-            example="5",
-        ),
-    )
-
-    project_phase: ProjectPhase = Field(  # type: ignore[call-overload]
-        sa_type=SAEnum(ProjectPhase),
-        description="Stage of the project when LCA is conducted.",
-        schema_extra=openbdf_field_metadata(
-            group="Project",
-            sub_group="Administrative data",
-            attribute_name="Project phase",
-            field_code="project_phase",
-            description=("Stage of the project when LCA is conducted (according to national standard)"),
-            requirements="Required",
-            example="Preliminary studies",
-        ),
-    )
-
-    project_design_start_date: Optional[date] = Field(
-        default=None,
-        sa_type=Date,
-        description="Project design start date.",
-        schema_extra=openbdf_field_metadata(
-            group="Project",
-            sub_group="Administrative data",
-            attribute_name="Project design start date",
-            field_code="project_design_start_date",
-            description="Project design start date.",
-            requirements="Recommended",
-            example="08/02/2026",
-        ),
-    )
-
-    project_construction_company_name: Optional[str] = Field(
-        default=None,
-        max_length=200,
-        description="Name of the company constructing the project.",
-        schema_extra=openbdf_field_metadata(
-            group="Project",
-            sub_group="Project Stakeholders",
-            attribute_name="Construction company name",
-            field_code="project_construction_company_name",
-            description="Name of the company constructing the project.",
-            requirements="Optional",
-            example="Terranova Construction Company",
-        ),
-    )
-
-    project_construction_company_address: Optional[str] = Field(
-        default=None,
-        max_length=200,
-        description="Physical location of the construction company.",
-        schema_extra=openbdf_field_metadata(
-            group="Project",
-            sub_group="Project Stakeholders",
-            attribute_name="Construction company address",
-            field_code="project_construction_company_address",
-            description="Physical location of the construction company.",
-            requirements="Optional",
-            example="Seebachstrasse 21, 5100 Zurich",
-        ),
-    )
-
-    project_contractor_name: Optional[str] = Field(
-        default=None,
-        max_length=200,
-        description="Name of the contractor executing the construction.",
-        schema_extra=openbdf_field_metadata(
-            group="Project",
-            sub_group="Project Stakeholders",
-            attribute_name="Contractor name",
-            field_code="project_contractor_name",
-            description="Name of the contractor executing the construction.",
-            requirements="Optional",
-            example="Regionale Contractors",
-        ),
-    )
-
-    project_architect_engineer_name: Optional[str] = Field(
-        default=None,
-        max_length=200,
-        description="Name of the architect/engineer appointed on the project.",
-        schema_extra=openbdf_field_metadata(
-            group="Project",
-            sub_group="Project Stakeholders",
-            attribute_name="Architect/ Engineer",
-            field_code="project_architect_engineer_name",
-            description=("Name of the architect/engineer appointed on the project"),
-            requirements="Optional",
-            example="Peter Sylon",
-        ),
-    )
-
-    project_structural_engineer_name: Optional[str] = Field(
-        default=None,
-        max_length=200,
-        description="Name of the structural engineer appointed on the project.",
-        schema_extra=openbdf_field_metadata(
-            group="Project",
-            sub_group="Project Stakeholders",
-            attribute_name="Structural Engineer",
-            field_code="project_structural_engineer_name",
-            description="Name of the engineer appointed on the project",
-            requirements="Optional",
-            example="Peter Sylon",
-        ),
-    )
-
-    project_mep_engineer_name: Optional[str] = Field(
-        default=None,
-        max_length=200,
-        description="Name of the MEP engineer appointed on the project.",
-        schema_extra=openbdf_field_metadata(
-            group="Project",
-            sub_group="Project Stakeholders",
-            attribute_name="MEP Engineer",
-            field_code="project_mep_engineer_name",
-            description="Name of the MEP Engineer appointed on the project",
-            requirements="Optional",
-            example="Peter Sylon",
-        ),
-    )
-
-    project_environmental_consultant_company: Optional[str] = Field(
-        default=None,
-        max_length=200,
-        description="Company conducting the LCA assessment.",
-        schema_extra=openbdf_field_metadata(
-            group="Project",
-            sub_group="Project Stakeholders",
-            attribute_name="Environmental consultant company",
-            field_code="project_environmental_consultant_company",
-            description="Name of the company conducting the LCA assessment",
-            requirements="Optional",
-            example="Environmental Design Consultants",
-        ),
-    )
-
-    project_environmental_assessor_name: Optional[str] = Field(
-        default=None,
-        max_length=200,
-        description="Name of the environmental assessor.",
-        schema_extra=openbdf_field_metadata(
-            group="Project",
-            sub_group="Project Stakeholders",
-            attribute_name="Environmental assessor name",
-            field_code="project_environmental_assessor_name",
-            description="Name of the environmental assessor",
-            requirements="Optional",
-            example="Thomas Casper",
-        ),
-    )
-
-    project_environmental_assessor_contact: Optional[str] = Field(
-        default=None,
-        max_length=200,
-        description="Contact details of the environmental assessor.",
-        schema_extra=openbdf_field_metadata(
-            group="Project",
-            sub_group="Project Stakeholders",
-            attribute_name="Environmental assessor contact",
-            field_code="project_environmental_assessor_contact",
-            description=("Contact details of the Environmental assessor (e.g. email, phone)"),
-            requirements="Optional",
-            example="email or phone number",
+            criticality="MUST",
+            example="IPMS – International Property Measurement Standards",
         ),
     )
 
@@ -554,13 +618,14 @@ class ProjectRecordBase(SQLModel):
             sub_group="Building data (general)",
             attribute_name="Building ID",
             field_code="building_id",
-            description="Assigned identifier for the building renovated/constructed.",
+            description="Assigned identifier for the building.",
+            constraint="max 200 characters",
             requirements="Recommended",
+            criticality="MAY",
             example="ABC1234",
         ),
     )
 
-    # TODO : datatype for this ?
     building_gps_coordinates: Optional[str] = Field(
         default=None,
         max_length=100,
@@ -570,23 +635,26 @@ class ProjectRecordBase(SQLModel):
             sub_group="Building data (general)",
             attribute_name="Building GPS coordinates",
             field_code="building_gps_coordinates",
-            description=("Latitude and longitude of the building project (decimal degrees)"),
-            constraint="numerical",
+            description="Latitude and longitude of the building project.",
+            constraint="max 100 characters",
             requirements="Recommended",
+            criticality="MAY",
             example="41.40338, 2.17403",
         ),
     )
 
-    building_geographic_climate_zone: ClimateZone = Field(  # type: ignore[call-overload]
+    building_geographic_climate_zone: Optional[ClimateZone] = Field(  # type: ignore[call-overload]
+        default=None,
         sa_type=SAEnum(ClimateZone),
-        description="ASHRAE climate zone typology.",
+        description="Climate zone of the building site, with its classification system: ASHRAE 169, IECC or Koppen-Geiger.",
         schema_extra=openbdf_field_metadata(
             group="Building",
             sub_group="Building data (general)",
-            attribute_name="ASHRAE climate zone typologies",
+            attribute_name="Climate zone",
             field_code="building_geographic_climate_zone",
-            description=("Classification of the area's climate based on ASHRAE classification"),
+            description="Climate zone of the building site, with its classification system: ASHRAE 169, IECC or Koppen-Geiger.",
             requirements="Recommended",
+            criticality="SHOULD",
             example="2A (Hot - Humid)",
         ),
     )
@@ -601,10 +669,10 @@ class ProjectRecordBase(SQLModel):
             sub_group="Building data (general)",
             attribute_name="Altitude",
             field_code="building_altitude",
-            description="Elevation of the project site above sea level",
-            constraint="numerical",
+            description="Elevation of the project site above sea level.",
             units="m",
             requirements="Recommended",
+            criticality="MAY",
             example="200m or 400 ft.",
         ),
     )
@@ -618,25 +686,24 @@ class ProjectRecordBase(SQLModel):
             sub_group="Building data (general)",
             attribute_name="Seismic zone",
             field_code="building_seismic_zone",
-            description=("Classification of the area's seismic activity level according to national standard"),
+            description="Classification of seismic activity level.",
             requirements="Recommended",
+            criticality="MAY",
             example="SDC A: Minor expected ground shaking.",
         ),
     )
 
-    building_typology: BuildingTypology = Field(  # type: ignore[call-overload]
+    building_use_type: BuildingTypology = Field(  # type: ignore[call-overload]
         sa_type=SAEnum(BuildingTypology),
-        description="Building category according to national classification.",
+        description="Main use of the building.",
         schema_extra=openbdf_field_metadata(
             group="Building",
             sub_group="Building data (general)",
-            attribute_name="Building typology",
-            field_code="building_typology",
-            description=(
-                "Building category according to national classification "
-                "(multi-family housing, single-family home etc.)."
-            ),
+            attribute_name="Building use type",
+            field_code="building_use_type",
+            description="Main use of the building.",
             requirements="Required",
+            criticality="SHOULD",
             example="Multi-family buildings",
         ),
     )
@@ -649,8 +716,9 @@ class ProjectRecordBase(SQLModel):
             sub_group="Building data (general)",
             attribute_name="No. of individual residential units",
             field_code="building_residential_units",
-            description=("Total number of individual residential units within the building (if residential asset)."),
+            description="Total number of individual residential units.",
             requirements="Recommended",
+            criticality="MAY",
             example="25",
         ),
     )
@@ -665,58 +733,39 @@ class ProjectRecordBase(SQLModel):
             sub_group="Building data (general)",
             attribute_name="No. of rooms in the residential units",
             field_code="building_rooms",
-            description="Total number of rooms (if residential asset).",
-            constraint="numerical",
+            description="Total number of rooms in residential units.",
             requirements="Optional",
+            criticality="MAY",
             example="100",
-        ),
-    )
-
-    building_energy_classification_system: Optional[BuildingEnergyClassificationSystem] = Field(  # type: ignore[call-overload]
-        default=None,
-        sa_type=SAEnum(BuildingEnergyClassificationSystem),
-        description="Energy classification of the building.",
-        schema_extra=openbdf_field_metadata(
-            group="Building",
-            sub_group="Building data (general)",
-            attribute_name="Energy classification system",
-            field_code="building_energy_classification_system",
-            description=(
-                "Energy classifications to assess the building's energy "
-                "performance (e.g., EPC, SAP Rating, HERS Index, ENERGY STAR, "
-                "A++, ...)."
-            ),
-            requirements="Recommended",
-            example="A, B, A+",
         ),
     )
 
     building_construction_start_date: Optional[date] = Field(
         default=None,
-        sa_type=Date,
         description="The year/date building construction officially started.",
         schema_extra=openbdf_field_metadata(
             group="Building",
             sub_group="Building data (general)",
             attribute_name="Construction start date",
             field_code="building_construction_start_date",
-            description=("The year the building construction officially started."),
+            description="The year/date building construction officially started.",
             requirements="Optional",
+            criticality="MAY",
             example="07/02/2026",
         ),
     )
 
     building_construction_end_date: Optional[date] = Field(
         default=None,
-        sa_type=Date,
         description="The year/date building construction completed.",
         schema_extra=openbdf_field_metadata(
             group="Building",
             sub_group="Building data (general)",
             attribute_name="Construction end date",
             field_code="building_construction_end_date",
-            description=("The year the building construction was officially completed and started operating."),
+            description="The year/date building construction completed.",
             requirements="Recommended",
+            criticality="MAY",
             example="07/02/2026",
         ),
     )
@@ -731,10 +780,10 @@ class ProjectRecordBase(SQLModel):
             sub_group="Building data (general)",
             attribute_name="Demolished area",
             field_code="building_demolished_area",
-            description=("Floor area that has been dismantled or destroyed as a part of end-of-life phase."),
-            constraint="numerical",
+            description="Floor area dismantled or destroyed in end-of-life phase.",
             units="m2",
             requirements="Optional",
+            criticality="MAY",
             example="500",
         ),
     )
@@ -749,10 +798,10 @@ class ProjectRecordBase(SQLModel):
             sub_group="Building data (general)",
             attribute_name="Roof area",
             field_code="building_roof_area",
-            description="The total surface area covered by the roof of a building",
-            constraint="numerical",
+            description="Total roof surface area.",
             units="m2",
             requirements="Recommended",
+            criticality="MAY",
             example="500",
         ),
     )
@@ -767,9 +816,9 @@ class ProjectRecordBase(SQLModel):
             sub_group="Building data (general)",
             attribute_name="No. of floors (below ground)",
             field_code="building_floors_bg",
-            description=("Number of floor levels situated below the ground level"),
-            constraint="numerical",
+            description="Number of floor levels below ground.",
             requirements="Recommended",
+            criticality="SHOULD",
             example="2",
         ),
     )
@@ -784,9 +833,9 @@ class ProjectRecordBase(SQLModel):
             sub_group="Building data (general)",
             attribute_name="No. of floors (above ground)",
             field_code="building_floors_ag",
-            description=("Number of floor levels situated above the ground level"),
-            constraint="numerical",
+            description="Number of floor levels above ground.",
             requirements="Recommended",
+            criticality="SHOULD",
             example="3",
         ),
     )
@@ -801,9 +850,9 @@ class ProjectRecordBase(SQLModel):
             sub_group="Building data (general)",
             attribute_name="No. of parking spots (in building)",
             field_code="building_parking_building",
-            description=("Total number of parking spots included in the building perimeter (e.g. in the basement)"),
-            constraint="numerical",
+            description="Parking spots included in the building perimeter.",
             requirements="Recommended",
+            criticality="MAY",
             example="5",
         ),
     )
@@ -818,9 +867,9 @@ class ProjectRecordBase(SQLModel):
             sub_group="Building data (general)",
             attribute_name="No. of parking spots (dislocated)",
             field_code="building_parking_dislocated",
-            description=("Total number of parking spot dislocated from the building (on-site, off-site)"),
-            constraint="numerical",
+            description="Parking spots dislocated from the building.",
             requirements="Recommended",
+            criticality="MAY",
             example="6",
         ),
     )
@@ -834,8 +883,9 @@ class ProjectRecordBase(SQLModel):
             sub_group="Building data (general)",
             attribute_name="Building Element Classification Code Name",
             field_code="building_element_classification_code_name",
-            description="Name of the custom or national building element classification code utilized",
+            description="Name of the custom or national building element classification code utilized.",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -848,8 +898,10 @@ class ProjectRecordBase(SQLModel):
             sub_group="Building data (general)",
             attribute_name="Building Element Classification Code Link",
             field_code="building_element_classification_code_link",
-            description="Link of the custom or national building element classification code utilized",
+            description="Link of the custom or national building element classification code utilized.",
+            constraint="max 500 characters",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -861,13 +913,15 @@ class ProjectRecordBase(SQLModel):
             sub_group="Building data (general)",
             attribute_name="Building Element Classification Code Version",
             field_code="building_element_classification_code_version",
-            description="Version of the custom or national building element classification code utilized",
+            description="Version of the custom or national building element classification code utilized.",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
-    building_element_classification_tier: Optional[BuildingElementClassificationTier] = Field(
+    building_element_classification_tier: Optional[BuildingElementClassificationTier] = Field(  # type: ignore[call-overload]
         default=None,
+        sa_type=SAEnum(BuildingElementClassificationTier),
         description="Tiers of the custom or national building element classification covered",
         schema_extra=openbdf_field_metadata(
             group="Building",
@@ -876,20 +930,22 @@ class ProjectRecordBase(SQLModel):
             field_code="building_element_classification_tier",
             description="Tiers of the custom or national building element classification covered",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
-    building_structure_typology: str = Field(
-        max_length=100,
-        description="Overall design and construction method of a building.",
+    building_structure_type: Optional[BuildingStructureType] = Field(  # type: ignore[call-overload]
+        default=None,
+        sa_type=SAEnum(BuildingStructureType),
+        description="Main structural material and structural system of the building, or a mixed combination.",
         schema_extra=openbdf_field_metadata(
             group="Building",
             sub_group="Building data (technical)",
             attribute_name="Building structure type",
-            field_code="building_structure_typology",
-            description=("Overall design and construction method of a building- Massive, Timber, Other"),
-            constraint="dropdown",
-            requirements="Required",
+            field_code="building_structure_type",
+            description="Main structural material and structural system of the building, or a mixed combination.",
+            requirements="Recommended",
+            criticality="SHOULD",
             example="Concrete (In-Situ)",
         ),
     )
@@ -902,12 +958,9 @@ class ProjectRecordBase(SQLModel):
             sub_group="Building data (technical)",
             attribute_name="Prefabricated elements",
             field_code="building_prefabricated_elements",
-            description=(
-                "Building components manufactured off-site in a factory "
-                "setting and transported to the construction site for assembly, "
-                "including panels, modules, and sections"
-            ),
+            description="Whether prefabricated elements are used.",
             requirements="Recommended",
+            criticality="MAY",
             example="Yes",
         ),
     )
@@ -921,8 +974,9 @@ class ProjectRecordBase(SQLModel):
             sub_group="Building data (technical)",
             attribute_name="Soil data",
             field_code="building_soil_data",
-            description=("Information about the catregory of soil (according to national standard)"),
+            description="Information about the category of soil.",
             requirements="Recommended",
+            criticality="MAY",
             example="sandy gravel",
         ),
     )
@@ -935,13 +989,57 @@ class ProjectRecordBase(SQLModel):
             sub_group="Building data (technical)",
             attribute_name="Foundation type",
             field_code="building_foundation_type",
-            description=(
-                "Construction method used to support a building's structure "
-                "below ground, such as Strip, Raft, Pile or basement foundation"
-            ),
-            units=None,
+            description="Construction method used to support a building below ground.",
             requirements="Required",
+            criticality="SHOULD",
             example="Spread foundation- Pad Footings (Isolated)",
+        ),
+    )
+
+    building_required_service_life: Decimal = Field(
+        max_digits=18,
+        decimal_places=4,
+        description="Service life required by the client or by regulation for the building, in years",
+        schema_extra=openbdf_field_metadata(
+            group="Building",
+            sub_group="Building data (technical)",
+            attribute_name="Required Service Life (RSL)",
+            field_code="building_required_service_life",
+            description="Service life required by the client or by regulation for the building, in years",
+            units="years",
+            requirements="Required",
+            criticality="SHOULD",
+        ),
+    )
+
+    building_energy_classification_system: Optional[BuildingEnergyClassificationSystem] = Field(  # type: ignore[call-overload]
+        default=None,
+        sa_type=SAEnum(BuildingEnergyClassificationSystem),
+        description="Energy classification of the building.",
+        schema_extra=openbdf_field_metadata(
+            group="Building",
+            sub_group="Building data (technical)",
+            attribute_name="Energy classification system",
+            field_code="building_energy_classification_system",
+            description="Energy classification of the building.",
+            requirements="Recommended",
+            criticality="MAY",
+            example="A, B, A+",
+        ),
+    )
+
+    building_energy_code_system: Optional[BuildingEnergyCodeSystem] = Field(  # type: ignore[call-overload]
+        default=None,
+        sa_type=SAEnum(BuildingEnergyCodeSystem),
+        description="Which energy code or standard the energy figures are calculated against",
+        schema_extra=openbdf_field_metadata(
+            group="Building",
+            sub_group="Building data (technical)",
+            attribute_name="Energy code system",
+            field_code="building_energy_code_system",
+            description="Which energy code or standard the energy figures are calculated against",
+            requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -955,10 +1053,10 @@ class ProjectRecordBase(SQLModel):
             sub_group="Building data (technical)",
             attribute_name="Energy demand - thermal",
             field_code="building_energy_demand_thermal",
-            description=("Energy demand for space (e.g., heating /cooling, domestic hot water - DHW)."),
-            constraint="numerical",
+            description="Energy demand for thermal space services.",
             units="kWh/y",
             requirements="Recommended",
+            criticality="MAY",
             example="100",
         ),
     )
@@ -973,10 +1071,10 @@ class ProjectRecordBase(SQLModel):
             sub_group="Building data (technical)",
             attribute_name="Energy demand - electric",
             field_code="building_energy_demand_electricity",
-            description=("Energy demand for electrical equipment (lighting, ventilation, etc.)."),
-            constraint="numerical",
+            description="Energy demand for electrical equipment.",
             units="kWh/y",
             requirements="Recommended",
+            criticality="MAY",
             example="101",
         ),
     )
@@ -991,10 +1089,10 @@ class ProjectRecordBase(SQLModel):
             sub_group="Building data (technical)",
             attribute_name="Energy supply - thermal",
             field_code="building_energy_supply_thermal",
-            description="Energy supply from local thermal RES (e.g., PV, etc.).",
-            constraint="numerical",
+            description="Energy supply from local thermal RES.",
             units="kWh/y",
             requirements="Recommended",
+            criticality="MAY",
             example="102",
         ),
     )
@@ -1009,10 +1107,10 @@ class ProjectRecordBase(SQLModel):
             sub_group="Building data (technical)",
             attribute_name="Energy supply - electric",
             field_code="building_energy_supply_electricity",
-            description=("Energy supply from local electrical RES (e.g., solar panel, etc.)."),
-            constraint="numerical",
+            description="Energy supply from local electrical RES.",
             units="kWh/y",
             requirements="Recommended",
+            criticality="MAY",
             example="103",
         ),
     )
@@ -1026,8 +1124,9 @@ class ProjectRecordBase(SQLModel):
             sub_group="Building data (technical)",
             attribute_name="Building primary energy source",
             field_code="building_primary_energy_source",
-            description="Primary energy source for heating/ cooling, DHW.",
+            description="Primary energy source for heating/cooling/DHW.",
             requirements="Recommended",
+            criticality="MAY",
             example="Coal",
         ),
     )
@@ -1041,16 +1140,15 @@ class ProjectRecordBase(SQLModel):
             sub_group="Building data (technical)",
             attribute_name="Building BIPV description",
             field_code="building_bipv_description",
-            description=(
-                "Type and scope of BIPV (building integrated PV). If present, "
-                "mentioning, e.g., area (m²) and power (kWpeak) as well as "
-                "specific type of the system."
-            ),
+            description="Type and scope of BIPV.",
+            constraint="max 500 characters",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
-    building_orientation: BuildingFacingDirection = Field(  # type: ignore[call-overload]
+    building_orientation: Optional[BuildingFacingDirection] = Field(  # type: ignore[call-overload]
+        default=None,
         sa_type=SAEnum(BuildingFacingDirection),
         description="Orientation of the main façade.",
         schema_extra=openbdf_field_metadata(
@@ -1058,8 +1156,9 @@ class ProjectRecordBase(SQLModel):
             sub_group="Building data (geometry)",
             attribute_name="Building orientation",
             field_code="building_orientation",
-            description="Building orientation of the 'main' façade",
+            description="Orientation of the main façade.",
             requirements="Recommended",
+            criticality="MAY",
             example="E",
         ),
     )
@@ -1074,13 +1173,10 @@ class ProjectRecordBase(SQLModel):
             sub_group="Building data (geometry)",
             attribute_name="Building footprint area",
             field_code="building_footprint",
-            description=(
-                "Building footprint, i.e. the area covered by the building on "
-                "the plot. Considered equivalent to projected roof area."
-            ),
-            constraint="numerical",
+            description="Area covered by the building on the plot.",
             units="m2",
             requirements="Recommended",
+            criticality="MAY",
             example="500",
         ),
     )
@@ -1095,14 +1191,10 @@ class ProjectRecordBase(SQLModel):
             sub_group="Building data (geometry)",
             attribute_name="Unconditioned floor area",
             field_code="building_unconditioned_area",
-            description=(
-                "The floor area within the building that is not conditioned. "
-                "Spaces that are not actively managed for temperature, humidity, "
-                "and air quality using HVAC systems."
-            ),
-            constraint="numerical",
+            description="Floor area within the building that is not conditioned.",
             units="m2",
             requirements="Recommended",
+            criticality="MAY",
             example="501",
         ),
     )
@@ -1117,14 +1209,10 @@ class ProjectRecordBase(SQLModel):
             sub_group="Building data (geometry)",
             attribute_name="Conditioned floor area",
             field_code="building_conditioned_area",
-            description=(
-                "The area used to calculate a building zone energy performance "
-                "(sum of all enclosed, heated/cooled floor areas of a building "
-                "where the ambient temperature is maintained above 12°C)."
-            ),
-            constraint="numerical",
+            description="Area used to calculate building zone energy performance.",
             units="m2",
             requirements="Recommended",
+            criticality="MAY",
             example="502",
         ),
     )
@@ -1138,14 +1226,10 @@ class ProjectRecordBase(SQLModel):
             sub_group="Building data (geometry)",
             attribute_name="Useful floor area (UFA)",
             field_code="building_useful_floor_area",
-            description=(
-                "Total area intended for primary use of the building zone "
-                "including living rooms, bedrooms, offices, classrooms, "
-                "retail spaces."
-            ),
-            constraint="numerical",
+            description="Total area intended for primary use of the building zone.",
             units="m2",
             requirements="Required",
+            criticality="SHOULD",
             example="503",
         ),
     )
@@ -1159,14 +1243,10 @@ class ProjectRecordBase(SQLModel):
             sub_group="Building data (geometry)",
             attribute_name="Gross floor area (GFA)",
             field_code="building_gross_floor_area",
-            description=(
-                "Total gross floor area based on the external perimeter of the "
-                "building geometry, including the area all structural and "
-                "non-structural elements."
-            ),
-            constraint="numerical",
+            description="Total gross floor area.",
             units="m2",
             requirements="Required",
+            criticality="MUST",
             example="504",
         ),
     )
@@ -1180,9 +1260,25 @@ class ProjectRecordBase(SQLModel):
             sub_group="Building data (geometry)",
             attribute_name="Gross floor area (GFA) Standard",
             field_code="building_gross_floor_area_standard",
-            description="Definition according to national standards",
+            description="Definition of GFA according to national standards.",
             requirements="Recommended",
+            criticality="SHOULD",
             example="RICS (UK), Type 2: GIA (Gross Internal Area)",
+        ),
+    )
+
+    building_floor_area_inclusions: FloorAreaInclusions = Field(  # type: ignore[call-overload]
+        sa_type=SAEnum(FloorAreaInclusions),
+        description="What the reported floor area contains",
+        schema_extra=openbdf_field_metadata(
+            group="Building",
+            sub_group="Building data (geometry)",
+            attribute_name="Floor area spatial inclusions",
+            field_code="building_floor_area_inclusions",
+            description="What the reported floor area contains",
+            constraint="multi-select",
+            requirements="Required",
+            criticality="SHOULD",
         ),
     )
 
@@ -1196,13 +1292,10 @@ class ProjectRecordBase(SQLModel):
             sub_group="Building data (geometry)",
             attribute_name="Circulation area",
             field_code="building_circulation_area",
-            description=(
-                "Total area used for the movement within the building zone "
-                "including hallway, staircases, elevators and lobbies."
-            ),
-            constraint="numerical",
+            description="Total circulation area.",
             units="m2",
             requirements="Optional",
+            criticality="MAY",
             example="500",
         ),
     )
@@ -1217,13 +1310,10 @@ class ProjectRecordBase(SQLModel):
             sub_group="Building data (geometry)",
             attribute_name="Technical area",
             field_code="building_technical_area",
-            description=(
-                "Total area reserved for building zone services and technical "
-                "equipment including boiler rooms, electrical rooms, HVAC etc."
-            ),
-            constraint="numerical",
+            description="Total area reserved for building services and equipment.",
             units="m2",
             requirements="Optional",
+            criticality="MAY",
             example="501",
         ),
     )
@@ -1238,13 +1328,10 @@ class ProjectRecordBase(SQLModel):
             sub_group="Building data (geometry)",
             attribute_name="Built floor area (BFA)",
             field_code="building_built_floor_area",
-            description=(
-                "Equals the gross floor area plus parking area located inside "
-                "the building shell/enclosed attached parking."
-            ),
-            constraint="numerical",
+            description="GFA plus parking area located inside the building shell.",
             units="m2",
             requirements="Recommended",
+            criticality="MAY",
             example="502",
         ),
     )
@@ -1253,16 +1340,16 @@ class ProjectRecordBase(SQLModel):
         default=None,
         max_digits=18,
         decimal_places=4,
-        description="Total area of the building envelope.",
+        description="Total area of the thermal envelope, enclosing the conditioned volume.",
         schema_extra=openbdf_field_metadata(
             group="Building",
             sub_group="Building data (geometry)",
-            attribute_name="Building envelope area",
+            attribute_name="Thermal envelope area",
             field_code="building_envelope_area",
-            description="Total area of the building envelope (facade and roof).",
-            constraint="numerical",
+            description="Total area of the thermal envelope, enclosing the conditioned volume.",
             units="m2",
             requirements="Recommended",
+            criticality="MAY",
             example="503",
         ),
     )
@@ -1277,10 +1364,10 @@ class ProjectRecordBase(SQLModel):
             sub_group="Building data (geometry)",
             attribute_name="Window area",
             field_code="building_window_area",
-            description="The combined surface area of all windows in a building.",
-            constraint="numerical",
+            description="Combined surface area of all windows.",
             units="m2",
             requirements="Recommended",
+            criticality="MAY",
             example="504",
         ),
     )
@@ -1295,12 +1382,10 @@ class ProjectRecordBase(SQLModel):
             sub_group="Building data (geometry)",
             attribute_name="Wall area (interior)",
             field_code="building_wall_area_interior",
-            description=(
-                "The total surface area of internal walls within a building, excluding openings like doors and windows."
-            ),
-            constraint="numerical",
+            description="Total surface area of internal walls.",
             units="m2",
             requirements="Recommended",
+            criticality="MAY",
             example="505",
         ),
     )
@@ -1315,19 +1400,16 @@ class ProjectRecordBase(SQLModel):
             sub_group="Building data (geometry)",
             attribute_name="Enclosed parking area",
             field_code="building_enclosed_parking_area",
-            description=(
-                "Parking area that is enclosed and/or attached to the building "
-                "shell. This measurement excludes surface parking lots or "
-                "parking structures that are entirely separate from the building."
-            ),
-            constraint="numerical",
+            description="Parking area enclosed and/or attached to the building shell.",
             units="m2",
             requirements="Recommended",
+            criticality="MAY",
             example="506",
         ),
     )
 
-    building_height: Decimal = Field(
+    building_height: Optional[Decimal] = Field(
+        default=None,
         max_digits=18,
         decimal_places=4,
         description="Total height of the building above finished ground level.",
@@ -1337,9 +1419,9 @@ class ProjectRecordBase(SQLModel):
             attribute_name="Building height",
             field_code="building_height",
             description="Total height of the building above finished ground level.",
-            constraint="numerical",
             units="m",
             requirements="Recommended",
+            criticality="MAY",
             example="20",
         ),
     )
@@ -1354,13 +1436,10 @@ class ProjectRecordBase(SQLModel):
             sub_group="Building data (geometry)",
             attribute_name="Average floor height",
             field_code="building_floor_height",
-            description=(
-                "Vertical distance between the upper surface of one finished "
-                "floor and the upper surface of the finished floor above it."
-            ),
-            constraint="numerical",
+            description="Average vertical distance between finished floors.",
             units="m",
             requirements="Recommended",
+            criticality="MAY",
             example="3",
         ),
     )
@@ -1375,13 +1454,10 @@ class ProjectRecordBase(SQLModel):
             sub_group="Building data (geometry)",
             attribute_name="Building volume",
             field_code="building_volume",
-            description=(
-                "Volume of the building (gross building volume), i.e. the total "
-                "space enclosed incl. volume of walls, roofs."
-            ),
-            constraint="numerical",
+            description="Gross building volume.",
             units="m3",
             requirements="Recommended",
+            criticality="MAY",
             example="50",
         ),
     )
@@ -1396,68 +1472,72 @@ class ProjectRecordBase(SQLModel):
             sub_group="Building data (geometry)",
             attribute_name="Occupancy count",
             field_code="building_occupancy_count",
-            description=(
-                "Estimated number of people that a building or space can "
-                "accommodate (residential: number of beds; office: number of "
-                "work places/desks)."
-            ),
-            constraint="numerical",
+            description="Estimated occupancy count.",
             requirements="Recommended",
+            criticality="MAY",
             example="10",
         ),
     )
 
-    lca_goal: str = Field(
-        description="Goal of the study.",
+    lca_assessment_date: Optional[date] = Field(
+        default=None,
+        description="Date of the life-cycle assessment conducted by the assessor.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
-            sub_group="Goal & Scope",
-            attribute_name="LCA goal",
-            field_code="lca_goal",
-            description="Goal of the study",
-            requirements="Required",
-            example="Permission from municipal corporation",
+            sub_group="LCA Administrative data",
+            attribute_name="Project date of assessment",
+            field_code="lca_assessment_date",
+            description="Date of the life-cycle assessment conducted by the assessor.",
+            requirements="Recommended",
+            criticality="SHOULD",
+            example="11/02/2026",
         ),
     )
 
-    lca_reference_unit: str = Field(
-        max_length=200,
-        description="Reference unit the results are primarily expressed for.",
+    lca_third_party_verified: Optional[bool] = Field(
+        default=None,
+        description="Whether the project LCA is verified by a third party.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
-            sub_group="Goal & Scope",
-            attribute_name="Reference Unit",
-            field_code="lca_reference_unit",
-            description=("Reference unit the results are primary expressed for, as stated in source"),
-            requirements="Required",
+            sub_group="LCA Administrative data",
+            attribute_name="Third party verified",
+            field_code="lca_third_party_verified",
+            description="Whether the project LCA is verified by a third party.",
+            requirements="Recommended",
+            criticality="MAY",
+            example="True",
         ),
     )
 
-    lca_rsl: str = Field(
+    lca_third_party_verifier_name: Optional[str] = Field(
+        default=None,
         max_length=200,
-        description="Duration over which the environmental impacts of a building are assessed, typically ranging from 50 to 100 years.",
+        description="Name of the third-party verifier.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
-            sub_group="Goal & Scope",
-            attribute_name="Required Service Life (RSL)",
-            field_code="lca_rsl",
-            description=(
-                "Duration over which the environmental impacts of a building are assessed, typically ranging from 50 to 100 years."
-            ),
-            requirements="Required",
+            sub_group="LCA Administrative data",
+            attribute_name="Third party verifier name",
+            field_code="lca_third_party_verifier_name",
+            description="Name of the third-party verifier.",
+            constraint="max 200 characters",
+            requirements="Recommended",
+            criticality="MAY",
+            example="Pullmann Consultants, Zurich",
         ),
     )
 
-    lca_functional_unit: str = Field(
-        max_length=200,
-        description="Functional equivalence specified for the assessment.",
+    lca_verification_date: Optional[date] = Field(
+        default=None,
+        description="Date of third-party verification.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
-            sub_group="Goal & Scope",
-            attribute_name="Functional unit",
-            field_code="lca_functional_unit",
-            description=("Functional unit, i.e., functional equivalence specified for the assessment"),
-            requirements="Required",
+            sub_group="LCA Administrative data",
+            attribute_name="Verification date",
+            field_code="lca_verification_date",
+            description="Date of third-party verification.",
+            requirements="Optional",
+            criticality="MAY",
+            example="07/02/2026",
         ),
     )
 
@@ -1466,16 +1546,87 @@ class ProjectRecordBase(SQLModel):
         description="Building regulation and code compliance methodology.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
-            sub_group="Administrative data",
-            attribute_name="Building regulation / Code",
+            sub_group="LCA Administrative data",
+            attribute_name="Building regulation/code",
             field_code="lca_building_regulation_code",
-            description=(
-                "Building regulation and code compliance methodology for "
-                "calculating carbon emissions across the entire building life "
-                "cycle."
-            ),
+            description="Building regulation and code compliance methodology.",
+            constraint="max 200 characters",
             requirements="Required",
+            criticality="SHOULD",
             example="ASHRAE 204p",
+        ),
+    )
+
+    lca_goal: str = Field(
+        description="Goal of the study.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA Goal & Scope",
+            attribute_name="LCA goal",
+            field_code="lca_goal",
+            description="Goal of the study.",
+            requirements="Required",
+            criticality="SHOULD",
+            example="Permission from municipal corporation",
+        ),
+    )
+
+    lca_reference_unit: str = Field(
+        max_length=200,
+        description="Reference unit the results are primarily expressed for. E.g., 1 m2 GFA / year.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA Goal & Scope",
+            attribute_name="Reference Unit",
+            field_code="lca_reference_unit",
+            description="Reference unit the results are primarily expressed for. E.g., 1 m2 GFA / year.",
+            constraint="max 200 characters",
+            requirements="Required",
+            criticality="SHOULD",
+        ),
+    )
+
+    lca_reference_study_period: str = Field(
+        max_length=200,
+        description="Duration over which the environmental impacts of a building are assessed, typically ranging from 50 to 100 years.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA Goal & Scope",
+            attribute_name="Reference Study Period (RSP)",
+            field_code="lca_reference_study_period",
+            description="Duration over which the environmental impacts of a building are assessed, typically ranging from 50 to 100 years.",
+            constraint="max 200 characters",
+            requirements="Required",
+            criticality="SHOULD",
+        ),
+    )
+
+    lca_replacement_count_method: ReplacementCountMethod = Field(  # type: ignore[call-overload]
+        sa_type=SAEnum(ReplacementCountMethod),
+        description="Rule used to count component replacements in module B4",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA Goal & Scope",
+            attribute_name="Replacement count method",
+            field_code="lca_replacement_count_method",
+            description="Rule used to count component replacements in module B4",
+            requirements="Required",
+            criticality="SHOULD",
+        ),
+    )
+
+    lca_functional_unit: str = Field(
+        max_length=200,
+        description="Functional equivalence specified for the assessment. E.g., 1 m2 GFA over 50-year RSL.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA Goal & Scope",
+            attribute_name="Functional unit",
+            field_code="lca_functional_unit",
+            description="Functional equivalence specified for the assessment. E.g., 1 m2 GFA over 50-year RSL.",
+            constraint="max 200 characters",
+            requirements="Required",
+            criticality="SHOULD",
         ),
     )
 
@@ -1488,8 +1639,10 @@ class ProjectRecordBase(SQLModel):
             sub_group="LCA inventory",
             attribute_name="LCA Software name",
             field_code="lca_software_name",
-            description="Details of the software used for LCA calculation",
+            description="Details of the software used for LCA calculation.",
+            constraint="max 200 characters",
             requirements="Recommended",
+            criticality="SHOULD",
             example="GBDI tool",
         ),
     )
@@ -1503,8 +1656,10 @@ class ProjectRecordBase(SQLModel):
             sub_group="LCA inventory",
             attribute_name="LCA software publisher",
             field_code="lca_software_publisher",
-            description="Company or entity that publishes the software",
+            description="Company or entity that publishes the software.",
+            constraint="max 200 characters",
             requirements="Optional",
+            criticality="SHOULD",
             example="GBDI",
         ),
     )
@@ -1518,23 +1673,40 @@ class ProjectRecordBase(SQLModel):
             sub_group="LCA inventory",
             attribute_name="LCA software version",
             field_code="lca_software_version",
-            description="Specific version number of the software being used",
+            description="Specific version number of the software being used.",
+            constraint="max 200 characters",
             requirements="Optional",
+            criticality="MAY",
             example="v2.1.1",
         ),
     )
 
-    lca_database_name: str = Field(
-        max_length=200,
-        description="Background database name.",
+    lca_database_name: LCADatabase = Field(  # type: ignore[call-overload]
+        sa_type=SAEnum(LCADatabase),
+        description="Background database and its release, in one value, for example OKOBAUDAT_20.23.050.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
             attribute_name="LCA database name",
             field_code="lca_database_name",
-            description="Background database name",
+            description="Background database and its release, in one value, for example OKOBAUDAT_20.23.050.",
             requirements="Required",
+            criticality="SHOULD",
             example="ecoinvent",
+        ),
+    )
+
+    lca_database_system_model: LCADatabaseSystemModel = Field(  # type: ignore[call-overload]
+        sa_type=SAEnum(LCADatabaseSystemModel),
+        description="System model of the background database",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA impact assessment",
+            attribute_name="Database system model",
+            field_code="lca_database_system_model",
+            description="System model of the background database",
+            requirements="Required",
+            criticality="MUST",
         ),
     )
 
@@ -1547,13 +1719,206 @@ class ProjectRecordBase(SQLModel):
             sub_group="LCA impact assessment",
             attribute_name="LCA database version",
             field_code="lca_database_version",
-            description="Background data version (or I-O source)",
-            requirements="Recommended",
+            description="Background data version or I-O source.",
+            requirements="Removed",
+            criticality="",
             example="v3.1",
         ),
     )
 
-    lca_temporal_approach: LCATemporalApproach = Field(  # type: ignore[call-overload]
+    lca_data_cpr_share: Optional[Decimal] = Field(
+        default=None,
+        max_digits=18,
+        decimal_places=4,
+        description="Share of the weighting basis documented with data from a declaration of performance and conformity.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA Data quality",
+            attribute_name="Construction Products Regulation data share",
+            field_code="lca_data_cpr_share",
+            description="Share of the weighting basis documented with data from a declaration of performance and conformity.",
+            constraint="0 to 1",
+            units="fraction",
+            requirements="Automatic",
+            criticality="SHOULD",
+        ),
+    )
+
+    lca_data_ecodesign_share: Optional[Decimal] = Field(
+        default=None,
+        max_digits=18,
+        decimal_places=4,
+        description="Share documented with compatible data issued under product regulations adopted.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA Data quality",
+            attribute_name="Ecodesign and energy labelling data share",
+            field_code="lca_data_ecodesign_share",
+            description="Share documented with compatible data issued under product regulations adopted.",
+            constraint="0 to 1",
+            units="fraction",
+            requirements="Automatic",
+            criticality="SHOULD",
+        ),
+    )
+
+    lca_data_project_specific_share: Optional[Decimal] = Field(
+        default=None,
+        max_digits=18,
+        decimal_places=4,
+        description="Share documented with project-specific data calculated to EN 15804 or EN 50693 or a compatible standard. Usable only where national legislation permits it.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA Data quality",
+            attribute_name="Project-specific data share",
+            field_code="lca_data_project_specific_share",
+            description="Share documented with project-specific data calculated to EN 15804 or EN 50693 or a compatible standard. Usable only where national legislation permits it.",
+            constraint="0 to 1",
+            units="fraction",
+            requirements="Automatic",
+            criticality="SHOULD",
+        ),
+    )
+
+    lca_data_product_specific_share: Optional[Decimal] = Field(
+        default=None,
+        max_digits=18,
+        decimal_places=4,
+        description="Share documented with product-specific data calculated to EN 15804 or EN 50693 or a compatible standard. Usable only where national legislation permits it.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA Data quality",
+            attribute_name="Product-specific data share",
+            field_code="lca_data_product_specific_share",
+            description="Share documented with product-specific data calculated to EN 15804 or EN 50693 or a compatible standard. Usable only where national legislation permits it.",
+            constraint="0 to 1",
+            units="fraction",
+            requirements="Automatic",
+            criticality="SHOULD",
+        ),
+    )
+
+    lca_data_product_group_average_share: Optional[Decimal] = Field(
+        default=None,
+        max_digits=18,
+        decimal_places=4,
+        description="Share documented with sectoral data representing the average of multiple products from one or more companies, provided by an industrial association or equivalent body covering the product. Usable only where national legislation permits it.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA Data quality",
+            attribute_name="Average data for a product group share",
+            field_code="lca_data_product_group_average_share",
+            description="Share documented with sectoral data representing the average of multiple products from one or more companies, provided by an industrial association or equivalent body covering the product. Usable only where national legislation permits it.",
+            constraint="0 to 1",
+            units="fraction",
+            requirements="Automatic",
+            criticality="SHOULD",
+        ),
+    )
+
+    lca_data_generic_share: Optional[Decimal] = Field(
+        default=None,
+        max_digits=18,
+        decimal_places=4,
+        description="Share documented with generic data calculated to EN 15804 or EN 50693 or a compatible standard for a group of products for a country or region, neither site nor enterprise specific.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA Data quality",
+            attribute_name="Generic data share",
+            field_code="lca_data_generic_share",
+            description="Share documented with generic data calculated to EN 15804 or EN 50693 or a compatible standard for a group of products for a country or region, neither site nor enterprise specific.",
+            constraint="0 to 1",
+            units="fraction",
+            requirements="Automatic",
+            criticality="SHOULD",
+        ),
+    )
+
+    lca_data_default_share: Optional[Decimal] = Field(
+        default=None,
+        max_digits=18,
+        decimal_places=4,
+        description="Share documented with default values used to fill data gaps where no other type of data is available, or to simplify the calculation.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA Data quality",
+            attribute_name="Default values share",
+            field_code="lca_data_default_share",
+            description="Share documented with default values used to fill data gaps where no other type of data is available, or to simplify the calculation.",
+            constraint="0 to 1",
+            units="fraction",
+            requirements="Automatic",
+            criticality="SHOULD",
+        ),
+    )
+
+    lca_data_undeclared_share: Optional[Decimal] = Field(
+        default=None,
+        max_digits=18,
+        decimal_places=4,
+        description="Share of the weighting basis whose data type is not declared.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA Data quality",
+            attribute_name="Undeclared share",
+            field_code="lca_data_undeclared_share",
+            description="Share of the weighting basis whose data type is not declared.",
+            units="%",
+            requirements="Automatic",
+            criticality="MAY",
+        ),
+    )
+
+    lca_data_weighting_basis: Optional[DataWeightingBasis] = Field(  # type: ignore[call-overload]
+        default=None,
+        sa_type=SAEnum(DataWeightingBasis),
+        description="Quantity used to weight the data quality shares.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA Data quality",
+            attribute_name="Data quality weighting basis",
+            field_code="lca_data_weighting_basis",
+            description="Quantity used to weight the data quality shares.",
+            requirements="Automatic",
+            criticality="MAY",
+        ),
+    )
+
+    lca_completeness_score: Optional[Decimal] = Field(
+        default=None,
+        max_digits=18,
+        decimal_places=4,
+        description="Share of fields actually populated.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA Data quality",
+            attribute_name="Submission completeness",
+            field_code="lca_completeness_score",
+            description="Share of fields actually populated.",
+            units="%",
+            requirements="Automatic",
+            criticality="MAY",
+        ),
+    )
+
+    lca_undeclared_material_note: Optional[str] = Field(
+        default=None,
+        max_length=200,
+        description="Basis used for materials without a verified EPD",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA Data quality",
+            attribute_name="Undeclared material justification",
+            field_code="lca_undeclared_material_note",
+            description="Basis used for materials without a verified EPD",
+            constraint="max 200 characters",
+            requirements="Recommended",
+            criticality="SHOULD",
+        ),
+    )
+
+    lca_temporal_approach: Optional[LCATemporalApproach] = Field(  # type: ignore[call-overload]
+        default=None,
         sa_type=SAEnum(LCATemporalApproach),
         description="Type of LCA (e.g., probabilistic, dynamic, probabilistic, prospective)",
         schema_extra=openbdf_field_metadata(
@@ -1561,13 +1926,119 @@ class ProjectRecordBase(SQLModel):
             sub_group="LCA impact assessment",
             attribute_name="LCA temporal approach",
             field_code="lca_temporal_approach",
-            description="Type of LCA (e.g., probabilistic, dynamic, prospective)",
+            description="Type of LCA (e.g., probabilistic, dynamic, probabilistic, prospective)",
             requirements="Optional",
+            criticality="SHOULD",
             example="Probabilistic",
         ),
     )
 
-    lca_lci_modeling_approach: LCIModelingApproach = Field(  # type: ignore[call-overload]
+    lca_onsite_renewable_allocation: Optional[OnSiteRenewableAllocationApproach] = Field(  # type: ignore[call-overload]
+        default=None,
+        sa_type=SAEnum(OnSiteRenewableAllocationApproach),
+        description="Approach chosen for allocating to the building the embodied emissions of on-site renewable energy production. Energy storage components are allocated to the building in full under every approach.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA impact assessment",
+            attribute_name="Allocation of embodied emissions of on-site renewable energy production",
+            field_code="lca_onsite_renewable_allocation",
+            description="Approach chosen for allocating to the building the embodied emissions of on-site renewable energy production. Energy storage components are allocated to the building in full under every approach.",
+            requirements="Recommended",
+            criticality="SHOULD",
+        ),
+    )
+
+    lca_shared_component_allocation_rule: Optional[SharedComponentAllocationRule] = Field(  # type: ignore[call-overload]
+        default=None,
+        sa_type=SAEnum(SharedComponentAllocationRule),
+        description="Rule applied to allocate the emissions of building components shared by multiple buildings. Stated only when the submission covers more than one building.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA impact assessment",
+            attribute_name="Rule for allocating emissions of shared building components",
+            field_code="lca_shared_component_allocation_rule",
+            description="Rule applied to allocate the emissions of building components shared by multiple buildings. Stated only when the submission covers more than one building.",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    lca_extended_default_data_use: Optional[bool] = Field(
+        default=None,
+        description="Whether the calculation was simplified through an extended use of default data.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA impact assessment",
+            attribute_name="Extended use of default data",
+            field_code="lca_extended_default_data_use",
+            description="Whether the calculation was simplified through an extended use of default data.",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    lca_extended_default_data_basis: Optional[ExtendedDefaultDataBasis] = Field(  # type: ignore[call-overload]
+        default=None,
+        sa_type=SAEnum(ExtendedDefaultDataBasis),
+        description="The provision or circumstance under which the extended use of default data was applied.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA impact assessment",
+            attribute_name="Basis for the extended use of default data",
+            field_code="lca_extended_default_data_basis",
+            description="The provision or circumstance under which the extended use of default data was applied.",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    lca_limit_value_compliance: Optional[bool] = Field(
+        default=None,
+        description="Whether the result is calculated for the verification of compliance with a limit value rather than as a complete assessment.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA impact assessment",
+            attribute_name="Verification of compliance with a limit value",
+            field_code="lca_limit_value_compliance",
+            description="Whether the result is calculated for the verification of compliance with a limit value rather than as a complete assessment.",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    lca_limit_value_scope_reduction: Optional[LimitValueScopeReduction] = Field(  # type: ignore[call-overload]
+        default=None,
+        sa_type=SAEnum(LimitValueScopeReduction),
+        description="The parts of life-cycle stages and of the scope of building components left out for the verification of compliance with a limit value.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA impact assessment",
+            attribute_name="Parts left out for the verification of compliance",
+            field_code="lca_limit_value_scope_reduction",
+            description="The parts of life-cycle stages and of the scope of building components left out for the verification of compliance with a limit value.",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    lca_emission_factor_scenario: Optional[EmissionFactorScenario] = Field(  # type: ignore[call-overload]
+        default=None,
+        sa_type=SAEnum(EmissionFactorScenario),
+        description="The forward-looking emission factor scenario applied over the study period",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA impact assessment",
+            attribute_name="Emission factor scenario",
+            field_code="lca_emission_factor_scenario",
+            description="The forward-looking emission factor scenario applied over the study period",
+            constraint="max 200 characters",
+            requirements="Recommended",
+            criticality="SHOULD",
+        ),
+    )
+
+    lca_lci_modeling_approach: Optional[LCIModelingApproach] = Field(  # type: ignore[call-overload]
+        default=None,
         sa_type=SAEnum(LCIModelingApproach),
         description="Type of Life Cycle Inventory (LCI) Modeling Approach",
         schema_extra=openbdf_field_metadata(
@@ -1577,22 +2048,22 @@ class ProjectRecordBase(SQLModel):
             field_code="lca_lci_modeling_approach",
             description="Type of Life Cycle Inventory (LCI) Modeling Approach",
             requirements="Optional",
+            criticality="SHOULD",
             example="Process-based",
         ),
     )
 
     lca_cycle_system_boundary: LifeCycleSystemBoundary = Field(  # type: ignore[call-overload]
         sa_type=SAEnum(LifeCycleSystemBoundary),
-        description=("Different Life Cycle Assessment (LCA) stages depending on where you start and stop measuring."),
+        description="Life-cycle modules included in the assessment.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="Life Cycle System Boundary",
+            attribute_name="Life cycle system boundary",
             field_code="lca_cycle_system_boundary",
-            description=(
-                "Different Life Cycle Assessment (LCA) stages depending on where you start and stop measuring"
-            ),
+            description="Life-cycle modules included in the assessment.",
             requirements="Required",
+            criticality="MUST",
             example="Cradle to Gate with Options (A1–A3 + others)",
         ),
     )
@@ -1605,23 +2076,10 @@ class ProjectRecordBase(SQLModel):
             sub_group="LCA impact assessment",
             attribute_name="LCIA Methodology",
             field_code="lcia_methodology",
-            description="Impact assessment method (for GHG emissions, GWP indicator)",
+            description="Impact assessment method (for GHG emissions, GWP indicator).",
             requirements="Required",
+            criticality="SHOULD",
             example="EN 15804+A2 (EF 3.0) - Current EU standard",
-        ),
-    )
-
-    lca_biogenic_carbon: Optional[bool] = Field(
-        default=None,
-        description="Biogenic carbon included in assessment.",
-        schema_extra=openbdf_field_metadata(
-            group="LCA",
-            sub_group="LCA impact assessment",
-            attribute_name="Biogenic Carbon",
-            field_code="lca_biogenic_carbon",
-            description="Biogenic carbon included in assessment",
-            requirements="Recommended",
-            example="Yes",
         ),
     )
 
@@ -1634,9 +2092,25 @@ class ProjectRecordBase(SQLModel):
             sub_group="LCA impact assessment",
             attribute_name="Biogenic Carbon Accounting Method",
             field_code="lca_biogenic_method",
-            description="Method used for biogenic carbon accounting",
+            description="Method used for biogenic carbon accounting.",
             requirements="Recommended",
+            criticality="SHOULD",
             example="-1/+1;",
+        ),
+    )
+
+    lca_biogenic_carbon: Optional[bool] = Field(
+        default=None,
+        description="Biogenic carbon included in assessment.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA impact assessment",
+            attribute_name="Biogenic Carbon",
+            field_code="lca_biogenic_carbon",
+            description="Biogenic carbon included in assessment.",
+            requirements="Recommended",
+            criticality="SHOULD",
+            example="Yes",
         ),
     )
 
@@ -1648,539 +2122,916 @@ class ProjectRecordBase(SQLModel):
             sub_group="LCA impact assessment",
             attribute_name="LCA Material Quantities Source",
             field_code="lca_material_source",
-            description="Main source of material quantities",
+            description="Main source of material quantities.",
             requirements="Required",
+            criticality="SHOULD",
             example="BIM Model",
         ),
     )
 
-    lca_gwp_total: bool = Field(
-        description="Life cycle impact included.",
+    lca_gwp_total_declared: bool = Field(
+        description="Whether this indicator was assessed. The value itself is carried by the result columns gwp_total_a1_a3 to gwp_total_c4, and the whole-life sum by gwp_total_total.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="Global Warming Potential - Total",
-            field_code="lca_gwp_total",
-            description="Life cycle impact included",
+            attribute_name="Global Warming Potential - Total, declared",
+            field_code="lca_gwp_total_declared",
+            description="Whether this indicator was assessed. The value itself is carried by the result columns gwp_total_a1_a3 to gwp_total_c4, and the whole-life sum by gwp_total_total.",
             requirements="Required",
+            criticality="SHOULD",
             example="Yes",
         ),
     )
 
-    lca_gwp_f_total: bool = Field(
-        description="Life cycle impact included.",
+    lca_gwp_f_declared: Optional[bool] = Field(
+        default=None,
+        description="Whether this indicator was assessed. The value itself is carried by the result columns gwp_f_a1_a3 to gwp_f_c4, and the whole-life sum by gwp_f_total.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="Global Warming Potential - Fossil",
-            field_code="lca_gwp_f_total",
-            description="Life cycle impact included",
-            requirements="Required",
+            attribute_name="Global Warming Potential - Fossil, declared",
+            field_code="lca_gwp_f_declared",
+            description="Whether this indicator was assessed. The value itself is carried by the result columns gwp_f_a1_a3 to gwp_f_c4, and the whole-life sum by gwp_f_total.",
+            requirements="Recommended",
+            criticality="MAY",
             example="Yes",
         ),
     )
 
-    lca_gwp_b_total: bool = Field(
-        description="Life cycle impact included.",
+    lca_gwp_b_declared: Optional[bool] = Field(
+        default=None,
+        description="Whether this indicator was assessed. The value itself is carried by the result columns gwp_b_a1_a3 to gwp_b_c4, and the whole-life sum by gwp_b_total.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="Global Warming Potential - Biogenic",
-            field_code="lca_gwp_b_total",
-            description="Life cycle impact included",
-            requirements="Required",
+            attribute_name="Global Warming Potential - Biogenic, declared",
+            field_code="lca_gwp_b_declared",
+            description="Whether this indicator was assessed. The value itself is carried by the result columns gwp_b_a1_a3 to gwp_b_c4, and the whole-life sum by gwp_b_total.",
+            requirements="Recommended",
+            criticality="MAY",
             example="Yes",
         ),
     )
 
-    lca_gwp_luc_total: bool = Field(
-        description="Life cycle impact included.",
+    lca_gwp_luc_declared: Optional[bool] = Field(
+        default=None,
+        description="Whether this indicator was assessed. The value itself is carried by the result columns gwp_luc_a1_a3 to gwp_luc_c4, and the whole-life sum by gwp_luc_total.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name=("Global Warming Potential - Land Use and Land Use Change"),
-            field_code="lca_gwp_luc_total",
-            description="Life cycle impact included",
-            requirements="Required",
+            attribute_name="Global Warming Potential - Land Use and Land Use Change, declared",
+            field_code="lca_gwp_luc_declared",
+            description="Whether this indicator was assessed. The value itself is carried by the result columns gwp_luc_a1_a3 to gwp_luc_c4, and the whole-life sum by gwp_luc_total.",
+            requirements="Recommended",
+            criticality="MAY",
             example="Yes",
         ),
     )
 
-    lca_odp_total: bool = Field(
-        description="Life cycle impact included.",
+    lca_odp_declared: Optional[bool] = Field(
+        default=None,
+        description="Whether this indicator was assessed. The value itself is carried by the result columns odp_a1_a3 to odp_c4, and the whole-life sum by odp_total.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="Ozone Depletion Potential (Stratospheric)",
-            field_code="lca_odp_total",
-            description="Life cycle impact included",
-            requirements="Required",
+            attribute_name="Ozone Depletion Potential (Stratospheric), declared",
+            field_code="lca_odp_declared",
+            description="Whether this indicator was assessed. The value itself is carried by the result columns odp_a1_a3 to odp_c4, and the whole-life sum by odp_total.",
+            requirements="Recommended",
+            criticality="MAY",
             example="Yes",
         ),
     )
 
-    lca_ap_total: bool = Field(
-        description="Life cycle impact included.",
+    lca_ap_declared: Optional[bool] = Field(
+        default=None,
+        description="Whether this indicator was assessed. The value itself is carried by the result columns ap_a1_a3 to ap_c4, and the whole-life sum by ap_total.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="Acidification Potential",
-            field_code="lca_ap_total",
-            description="Life cycle impact included",
-            requirements="Required",
+            attribute_name="Acidification Potential, declared",
+            field_code="lca_ap_declared",
+            description="Whether this indicator was assessed. The value itself is carried by the result columns ap_a1_a3 to ap_c4, and the whole-life sum by ap_total.",
+            requirements="Recommended",
+            criticality="MAY",
             example="Yes",
         ),
     )
 
-    lca_ep_total: bool = Field(
-        description="Life cycle impact included.",
+    lca_ep_declared: Optional[bool] = Field(
+        default=None,
+        description="Whether this indicator was assessed. The value itself is carried by the result columns ep_a1_a3 to ep_c4, and the whole-life sum by ep_total.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="Eutrophication Potential (Total/Generic)",
-            field_code="lca_ep_total",
-            description="Life cycle impact included",
-            requirements="Required",
+            attribute_name="Eutrophication Potential (Total/Generic), declared",
+            field_code="lca_ep_declared",
+            description="Whether this indicator was assessed. The value itself is carried by the result columns ep_a1_a3 to ep_c4, and the whole-life sum by ep_total.",
+            requirements="Recommended",
+            criticality="MAY",
             example="No",
         ),
     )
 
-    lca_ep_af_total: bool = Field(
-        description="Life cycle impact included.",
+    lca_ep_af_declared: Optional[bool] = Field(
+        default=None,
+        description="Whether this indicator was assessed. The value itself is carried by the result columns ep_af_a1_a3 to ep_af_c4, and the whole-life sum by ep_af_total.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="Eutrophication Potential - Freshwater",
-            field_code="lca_ep_af_total",
-            description="Life cycle impact included",
-            requirements="Required",
+            attribute_name="Eutrophication Potential - Freshwater, declared",
+            field_code="lca_ep_af_declared",
+            description="Whether this indicator was assessed. The value itself is carried by the result columns ep_af_a1_a3 to ep_af_c4, and the whole-life sum by ep_af_total.",
+            requirements="Recommended",
+            criticality="MAY",
             example="Yes",
         ),
     )
 
-    lca_ep_am_total: bool = Field(
-        description="Life cycle impact included.",
+    lca_ep_am_declared: Optional[bool] = Field(
+        default=None,
+        description="Whether this indicator was assessed. The value itself is carried by the result columns ep_am_a1_a3 to ep_am_c4, and the whole-life sum by ep_am_total.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="Eutrophication Potential - Marine",
-            field_code="lca_ep_am_total",
-            description="Life cycle impact included",
-            requirements="Required",
+            attribute_name="Eutrophication Potential - Marine, declared",
+            field_code="lca_ep_am_declared",
+            description="Whether this indicator was assessed. The value itself is carried by the result columns ep_am_a1_a3 to ep_am_c4, and the whole-life sum by ep_am_total.",
+            requirements="Recommended",
+            criticality="MAY",
             example="Yes",
         ),
     )
 
-    lca_ep_t_total: bool = Field(
-        description="Life cycle impact included.",
+    lca_ep_t_declared: Optional[bool] = Field(
+        default=None,
+        description="Whether this indicator was assessed. The value itself is carried by the result columns ep_t_a1_a3 to ep_t_c4, and the whole-life sum by ep_t_total.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="Eutrophication Potential - Terrestrial",
-            field_code="lca_ep_t_total",
-            description="Life cycle impact included",
-            requirements="Required",
+            attribute_name="Eutrophication Potential - Terrestrial, declared",
+            field_code="lca_ep_t_declared",
+            description="Whether this indicator was assessed. The value itself is carried by the result columns ep_t_a1_a3 to ep_t_c4, and the whole-life sum by ep_t_total.",
+            requirements="Recommended",
+            criticality="MAY",
             example="Yes",
         ),
     )
 
-    lca_pocp_total: bool = Field(
-        description="Life cycle impact included.",
+    lca_pocp_declared: Optional[bool] = Field(
+        default=None,
+        description="Whether this indicator was assessed. The value itself is carried by the result columns pocp_a1_a3 to pocp_c4, and the whole-life sum by pocp_total.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="Photochemical Ozone Creation Potential",
-            field_code="lca_pocp_total",
-            description="Life cycle impact included",
-            requirements="Required",
+            attribute_name="Photochemical Ozone Creation Potential, declared",
+            field_code="lca_pocp_declared",
+            description="Whether this indicator was assessed. The value itself is carried by the result columns pocp_a1_a3 to pocp_c4, and the whole-life sum by pocp_total.",
+            requirements="Recommended",
+            criticality="MAY",
             example="No",
         ),
     )
 
-    lca_sfp_total: bool = Field(
-        description="Life cycle impact included.",
+    lca_sfp_declared: Optional[bool] = Field(
+        default=None,
+        description="Whether this indicator was assessed. The value itself is carried by the result columns sfp_a1_a3 to sfp_c4, and the whole-life sum by sfp_total.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="Smog Formation Potential",
-            field_code="lca_sfp_total",
-            description="Life cycle impact included",
-            requirements="Required",
+            attribute_name="Smog Formation Potential, declared",
+            field_code="lca_sfp_declared",
+            description="Whether this indicator was assessed. The value itself is carried by the result columns sfp_a1_a3 to sfp_c4, and the whole-life sum by sfp_total.",
+            requirements="Recommended",
+            criticality="MAY",
             example="No",
         ),
     )
 
-    lca_pofp_total: bool = Field(
-        description="Life cycle impact included.",
+    lca_pofp_declared: Optional[bool] = Field(
+        default=None,
+        description="Whether this indicator was assessed. The value itself is carried by the result columns pofp_a1_a3 to pofp_c4, and the whole-life sum by pofp_total.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="Photochemical Ozone Formation Potential",
-            field_code="lca_pofp_total",
-            description="Life cycle impact included",
-            requirements="Required",
+            attribute_name="Photochemical Ozone Formation Potential, declared",
+            field_code="lca_pofp_declared",
+            description="Whether this indicator was assessed. The value itself is carried by the result columns pofp_a1_a3 to pofp_c4, and the whole-life sum by pofp_total.",
+            requirements="Recommended",
+            criticality="MAY",
             example="Yes",
         ),
     )
 
-    lca_adpmm_total: bool = Field(
-        description="Life cycle impact included.",
+    lca_adpmm_declared: Optional[bool] = Field(
+        default=None,
+        description="Whether this indicator was assessed. The value itself is carried by the result columns adpmm_a1_a3 to adpmm_c4, and the whole-life sum by adpmm_total.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name=("Abiotic Depletion Potential - Minerals and Metals (Non-fossil)"),
-            field_code="lca_adpmm_total",
-            description="Life cycle impact included",
-            requirements="Required",
+            attribute_name="Abiotic Depletion Potential - Minerals and Metals (Non-fossil), declared",
+            field_code="lca_adpmm_declared",
+            description="Whether this indicator was assessed. The value itself is carried by the result columns adpmm_a1_a3 to adpmm_c4, and the whole-life sum by adpmm_total.",
+            requirements="Recommended",
+            criticality="MAY",
             example="Yes",
         ),
     )
 
-    lca_adpf_total: bool = Field(
-        description="Life cycle impact included.",
+    lca_adpf_declared: Optional[bool] = Field(
+        default=None,
+        description="Whether this indicator was assessed. The value itself is carried by the result columns adpf_a1_a3 to adpf_c4, and the whole-life sum by adpf_total.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="Abiotic Depletion Potential - Fossil Resources",
-            field_code="lca_adpf_total",
-            description="Life cycle impact included",
-            requirements="Required",
+            attribute_name="Abiotic Depletion Potential - Fossil Resources, declared",
+            field_code="lca_adpf_declared",
+            description="Whether this indicator was assessed. The value itself is carried by the result columns adpf_a1_a3 to adpf_c4, and the whole-life sum by adpf_total.",
+            requirements="Recommended",
+            criticality="MAY",
             example="Yes",
         ),
     )
 
-    lca_wdp_total: bool = Field(
-        description="Life cycle impact included.",
+    lca_wdp_declared: Optional[bool] = Field(
+        default=None,
+        description="Whether this indicator was assessed. The value itself is carried by the result columns wdp_a1_a3 to wdp_c4, and the whole-life sum by wdp_total.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="Water Deprivation Potential",
-            field_code="lca_wdp_total",
-            description="Life cycle impact included",
-            requirements="Required",
+            attribute_name="Water Deprivation Potential, declared",
+            field_code="lca_wdp_declared",
+            description="Whether this indicator was assessed. The value itself is carried by the result columns wdp_a1_a3 to wdp_c4, and the whole-life sum by wdp_total.",
+            requirements="Recommended",
+            criticality="MAY",
             example="Yes",
         ),
     )
 
-    lca_pere_total: bool = Field(
-        description="Life cycle impact included.",
+    lca_pere_declared: Optional[bool] = Field(
+        default=None,
+        description="Whether this indicator was assessed. The value itself is carried by the result columns pere_a1_a3 to pere_c4, and the whole-life sum by pere_total.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name=("Primary Energy Renewable (excluding resources used as raw materials)"),
-            field_code="lca_pere_total",
-            description="Life cycle impact included",
-            requirements="Required",
+            attribute_name="Primary Energy Renewable (excluding resources used as raw materials), declared",
+            field_code="lca_pere_declared",
+            description="Whether this indicator was assessed. The value itself is carried by the result columns pere_a1_a3 to pere_c4, and the whole-life sum by pere_total.",
+            requirements="Recommended",
+            criticality="MAY",
             example="Yes",
         ),
     )
 
-    lca_penre_total: bool = Field(
-        description="Life cycle impact included.",
+    lca_penre_declared: Optional[bool] = Field(
+        default=None,
+        description="Whether this indicator was assessed. The value itself is carried by the result columns penre_a1_a3 to penre_c4, and the whole-life sum by penre_total.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name=("Primary Energy Non-Renewable (excluding resources used as raw materials)"),
-            field_code="lca_penre_total",
-            description="Life cycle impact included",
-            requirements="Required",
+            attribute_name="Primary Energy Non-Renewable (excluding resources used as raw materials), declared",
+            field_code="lca_penre_declared",
+            description="Whether this indicator was assessed. The value itself is carried by the result columns penre_a1_a3 to penre_c4, and the whole-life sum by penre_total.",
+            requirements="Recommended",
+            criticality="MAY",
             example="Yes",
         ),
     )
 
-    lca_pert_total: bool = Field(
-        description="Life cycle impact included.",
+    lca_pert_declared: Optional[bool] = Field(
+        default=None,
+        description="Whether this indicator was assessed. The value itself is carried by the result columns pert_a1_a3 to pert_c4, and the whole-life sum by pert_total.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="Primary Energy Renewable - Total",
-            field_code="lca_pert_total",
-            description="Life cycle impact included",
-            requirements="Required",
+            attribute_name="Primary Energy Renewable - Total, declared",
+            field_code="lca_pert_declared",
+            description="Whether this indicator was assessed. The value itself is carried by the result columns pert_a1_a3 to pert_c4, and the whole-life sum by pert_total.",
+            requirements="Recommended",
+            criticality="MAY",
             example="Yes",
         ),
     )
 
-    lca_penrt_total: bool = Field(
-        description="Life cycle impact included.",
+    lca_penrt_declared: Optional[bool] = Field(
+        default=None,
+        description="Whether this indicator was assessed. The value itself is carried by the result columns penrt_a1_a3 to penrt_c4, and the whole-life sum by penrt_total.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="Primary Energy Non-Renewable - Total",
-            field_code="lca_penrt_total",
-            description="Life cycle impact included",
-            requirements="Required",
+            attribute_name="Primary Energy Non-Renewable - Total, declared",
+            field_code="lca_penrt_declared",
+            description="Whether this indicator was assessed. The value itself is carried by the result columns penrt_a1_a3 to penrt_c4, and the whole-life sum by penrt_total.",
+            requirements="Recommended",
+            criticality="MAY",
             example="Yes",
         ),
     )
 
-    lca_a1_3: bool = Field(
+    lca_pm_declared: Optional[bool] = Field(
+        default=None,
+        description="Total particulate matter emissions over modules A to C, excluding module D.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA impact assessment",
+            attribute_name="Particulate matter emissions - Total",
+            field_code="lca_pm_declared",
+            description="Total particulate matter emissions over modules A to C, excluding module D.",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    lca_irp_declared: Optional[bool] = Field(
+        default=None,
+        description="Total ionising radiation, human health over modules A to C, excluding module D.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA impact assessment",
+            attribute_name="Ionising radiation, human health - Total",
+            field_code="lca_irp_declared",
+            description="Total ionising radiation, human health over modules A to C, excluding module D.",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    lca_etp_fw_declared: Optional[bool] = Field(
+        default=None,
+        description="Total ecotoxicity, freshwater over modules A to C, excluding module D.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA impact assessment",
+            attribute_name="Ecotoxicity, freshwater - Total",
+            field_code="lca_etp_fw_declared",
+            description="Total ecotoxicity, freshwater over modules A to C, excluding module D.",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    lca_htp_c_declared: Optional[bool] = Field(
+        default=None,
+        description="Total human toxicity, cancer over modules A to C, excluding module D.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA impact assessment",
+            attribute_name="Human toxicity, cancer - Total",
+            field_code="lca_htp_c_declared",
+            description="Total human toxicity, cancer over modules A to C, excluding module D.",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    lca_htp_nc_declared: Optional[bool] = Field(
+        default=None,
+        description="Total human toxicity, non-cancer over modules A to C, excluding module D.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA impact assessment",
+            attribute_name="Human toxicity, non-cancer - Total",
+            field_code="lca_htp_nc_declared",
+            description="Total human toxicity, non-cancer over modules A to C, excluding module D.",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    lca_sqp_declared: Optional[bool] = Field(
+        default=None,
+        description="Total land use related soil quality over modules A to C, excluding module D.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA impact assessment",
+            attribute_name="Land use related soil quality - Total",
+            field_code="lca_sqp_declared",
+            description="Total land use related soil quality over modules A to C, excluding module D.",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    lca_a1_3: Optional[bool] = Field(
+        default=None,
         description="Life cycle module included.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
             attribute_name="A1-A3: Product Stage",
             field_code="lca_a1_3",
-            description="Life cycle module included",
-            requirements="Required",
+            description="Life cycle module included.",
+            requirements="Recommended",
+            criticality="SHOULD",
             example="Yes",
         ),
     )
 
-    lca_a1: bool = Field(
+    lca_a1: Optional[bool] = Field(
+        default=None,
         description="Life cycle module included.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
             attribute_name="A1 Raw Material Supply",
             field_code="lca_a1",
-            description="Life cycle module included",
-            requirements="Required",
+            description="Life cycle module included.",
+            requirements="Recommended",
+            criticality="SHOULD",
             example="No",
         ),
     )
 
-    lca_a2: bool = Field(
+    lca_a2: Optional[bool] = Field(
+        default=None,
         description="Life cycle module included.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
             attribute_name="A2 Transport",
             field_code="lca_a2",
-            description="Life cycle module included",
-            requirements="Required",
+            description="Life cycle module included.",
+            requirements="Recommended",
+            criticality="SHOULD",
             example="No",
         ),
     )
 
-    lca_a3: bool = Field(
+    lca_a3: Optional[bool] = Field(
+        default=None,
         description="Life cycle module included.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
             attribute_name="A3 Manufacturing",
             field_code="lca_a3",
-            description="Life cycle module included",
-            requirements="Required",
+            description="Life cycle module included.",
+            requirements="Recommended",
+            criticality="SHOULD",
             example="No",
         ),
     )
 
-    lca_a4: bool = Field(
+    lca_a4: Optional[bool] = Field(
+        default=None,
         description="Life cycle module included.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
             attribute_name="A4 Transport",
             field_code="lca_a4",
-            description="Life cycle module included",
-            requirements="Required",
+            description="Life cycle module included.",
+            requirements="Recommended",
+            criticality="SHOULD",
             example="Yes",
         ),
     )
 
-    lca_a5: bool = Field(
+    lca_a5: Optional[bool] = Field(
+        default=None,
         description="Life cycle module included.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name=("A5 Construction/Installation: Installation of the product into the building"),
+            attribute_name="A5 Construction/Installation: Installation of the product into the building",
             field_code="lca_a5",
-            description="Life cycle module included",
-            requirements="Required",
+            description="Life cycle module included.",
+            requirements="Recommended",
+            criticality="SHOULD",
             example="Yes",
         ),
     )
 
-    lca_b1: bool = Field(
+    lca_a5_1: Optional[bool] = Field(
+        default=None,
+        description="Life cycle sub-module included. Pre-construction demolition and site clearance.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA impact assessment",
+            attribute_name="A5.1 Pre-construction demolition",
+            field_code="lca_a5_1",
+            description="Life cycle sub-module included. Pre-construction demolition and site clearance.",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    lca_a5_2: Optional[bool] = Field(
+        default=None,
+        description="Life cycle sub-module included. On-site construction and installation activities.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA impact assessment",
+            attribute_name="A5.2 Construction activities",
+            field_code="lca_a5_2",
+            description="Life cycle sub-module included. On-site construction and installation activities.",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    lca_a5_3: Optional[bool] = Field(
+        default=None,
+        description="Life cycle sub-module included. Construction waste and its management.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA impact assessment",
+            attribute_name="A5.3 Waste and waste management",
+            field_code="lca_a5_3",
+            description="Life cycle sub-module included. Construction waste and its management.",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    lca_a5_4: Optional[bool] = Field(
+        default=None,
+        description="Life cycle sub-module included. Transport of workers to and from the site.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA impact assessment",
+            attribute_name="A5.4 Worker transport",
+            field_code="lca_a5_4",
+            description="Life cycle sub-module included. Transport of workers to and from the site.",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    lca_b1: Optional[bool] = Field(
+        default=None,
         description="Life cycle module included.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name=(
-                "B1 Use: Environmental impacts arising from the product in use (eg, release of substances)"
-            ),
+            attribute_name="B1 Use: Environmental impacts arising from the product in use (eg, release of substances)",
             field_code="lca_b1",
-            description="Life cycle module included",
-            requirements="Required",
+            description="Life cycle module included.",
+            requirements="Recommended",
+            criticality="SHOULD",
             example="Yes",
         ),
     )
 
-    lca_b2: bool = Field(
+    lca_b1_1: Optional[bool] = Field(
+        default=None,
+        description="Life cycle module included. Emissions from materials and carbonation within module B1.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA impact assessment",
+            attribute_name="B1.1 Emissions from materials and carbonation",
+            field_code="lca_b1_1",
+            description="Life cycle module included. Emissions from materials and carbonation within module B1.",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    lca_b1_2: Optional[bool] = Field(
+        default=None,
+        description="Life cycle module included. Fugitive emissions of refrigerants within module B1.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA impact assessment",
+            attribute_name="B1.2 Fugitive emissions of refrigerants",
+            field_code="lca_b1_2",
+            description="Life cycle module included. Fugitive emissions of refrigerants within module B1.",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    lca_b2: Optional[bool] = Field(
+        default=None,
         description="Life cycle module included.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name=(
-                "B2 Maintenance: Actions to maintain the product's functional quality (cleaning, painting)"
-            ),
+            attribute_name="B2 Maintenance: Actions to maintain the product's functional quality (cleaning, painting)",
             field_code="lca_b2",
-            description="Life cycle module included",
-            requirements="Required",
+            description="Life cycle module included.",
+            requirements="Recommended",
+            criticality="SHOULD",
             example="Yes",
         ),
     )
 
-    lca_b3: bool = Field(
+    lca_b3: Optional[bool] = Field(
+        default=None,
         description="Life cycle module included.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name=("B3 Repair: Corrective actions to return the product to a functional state"),
+            attribute_name="B3 Repair: Corrective actions to return the product to a functional state",
             field_code="lca_b3",
-            description="Life cycle module included",
-            requirements="Required",
+            description="Life cycle module included.",
+            requirements="Recommended",
+            criticality="SHOULD",
             example="Yes",
         ),
     )
 
-    lca_b4: bool = Field(
+    lca_b4: Optional[bool] = Field(
+        default=None,
         description="Life cycle module included.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name=("B4 Replacement: Replacing the product or parts of it at the end of its service life"),
+            attribute_name="B4 Replacement: Replacing the product or parts of it at the end of its service life",
             field_code="lca_b4",
-            description="Life cycle module included",
-            requirements="Required",
+            description="Life cycle module included.",
+            requirements="Recommended",
+            criticality="SHOULD",
             example="Yes",
         ),
     )
 
-    lca_b5: bool = Field(
+    lca_b5: Optional[bool] = Field(
+        default=None,
         description="Life cycle module included.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name=("B5 Refurbishment: Major changes to restore or improve performance"),
+            attribute_name="B5 Refurbishment: Major changes to restore or improve performance",
             field_code="lca_b5",
-            description="Life cycle module included",
-            requirements="Required",
+            description="Life cycle module included.",
+            requirements="Recommended",
+            criticality="SHOULD",
             example="Yes",
         ),
     )
 
-    lca_b6: bool = Field(
+    lca_b6: Optional[bool] = Field(
+        default=None,
         description="Life cycle module included.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name=(
-                "B6 Operational Energy Use: Energy consumption related to the "
-                "building's operation (heating, cooling, lighting)"
-            ),
+            attribute_name="B6 Operational Energy Use: Energy consumption related to the building's operation (heating, cooling, lighting)",
             field_code="lca_b6",
-            description="Life cycle module included",
-            requirements="Required",
+            description="Life cycle module included.",
+            requirements="Recommended",
+            criticality="SHOULD",
             example="Yes",
         ),
     )
 
-    lca_b7: bool = Field(
+    lca_b6_1: Optional[bool] = Field(
+        default=None,
+        description="Life cycle module included. Operational energy of regulated building-integrated systems.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA impact assessment",
+            attribute_name="B6.1 Regulated building-integrated systems",
+            field_code="lca_b6_1",
+            description="Life cycle module included. Operational energy of regulated building-integrated systems.",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    lca_b6_2: Optional[bool] = Field(
+        default=None,
+        description="Life cycle module included. Operational energy of non-regulated building-integrated systems.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA impact assessment",
+            attribute_name="B6.2 Non-regulated building-integrated systems",
+            field_code="lca_b6_2",
+            description="Life cycle module included. Operational energy of non-regulated building-integrated systems.",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    lca_b6_3: Optional[bool] = Field(
+        default=None,
+        description="Life cycle module included. Other operational energy related to building user activities.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA impact assessment",
+            attribute_name="B6.3 Other energy use related to user activities",
+            field_code="lca_b6_3",
+            description="Life cycle module included. Other operational energy related to building user activities.",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    lca_b7: Optional[bool] = Field(
+        default=None,
         description="Life cycle module included.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name=("B7 Operational Water Use: Water consumption related to the building's operation"),
+            attribute_name="B7 Operational Water Use: Water consumption related to the building's operation",
             field_code="lca_b7",
-            description="Life cycle module included",
-            requirements="Required",
+            description="Life cycle module included.",
+            requirements="Recommended",
+            criticality="SHOULD",
             example="Yes",
         ),
     )
 
-    lca_c1: bool = Field(
+    lca_b7_1: Optional[bool] = Field(
+        default=None,
+        description="Life cycle module included. Operational water of essential building-integrated systems.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA impact assessment",
+            attribute_name="B7.1 Essential building-integrated systems",
+            field_code="lca_b7_1",
+            description="Life cycle module included. Operational water of essential building-integrated systems.",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    lca_b7_2: Optional[bool] = Field(
+        default=None,
+        description="Life cycle module included. Operational water of other building-integrated systems.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA impact assessment",
+            attribute_name="B7.2 Other building-integrated systems",
+            field_code="lca_b7_2",
+            description="Life cycle module included. Operational water of other building-integrated systems.",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    lca_b7_3: Optional[bool] = Field(
+        default=None,
+        description="Life cycle module included. Operational water of non-building-integrated systems.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA impact assessment",
+            attribute_name="B7.3 Non-building-integrated systems",
+            field_code="lca_b7_3",
+            description="Life cycle module included. Operational water of non-building-integrated systems.",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    lca_b8: Optional[bool] = Field(
+        default=None,
+        description="Life cycle module included. Building-integrated users activities not covered by B1 to B7. Optional stage.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA impact assessment",
+            attribute_name="B8 Building-integrated users activities",
+            field_code="lca_b8",
+            description="Life cycle module included. Building-integrated users activities not covered by B1 to B7. Optional stage.",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    lca_b8_1: Optional[bool] = Field(
+        default=None,
+        description="Life cycle module included. Transport of persons to and from the building.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA impact assessment",
+            attribute_name="B8.1 Transport of persons",
+            field_code="lca_b8_1",
+            description="Life cycle module included. Transport of persons to and from the building.",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    lca_b8_2: Optional[bool] = Field(
+        default=None,
+        description="Life cycle module included. Charging of electric vehicles within the building site.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA impact assessment",
+            attribute_name="B8.2 Charging of electric vehicles",
+            field_code="lca_b8_2",
+            description="Life cycle module included. Charging of electric vehicles within the building site.",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    lca_b8_3: Optional[bool] = Field(
+        default=None,
+        description="Life cycle module included. Other user activities, such as consumables and unfixed furniture.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA impact assessment",
+            attribute_name="B8.3 Other user activities",
+            field_code="lca_b8_3",
+            description="Life cycle module included. Other user activities, such as consumables and unfixed furniture.",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    lca_c1: Optional[bool] = Field(
+        default=None,
         description="Life cycle module included.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name=("C1 De-construction/Demolition: Dismantling or demolishing the building/product"),
+            attribute_name="C1 De-construction/Demolition: Dismantling or demolishing the building/product",
             field_code="lca_c1",
-            description="Life cycle module included",
-            requirements="Required",
+            description="Life cycle module included.",
+            requirements="Recommended",
+            criticality="SHOULD",
             example="Yes",
         ),
     )
 
-    lca_c2: bool = Field(
+    lca_c2: Optional[bool] = Field(
+        default=None,
         description="Life cycle module included.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name=("C2 Transport: Transporting the waste to processing or disposal sites"),
+            attribute_name="C2 Transport: Transporting the waste to processing or disposal sites",
             field_code="lca_c2",
-            description="Life cycle module included",
-            requirements="Required",
+            description="Life cycle module included.",
+            requirements="Recommended",
+            criticality="SHOULD",
             example="Yes",
         ),
     )
 
-    lca_c3: bool = Field(
+    lca_c3: Optional[bool] = Field(
+        default=None,
         description="Life cycle module included.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name=("C3 Waste Processing: Processing waste for reuse, recovery, or recycling"),
+            attribute_name="C3 Waste Processing: Processing waste for reuse, recovery, or recycling",
             field_code="lca_c3",
-            description="Life cycle module included",
-            requirements="Required",
+            description="Life cycle module included.",
+            requirements="Recommended",
+            criticality="SHOULD",
             example="Yes",
         ),
     )
 
-    lca_c4: bool = Field(
+    lca_c4: Optional[bool] = Field(
+        default=None,
         description="Life cycle module included.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name=("C4 Disposal: Final disposal of waste that cannot be recovered (eg, landfill)"),
+            attribute_name="C4 Disposal: Final disposal of waste that cannot be recovered (eg, landfill)",
             field_code="lca_c4",
-            description="Life cycle module included",
-            requirements="Required",
+            description="Life cycle module included.",
+            requirements="Recommended",
+            criticality="SHOULD",
             example="Yes",
         ),
     )
 
-    lca_d: bool = Field(
+    lca_d: Optional[bool] = Field(
+        default=None,
         description="Life cycle module included.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
             attribute_name="D Benefits and Loads Beyond the System Boundary",
             field_code="lca_d",
-            description="Life cycle module included",
-            requirements="Required",
+            description="Life cycle module included.",
+            requirements="Recommended",
+            criticality="SHOULD",
             example="Yes",
         ),
     )
 
-    lca_d1: bool = Field(
+    lca_d1: Optional[bool] = Field(
+        default=None,
         description="Life cycle module included.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name=(
-                "D1 Reuse, Recovery, and Recycling Potential: Net benefits or "
-                "loads resulting from reusing or recycling materials "
-                "(avoided emissions)"
-            ),
+            attribute_name="D1 Reuse, Recovery, and Recycling Potential: Net benefits or loads resulting from reusing or recycling materials (avoided emissions)",
             field_code="lca_d1",
-            description="Life cycle module included",
-            requirements="Required",
+            description="Life cycle module included.",
+            requirements="Recommended",
+            criticality="SHOULD",
             example="Yes",
         ),
     )
 
-    lca_d2: bool = Field(
+    lca_d2: Optional[bool] = Field(
+        default=None,
         description="Life cycle module included.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
             attribute_name="D2 Exported Energy (or Energy Recovery Potential)",
             field_code="lca_d2",
-            description="Life cycle module included",
-            requirements="Required",
+            description="Life cycle module included.",
+            requirements="Recommended",
+            criticality="SHOULD",
             example="Yes",
         ),
     )

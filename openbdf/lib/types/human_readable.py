@@ -9,7 +9,7 @@ _TYPE_TO_HUMAN_READABLE: dict[Any, str] = {
     str: "string",
     int: "integer",
     float: "float",
-    bool: "boolean",
+    bool: "Boolean",
     date: "date",
     datetime: "datetime",
 }
