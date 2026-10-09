@@ -40,20 +40,23 @@ def test_tall_module_has_static_fields():
 
 
 def test_wide_module_gwp_total_special_cases():
-    """gwp_total keeps a bare required total field and a required a1-a3 field."""
+    """gwp_total has a required a1-a3 field and an optional gwp_total_total field."""
     wide = _formatted("lca_results_full_wide.py")
-    assert "    gwp_total: Decimal = Field(" in wide
-    assert "gwp_total_total" not in wide
-    assert 'attribute_name="Total Global Warming Potential"' in wide
+    assert "    gwp_total_total: Optional[Decimal] = Field(" in wide
+    assert "    gwp_total: " not in wide
+    assert 'attribute_name="Total Global Warming Potential - Total"' in wide
     assert "    gwp_total_a1_a3: Decimal = Field(" in wide
     assert 'requirements="Required"' in wide
 
 
 def test_wide_module_has_expected_field_count():
-    """One material id plus 20 indicators x (16 stages + 1 total) fields."""
+    """One material id, the gwp_total sub-module stages, and the per-indicator stages."""
     wide = _formatted("lca_results_full_wide.py")
     field_count = sum(1 for line in wide.splitlines() if " = Field(" in line)
-    assert field_count == 1 + len(lca_results.INDICATORS) * (len(lca_results.STAGES) + 1)
+    expected = (
+        1 + len(lca_results.GWP_TOTAL_STAGES) + 1 + (len(lca_results.INDICATORS) - 1) * (len(lca_results.STAGES) + 1)
+    )
+    assert field_count == expected
 
 
 def test_generated_files_warn_against_manual_edits():

@@ -95,6 +95,33 @@ def test_ignores_overall_summary_fields():
     assert results[0].odp is None
 
 
+def test_derives_lca_stage_module_and_submodule_from_the_enum_parent_chain():
+    results = lca_results_wide_to_tall(
+        wide_result(gwp_total_a5=Decimal(2), gwp_total_a5_1=Decimal(3)),
+        bill_material(),
+        LCAResultsTallFullRecord,
+    )
+
+    by_stage = {result.lca_stage_module_submodule: result for result in results}
+
+    stage_row = by_stage[LCAStageOrModuleOrSubModule.A1_A3]
+    assert stage_row.lca_stage is LCAStageOrModuleOrSubModule.A1_A3
+    assert stage_row.lca_module is None
+    assert stage_row.lca_submodule is None
+
+    module_row = by_stage[LCAStageOrModuleOrSubModule.A5]
+    assert module_row.lca_stage is LCAStageOrModuleOrSubModule.A4_A5
+    assert module_row.lca_module is LCAStageOrModuleOrSubModule.A5
+    assert module_row.lca_submodule is None
+
+    submodule_row = by_stage[LCAStageOrModuleOrSubModule.A5_1]
+    assert submodule_row.lca_stage is LCAStageOrModuleOrSubModule.A4_A5
+    assert submodule_row.lca_module is LCAStageOrModuleOrSubModule.A5
+    assert submodule_row.lca_submodule is LCAStageOrModuleOrSubModule.A5_1
+    assert submodule_row.gwp_total == Decimal(3)
+    assert submodule_row.gwp_f is None
+
+
 @pytest.mark.parametrize("record_id", [42, None])
 def test_copies_identifiers_without_attaching_relationships(record_id: int | None):
     wide = wide_result()
