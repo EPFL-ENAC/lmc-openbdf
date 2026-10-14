@@ -185,7 +185,7 @@ class LCAResultsTallBase(SQLModel):
             attribute_name="Ozone Depletion Potential",
             field_code="odp",
             description="Ozone Depletion Potential",
-            units="kg R11 eq / kg CFC-11 eq.",
+            units="kg CFC-11 eq",
             requirements="Optional",
             criticality="MAY",
         ),
@@ -199,6 +199,19 @@ class LCAResultsTallBase(SQLModel):
             field_code="ap",
             description="Acidification Potential.",
             units="kg SO₂ eq.",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    ap_ae: Optional[Decimal] = Field(
+        default=None,
+        description="Acidification Potential.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Acidification Potential - Accumulated Exceedance",
+            field_code="ap_ae",
+            description="Acidification Potential.",
+            units="mol H+ eq",
             requirements="Optional",
             criticality="MAY",
         ),
@@ -221,7 +234,7 @@ class LCAResultsTallBase(SQLModel):
         default=None,
         description="Eutrophication Potential - Aquatic Freshwater.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Eutrophication potential, freshwater",
+            attribute_name="Eutrophication Potential - Aquatic Freshwater",
             field_code="ep_af",
             description="Eutrophication Potential - Aquatic Freshwater.",
             units="kg PO4 eq",
@@ -234,7 +247,7 @@ class LCAResultsTallBase(SQLModel):
         default=None,
         description="Eutrophication Potential - Aquatic Marine.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Eutrophication potential, marine",
+            attribute_name="Eutrophication Potential - Aquatic Marine",
             field_code="ep_am",
             description="Eutrophication Potential - Aquatic Marine.",
             units="kg N eq",
@@ -247,7 +260,7 @@ class LCAResultsTallBase(SQLModel):
         default=None,
         description="Eutrophication Potential - Terrestrial.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Eutrophication potential, terrestrial",
+            attribute_name="Eutrophication Potential - Terrestrial",
             field_code="ep_t",
             description="Eutrophication Potential - Terrestrial.",
             units="mol N eq",
@@ -260,7 +273,7 @@ class LCAResultsTallBase(SQLModel):
         default=None,
         description="Photochemical Ozone Creation Potential.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Formation potential of tropospheric ozone",
+            attribute_name="Photochemical Ozone Creation Potential",
             field_code="pocp",
             description="Photochemical Ozone Creation Potential.",
             units="kg C2H4 eq",
@@ -273,7 +286,7 @@ class LCAResultsTallBase(SQLModel):
         default=None,
         description="Smog Forming Potential.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Smog formation potential",
+            attribute_name="Smog Forming Potential",
             field_code="sfp",
             description="Smog Forming Potential.",
             units="kg O3 eq",
@@ -299,7 +312,7 @@ class LCAResultsTallBase(SQLModel):
         default=None,
         description="Abiotic Depletion Potential (Minerals and Metals).",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Abiotic Depletion Potential (Minerals and Metals)",
+            attribute_name="Abiotic Depletion Potential - Minerals and Metals",
             field_code="adpmm",
             description="Abiotic Depletion Potential (Minerals and Metals).",
             units="kg Sb eq",
@@ -312,7 +325,7 @@ class LCAResultsTallBase(SQLModel):
         default=None,
         description="Abiotic Depletion Potential (Fossil Fuels).",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Abiotic Depletion Potential (Fossil Fuels)",
+            attribute_name="Abiotic Depletion Potential - Fossil Fuels",
             field_code="adpf",
             description="Abiotic Depletion Potential (Fossil Fuels).",
             units="MJ",
@@ -328,7 +341,7 @@ class LCAResultsTallBase(SQLModel):
             attribute_name="Water Depletion Potential",
             field_code="wdp",
             description="Water Depletion Potential.",
-            units="m3 world eq",
+            units="m3 world eq deprived",
             requirements="Optional",
             criticality="MAY",
         ),
@@ -338,7 +351,7 @@ class LCAResultsTallBase(SQLModel):
         default=None,
         description="Primary Energy Renewable (Energy resources).",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Primary Energy Renewable (Energy resources)",
+            attribute_name="Primary Energy Renewable - Energy Resources",
             field_code="pere",
             description="Primary Energy Renewable (Energy resources).",
             units="MJ",
@@ -351,7 +364,7 @@ class LCAResultsTallBase(SQLModel):
         default=None,
         description="Primary Energy Non-Renewable (Energy resources).",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Primary Energy Non-Renewable (Energy resources)",
+            attribute_name="Primary Energy Non-Renewable - Energy Resources",
             field_code="penre",
             description="Primary Energy Non-Renewable (Energy resources).",
             units="MJ",
@@ -390,7 +403,7 @@ class LCAResultsTallBase(SQLModel):
         default=None,
         description="Particulate matter emissions",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Particulate matter emissions",
+            attribute_name="Particulate Matter Emissions",
             field_code="pm",
             description="Particulate matter emissions",
             units="disease incidence",
@@ -403,7 +416,7 @@ class LCAResultsTallBase(SQLModel):
         default=None,
         description="Ionising radiation, human health",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Ionising radiation, human health",
+            attribute_name="Ionising Radiation - Human Health",
             field_code="irp",
             description="Ionising radiation, human health",
             units="kBq U235 eq",
@@ -416,7 +429,7 @@ class LCAResultsTallBase(SQLModel):
         default=None,
         description="Ecotoxicity, freshwater",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Ecotoxicity, freshwater",
+            attribute_name="Ecotoxicity - Freshwater",
             field_code="etp_fw",
             description="Ecotoxicity, freshwater",
             units="CTUe",
@@ -429,7 +442,7 @@ class LCAResultsTallBase(SQLModel):
         default=None,
         description="Human toxicity, cancer effects",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Human toxicity, cancer effects",
+            attribute_name="Human Toxicity - Cancer Effects",
             field_code="htp_c",
             description="Human toxicity, cancer effects",
             units="CTUh",
@@ -442,7 +455,7 @@ class LCAResultsTallBase(SQLModel):
         default=None,
         description="Human toxicity, non-cancer effects",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Human toxicity, non-cancer effects",
+            attribute_name="Human Toxicity - Non-cancer Effects",
             field_code="htp_nc",
             description="Human toxicity, non-cancer effects",
             units="CTUh",
@@ -455,7 +468,7 @@ class LCAResultsTallBase(SQLModel):
         default=None,
         description="Soil quality index",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Soil quality index",
+            attribute_name="Soil Quality Index",
             field_code="sqp",
             description="Soil quality index",
             units="-",

@@ -109,17 +109,17 @@ class MaterialQuantitiesUnits(OpenBDFEnum):
 class ReplacementCountMethod(OpenBDFEnum):
     INTEGER = (
         "integer",
-        "integer (whole replacements only)",
+        "Integer (whole replacements only)",
         "whole replacements only",
     )
     DECIMAL = (
         "decimal",
-        "decimal (fractional replacements allowed)",
+        "Decimal (fractional replacements allowed)",
         "fractional replacements allowed",
     )
     UNKNOWN = (
         "unknown",
-        "unknown (rule not declared)",
+        "Unknown (rule not declared)",
         "rule not declared",
     )
 
@@ -127,37 +127,37 @@ class ReplacementCountMethod(OpenBDFEnum):
 class MaterialDataType(OpenBDFEnum):
     CPR_DOPC = (
         "cpr_dopc",
-        "cpr dopc (declaration of performance and conformity under the Construction Products Regulation)",
+        "Cpr dopc (declaration of performance and conformity under the Construction Products Regulation)",
         "declaration of performance and conformity under the Construction Products Regulation",
     )
     ECODESIGN = (
         "ecodesign",
-        "ecodesign (data issued under ecodesign or energy labelling legislation)",
+        "Ecodesign (data issued under ecodesign or energy labelling legislation)",
         "data issued under ecodesign or energy labelling legislation",
     )
     PROJECT_SPECIFIC = (
         "project_specific",
-        "project specific (assessment of this project, not issued under those rules)",
+        "Project specific (assessment of this project, not issued under those rules)",
         "assessment of this project, not issued under those rules",
     )
     PRODUCT_SPECIFIC = (
         "product_specific",
-        "product specific (assessment of this product, not issued under those rules)",
+        "Product specific (assessment of this product, not issued under those rules)",
         "assessment of this product, not issued under those rules",
     )
     PRODUCT_GROUP_AVERAGE = (
         "product_group_average",
-        "product group average (sectoral or industry average)",
+        "Product group average (sectoral or industry average)",
         "sectoral or industry average",
     )
     GENERIC = (
         "generic",
-        "generic (background database value)",
+        "Generic (background database value)",
         "background database value",
     )
     DEFAULT_VALUE = (
         "default_value",
-        "default value (conservative national default)",
+        "Default value (conservative national default)",
         "conservative national default",
     )
 
@@ -165,37 +165,37 @@ class MaterialDataType(OpenBDFEnum):
 class MaterialEPDMatch(OpenBDFEnum):
     IDENTICAL = (
         "identical",
-        "identical (the declaration describes this product)",
+        "Identical (the declaration describes this product)",
         "the declaration describes this product",
     )
     SAME_PRODUCT_GROUP = (
         "same_product_group",
-        "same product group (a sectoral average covering it)",
+        "Same product group (a sectoral average covering it)",
         "a sectoral average covering it",
     )
     PROXY_TECHNOLOGICAL = (
         "proxy_technological",
-        "proxy technological (a different product used as a stand-in)",
+        "Proxy technological (a different product used as a stand-in)",
         "a different product used as a stand-in",
     )
     PROXY_GEOGRAPHICAL = (
         "proxy_geographical",
-        "proxy geographical (the same product, another region)",
+        "Proxy geographical (the same product, another region)",
         "the same product, another region",
     )
     PROXY_TEMPORAL = (
         "proxy_temporal",
-        "proxy temporal (the same product, outside the validity of its declaration)",
+        "Proxy temporal (the same product, outside the validity of its declaration)",
         "the same product, outside the validity of its declaration",
     )
     REFERENCE_ONLY = (
         "reference_only",
-        "reference only (a broad reference, not a match)",
+        "Reference only (a broad reference, not a match)",
         "a broad reference, not a match",
     )
     UNKNOWN = (
         "unknown",
-        "unknown (the relationship cannot be established)",
+        "Unknown (the relationship cannot be established)",
         "the relationship cannot be established",
     )
 
@@ -213,41 +213,41 @@ class DeclaredUnit(OpenBDFEnum):
 class MaterialFlowType(OpenBDFEnum):
     PROCESS = (
         "process",
-        "process (an activity without a material flow)",
+        "Process (an activity without a material flow)",
         "an activity without a material flow",
     )
     MATERIAL_IN = (
         "material_in",
-        "material in (material entering the building)",
+        "Material in (material entering the building)",
         "material entering the building",
     )
     MATERIAL_OUT = (
         "material_out",
-        "material out (material leaving the building)",
+        "Material out (material leaving the building)",
         "material leaving the building",
     )
     MATERIAL_LOSS_IN = (
         "material_loss_in",
-        "material loss in (losses during installation)",
+        "Material loss in (losses during installation)",
         "losses during installation",
     )
     MATERIAL_LOSS_OUT = (
         "material_loss_out",
-        "material loss out (losses during removal)",
+        "Material loss out (losses during removal)",
         "losses during removal",
     )
     TRANSPORT_TO_SITE = (
         "transport_to_site",
-        "transport to site (delivery of the product)",
+        "Transport to site (delivery of the product)",
         "delivery of the product",
     )
     TRANSPORT_END_OF_LIFE = (
         "transport_end_of_life",
-        "transport end of life (removal from site)",
+        "Transport end of life (removal from site)",
         "removal from site",
     )
     ENERGY_IN = (
         "energy_in",
-        "energy in (energy consumed by the process)",
+        "Energy in (energy consumed by the process)",
         "energy consumed by the process",
     )

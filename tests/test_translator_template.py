@@ -48,11 +48,13 @@ def test_translator_template_adds_default_and_preprocess_columns(tmp_path):
             assert sheet.cell(row=row, column=7).protection.locked is False
 
     bill_of_materials = workbook[COMMON_CATEGORY_PROPERTIES["bom"]["name"]]
-    service_life_row = next(row for row in bill_of_materials.iter_rows() if row[1].value == "lca_service_life")
+    service_life_row = next(
+        row for row in bill_of_materials.iter_rows() if row[1].value == "material_reference_service_life"
+    )
     assert [cell.value for cell in service_life_row[:5]] == [
         None,
-        "lca_service_life",
-        "Service life",
+        "material_reference_service_life",
+        "Reference Service Life (RSL)",
         "Decimal",
         "Required",
     ]
@@ -71,7 +73,6 @@ def test_openbdf_template_includes_criticality_metadata(tmp_path):
     ]
     assert info.cell(row=2, column=10).value == "SHOULD"
 
-    bom_sheet_name = FIELD_SHEET_NAMES[1]
     for sheet_name in FIELD_SHEET_NAMES[1:]:
         sheet = workbook[sheet_name]
         assert sheet["A2"].value == "Field Code"
@@ -84,10 +85,8 @@ def test_openbdf_template_includes_criticality_metadata(tmp_path):
         # Reference alignment position (v2.0.0): row 9 stays present but empty.
         assert sheet["A9"].value is None
         assert sheet.cell(row=2, column=2).value == "material_id"
-        # The BOM material_id keeps its SHOULD export default; the LCA results
-        # material_id is MUST in format v2.0.0.
-        expected_criticality = "SHOULD" if sheet_name == bom_sheet_name else "MUST"
-        assert sheet.cell(row=8, column=2).value == expected_criticality
+        # material_id is MUST in format v2.0.0 on every field sheet.
+        assert sheet.cell(row=8, column=2).value == "MUST"
 
     type_definitions = workbook["TypeDefinitions"]
     assert type_definitions["A1"].style == "AttributeName"

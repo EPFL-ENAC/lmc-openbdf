@@ -19,14 +19,14 @@ def bill_material(
     *,
     material_id: str = "mat-1",
     record_id: int | None = 42,
-    lca_service_life: Decimal = Decimal(50),
+    material_reference_service_life: Decimal = Decimal(50),
 ) -> BuildingBillMaterialsSlimRecord:
     return BuildingBillMaterialsSlimRecord(
         id=record_id,
         material_id=material_id,
-        material_name_custom="Test material",
-        above_below_ground=AboveBelowGround.ABOVE,
-        lca_service_life=lca_service_life,
+        custom_material_name="Test material",
+        common_above_below_ground=AboveBelowGround.ABOVE,
+        material_reference_service_life=material_reference_service_life,
         project_id=1,
     )
 
@@ -49,7 +49,7 @@ def test_maps_all_supported_stages_in_stable_order():
 
     results = lca_results_wide_to_tall(
         wide_result(**stage_values),
-        bill_material(lca_service_life=Decimal(60)),
+        bill_material(material_reference_service_life=Decimal(60)),
         LCAResultsTallFullRecord,
     )
 
@@ -66,7 +66,7 @@ def test_combines_indicators_for_the_same_stage_and_omits_empty_stages():
             penrt_b6=Decimal(0),
             ap_c2=Decimal("7.25"),
         ),
-        bill_material(lca_service_life=Decimal(75)),
+        bill_material(material_reference_service_life=Decimal(75)),
         LCAResultsTallFullRecord,
     )
 

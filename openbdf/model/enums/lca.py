@@ -269,19 +269,19 @@ class LCADatabase(OpenBDFEnum):
     HABITAT2030_BIGTEN = ("habitat2030_BIGTEN", "habitat2030_BIGTEN")
     IBU_DATA = ("IBU_Data", "IBU_Data")
     EC3 = ("EC3", "EC3")
-    ECOINVENT = ("ecoinvent", "ecoinvent")
+    ECOINVENT = ("ecoinvent", "Ecoinvent")
     OTHER = ("Other", "Other")
 
 
 class LCADatabaseSystemModel(OpenBDFEnum):
     CUT_OFF = (
         "cut_off",
-        "cut off (recycled content approach, ecoinvent cut-off)",
+        "Cut off (recycled content approach, ecoinvent cut-off)",
         "recycled content approach, ecoinvent cut-off",
     )
     CUT_OFF_EN15804 = (
         "cut_off_en15804",
-        "cut off EN15804 (ecoinvent system model aligned with EN 15804)",
+        "Cut off EN15804 (ecoinvent system model aligned with EN 15804)",
         "ecoinvent system model aligned with EN 15804",
     )
     APOS = (
@@ -291,7 +291,7 @@ class LCADatabaseSystemModel(OpenBDFEnum):
     )
     CONSEQUENTIAL = (
         "consequential",
-        "consequential (marginal, market-driven modelling)",
+        "Consequential (marginal, market-driven modelling)",
         "marginal, market-driven modelling",
     )
 
@@ -299,17 +299,17 @@ class LCADatabaseSystemModel(OpenBDFEnum):
 class DataWeightingBasis(OpenBDFEnum):
     GWP_FOSSIL_A1_A3 = (
         "gwp_fossil_a1_a3",
-        "gwp fossil a1 a3 (shares weighted by fossil global warming potential of modules A1 to A3)",
+        "GWP fossil a1 a3 (shares weighted by fossil global warming potential of modules A1 to A3)",
         "shares weighted by fossil global warming potential of modules A1 to A3",
     )
     MASS = (
         "mass",
-        "mass (shares weighted by mass)",
+        "Mass (shares weighted by mass)",
         "shares weighted by mass",
     )
     NOT_COMPUTED = (
         "not_computed",
-        "not computed (shares not weighted)",
+        "Not computed (shares not weighted)",
         "shares not weighted",
     )
 
@@ -352,54 +352,29 @@ class AssessmentType_EN15978(OpenBDFEnum):
 class LimitValueScopeReduction(OpenBDFEnum):
     NONE = (
         "none",
-        "none (nothing left out, the result is a complete assessment)",
+        "None (nothing left out, the result is a complete assessment)",
         "nothing left out, the result is a complete assessment",
     )
     LIFE_CYCLE_STAGES = (
         "life_cycle_stages",
-        "life_cycle_stages (parts of life-cycle stages left out)",
+        "Life cycle stages",
         "parts of life-cycle stages left out",
     )
     SCOPE_OF_BUILDING_COMPONENTS = (
         "scope_of_building_components",
-        "scope_of_building_components (parts of the scope of building components left out)",
+        "Scope of building components",
         "parts of the scope of building components left out",
     )
     BOTH = (
         "both",
-        "both (parts of life-cycle stages and parts of the scope of building components left out)",
+        "Both (parts of life-cycle stages and parts of the scope of building components left out)",
         "parts of life-cycle stages and parts of the scope of building components left out",
     )
 
 
 class LCIAMethodology(OpenBDFEnum):
-    EN_15804_A2 = (
-        "EN15804_A2_EF3.0",
-        "EN15804_A2_EF3.0",
-        "EN 15804+A2 (EF 3.0) - Current EU standard for environmental product declarations.",
-    )
-    EN_15804_A1 = (
-        "EN15804_A1_CML2001",
-        "EN15804_A1_CML2001",
-        "EN 15804+A1 (CML 2001) - Older EU standard for environmental product declarations.",
-    )
-    TRACI_2_1 = (
-        "TRACI_2.1",
-        "TRACI_2.1",
-        "Standard for North America/LEED (The Tool for Reduction and Assessment of Chemical and Other Environmental Impacts).",
-    )
-    RECIPE_2016 = (
-        "ReCiPe_2016",
-        "ReCiPe_2016",
-        "A harmonized life cycle impact assessment method at midpoint and endpoint level.",
-    )
-    IPCC_AR6 = (
-        "IPCC_AR6",
-        "IPCC_AR6",
-        "Intergovernmental Panel on Climate Change Sixth Assessment Report.",
-    )
-    OTHER = (
-        "Other",
-        "Other",
-        "Other non-specified LCIA methodology.",
-    )
+    EN_15804_2012_A1_2013 = ("EN 15804:2012+A1:2013", "EN 15804:2012+A1:2013")
+    EN_15804_2012_A2_2019 = ("EN 15804:2012+A2:2019", "EN 15804:2012+A2:2019")
+    EN_15978_2026 = ("EN 15978:2026", "EN 15978:2026")
+    US_EPA_TRACI_2_1 = ("US EPA TRACI 2.1", "US EPA TRACI 2.1")
+    OTHER = ("Other", "Other")
