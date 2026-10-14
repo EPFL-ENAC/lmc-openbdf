@@ -133,7 +133,7 @@ GWP_TOTAL_STAGES: tuple[tuple[LCAStageOrModuleOrSubModule, str], ...] = (
 
 # Every LCA impact indicator present in the tall and wide models.
 # `gwp_total` is special: it carries the sub-module stage columns (GWP_TOTAL_STAGES) and
-# its `a1_a3` stage field is required.
+# its `a1_a3` stage field keeps `Required` requirements metadata.
 INDICATORS: tuple[LCAResultIndicator, ...] = (
     LCAResultIndicator(
         code="gwp_total",
@@ -606,8 +606,8 @@ def _wide_stage_field(
     field_code = f"{indicator.code}_{suffix}"
     return _render_field(
         name=field_code,
-        type_="Decimal" if required else "Optional[Decimal]",
-        default=None if required else "None",
+        type_="Optional[Decimal]",
+        default="None",
         requirements=requirements,
         criticality="SHOULD" if required else "MAY",
         attribute_name=_wide_stage_attribute(indicator, stage, suffix),
