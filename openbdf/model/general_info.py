@@ -2134,7 +2134,7 @@ class ProjectRecordBase(SQLModel):
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="Global Warming Potential - Total, declared",
+            attribute_name="Global Warming Potential - Total",
             field_code="lca_gwp_total_declared",
             description="Whether this indicator was assessed. The value itself is carried by the result columns gwp_total_a1_a3 to gwp_total_c4, and the whole-life sum by gwp_total_total.",
             requirements="Required",
@@ -2149,7 +2149,7 @@ class ProjectRecordBase(SQLModel):
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="Global Warming Potential - Fossil, declared",
+            attribute_name="Global Warming Potential - Fossil",
             field_code="lca_gwp_f_declared",
             description="Whether this indicator was assessed. The value itself is carried by the result columns gwp_f_a1_a3 to gwp_f_c4, and the whole-life sum by gwp_f_total.",
             requirements="Recommended",
@@ -2164,7 +2164,7 @@ class ProjectRecordBase(SQLModel):
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="Global Warming Potential - Biogenic, declared",
+            attribute_name="Global Warming Potential - Biogenic",
             field_code="lca_gwp_b_declared",
             description="Whether this indicator was assessed. The value itself is carried by the result columns gwp_b_a1_a3 to gwp_b_c4, and the whole-life sum by gwp_b_total.",
             requirements="Recommended",
@@ -2179,7 +2179,7 @@ class ProjectRecordBase(SQLModel):
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="Global Warming Potential - Land Use and Land Use Change, declared",
+            attribute_name="Global Warming Potential - Land Use and Land Use Change",
             field_code="lca_gwp_luc_declared",
             description="Whether this indicator was assessed. The value itself is carried by the result columns gwp_luc_a1_a3 to gwp_luc_c4, and the whole-life sum by gwp_luc_total.",
             requirements="Recommended",
@@ -2194,7 +2194,7 @@ class ProjectRecordBase(SQLModel):
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="Ozone Depletion Potential (Stratospheric), declared",
+            attribute_name="Ozone Depletion Potential",
             field_code="lca_odp_declared",
             description="Whether this indicator was assessed. The value itself is carried by the result columns odp_a1_a3 to odp_c4, and the whole-life sum by odp_total.",
             requirements="Recommended",
@@ -2209,9 +2209,24 @@ class ProjectRecordBase(SQLModel):
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="Acidification Potential, declared",
+            attribute_name="Acidification potential",
             field_code="lca_ap_declared",
             description="Whether this indicator was assessed. The value itself is carried by the result columns ap_a1_a3 to ap_c4, and the whole-life sum by ap_total.",
+            requirements="Recommended",
+            criticality="MAY",
+            example="Yes",
+        ),
+    )
+
+    lca_ap_ae_declared: Optional[bool] = Field(
+        default=None,
+        description="Whether this indicator was assessed. The value itself is carried by the result columns ep_a1_a3 to ep_c4, and the whole-life sum by ep_total.",
+        schema_extra=openbdf_field_metadata(
+            group="LCA",
+            sub_group="LCA impact assessment",
+            attribute_name="Acidification Potential - Accumulated Exceedance",
+            field_code="lca_ap_ae_declared",
+            description="Whether this indicator was assessed. The value itself is carried by the result columns ep_a1_a3 to ep_c4, and the whole-life sum by ep_total.",
             requirements="Recommended",
             criticality="MAY",
             example="Yes",
@@ -2224,7 +2239,7 @@ class ProjectRecordBase(SQLModel):
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="Eutrophication Potential (Total/Generic), declared",
+            attribute_name="Eutrophication Potential",
             field_code="lca_ep_declared",
             description="Whether this indicator was assessed. The value itself is carried by the result columns ep_a1_a3 to ep_c4, and the whole-life sum by ep_total.",
             requirements="Recommended",
@@ -2239,7 +2254,7 @@ class ProjectRecordBase(SQLModel):
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="Eutrophication Potential - Freshwater, declared",
+            attribute_name="Eutrophication Potential - Aquatic Freshwater",
             field_code="lca_ep_af_declared",
             description="Whether this indicator was assessed. The value itself is carried by the result columns ep_af_a1_a3 to ep_af_c4, and the whole-life sum by ep_af_total.",
             requirements="Recommended",
@@ -2254,7 +2269,7 @@ class ProjectRecordBase(SQLModel):
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="Eutrophication Potential - Marine, declared",
+            attribute_name="Eutrophication Potential - Aquatic Marine",
             field_code="lca_ep_am_declared",
             description="Whether this indicator was assessed. The value itself is carried by the result columns ep_am_a1_a3 to ep_am_c4, and the whole-life sum by ep_am_total.",
             requirements="Recommended",
@@ -2269,7 +2284,7 @@ class ProjectRecordBase(SQLModel):
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="Eutrophication Potential - Terrestrial, declared",
+            attribute_name="Eutrophication Potential - Terrestrial",
             field_code="lca_ep_t_declared",
             description="Whether this indicator was assessed. The value itself is carried by the result columns ep_t_a1_a3 to ep_t_c4, and the whole-life sum by ep_t_total.",
             requirements="Recommended",
@@ -2284,7 +2299,7 @@ class ProjectRecordBase(SQLModel):
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="Photochemical Ozone Creation Potential, declared",
+            attribute_name="Photochemical Ozone Creation Potential",
             field_code="lca_pocp_declared",
             description="Whether this indicator was assessed. The value itself is carried by the result columns pocp_a1_a3 to pocp_c4, and the whole-life sum by pocp_total.",
             requirements="Recommended",
@@ -2299,7 +2314,7 @@ class ProjectRecordBase(SQLModel):
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="Smog Formation Potential, declared",
+            attribute_name="Smog Forming Potential",
             field_code="lca_sfp_declared",
             description="Whether this indicator was assessed. The value itself is carried by the result columns sfp_a1_a3 to sfp_c4, and the whole-life sum by sfp_total.",
             requirements="Recommended",
@@ -2314,7 +2329,7 @@ class ProjectRecordBase(SQLModel):
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="Photochemical Ozone Formation Potential, declared",
+            attribute_name="Photochemical Ozone Formation Potential",
             field_code="lca_pofp_declared",
             description="Whether this indicator was assessed. The value itself is carried by the result columns pofp_a1_a3 to pofp_c4, and the whole-life sum by pofp_total.",
             requirements="Recommended",
@@ -2329,7 +2344,7 @@ class ProjectRecordBase(SQLModel):
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="Abiotic Depletion Potential - Minerals and Metals (Non-fossil), declared",
+            attribute_name="Abiotic Depletion Potential (Minerals and Metals)",
             field_code="lca_adpmm_declared",
             description="Whether this indicator was assessed. The value itself is carried by the result columns adpmm_a1_a3 to adpmm_c4, and the whole-life sum by adpmm_total.",
             requirements="Recommended",
@@ -2344,7 +2359,7 @@ class ProjectRecordBase(SQLModel):
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="Abiotic Depletion Potential - Fossil Resources, declared",
+            attribute_name="Abiotic Depletion Potential (Fossil Fuels)",
             field_code="lca_adpf_declared",
             description="Whether this indicator was assessed. The value itself is carried by the result columns adpf_a1_a3 to adpf_c4, and the whole-life sum by adpf_total.",
             requirements="Recommended",
@@ -2359,7 +2374,7 @@ class ProjectRecordBase(SQLModel):
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="Water Deprivation Potential, declared",
+            attribute_name="Water deprivation potential (deprivation-weighted water consumption)",
             field_code="lca_wdp_declared",
             description="Whether this indicator was assessed. The value itself is carried by the result columns wdp_a1_a3 to wdp_c4, and the whole-life sum by wdp_total.",
             requirements="Recommended",
@@ -2374,7 +2389,7 @@ class ProjectRecordBase(SQLModel):
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="Primary Energy Renewable (excluding resources used as raw materials), declared",
+            attribute_name="Primary Energy Renewable (Energy resources)",
             field_code="lca_pere_declared",
             description="Whether this indicator was assessed. The value itself is carried by the result columns pere_a1_a3 to pere_c4, and the whole-life sum by pere_total.",
             requirements="Recommended",
@@ -2389,7 +2404,7 @@ class ProjectRecordBase(SQLModel):
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="Primary Energy Non-Renewable (excluding resources used as raw materials), declared",
+            attribute_name="Primary Energy Non-Renewable (Energy resources)",
             field_code="lca_penre_declared",
             description="Whether this indicator was assessed. The value itself is carried by the result columns penre_a1_a3 to penre_c4, and the whole-life sum by penre_total.",
             requirements="Recommended",
@@ -2404,7 +2419,7 @@ class ProjectRecordBase(SQLModel):
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="Primary Energy Renewable - Total, declared",
+            attribute_name="Primary Energy Renewable Total",
             field_code="lca_pert_declared",
             description="Whether this indicator was assessed. The value itself is carried by the result columns pert_a1_a3 to pert_c4, and the whole-life sum by pert_total.",
             requirements="Recommended",
@@ -2419,7 +2434,7 @@ class ProjectRecordBase(SQLModel):
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="Primary Energy Non-Renewable - Total, declared",
+            attribute_name="Primary Energy Non-Renewable Total",
             field_code="lca_penrt_declared",
             description="Whether this indicator was assessed. The value itself is carried by the result columns penrt_a1_a3 to penrt_c4, and the whole-life sum by penrt_total.",
             requirements="Recommended",
@@ -2434,7 +2449,7 @@ class ProjectRecordBase(SQLModel):
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="Particulate matter emissions - Total",
+            attribute_name="Particulate Matter Emissions",
             field_code="lca_pm_declared",
             description="Total particulate matter emissions over modules A to C, excluding module D.",
             requirements="Optional",
@@ -2448,7 +2463,7 @@ class ProjectRecordBase(SQLModel):
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="Ionising radiation, human health - Total",
+            attribute_name="Ionising Radiation - Human Health",
             field_code="lca_irp_declared",
             description="Total ionising radiation, human health over modules A to C, excluding module D.",
             requirements="Optional",
@@ -2462,7 +2477,7 @@ class ProjectRecordBase(SQLModel):
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="Ecotoxicity, freshwater - Total",
+            attribute_name="Ecotoxicity - Freshwater",
             field_code="lca_etp_fw_declared",
             description="Total ecotoxicity, freshwater over modules A to C, excluding module D.",
             requirements="Optional",
@@ -2476,7 +2491,7 @@ class ProjectRecordBase(SQLModel):
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="Human toxicity, cancer - Total",
+            attribute_name="Human Toxicity - Cancer Effects",
             field_code="lca_htp_c_declared",
             description="Total human toxicity, cancer over modules A to C, excluding module D.",
             requirements="Optional",
@@ -2490,7 +2505,7 @@ class ProjectRecordBase(SQLModel):
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="Human toxicity, non-cancer - Total",
+            attribute_name="Human Toxicity - Non-cancer Effects",
             field_code="lca_htp_nc_declared",
             description="Total human toxicity, non-cancer over modules A to C, excluding module D.",
             requirements="Optional",
@@ -2504,7 +2519,7 @@ class ProjectRecordBase(SQLModel):
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="Land use related soil quality - Total",
+            attribute_name="Soil Quality Index",
             field_code="lca_sqp_declared",
             description="Total land use related soil quality over modules A to C, excluding module D.",
             requirements="Optional",

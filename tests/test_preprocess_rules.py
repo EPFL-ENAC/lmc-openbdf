@@ -46,41 +46,41 @@ def test_preprocess_rule_rejects_unsupported_syntax(code):
 @pytest.mark.parametrize(
     "value, expected_floor_level, expected_above_below_ground",
     [
-        ("-1", -1, AboveBelowGround.BELOW),
-        ("0", 0, AboveBelowGround.ABOVE),
-        ("1", 1, AboveBelowGround.ABOVE),
-        ("2", 2, AboveBelowGround.ABOVE),
-        ("3", 3, AboveBelowGround.ABOVE),
-        ("4", 4, AboveBelowGround.ABOVE),
-        ("5", 5, AboveBelowGround.ABOVE),
-        ("6. Geschoss", 6, AboveBelowGround.ABOVE),
+        ("-1", "-1", AboveBelowGround.BELOW),
+        ("0", "0", AboveBelowGround.ABOVE),
+        ("1", "1", AboveBelowGround.ABOVE),
+        ("2", "2", AboveBelowGround.ABOVE),
+        ("3", "3", AboveBelowGround.ABOVE),
+        ("4", "4", AboveBelowGround.ABOVE),
+        ("5", "5", AboveBelowGround.ABOVE),
+        ("6. Geschoss", "6", AboveBelowGround.ABOVE),
         ("DG", None, AboveBelowGround.ABOVE),
         ("DG - Dak", None, AboveBelowGround.ABOVE),
         ("EG", None, AboveBelowGround.ABOVE),
         ("EG - Begane grond", None, AboveBelowGround.ABOVE),
         ("Erdgeschoß", None, AboveBelowGround.ABOVE),
         ("Favoriten", None, AboveBelowGround.BELOW),
-        ("Obergeschoß 1", 1, AboveBelowGround.ABOVE),
-        ("Obergeschoß 10", 10, AboveBelowGround.ABOVE),
-        ("Obergeschoß 2", 2, AboveBelowGround.ABOVE),
-        ("Obergeschoß 3", 3, AboveBelowGround.ABOVE),
-        ("Obergeschoß 4", 4, AboveBelowGround.ABOVE),
-        ("Obergeschoß 5", 5, AboveBelowGround.ABOVE),
-        ("Obergeschoß 6", 6, AboveBelowGround.ABOVE),
-        ("Obergeschoß 7", 7, AboveBelowGround.ABOVE),
-        ("Obergeschoß 8", 8, AboveBelowGround.ABOVE),
-        ("Obergeschoß 9", 9, AboveBelowGround.ABOVE),
+        ("Obergeschoß 1", "1", AboveBelowGround.ABOVE),
+        ("Obergeschoß 10", "10", AboveBelowGround.ABOVE),
+        ("Obergeschoß 2", "2", AboveBelowGround.ABOVE),
+        ("Obergeschoß 3", "3", AboveBelowGround.ABOVE),
+        ("Obergeschoß 4", "4", AboveBelowGround.ABOVE),
+        ("Obergeschoß 5", "5", AboveBelowGround.ABOVE),
+        ("Obergeschoß 6", "6", AboveBelowGround.ABOVE),
+        ("Obergeschoß 7", "7", AboveBelowGround.ABOVE),
+        ("Obergeschoß 8", "8", AboveBelowGround.ABOVE),
+        ("Obergeschoß 9", "9", AboveBelowGround.ABOVE),
         ("OG", None, AboveBelowGround.ABOVE),
-        ("OG 1 - 1e verdieping", 1, AboveBelowGround.ABOVE),
-        ("OG 2 - 2e verdieping", 2, AboveBelowGround.ABOVE),
-        ("OG 3 - 3e verdieping", 3, AboveBelowGround.ABOVE),
+        ("OG 1 - 1e verdieping", "1", AboveBelowGround.ABOVE),
+        ("OG 2 - 2e verdieping", "2", AboveBelowGround.ABOVE),
+        ("OG 3 - 3e verdieping", "3", AboveBelowGround.ABOVE),
         ("RDOK Dach", None, AboveBelowGround.ABOVE),
         ("UG", None, AboveBelowGround.BELOW),
         ("UG - Kelder", None, AboveBelowGround.BELOW),
         ("Untergeschoß", None, AboveBelowGround.BELOW),
     ],
 )
-def test_parse_floor(value: str, expected_floor_level: int | None, expected_above_below_ground: AboveBelowGround):
+def test_parse_floor(value: str, expected_floor_level: str | None, expected_above_below_ground: AboveBelowGround):
     above_below_ground_rules = [
         ("@INT>=0", AboveBelowGround.ABOVE),
         ("@REGEX^DG.*", AboveBelowGround.ABOVE),
@@ -98,7 +98,7 @@ def test_parse_floor(value: str, expected_floor_level: int | None, expected_abov
 
     bom_sheet = pd.DataFrame({
         "source": ["floor", "floor"],
-        "target": ["floor_level", "above_below_ground"],
+        "target": ["custom_floor_level", "common_above_below_ground"],
         "preprocess": ["@INT", ""],
     })
     enum_sheet = pd.DataFrame({
@@ -119,8 +119,8 @@ def test_parse_floor(value: str, expected_floor_level: int | None, expected_abov
     )
 
     record = records[0]
-    assert record.floor_level == expected_floor_level
-    assert record.above_below_ground == expected_above_below_ground
+    assert record.custom_floor_level == expected_floor_level
+    assert record.common_above_below_ground == expected_above_below_ground
 
 
 def test_blank_preprocess_cells_mean_no_rule():
