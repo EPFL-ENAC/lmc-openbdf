@@ -66,7 +66,7 @@ def bom_df(*material_ids: str) -> pd.DataFrame:
         required_horizontal_row(
             BuildingBillMaterialsSlimRecordBase,
             material_id=material_id,
-            material_name_custom=f"Material {material_id}",
+            custom_material_name=f"Material {material_id}",
         )
         for material_id in material_ids
     ]
@@ -112,29 +112,29 @@ def tables(
     )
 
 
-def test_bom_from_dataframe_requires_lca_service_life():
-    dataframe = bom_df("mat-1").drop(columns=["lca_service_life"])
+def test_bom_from_dataframe_requires_material_reference_service_life():
+    dataframe = bom_df("mat-1").drop(columns=["material_reference_service_life"])
 
-    with pytest.raises(ValidationError, match="lca_service_life"):
+    with pytest.raises(ValidationError, match="material_reference_service_life"):
         bom_from_dataframe(dataframe)
 
 
 def test_bom_from_dataframe_drop_invalid_drops_missing_required(capsys):
     valid = bom_df("mat-1")
-    invalid = bom_df("mat-2").drop(columns=["lca_service_life"])
+    invalid = bom_df("mat-2").drop(columns=["material_reference_service_life"])
     dataframe = pd.concat([valid, invalid], ignore_index=True)
 
     result = bom_from_dataframe(dataframe, drop_invalid=True)
 
     assert [item.material_id for item in result] == ["mat-1"]
     captured = capsys.readouterr().out
-    assert "lca_service_life" in captured
+    assert "material_reference_service_life" in captured
     assert "mat-2" in captured
 
 
 def test_bom_draft_from_dataframe_drop_invalid_drops_missing_required():
     valid = bom_df("mat-1")
-    invalid = bom_df("mat-2").drop(columns=["lca_service_life"])
+    invalid = bom_df("mat-2").drop(columns=["material_reference_service_life"])
     dataframe = pd.concat([valid, invalid], ignore_index=True)
 
     result = bom_draft_from_dataframe(dataframe, drop_invalid=True)
@@ -160,7 +160,7 @@ def test_bom_drop_invalid_blank_rows_not_counted():
 
 def test_project_package_from_tables_drop_invalid_drops_missing_required():
     valid = bom_df("mat-1")
-    invalid = bom_df("mat-2").drop(columns=["lca_service_life"])
+    invalid = bom_df("mat-2").drop(columns=["material_reference_service_life"])
     dataframe = pd.concat([valid, invalid], ignore_index=True)
 
     project = project_package_from_tables(tables(dataframe), drop_invalid=True)
@@ -168,13 +168,13 @@ def test_project_package_from_tables_drop_invalid_drops_missing_required():
     assert [b.material_id for b in project.bill_of_materials] == ["mat-1"]
 
 
-def test_bom_draft_from_dataframe_allows_missing_lca_service_life():
-    dataframe = bom_df("mat-1").drop(columns=["lca_service_life"])
+def test_bom_draft_from_dataframe_allows_missing_material_reference_service_life():
+    dataframe = bom_df("mat-1").drop(columns=["material_reference_service_life"])
 
     records = bom_draft_from_dataframe(dataframe)
 
     assert len(records) == 1
-    assert records[0].lca_service_life is None
+    assert records[0].material_reference_service_life is None
 
 
 def test_project_package_from_tables_links_wide_results_to_bom_by_material_id():

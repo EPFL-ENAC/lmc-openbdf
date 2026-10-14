@@ -421,7 +421,7 @@ def wide_to_xlsx(
 
         sheet.cell(row=4, column=cell_column, value=human_readable_type(data_type))
 
-        constraints = human_readable_constraints(metadata)
+        constraints = extra.get("constraint") or human_readable_constraints(metadata)
         c = sheet.cell(row=5, column=cell_column, value=constraints)
         if constraints:
             c.style = INFO_STYLE.name
