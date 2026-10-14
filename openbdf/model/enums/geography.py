@@ -71,22 +71,22 @@ class ClimateZone(OpenBDFEnum):
 class ExtendedDefaultDataBasis(OpenBDFEnum):
     OUTERMOST_REGION = (
         "outermost_region",
-        "outermost_region (an outermost region within the meaning of Article 349 TFEU)",
+        "Outermost region",
         "an outermost region within the meaning of Article 349 TFEU",
     )
     DATA_GAP = (
         "data_gap",
-        "data_gap (default values used to fill data gaps where no other type of data is available)",
+        "Data gap (default values used to fill data gaps where no other type of data is available)",
         "default values used to fill data gaps where no other type of data is available",
     )
     SIMPLIFIED_CALCULATION = (
         "simplified_calculation",
-        "simplified_calculation (default values used where it is necessary to simplify the calculation)",
+        "Simplified Calculation (default values used where it is necessary to simplify the calculation)",
         "default values used where it is necessary to simplify the calculation",
     )
     OTHER = (
         "other",
-        "other (stated in the assessor note)",
+        "Other (stated in the assessor note)",
         "stated in the assessor note",
     )
 

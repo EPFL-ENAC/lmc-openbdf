@@ -423,11 +423,13 @@ class DocumentTranslator:
                     header_col=3,
                     values_col=10,
                 ),
+                # Generated template layout (wide_to_xlsx): field codes in
+                # xlsx row 2, metadata rows 3-8, data from xlsx row 10.
                 SheetTranslation(
                     original_name=COMMON_CATEGORY_PROPERTIES["bom"]["name"],
                     translated_name=COMMON_CATEGORY_PROPERTIES["bom"]["name"],
                     orientation=COMMON_CATEGORY_PROPERTIES["bom"]["orientation"],
-                    header_row=8,
+                    header_row=1,
                     start_row=9,
                     start_col=1,
                 ),
@@ -435,8 +437,8 @@ class DocumentTranslator:
                     original_name=COMMON_CATEGORY_PROPERTIES["results_wide"]["name"],
                     translated_name=COMMON_CATEGORY_PROPERTIES["results_wide"]["name"],
                     orientation=COMMON_CATEGORY_PROPERTIES["results_wide"]["orientation"],
-                    header_row=7,
-                    start_row=8,
+                    header_row=1,
+                    start_row=9,
                     start_col=1,
                 ),
             ])

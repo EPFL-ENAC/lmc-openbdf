@@ -112,12 +112,12 @@ class OnSiteRenewableAllocationApproach(OpenBDFEnum):
 class EmissionFactorScenario(OpenBDFEnum):
     NOT_APPLICABLE = (
         "not_applicable",
-        "not_applicable (no operational energy calculated)",
+        "Not applicable (no operational energy calculated)",
         "no operational energy calculated",
     )
     NONE = (
         "none",
-        "none (no forward-looking factors; the factors of the base year apply over the whole period)",
+        "None (no forward-looking factors; the factors of the base Year apply over the whole period)",
         "no forward-looking factors; the factors of the base year apply over the whole period",
     )
     FORWARD_LOOKING = (
