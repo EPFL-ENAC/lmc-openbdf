@@ -24,7 +24,8 @@ class LCAResultsWideFullBase(SQLModel):
         ),
     )
 
-    gwp_total_a1_a3: Decimal = Field(
+    gwp_total_a1_a3: Optional[Decimal] = Field(
+        default=None,
         description="Global Warming Potential - Total for module A1-A3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Total (A1-A3)",

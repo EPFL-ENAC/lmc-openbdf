@@ -160,7 +160,8 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    project_construction_type: ConstructionType = Field(  # type: ignore[call-overload]
+    project_construction_type: Optional[ConstructionType] = Field(  # type: ignore[call-overload]
+        default=None,
         sa_type=SAEnum(ConstructionType),
         description="Construction type of the project.",
         schema_extra=openbdf_field_metadata(
@@ -175,7 +176,8 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    project_country: Country = Field(  # type: ignore[call-overload]
+    project_country: Optional[Country] = Field(  # type: ignore[call-overload]
+        default=None,
         sa_type=SAEnum(Country),
         description="Country where the project is located.",
         schema_extra=openbdf_field_metadata(
@@ -353,7 +355,8 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    project_no_of_buildings: int = Field(
+    project_no_of_buildings: Optional[int] = Field(
+        default=None,
         description="Total number of buildings in the project.",
         schema_extra=openbdf_field_metadata(
             group="Project",
@@ -367,7 +370,8 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    project_phase: ProjectPhase = Field(  # type: ignore[call-overload]
+    project_phase: Optional[ProjectPhase] = Field(  # type: ignore[call-overload]
+        default=None,
         sa_type=SAEnum(ProjectPhase),
         description="Stage of the project when LCA is conducted.",
         schema_extra=openbdf_field_metadata(
@@ -693,7 +697,8 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    building_use_type: BuildingTypology = Field(  # type: ignore[call-overload]
+    building_use_type: Optional[BuildingTypology] = Field(  # type: ignore[call-overload]
+        default=None,
         sa_type=SAEnum(BuildingTypology),
         description="Main use of the building.",
         schema_extra=openbdf_field_metadata(
@@ -981,7 +986,8 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    building_foundation_type: FoundationType = Field(  # type: ignore[call-overload]
+    building_foundation_type: Optional[FoundationType] = Field(  # type: ignore[call-overload]
+        default=None,
         sa_type=SAEnum(FoundationType),
         description="Construction method used to support a building below ground.",
         schema_extra=openbdf_field_metadata(
@@ -996,7 +1002,8 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    building_required_service_life: Decimal = Field(
+    building_required_service_life: Optional[Decimal] = Field(
+        default=None,
         max_digits=18,
         decimal_places=4,
         description="Service life required by the client or by regulation for the building, in years",
@@ -1217,7 +1224,8 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    building_useful_floor_area: Decimal = Field(
+    building_useful_floor_area: Optional[Decimal] = Field(
+        default=None,
         max_digits=18,
         decimal_places=4,
         description="Total area intended for primary use of the building zone.",
@@ -1267,7 +1275,8 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    building_floor_area_inclusions: FloorAreaInclusions = Field(  # type: ignore[call-overload]
+    building_floor_area_inclusions: Optional[FloorAreaInclusions] = Field(  # type: ignore[call-overload]
+        default=None,
         sa_type=SAEnum(FloorAreaInclusions),
         description="What the reported floor area contains",
         schema_extra=openbdf_field_metadata(
@@ -1541,7 +1550,8 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    lca_building_regulation_code: str = Field(
+    lca_building_regulation_code: Optional[str] = Field(
+        default=None,
         max_length=200,
         description="Building regulation and code compliance methodology.",
         schema_extra=openbdf_field_metadata(
@@ -1557,7 +1567,8 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    lca_goal: str = Field(
+    lca_goal: Optional[str] = Field(
+        default=None,
         description="Goal of the study.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
@@ -1571,7 +1582,8 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    lca_reference_unit: str = Field(
+    lca_reference_unit: Optional[str] = Field(
+        default=None,
         max_length=200,
         description="Reference unit the results are primarily expressed for. E.g., 1 m2 GFA / year.",
         schema_extra=openbdf_field_metadata(
@@ -1586,7 +1598,8 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    lca_reference_study_period: str = Field(
+    lca_reference_study_period: Optional[str] = Field(
+        default=None,
         max_length=200,
         description="Duration over which the environmental impacts of a building are assessed, typically ranging from 50 to 100 years.",
         schema_extra=openbdf_field_metadata(
@@ -1601,7 +1614,8 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    lca_replacement_count_method: ReplacementCountMethod = Field(  # type: ignore[call-overload]
+    lca_replacement_count_method: Optional[ReplacementCountMethod] = Field(  # type: ignore[call-overload]
+        default=None,
         sa_type=SAEnum(ReplacementCountMethod),
         description="Rule used to count component replacements in module B4",
         schema_extra=openbdf_field_metadata(
@@ -1615,7 +1629,8 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    lca_functional_unit: str = Field(
+    lca_functional_unit: Optional[str] = Field(
+        default=None,
         max_length=200,
         description="Functional equivalence specified for the assessment. E.g., 1 m2 GFA over 50-year RSL.",
         schema_extra=openbdf_field_metadata(
@@ -1681,7 +1696,8 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    lca_database_name: LCADatabase = Field(  # type: ignore[call-overload]
+    lca_database_name: Optional[LCADatabase] = Field(  # type: ignore[call-overload]
+        default=None,
         sa_type=SAEnum(LCADatabase),
         description="Background database and its release, in one value, for example OKOBAUDAT_20.23.050.",
         schema_extra=openbdf_field_metadata(
@@ -2068,7 +2084,8 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    lcia_methodology: LCIAMethodology = Field(  # type: ignore[call-overload]
+    lcia_methodology: Optional[LCIAMethodology] = Field(  # type: ignore[call-overload]
+        default=None,
         sa_type=SAEnum(LCIAMethodology),
         description="Impact assessment method (for GHG emissions, GWP indicator).",
         schema_extra=openbdf_field_metadata(
@@ -2114,7 +2131,8 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    lca_material_source: MaterialQuantitiesSource = Field(  # type: ignore[call-overload]
+    lca_material_source: Optional[MaterialQuantitiesSource] = Field(  # type: ignore[call-overload]
+        default=None,
         sa_type=SAEnum(MaterialQuantitiesSource),
         description="Main source of material quantities.",
         schema_extra=openbdf_field_metadata(
@@ -2129,7 +2147,8 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    lca_gwp_total_declared: bool = Field(
+    lca_gwp_total_declared: Optional[bool] = Field(
+        default=None,
         description="Whether this indicator was assessed. The value itself is carried by the result columns gwp_total_a1_a3 to gwp_total_c4, and the whole-life sum by gwp_total_total.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
