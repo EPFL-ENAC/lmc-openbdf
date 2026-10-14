@@ -40,12 +40,12 @@ def test_tall_module_has_static_fields():
 
 
 def test_wide_module_gwp_total_special_cases():
-    """gwp_total has a required a1-a3 field and an optional gwp_total_total field."""
+    """gwp_total a1-a3 keeps requirements="Required" metadata but is Python-optional; gwp_total_total is optional."""
     wide = _formatted("lca_results_full_wide.py")
     assert "    gwp_total_total: Optional[Decimal] = Field(" in wide
     assert "    gwp_total: " not in wide
     assert 'attribute_name="Total Global Warming Potential - Total"' in wide
-    assert "    gwp_total_a1_a3: Decimal = Field(" in wide
+    assert "    gwp_total_a1_a3: Optional[Decimal] = Field(\n        default=None," in wide
     assert 'requirements="Required"' in wide
 
 

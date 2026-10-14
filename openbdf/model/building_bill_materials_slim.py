@@ -79,7 +79,8 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
         ),
     )
 
-    common_above_below_ground: AboveBelowGround = Field(  # type: ignore[call-overload]
+    common_above_below_ground: Optional[AboveBelowGround] = Field(  # type: ignore[call-overload]
+        default=None,
         sa_type=SAEnum(AboveBelowGround),
         description="Position of the finished floor level relative to the natural or finished ground elevation. "
         "Example: Below ground for a foundation slab, Above ground for a facade.",
@@ -267,7 +268,8 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
         ),
     )
 
-    material_reference_service_life: Decimal = Field(
+    material_reference_service_life: Optional[Decimal] = Field(
+        default=None,
         description="Declared reference service life. Example: 50, in years, for a structural element; 25 for a membrane.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Reference Service Life (RSL)",
