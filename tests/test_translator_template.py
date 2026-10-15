@@ -84,8 +84,10 @@ def test_openbdf_template_includes_criticality_metadata(tmp_path):
         assert sheet["A8"].value == "Criticality"
         # Reference alignment position (v2.0.0): row 9 stays present but empty.
         assert sheet["A9"].value is None
-        assert sheet.cell(row=2, column=2).value == "material_id"
-        # material_id is MUST in format v2.0.0 on every field sheet.
+        assert sheet.cell(row=2, column=2).value == (
+            "material_ref_id" if sheet_name == "Project Material Database" else "material_id"
+        )
+        # The first field is MUST in format v2.0.0 on every field sheet.
         assert sheet.cell(row=8, column=2).value == "MUST"
 
     type_definitions = workbook["TypeDefinitions"]
