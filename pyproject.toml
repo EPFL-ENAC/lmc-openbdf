@@ -59,7 +59,7 @@ testpaths = [
 packages = ["openbdf"]
 
 [tool.setuptools.package-data]
-openbdf = ["about.txt"]
+openbdf = ["about.md"]
 
 [tool.setuptools_scm]
 
