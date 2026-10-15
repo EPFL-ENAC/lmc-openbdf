@@ -47,6 +47,14 @@ def table_translator() -> DocumentTranslator:
                 start_col=0,
             ),
             SheetTranslation(
+                original_name="Materials Database Input",
+                translated_name="Project Material Database",
+                orientation="horizontal",
+                header_row=0,
+                start_row=1,
+                start_col=0,
+            ),
+            SheetTranslation(
                 original_name="Wide Input",
                 translated_name="LCA Result (Wide)",
                 orientation="horizontal",
@@ -70,6 +78,7 @@ def test_openbdf_tables_from_source_uses_only_the_sheet_source_interface():
     source = MemorySheetSource({
         "Project Input": pd.DataFrame([["project_name", "Example project"]]),
         "Materials Input": pd.DataFrame([["material_id"], ["MAT-1"]]),
+        "Materials Database Input": pd.DataFrame([["material_ref_id"], ["M0001"]]),
         "Wide Input": pd.DataFrame([["material_id"], ["MAT-1"]]),
         "Tall Input": pd.DataFrame([["material_id"], ["MAT-1"]]),
     })
@@ -79,17 +88,25 @@ def test_openbdf_tables_from_source_uses_only_the_sheet_source_interface():
     assert tables is not None
     assert tables.project.to_dict(orient="records") == [{"field_code": "project_name", "value": "Example project"}]
     assert tables.bill_of_materials.to_dict(orient="records") == [{"material_id": "MAT-1"}]
+    assert tables.project_material_database.to_dict(orient="records") == [{"material_ref_id": "M0001"}]
     assert tables.results_wide is not None
     assert tables.results_wide.to_dict(orient="records") == [{"material_id": "MAT-1"}]
     assert tables.results_tall is not None
     assert tables.results_tall.to_dict(orient="records") == [{"material_id": "MAT-1"}]
-    assert source.read_sheets == ["Project Input", "Materials Input", "Wide Input", "Tall Input"]
+    assert source.read_sheets == [
+        "Project Input",
+        "Materials Input",
+        "Materials Database Input",
+        "Wide Input",
+        "Tall Input",
+    ]
 
 
 def test_openbdf_tables_from_source_allows_missing_optional_sheets():
     source = MemorySheetSource({
         "Project Input": pd.DataFrame([["project_name", "Example project"]]),
         "Materials Input": pd.DataFrame([["material_id"], ["MAT-1"]]),
+        "Materials Database Input": pd.DataFrame([["material_ref_id"], ["M0001"]]),
     })
 
     tables = OpenBDFTables.from_source(source, table_translator())
@@ -106,6 +123,16 @@ def test_openbdf_tables_from_source_returns_none_when_a_required_sheet_is_missin
 
     assert OpenBDFTables.from_source(source, table_translator()) is None
     assert source.read_sheets == ["Project Input"]
+
+
+def test_openbdf_tables_from_source_returns_none_when_the_project_material_database_is_missing():
+    source = MemorySheetSource({
+        "Project Input": pd.DataFrame([["project_name", "Example project"]]),
+        "Materials Input": pd.DataFrame([["material_id"], ["MAT-1"]]),
+    })
+
+    assert OpenBDFTables.from_source(source, table_translator()) is None
+    assert source.read_sheets == ["Project Input", "Materials Input"]
 
 
 @pytest.mark.parametrize("reverse_order", [False, True])

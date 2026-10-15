@@ -14,6 +14,7 @@ class OpenBDFTables:
 
     project: pd.DataFrame
     bill_of_materials: pd.DataFrame
+    project_material_database: pd.DataFrame
     results_wide: pd.DataFrame | None = None
     results_tall: pd.DataFrame | None = None
 
@@ -27,7 +28,8 @@ class OpenBDFTables:
 
         project = cls._load_table(source, document_translator, "project")
         bill_of_materials = cls._load_table(source, document_translator, "bom")
-        if project is None or bill_of_materials is None:
+        project_material_database = cls._load_table(source, document_translator, "material_database")
+        if project is None or bill_of_materials is None or project_material_database is None:
             return None
 
         results_wide = cls._load_table(source, document_translator, "results_wide")
@@ -38,6 +40,7 @@ class OpenBDFTables:
                 drop=True
             ),
             bill_of_materials=bill_of_materials.reset_index(drop=True),
+            project_material_database=project_material_database.reset_index(drop=True),
             results_wide=results_wide.reset_index(drop=True) if results_wide is not None else None,
             results_tall=results_tall.reset_index(drop=True) if results_tall is not None else None,
         )

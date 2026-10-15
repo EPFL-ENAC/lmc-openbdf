@@ -16,6 +16,7 @@ from openbdf.model.building_bill_materials_slim import (
 )
 from openbdf.model.general_info import ProjectRecordBase, ProjectRecordBaseDraft
 from openbdf.model.lca_results_full_wide import LCAResultsWideFullBase
+from openbdf.model.project_material_database import ProjectMaterialDatabaseBase
 from openbdf.model.tables import (
     BuildingBillMaterialsSlimRecord,
     BuildingBillMaterialsSlimRecordDraft,
@@ -23,6 +24,7 @@ from openbdf.model.tables import (
     LCAResultsTallFullRecordDraft,
     LCAResultsWideFullRecord,
     LCAResultsWideFullRecordDraft,
+    ProjectMaterialDatabaseRecord,
     ProjectRecord,
     ProjectRecordDraft,
 )
@@ -421,6 +423,22 @@ def bom_draft_from_dataframe(
     )
 
 
+def project_material_database_from_dataframe(
+    project_material_database_df: pd.DataFrame,
+    document_translator: DocumentTranslator | None = None,
+) -> list[ProjectMaterialDatabaseBase]:
+    """
+    Build a list of ProjectMaterialDatabaseBase from a dataframe
+    produced by the Project Material Database sheet.
+    """
+    return horizontal_from_dataframe(
+        project_material_database_df,
+        ProjectMaterialDatabaseBase,
+        COMMON_CATEGORY_PROPERTIES["material_database"]["name"],
+        document_translator=document_translator,
+    )
+
+
 def results_wide_from_dataframe(
     results_wide_df: pd.DataFrame,
     document_translator: DocumentTranslator | None = None,
@@ -529,6 +547,14 @@ def project_package_from_tables(
 
     bill_of_materials = [BuildingBillMaterialsSlimRecord(**bom.model_dump()) for bom in bill_of_materials_base]
 
+    project_material_database_base = project_material_database_from_dataframe(
+        tables.project_material_database,
+        document_translator,
+    )
+    project_material_database = [
+        ProjectMaterialDatabaseRecord(**record.model_dump()) for record in project_material_database_base
+    ]
+
     material_id_to_bom = {bom.material_id: bom for bom in bill_of_materials}
 
     results_wide: list[LCAResultsWideFullRecord] = []
@@ -563,6 +589,7 @@ def project_package_from_tables(
     project = ProjectRecord(
         **project_base.model_dump(),
         bill_of_materials=bill_of_materials,
+        project_material_database=project_material_database,
         results_wide=results_wide,
         results_tall=results_tall,
     )

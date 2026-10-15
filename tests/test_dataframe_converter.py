@@ -16,6 +16,7 @@ from openbdf.model.building_bill_materials_slim import BuildingBillMaterialsSlim
 from openbdf.model.general_info import ProjectRecordBase
 from openbdf.model.lca_results_full_tall import LCAResultsTallBase
 from openbdf.model.lca_results_full_wide import LCAResultsWideFullBase
+from openbdf.model.project_material_database import ProjectMaterialDatabaseBase
 
 
 def value_for_annotation(annotation: Any) -> Any:
@@ -102,13 +103,29 @@ def tables(
     bill_of_materials: pd.DataFrame,
     results_wide: pd.DataFrame | None = None,
     results_tall: pd.DataFrame | None = None,
+    project_material_database: pd.DataFrame | None = None,
 ) -> OpenBDFTables:
     return OpenBDFTables(
         project=project_df(),
         bill_of_materials=bill_of_materials,
+        project_material_database=(
+            project_material_database if project_material_database is not None else project_material_database_df()
+        ),
         results_wide=results_wide,
         results_tall=results_tall,
     )
+
+
+def project_material_database_df(*material_ref_ids: str) -> pd.DataFrame:
+    rows = [
+        required_horizontal_row(
+            ProjectMaterialDatabaseBase,
+            material_ref_id=material_ref_id,
+            custom_material_name=f"Material {material_ref_id}",
+        )
+        for material_ref_id in material_ref_ids
+    ]
+    return pd.DataFrame(rows)
 
 
 def test_bom_from_dataframe_keeps_missing_material_reference_service_life():
@@ -209,3 +226,12 @@ def test_project_package_from_tables_allows_missing_result_tables():
     assert bom_record.material_id == "mat-1"
     assert bom_record.lca_results_full_record is None
     assert bom_record.lca_results_tall_full_records == []
+
+
+def test_project_package_from_tables_builds_project_material_database_records():
+    project = project_package_from_tables(
+        tables(bom_df("mat-1"), project_material_database=project_material_database_df("M0001", "M0002"))
+    )
+
+    assert [record.material_ref_id for record in project.project_material_database] == ["M0001", "M0002"]
+    assert all(record.project_record is project for record in project.project_material_database)

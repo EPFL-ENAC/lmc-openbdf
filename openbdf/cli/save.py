@@ -75,6 +75,7 @@ from openbdf.model.enums.project import ConstructionType, ProjectPhase, ProjectP
 from openbdf.model.general_info import ProjectRecordBase
 from openbdf.model.lca_results_full_tall import LCAResultsTallBase
 from openbdf.model.lca_results_full_wide import LCAResultsWideFullBase
+from openbdf.model.project_material_database import ProjectMaterialDatabaseBase
 from openbdf.model.tables import ProjectRecord
 
 thin_side = Side(border_style="thin", color="AAAAAA")
@@ -259,6 +260,7 @@ def save_openbdf_to_xlsx(
     project: ProjectRecord | None,
     info_sheet_name: str = COMMON_CATEGORY_PROPERTIES["project"]["name"],
     bom_sheet_name: str = COMMON_CATEGORY_PROPERTIES["bom"]["name"],
+    project_material_database_sheet_name: str = COMMON_CATEGORY_PROPERTIES["material_database"]["name"],
     results_wide_sheet_name: str = COMMON_CATEGORY_PROPERTIES["results_wide"]["name"],
     results_tall_sheet_name: str = COMMON_CATEGORY_PROPERTIES["results_tall"]["name"],
 ):
@@ -277,6 +279,13 @@ def save_openbdf_to_xlsx(
             project.bill_of_materials if project else None,
             BuildingBillMaterialsSlimRecordBase,
             bom_sheet_name,
+            enum_registry,
+        )
+        wide_to_xlsx(
+            writer,
+            project.project_material_database if project else None,
+            ProjectMaterialDatabaseBase,
+            project_material_database_sheet_name,
             enum_registry,
         )
         wide_to_xlsx(
@@ -565,6 +574,9 @@ def save_translator(
             writer, COMMON_CATEGORY_PROPERTIES["bom"]["name"], BuildingBillMaterialsSlimRecordBase.model_fields
         )
         make_translator_openbdf_pydantic(
+            writer, COMMON_CATEGORY_PROPERTIES["material_database"]["name"], ProjectMaterialDatabaseBase.model_fields
+        )
+        make_translator_openbdf_pydantic(
             writer, COMMON_CATEGORY_PROPERTIES["results_wide"]["name"], LCAResultsWideFullBase.model_fields
         )
         make_translator_openbdf_pydantic(
@@ -572,6 +584,7 @@ def save_translator(
         )
         export_all_enums_in_model_to_translator(writer, ProjectRecordBase.model_fields)
         export_all_enums_in_model_to_translator(writer, BuildingBillMaterialsSlimRecordBase.model_fields)
+        export_all_enums_in_model_to_translator(writer, ProjectMaterialDatabaseBase.model_fields)
 
 
 def make_translations_library_template_xlsx(writer: pd.ExcelWriter, sheet_name: str):
@@ -667,6 +680,9 @@ def export_all_enums_in_model_to_translator(writer: pd.ExcelWriter, model: dict[
 
 
 def make_translator_openbdfenum(writer: pd.ExcelWriter, sheet_name: str, enum: type[OpenBDFEnum]):
+    if sheet_name in writer.book.sheetnames:
+        return
+
     info_sheet = writer.book.create_sheet(sheet_name)
 
     info_sheet.cell(row=1, column=1, value="Value in your format")
