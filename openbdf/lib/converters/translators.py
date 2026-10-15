@@ -433,6 +433,17 @@ class DocumentTranslator:
                     start_row=9,
                     start_col=1,
                 ),
+                # Project Material Database: field codes in xlsx row 2, data
+                # from xlsx row 9 in the 2026.10 target file; the generated
+                # template's blank row 9 is skipped as a blank record row.
+                SheetTranslation(
+                    original_name=COMMON_CATEGORY_PROPERTIES["material_database"]["name"],
+                    translated_name=COMMON_CATEGORY_PROPERTIES["material_database"]["name"],
+                    orientation=COMMON_CATEGORY_PROPERTIES["material_database"]["orientation"],
+                    header_row=1,
+                    start_row=8,
+                    start_col=1,
+                ),
                 SheetTranslation(
                     original_name=COMMON_CATEGORY_PROPERTIES["results_wide"]["name"],
                     translated_name=COMMON_CATEGORY_PROPERTIES["results_wide"]["name"],
@@ -453,6 +464,7 @@ class CategoryProperties(TypedDict):
 COMMON_CATEGORY_PROPERTIES: dict[str, CategoryProperties] = {
     "project": {"name": "General Information", "orientation": "vertical"},
     "bom": {"name": "Bill of Materials", "orientation": "horizontal"},
+    "material_database": {"name": "Project Material Database", "orientation": "horizontal"},
     "results_wide": {"name": "LCA Result (Wide)", "orientation": "horizontal"},
     "results_tall": {"name": "LCA Result (Tall)", "orientation": "horizontal"},
 }

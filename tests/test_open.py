@@ -14,6 +14,7 @@ from openbdf.main import app
 from openbdf.model.building_bill_materials_slim import BuildingBillMaterialsSlimRecordBase
 from openbdf.model.general_info import ProjectRecordBase
 from openbdf.model.lca_results_full_wide import LCAResultsWideFullBase
+from openbdf.model.project_material_database import ProjectMaterialDatabaseBase
 
 runner = CliRunner()
 
@@ -38,9 +39,15 @@ def default_openbdf_sheets() -> dict[str, pd.DataFrame]:
     results_wide.iloc[1, 1] = "material_id"
     results_wide.iloc[9, 1] = "MAT-1"
 
+    # Project Material Database in the repo wide layout: field codes in row 2, data from row 10.
+    project_material_database = pd.DataFrame([[None] * 2 for _ in range(10)])
+    project_material_database.iloc[1, 1] = "material_ref_id"
+    project_material_database.iloc[9, 1] = "M0001"
+
     return {
         "General Information": project,
         "Bill of Materials": bill_of_materials,
+        "Project Material Database": project_material_database,
         "LCA Result (Wide)": results_wide,
     }
 
@@ -58,14 +65,16 @@ def test_open_command_processes_sheets_split_across_files(tmp_path: Path, monkey
     sheets = default_openbdf_sheets()
     project = tmp_path / "project.xlsx"
     materials = tmp_path / "materials.xlsx"
+    materials_database = tmp_path / "materials_database.xlsx"
     results = tmp_path / "results.xlsx"
     write_workbook(project, {"General Information": sheets["General Information"]})
     write_workbook(materials, {"Bill of Materials": sheets["Bill of Materials"]})
+    write_workbook(materials_database, {"Project Material Database": sheets["Project Material Database"]})
     write_workbook(results, {"LCA Result (Wide)": sheets["LCA Result (Wide)"]})
     captured_tables: list[Any] = []
     mock_conversion_and_save(monkeypatch, captured_tables)
 
-    result = runner.invoke(app, ["open", str(results), str(project), str(materials)])
+    result = runner.invoke(app, ["open", str(results), str(project), str(materials), str(materials_database)])
 
     assert result.exit_code == 0
     assert len(captured_tables) == 1
@@ -73,6 +82,10 @@ def test_open_command_processes_sheets_split_across_files(tmp_path: Path, monkey
     assert drop_invalid is False
     assert tables.project.to_dict(orient="records") == [{"field_code": "project_name", "value": "Example project"}]
     assert tables.bill_of_materials.to_dict(orient="records") == [{"material_id": "MAT-1"}]
+    # start_row=8 keeps the repo wide layout's blank row 9 in the raw table; blank record rows are skipped downstream.
+    raw_project_material_database = tables.project_material_database.to_dict(orient="records")
+    assert pd.isna(raw_project_material_database[0]["material_ref_id"])
+    assert raw_project_material_database[1] == {"material_ref_id": "M0001"}
     assert tables.results_wide.to_dict(orient="records") == [{"material_id": "MAT-1"}]
 
 
@@ -273,6 +286,12 @@ def test_open_command_opens_filled_generated_template_as_single_file(tmp_path: P
     bom.cell(row=10, column=bom_codes["custom_material_name"], value="Concrete C30/37")
     bom.cell(row=10, column=bom_codes["material_reference_service_life"], value=50)
 
+    project_material_database = workbook["Project Material Database"]
+    fill_required_horizontal(project_material_database, ProjectMaterialDatabaseBase)
+    pmd_codes = {cell.value: cell.column for cell in project_material_database[2] if cell.value}
+    project_material_database.cell(row=10, column=pmd_codes["material_ref_id"], value="M0001")
+    project_material_database.cell(row=10, column=pmd_codes["custom_material_name"], value="Concrete C30/37")
+
     wide = workbook["LCA Result (Wide)"]
     fill_required_horizontal(wide, LCAResultsWideFullBase)
     wide_codes = {cell.value: cell.column for cell in wide[2] if cell.value}
@@ -294,6 +313,10 @@ def test_open_command_opens_filled_generated_template_as_single_file(tmp_path: P
     out_wide = out["LCA Result (Wide)"]
     assert out_wide.cell(row=10, column=out_wide_codes["material_id"]).value == "MAT-1"
     assert out_wide.cell(row=10, column=out_wide_codes["gwp_total_a1_a3"]).value == "123.45"
+    out_pmd_codes = {cell.value: cell.column for cell in out["Project Material Database"][2] if cell.value}
+    out_pmd = out["Project Material Database"]
+    assert out_pmd.cell(row=10, column=out_pmd_codes["material_ref_id"]).value == "M0001"
+    assert out_pmd.cell(row=10, column=out_pmd_codes["custom_material_name"]).value == "Concrete C30/37"
 
 
 def test_document_translator_add_last_wins_on_category_conflict():
