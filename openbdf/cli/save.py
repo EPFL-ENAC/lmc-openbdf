@@ -1,5 +1,6 @@
 import importlib.resources
 import itertools
+import re
 from copy import copy
 from pathlib import Path
 from typing import TypeVar
@@ -198,11 +199,59 @@ def get_field_extra(field: FieldInfo) -> dict:
     return extra if isinstance(extra, dict) else {}
 
 
+ABOUT_WIDTH = 80
+HYPERLINK_PATTERN = re.compile(r"\[([^\]]+)\]\(([^)]+)\)|<((?:https?|mailto):[^>]+)>")
+HYPERLINK_FONT = Font(name="Calibri", color="0563C1", underline="single")
+ABOUT_TITLE_FONT = Font(name="Calibri", bold=True, size=14, color="2B5B47")
+
+
+def about_text_rows(text: str) -> list[tuple[str, str | None]]:
+    """Plain markdown text to rows wrapped at spaces before 80 characters; separator-only fragments between links are dropped."""
+    text = text.replace("**", "").lstrip("#> ").strip()
+    if not text.strip(", "):
+        return []
+    rows: list[tuple[str, str | None]] = []
+    current = ""
+    for word in text.split():
+        if current and len(current) + 1 + len(word) > ABOUT_WIDTH:
+            rows.append((current, None))
+            current = word
+        else:
+            current = f"{current} {word}".strip()
+    return [*rows, (current, None)] if current else rows
+
+
+def about_line_rows(line: str) -> list[tuple[str, str | None]]:
+    """One markdown line becomes (text, url) rows; links get their own row since Excel allows one hyperlink per cell."""
+    rows: list[tuple[str, str | None]] = []
+    position = 0
+    for match in HYPERLINK_PATTERN.finditer(line):
+        rows.extend(about_text_rows(line[position : match.start()]))
+        display = match.group(1) if match.group(1) is not None else match.group(3)
+        rows.append((display, match.group(2) or match.group(3)))
+        position = match.end()
+    rows.extend(about_text_rows(line[position:]))
+    return rows or [("", None)]
+
+
 def about_to_xlsx(writer: pd.ExcelWriter) -> None:
-    about_text = importlib.resources.files("openbdf").joinpath("about.txt").read_text(encoding="utf-8")
+    about_text = importlib.resources.files("openbdf").joinpath("about.md").read_text(encoding="utf-8")
     about_sheet = writer.book.create_sheet(ABOUT_SHEET_NAME)
-    for cell_row, line in enumerate(about_text.splitlines(), start=1):
-        about_sheet.cell(row=cell_row, column=1, value=line)
+    about_sheet.column_dimensions["A"].width = ABOUT_WIDTH + 5
+    cell_row = 1
+    for line in about_text.splitlines():
+        title = line.startswith("#")
+        notice = line.lstrip().startswith(">")
+        for text, url in about_line_rows(line):
+            cell = about_sheet.cell(row=cell_row, column=1, value=text)
+            if url:
+                cell.hyperlink = url
+                cell.font = HYPERLINK_FONT
+            elif title:
+                cell.font = ABOUT_TITLE_FONT
+            elif notice:
+                cell.style = INFO_STYLE.name
+            cell_row += 1
 
 
 def save_openbdf_to_xlsx(
