@@ -45,13 +45,16 @@ def analyze_model(model_name: str, field_names: list[str] | None = None) -> Mode
     from openbdf.model.building_bill_materials_slim import BuildingBillMaterialsSlimRecordBase
     from openbdf.model.enums.openbdf_enum import OpenBDFEnum
     from openbdf.model.general_info import ProjectRecordBase  # Import inside to avoid circular deps
-    from openbdf.model.tables import BuildingBillMaterialsSlimRecord, ProjectRecord
+    from openbdf.model.project_material_database import ProjectMaterialDatabaseBase
+    from openbdf.model.tables import BuildingBillMaterialsSlimRecord, ProjectMaterialDatabaseRecord, ProjectRecord
 
     registry = {
         "ProjectRecordBase": ProjectRecordBase,
         "ProjectRecord": ProjectRecord,
         "BuildingBillMaterialsSlimRecordBase": BuildingBillMaterialsSlimRecordBase,
         "BuildingBillMaterialsSlimRecord": BuildingBillMaterialsSlimRecord,
+        "ProjectMaterialDatabaseBase": ProjectMaterialDatabaseBase,
+        "ProjectMaterialDatabaseRecord": ProjectMaterialDatabaseRecord,
         "LCAResultsFullBase": LCAResultsWideFullBase,
         "LCAResultsFullRecord": LCAResultsWideFullRecord,
     }
