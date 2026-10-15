@@ -1,18 +1,23 @@
-install:
+.PHONY: help
+help: ## Show available targets
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
+
+
+install: ## Install with uv sync and pre-commit
 	uv sync --all-extras
 	uv run pre-commit install
 
-lint:
+lint: ## Run pre-commit on all files
 	uv run pre-commit run --all-files
 
-build:
+build: ## Run python -m build
 	uv run python -m build
 
-test:
+test: ## Run pytest
 	uv run --extra dev pytest
 
-generate-lca-results-classes:
+generate-lca-results-classes: ## Generate LCA classes modules
 	uv run --extra dev python scripts/generate_lca_results_classes.py
 
-check-lca-results-classes:
+check-lca-results-classes: ## Check LCA classes modules
 	uv run --extra dev python scripts/generate_lca_results_classes.py --check
