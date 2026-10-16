@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from decimal import Decimal
 from typing import Any, Optional, TypeVar
 
 import pandas as pd
@@ -16,7 +17,7 @@ from openbdf.model.building_bill_materials_slim import (
 )
 from openbdf.model.general_info import ProjectRecordBase, ProjectRecordBaseDraft
 from openbdf.model.lca_results_full_wide import LCAResultsWideFullBase
-from openbdf.model.project_material_database import ProjectMaterialDatabaseBase
+from openbdf.model.project_material_database import ProjectMaterialDatabaseBase, ProjectMaterialDatabaseBaseDraft
 from openbdf.model.tables import (
     BuildingBillMaterialsSlimRecord,
     BuildingBillMaterialsSlimRecordDraft,
@@ -25,6 +26,7 @@ from openbdf.model.tables import (
     LCAResultsWideFullRecord,
     LCAResultsWideFullRecordDraft,
     ProjectMaterialDatabaseRecord,
+    ProjectMaterialDatabaseRecordDraft,
     ProjectRecord,
     ProjectRecordDraft,
 )
@@ -373,6 +375,144 @@ def add_material_id_column_if_missing(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
+def _material_ref_id_number(material_ref_id: str | None) -> int:
+    """Return the numeric suffix of an M%d material_ref_id, or 0."""
+    if material_ref_id and material_ref_id.startswith("M") and material_ref_id[1:].isdigit():
+        return int(material_ref_id[1:])
+    return 0
+
+
+def _validate_project_material_database_against_bom(
+    bill_of_materials: list[BuildingBillMaterialsSlimRecordBase],
+    project_material_database: list[ProjectMaterialDatabaseBase],
+) -> None:
+    """
+    Check the project material database lines against the bill of materials and
+    raise a ValueError naming every mismatch.
+    """
+    bom_rows_by_name: dict[str, list[BuildingBillMaterialsSlimRecordBase]] = {}
+    for bom in bill_of_materials:
+        if bom.custom_material_name:
+            bom_rows_by_name.setdefault(bom.custom_material_name, []).append(bom)
+
+    pmd_lines_by_name: dict[str, list[ProjectMaterialDatabaseBase]] = {}
+    for pmd in project_material_database:
+        pmd_lines_by_name.setdefault(pmd.custom_material_name, []).append(pmd)
+
+    findings: list[str] = []
+
+    orphan_names = [name for name in pmd_lines_by_name if name not in bom_rows_by_name]
+    if orphan_names:
+        findings.append(f"project material database lines without a bill of materials material: {orphan_names!r}")
+
+    missing_names = [name for name in bom_rows_by_name if name not in pmd_lines_by_name]
+    if missing_names:
+        findings.append(f"bill of materials materials without a project material database line: {missing_names!r}")
+
+    duplicate_names = [name for name, lines in pmd_lines_by_name.items() if len(lines) > 1 and name in bom_rows_by_name]
+    if duplicate_names:
+        findings.append(
+            f"bill of materials materials with more than one project material database line: {duplicate_names!r}"
+        )
+
+    for name, lines in pmd_lines_by_name.items():
+        if name not in bom_rows_by_name or len(lines) != 1:
+            continue
+        expected_ref_id = lines[0].material_ref_id
+        wrong_ref_ids = list(
+            dict.fromkeys(
+                bom.material_ref_id
+                for bom in bom_rows_by_name[name]
+                if bom.material_ref_id and bom.material_ref_id != expected_ref_id
+            )
+        )
+        if wrong_ref_ids:
+            findings.append(
+                f"bill of materials rows of material {name!r} carry material_ref_id values that differ from the "
+                f"project material database material_ref_id {expected_ref_id!r}: {wrong_ref_ids!r}"
+            )
+
+    ref_id_counts: dict[str, int] = {}
+    for pmd in project_material_database:
+        ref_id_counts[pmd.material_ref_id] = ref_id_counts.get(pmd.material_ref_id, 0) + 1
+    duplicate_ref_ids = [ref_id for ref_id, count in ref_id_counts.items() if count > 1]
+    if duplicate_ref_ids:
+        findings.append(
+            f"project material database material_ref_id values used by more than one line: {duplicate_ref_ids!r}"
+        )
+
+    if findings:
+        raise ValueError("The project material database does not match the bill of materials: " + "; ".join(findings))
+
+
+def _merge_project_material_database_draft(
+    bill_of_materials: list[BuildingBillMaterialsSlimRecordBaseDraft],
+    project_material_database: list[ProjectMaterialDatabaseBaseDraft],
+) -> list[ProjectMaterialDatabaseBaseDraft]:
+    """
+    Merge the parsed project material database lines with the bill of materials.
+    Every bill of materials material without a line gets a generated one, and the
+    rows of every grouped material are back-filled with the line's material_ref_id.
+    Existing lines are kept exactly as parsed.
+    """
+    bom_rows_by_name: dict[str, list[BuildingBillMaterialsSlimRecordBaseDraft]] = {}
+    for bom in bill_of_materials:
+        if bom.custom_material_name:
+            bom_rows_by_name.setdefault(bom.custom_material_name, []).append(bom)
+
+    existing_line_by_name: dict[str, ProjectMaterialDatabaseBaseDraft] = {}
+    for pmd in project_material_database:
+        existing_line_by_name.setdefault(pmd.custom_material_name, pmd)
+
+    ref_id_records: list[ProjectMaterialDatabaseBaseDraft | BuildingBillMaterialsSlimRecordBaseDraft] = [
+        *project_material_database,
+        *bill_of_materials,
+    ]
+    highest_ref_id = max(
+        (_material_ref_id_number(record.material_ref_id) for record in ref_id_records),
+        default=0,
+    )
+
+    generated_lines: list[ProjectMaterialDatabaseBaseDraft] = []
+    for name, bom_rows in bom_rows_by_name.items():
+        if name in existing_line_by_name:
+            continue
+        highest_ref_id += 1
+        generated_lines.append(
+            ProjectMaterialDatabaseBaseDraft(
+                custom_material_name=name,
+                material_ref_id=f"M{highest_ref_id:04d}",
+                lca_dataset_material_name=next(
+                    (bom.lca_dataset_material_name for bom in bom_rows if bom.lca_dataset_material_name),
+                    None,
+                ),
+                lca_database_name=next((bom.lca_database_name for bom in bom_rows if bom.lca_database_name), None),
+                bom_row_count=len(bom_rows),
+                material_mass_kg=sum(
+                    (bom.material_weight_kg or Decimal(0)) * (bom.floor_repetition or 1) for bom in bom_rows
+                ),
+            )
+        )
+
+    materials_total_mass = sum(
+        (bom.material_weight_kg or Decimal(0)) * (bom.floor_repetition or 1)
+        for bom_rows in bom_rows_by_name.values()
+        for bom in bom_rows
+    )
+    for pmd in generated_lines:
+        pmd.material_mass_share = pmd.material_mass_kg / materials_total_mass * 100 if materials_total_mass else None
+
+    merged_line_by_name = {
+        **existing_line_by_name,
+        **{pmd.custom_material_name: pmd for pmd in generated_lines},
+    }
+    for name, bom_rows in bom_rows_by_name.items():
+        for bom in bom_rows:
+            bom.material_ref_id = merged_line_by_name[name].material_ref_id
+
+    return [*project_material_database, *generated_lines]
+
+
 def bom_from_dataframe(
     bom_df: pd.DataFrame,
     document_translator: DocumentTranslator | None = None,
@@ -434,6 +574,22 @@ def project_material_database_from_dataframe(
     return horizontal_from_dataframe(
         project_material_database_df,
         ProjectMaterialDatabaseBase,
+        COMMON_CATEGORY_PROPERTIES["material_database"]["name"],
+        document_translator=document_translator,
+    )
+
+
+def project_material_database_draft_from_dataframe(
+    project_material_database_df: pd.DataFrame,
+    document_translator: DocumentTranslator | None = None,
+) -> list[ProjectMaterialDatabaseBaseDraft]:
+    """
+    Build a list of ProjectMaterialDatabaseBaseDraft from a dataframe
+    produced by the Project Material Database sheet.
+    """
+    return horizontal_from_dataframe(
+        project_material_database_df,
+        ProjectMaterialDatabaseBaseDraft,
         COMMON_CATEGORY_PROPERTIES["material_database"]["name"],
         document_translator=document_translator,
     )
@@ -555,6 +711,8 @@ def project_package_from_tables(
         ProjectMaterialDatabaseRecord(**record.model_dump()) for record in project_material_database_base
     ]
 
+    _validate_project_material_database_against_bom(bill_of_materials_base, project_material_database_base)
+
     material_id_to_bom = {bom.material_id: bom for bom in bill_of_materials}
 
     results_wide: list[LCAResultsWideFullRecord] = []
@@ -619,6 +777,19 @@ def project_draft_package_from_tables(
         document_translator,
         drop_invalid=drop_invalid,
     )
+
+    project_material_database_base = project_material_database_draft_from_dataframe(
+        tables.project_material_database,
+        document_translator,
+    )
+    project_material_database = [
+        ProjectMaterialDatabaseRecordDraft(**record.model_dump())
+        for record in _merge_project_material_database_draft(
+            bill_of_materials_base,
+            project_material_database_base,
+        )
+    ]
+
     bill_of_materials = [BuildingBillMaterialsSlimRecordDraft(**bom.model_dump()) for bom in bill_of_materials_base]
 
     material_id_to_bom = {bom.material_id: bom for bom in bill_of_materials}
@@ -655,6 +826,7 @@ def project_draft_package_from_tables(
     project_draft = ProjectRecordDraft(
         **project_base.model_dump(),
         bill_of_materials=bill_of_materials,
+        project_material_database=project_material_database,
         results_wide=results_wide,
         results_tall=results_tall,
     )

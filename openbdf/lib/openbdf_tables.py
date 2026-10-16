@@ -23,12 +23,16 @@ class OpenBDFTables:
         cls,
         source: SheetSource,
         document_translator: DocumentTranslator,
+        draft: bool = False,
     ) -> OpenBDFTables | None:
         """Load and lay out the logical OpenBDF tables from a sheet source."""
 
         project = cls._load_table(source, document_translator, "project")
         bill_of_materials = cls._load_table(source, document_translator, "bom")
         project_material_database = cls._load_table(source, document_translator, "material_database")
+        if draft and project_material_database is None:
+            # Draft mode generates the project material database from the bill of materials.
+            project_material_database = pd.DataFrame()
         if project is None or bill_of_materials is None or project_material_database is None:
             return None
 
