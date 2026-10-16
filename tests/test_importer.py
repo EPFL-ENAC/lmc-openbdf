@@ -132,7 +132,22 @@ def test_openbdf_tables_from_source_returns_none_when_the_project_material_datab
     })
 
     assert OpenBDFTables.from_source(source, table_translator()) is None
-    assert source.read_sheets == ["Project Input", "Materials Input"]
+    assert OpenBDFTables.from_source(source, table_translator(), draft=False) is None
+    assert source.read_sheets == ["Project Input", "Materials Input", "Project Input", "Materials Input"]
+
+
+def test_openbdf_tables_from_source_draft_creates_an_empty_project_material_database():
+    source = MemorySheetSource({
+        "Project Input": pd.DataFrame([["project_name", "Example project"]]),
+        "Materials Input": pd.DataFrame([["material_id"], ["MAT-1"]]),
+    })
+
+    tables = OpenBDFTables.from_source(source, table_translator(), draft=True)
+
+    assert tables is not None
+    assert tables.project.to_dict(orient="records") == [{"field_code": "project_name", "value": "Example project"}]
+    assert tables.bill_of_materials.to_dict(orient="records") == [{"material_id": "MAT-1"}]
+    assert tables.project_material_database.empty
 
 
 @pytest.mark.parametrize("reverse_order", [False, True])
@@ -221,13 +236,13 @@ def translator_path(filename: str) -> Path:
     return Path(__file__).parents[1] / "translators" / filename
 
 
-def test_cola_translator_maps_lca_service_life():
+def test_cola_translator_maps_material_reference_service_life():
     translator = DocumentTranslator.from_xlsx(
         translator_path("translator_at_v2.0.0.xlsx"),
         **cola_translator_args(),
     )
 
-    assert translator.translate("Bill of Materials", "Lebensdauer (Jahre)") == ["lca_service_life"]
+    assert translator.translate("Bill of Materials", "Lebensdauer (Jahre)") == ["material_reference_service_life"]
 
 
 def test_bec_translator_maps_building_element_classification():
@@ -264,6 +279,6 @@ def test_cola_translator_set_maps_attributes_and_classification():
             **cola_translator_args(),
         )
 
-    assert translator.translate("Bill of Materials", "Lebensdauer (Jahre)") == ["lca_service_life"]
+    assert translator.translate("Bill of Materials", "Lebensdauer (Jahre)") == ["material_reference_service_life"]
     assert translator.translate("OpenBDFBuildingElementClassific", "2 Bauwerk-Rohbau") == ["2"]
     assert translator.translate("OpenBDFMaterialClassification", "i9") == ["1.1"]
