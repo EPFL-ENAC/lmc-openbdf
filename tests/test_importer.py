@@ -125,29 +125,17 @@ def test_openbdf_tables_from_source_returns_none_when_a_required_sheet_is_missin
     assert source.read_sheets == ["Project Input"]
 
 
-def test_openbdf_tables_from_source_returns_none_when_the_project_material_database_is_missing():
+def test_openbdf_tables_from_source_leaves_the_project_material_database_empty_when_the_sheet_is_missing():
     source = MemorySheetSource({
         "Project Input": pd.DataFrame([["project_name", "Example project"]]),
         "Materials Input": pd.DataFrame([["material_id"], ["MAT-1"]]),
     })
 
-    assert OpenBDFTables.from_source(source, table_translator()) is None
-    assert OpenBDFTables.from_source(source, table_translator(), draft=False) is None
-    assert source.read_sheets == ["Project Input", "Materials Input", "Project Input", "Materials Input"]
-
-
-def test_openbdf_tables_from_source_draft_creates_an_empty_project_material_database():
-    source = MemorySheetSource({
-        "Project Input": pd.DataFrame([["project_name", "Example project"]]),
-        "Materials Input": pd.DataFrame([["material_id"], ["MAT-1"]]),
-    })
-
-    tables = OpenBDFTables.from_source(source, table_translator(), draft=True)
+    tables = OpenBDFTables.from_source(source, table_translator())
 
     assert tables is not None
-    assert tables.project.to_dict(orient="records") == [{"field_code": "project_name", "value": "Example project"}]
     assert tables.bill_of_materials.to_dict(orient="records") == [{"material_id": "MAT-1"}]
-    assert tables.project_material_database.empty
+    assert tables.project_material_database is None
 
 
 @pytest.mark.parametrize("reverse_order", [False, True])

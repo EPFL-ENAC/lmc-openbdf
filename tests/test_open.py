@@ -291,6 +291,12 @@ def test_open_command_opens_filled_generated_template_as_single_file(tmp_path: P
     pmd_codes = {cell.value: cell.column for cell in project_material_database[2] if cell.value}
     project_material_database.cell(row=10, column=pmd_codes["material_ref_id"], value="M0001")
     project_material_database.cell(row=10, column=pmd_codes["custom_material_name"], value="Concrete C30/37")
+    # A material is the pair of its name and its EPD dataset name, so both sheets must agree on it.
+    bom.cell(
+        row=10,
+        column=bom_codes["lca_dataset_material_name"],
+        value=project_material_database.cell(row=10, column=pmd_codes["lca_dataset_material_name"]).value,
+    )
 
     wide = workbook["LCA Result (Wide)"]
     fill_required_horizontal(wide, LCAResultsWideFullBase)
