@@ -127,12 +127,12 @@ def open(
 
     try:
         with ExcelSheetSource(files) as source:
-            tables = OpenBDFTables.from_source(source, document_translator, draft=draft)
+            tables = OpenBDFTables.from_source(source, document_translator)
     except DuplicateSheetNamesError as exc:
         typer.echo(f"Error: {exc}", err=True)
         raise typer.Exit(code=1) from exc
 
-    if tables is None:
+    if tables is None or (not draft and tables.project_material_database is None):
         print("Failed to open the files. Please check the provided paths and formats.")
         return False
 

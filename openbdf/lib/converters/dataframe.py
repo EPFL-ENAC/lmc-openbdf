@@ -375,11 +375,61 @@ def add_material_id_column_if_missing(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
+MaterialPair = tuple[str, str | None]
+
+
 def _material_ref_id_number(material_ref_id: str | None) -> int:
     """Return the numeric suffix of an M%d material_ref_id, or 0."""
     if material_ref_id and material_ref_id.startswith("M") and material_ref_id[1:].isdigit():
         return int(material_ref_id[1:])
     return 0
+
+
+def _material_pair(
+    custom_material_name: str | None,
+    lca_dataset_material_name: str | None,
+) -> MaterialPair | None:
+    """
+    Return the normalized pair that identifies a material, or None when it has no name.
+    Names and EPD dataset names compare without surrounding spaces and without case,
+    and a missing EPD dataset is the same as a blank one.
+    """
+    name = (custom_material_name or "").strip().casefold()
+    if not name:
+        return None
+    return name, (lca_dataset_material_name or "").strip().casefold() or None
+
+
+def _material_pair_label(record: Any) -> str:
+    """Describe a material pair as written in the workbook, for a finding."""
+    name = (record.custom_material_name or "").strip()
+    dataset = (record.lca_dataset_material_name or "").strip()
+    return f"{name!r} with EPD dataset {dataset!r}" if dataset else f"{name!r} without an EPD dataset"
+
+
+def _group_by_material_pair(records: list[Any]) -> dict[MaterialPair, list[Any]]:
+    """Group records by material pair and drop the records that carry no material name."""
+    grouped: dict[MaterialPair, list[Any]] = {}
+    for record in records:
+        pair = _material_pair(record.custom_material_name, record.lca_dataset_material_name)
+        if pair is not None:
+            grouped.setdefault(pair, []).append(record)
+    return grouped
+
+
+def _first_text(records: list[Any], field_name: str) -> str | None:
+    """Return the first non-blank value of a text field, without its surrounding spaces."""
+    for record in records:
+        value = (getattr(record, field_name) or "").strip()
+        if value:
+            return value
+    return None
+
+
+def _bom_row_mass(row: BuildingBillMaterialsSlimRecordBaseDraft) -> Decimal:
+    """Return the mass a bill of materials row contributes, repeated once per floor unless stated."""
+    repetitions = 1 if row.floor_repetition is None else row.floor_repetition
+    return (row.material_weight_kg or Decimal(0)) * repetitions
 
 
 def _validate_project_material_database_against_bom(
@@ -388,48 +438,51 @@ def _validate_project_material_database_against_bom(
 ) -> None:
     """
     Check the project material database lines against the bill of materials and
-    raise a ValueError naming every mismatch.
+    raise a ValueError naming every mismatch. A material is the pair of its name
+    and its EPD dataset name.
     """
-    bom_rows_by_name: dict[str, list[BuildingBillMaterialsSlimRecordBase]] = {}
-    for bom in bill_of_materials:
-        if bom.custom_material_name:
-            bom_rows_by_name.setdefault(bom.custom_material_name, []).append(bom)
-
-    pmd_lines_by_name: dict[str, list[ProjectMaterialDatabaseBase]] = {}
-    for pmd in project_material_database:
-        pmd_lines_by_name.setdefault(pmd.custom_material_name, []).append(pmd)
+    bom_rows_by_pair = _group_by_material_pair(bill_of_materials)
+    pmd_lines_by_pair = _group_by_material_pair(project_material_database)
 
     findings: list[str] = []
 
-    orphan_names = [name for name in pmd_lines_by_name if name not in bom_rows_by_name]
-    if orphan_names:
-        findings.append(f"project material database lines without a bill of materials material: {orphan_names!r}")
+    orphan_labels = [
+        _material_pair_label(pmd_lines_by_pair[pair][0]) for pair in pmd_lines_by_pair if pair not in bom_rows_by_pair
+    ]
+    if orphan_labels:
+        findings.append(f"project material database lines without a bill of materials material: {orphan_labels!r}")
 
-    missing_names = [name for name in bom_rows_by_name if name not in pmd_lines_by_name]
-    if missing_names:
-        findings.append(f"bill of materials materials without a project material database line: {missing_names!r}")
+    missing_labels = [
+        _material_pair_label(bom_rows_by_pair[pair][0]) for pair in bom_rows_by_pair if pair not in pmd_lines_by_pair
+    ]
+    if missing_labels:
+        findings.append(f"bill of materials materials without a project material database line: {missing_labels!r}")
 
-    duplicate_names = [name for name, lines in pmd_lines_by_name.items() if len(lines) > 1 and name in bom_rows_by_name]
-    if duplicate_names:
+    duplicate_labels = [
+        _material_pair_label(lines[0])
+        for pair, lines in pmd_lines_by_pair.items()
+        if len(lines) > 1 and pair in bom_rows_by_pair
+    ]
+    if duplicate_labels:
         findings.append(
-            f"bill of materials materials with more than one project material database line: {duplicate_names!r}"
+            f"bill of materials materials with more than one project material database line: {duplicate_labels!r}"
         )
 
-    for name, lines in pmd_lines_by_name.items():
-        if name not in bom_rows_by_name or len(lines) != 1:
+    for pair, lines in pmd_lines_by_pair.items():
+        if pair not in bom_rows_by_pair or len(lines) != 1:
             continue
         expected_ref_id = lines[0].material_ref_id
         wrong_ref_ids = list(
             dict.fromkeys(
                 bom.material_ref_id
-                for bom in bom_rows_by_name[name]
+                for bom in bom_rows_by_pair[pair]
                 if bom.material_ref_id and bom.material_ref_id != expected_ref_id
             )
         )
         if wrong_ref_ids:
             findings.append(
-                f"bill of materials rows of material {name!r} carry material_ref_id values that differ from the "
-                f"project material database material_ref_id {expected_ref_id!r}: {wrong_ref_ids!r}"
+                f"bill of materials rows of material {_material_pair_label(lines[0])} carry material_ref_id values "
+                f"that differ from the project material database material_ref_id {expected_ref_id!r}: {wrong_ref_ids!r}"
             )
 
     ref_id_counts: dict[str, int] = {}
@@ -451,18 +504,19 @@ def _merge_project_material_database_draft(
 ) -> list[ProjectMaterialDatabaseBaseDraft]:
     """
     Merge the parsed project material database lines with the bill of materials.
-    Every bill of materials material without a line gets a generated one, and the
-    rows of every grouped material are back-filled with the line's material_ref_id.
-    Existing lines are kept exactly as parsed.
+    A material is the pair of its name and its EPD dataset name. Every bill of
+    materials pair without a line gets a generated one, the automatic fields of
+    every line are recomputed from its rows, and the rows are back-filled with the
+    line's material_ref_id. A line without bill of materials rows is kept and its
+    automatic fields count zero.
     """
-    bom_rows_by_name: dict[str, list[BuildingBillMaterialsSlimRecordBaseDraft]] = {}
-    for bom in bill_of_materials:
-        if bom.custom_material_name:
-            bom_rows_by_name.setdefault(bom.custom_material_name, []).append(bom)
+    bom_rows_by_pair = _group_by_material_pair(bill_of_materials)
 
-    existing_line_by_name: dict[str, ProjectMaterialDatabaseBaseDraft] = {}
+    first_line_by_pair: dict[MaterialPair, ProjectMaterialDatabaseBaseDraft] = {}
     for pmd in project_material_database:
-        existing_line_by_name.setdefault(pmd.custom_material_name, pmd)
+        pair = _material_pair(pmd.custom_material_name, pmd.lca_dataset_material_name)
+        if pair is not None:
+            first_line_by_pair.setdefault(pair, pmd)
 
     ref_id_records: list[ProjectMaterialDatabaseBaseDraft | BuildingBillMaterialsSlimRecordBaseDraft] = [
         *project_material_database,
@@ -473,44 +527,36 @@ def _merge_project_material_database_draft(
         default=0,
     )
 
-    generated_lines: list[ProjectMaterialDatabaseBaseDraft] = []
-    for name, bom_rows in bom_rows_by_name.items():
-        if name in existing_line_by_name:
+    generated_by_pair: dict[MaterialPair, ProjectMaterialDatabaseBaseDraft] = {}
+    for pair, bom_rows in bom_rows_by_pair.items():
+        if pair in first_line_by_pair:
             continue
         highest_ref_id += 1
-        generated_lines.append(
-            ProjectMaterialDatabaseBaseDraft(
-                custom_material_name=name,
-                material_ref_id=f"M{highest_ref_id:04d}",
-                lca_dataset_material_name=next(
-                    (bom.lca_dataset_material_name for bom in bom_rows if bom.lca_dataset_material_name),
-                    None,
-                ),
-                lca_database_name=next((bom.lca_database_name for bom in bom_rows if bom.lca_database_name), None),
-                bom_row_count=len(bom_rows),
-                material_mass_kg=sum(
-                    (bom.material_weight_kg or Decimal(0)) * (bom.floor_repetition or 1) for bom in bom_rows
-                ),
-            )
+        generated_by_pair[pair] = ProjectMaterialDatabaseBaseDraft(
+            custom_material_name=_first_text(bom_rows, "custom_material_name"),
+            lca_dataset_material_name=_first_text(bom_rows, "lca_dataset_material_name"),
+            lca_database_name=_first_text(bom_rows, "lca_database_name"),
+            material_ref_id=f"M{highest_ref_id:04d}",
         )
 
-    materials_total_mass = sum(
-        (bom.material_weight_kg or Decimal(0)) * (bom.floor_repetition or 1)
-        for bom_rows in bom_rows_by_name.values()
-        for bom in bom_rows
-    )
-    for pmd in generated_lines:
-        pmd.material_mass_share = pmd.material_mass_kg / materials_total_mass * 100 if materials_total_mass else None
+    total_mass = sum(_bom_row_mass(row) for bom_rows in bom_rows_by_pair.values() for row in bom_rows)
+    for pair, bom_rows in bom_rows_by_pair.items():
+        line = first_line_by_pair.get(pair) or generated_by_pair[pair]
+        line_mass = sum(_bom_row_mass(row) for row in bom_rows)
+        line.bom_row_count = len(bom_rows)
+        line.material_mass_kg = line_mass
+        line.material_mass_share = line_mass / total_mass * 100 if total_mass else Decimal(0)
+        for row in bom_rows:
+            row.material_ref_id = line.material_ref_id
 
-    merged_line_by_name = {
-        **existing_line_by_name,
-        **{pmd.custom_material_name: pmd for pmd in generated_lines},
-    }
-    for name, bom_rows in bom_rows_by_name.items():
-        for bom in bom_rows:
-            bom.material_ref_id = merged_line_by_name[name].material_ref_id
+    for pmd in project_material_database:
+        pair = _material_pair(pmd.custom_material_name, pmd.lca_dataset_material_name)
+        if pair is None or pair not in bom_rows_by_pair:
+            pmd.bom_row_count = 0
+            pmd.material_mass_kg = Decimal(0)
+            pmd.material_mass_share = Decimal(0)
 
-    return [*project_material_database, *generated_lines]
+    return [*project_material_database, *generated_by_pair.values()]
 
 
 def bom_from_dataframe(
@@ -593,6 +639,16 @@ def project_material_database_draft_from_dataframe(
         COMMON_CATEGORY_PROPERTIES["material_database"]["name"],
         document_translator=document_translator,
     )
+
+
+def _require_project_material_database(project_material_database_df: pd.DataFrame | None) -> pd.DataFrame:
+    """Return the project material database of a strict record, which must be present."""
+    if project_material_database_df is None:
+        raise ValueError(
+            "The Project Material Database sheet is missing from the source workbook; "
+            "add it, or open the workbook in draft mode."
+        )
+    return project_material_database_df
 
 
 def results_wide_from_dataframe(
@@ -704,7 +760,7 @@ def project_package_from_tables(
     bill_of_materials = [BuildingBillMaterialsSlimRecord(**bom.model_dump()) for bom in bill_of_materials_base]
 
     project_material_database_base = project_material_database_from_dataframe(
-        tables.project_material_database,
+        _require_project_material_database(tables.project_material_database),
         document_translator,
     )
     project_material_database = [
@@ -778,9 +834,10 @@ def project_draft_package_from_tables(
         drop_invalid=drop_invalid,
     )
 
-    project_material_database_base = project_material_database_draft_from_dataframe(
-        tables.project_material_database,
-        document_translator,
+    project_material_database_base = (
+        project_material_database_draft_from_dataframe(tables.project_material_database, document_translator)
+        if tables.project_material_database is not None
+        else []
     )
     project_material_database = [
         ProjectMaterialDatabaseRecordDraft(**record.model_dump())
