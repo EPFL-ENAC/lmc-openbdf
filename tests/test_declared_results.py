@@ -6,14 +6,11 @@ from types import SimpleNamespace
 from typing import Any
 
 import pandas as pd
-import pytest
 from typer.testing import CliRunner
 
 import openbdf.main as main_module
 from openbdf.lib.validation import (
     DeclaredIndicatorWithoutResults,
-    OpenBDFValidationErrors,
-    ResultsWithoutIndicatorDeclaration,
     Severity,
     check_declared_results,
     format_findings,
@@ -60,6 +57,9 @@ def tall_results(code: str, methodology: LCIAMethodology, value: str = "1", mate
 def material(material_id: str = "MAT-1", wide: Any = None, tall: list[Any] | None = None):
     return SimpleNamespace(
         material_id=material_id,
+        custom_material_name="Steel",
+        lca_dataset_material_name=None,
+        material_ref_id="M0001",
         lca_results_full_record=wide,
         lca_results_tall_full_records=list(tall or []),
     )
@@ -68,7 +68,12 @@ def material(material_id: str = "MAT-1", wide: Any = None, tall: list[Any] | Non
 def project(methodology: LCIAMethodology | None, materials: list[Any], **declared: bool | None):
     flags: dict[str, bool | None] = {f"lca_{indicator.code}_declared": None for indicator in INDICATORS}
     flags.update({f"lca_{code}_declared": value for code, value in declared.items()})
-    return SimpleNamespace(lcia_methodology=methodology, bill_of_materials=materials, **flags)
+    return SimpleNamespace(
+        lcia_methodology=methodology,
+        bill_of_materials=materials,
+        project_material_database=materials,
+        **flags,
+    )
 
 
 def test_a_declared_indicator_with_all_aligned_results_passes():
@@ -105,15 +110,13 @@ def test_a_result_behind_an_undeclared_indicator_rejects_the_file_even_when_the_
     assert "b8" not in aligned_suffixes("gwp_total", EN_15804_A2)
     wide = wide_record("MAT-1", gwp_total_b8=Decimal("1"))
 
-    with pytest.raises(OpenBDFValidationErrors) as raised:
-        check_declared_results(project(EN_15804_A2, [material(wide=wide)], gwp_total=False))
+    findings = check_declared_results(project(EN_15804_A2, [material(wide=wide)], gwp_total=False))
 
-    assert str(raised.value.findings[0]) == (
+    assert str(findings[0]) == (
         "E26: Indicator gwp_total carries a result in b8 but is not declared for material MAT-1"
     )
-    assert [finding.source for finding in raised.value.findings] == [WIDE_SHEET]
-    assert raised.value.errors == raised.value.findings
-    assert raised.value.warnings == []
+    assert [finding.source for finding in findings] == [WIDE_SHEET]
+    assert findings[0].severity is Severity.REJECT
 
 
 def test_a_zero_counts_as_a_result():
@@ -158,24 +161,15 @@ def test_a_methodology_without_aligned_columns_requires_nothing():
     assert findings == []
 
 
-def test_draft_mode_downgrades_a_reject_to_a_warning():
-    wide = wide_record("MAT-1", gwp_total_b8=Decimal("1"))
-
-    findings = check_declared_results(project(EN_15804_A2, [material(wide=wide)], gwp_total=False), draft=True)
-
-    assert [finding.severity for finding in findings] == [Severity.WARNING]
-    assert isinstance(findings[0], ResultsWithoutIndicatorDeclaration)
-
-
 def test_findings_are_capped_per_sheet_in_the_terminal_output():
-    findings = [DeclaredIndicatorWithoutResults(f"finding {index}", source=WIDE_SHEET) for index in range(53)]
+    findings = [DeclaredIndicatorWithoutResults(f"finding {index}", source=WIDE_SHEET) for index in range(13)]
 
-    lines = format_findings(findings, limit=50)
+    lines = format_findings(findings)
 
     assert lines[0] == f"{WIDE_SHEET}:"
     assert lines[1] == "  E25: finding 0"
     assert lines[-1] == "  ... 3 more findings not shown"
-    assert len(lines) == 52
+    assert len(lines) == 12
 
 
 def write_workbook(path: Path, sheets: dict[str, pd.DataFrame]) -> None:

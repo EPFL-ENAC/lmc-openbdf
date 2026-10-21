@@ -37,15 +37,11 @@ class OpenBDFTables:
         results_tall = cls._load_table(source, document_translator, "results_tall")
 
         return cls(
-            project=project.rename(columns={project.columns[0]: "field_code", project.columns[1]: "value"}).reset_index(
-                drop=True
-            ),
-            bill_of_materials=bill_of_materials.reset_index(drop=True),
-            project_material_database=(
-                project_material_database.reset_index(drop=True) if project_material_database is not None else None
-            ),
-            results_wide=results_wide.reset_index(drop=True) if results_wide is not None else None,
-            results_tall=results_tall.reset_index(drop=True) if results_tall is not None else None,
+            project=project.rename(columns={project.columns[0]: "field_code", project.columns[1]: "value"}),
+            bill_of_materials=bill_of_materials,
+            project_material_database=project_material_database,
+            results_wide=results_wide,
+            results_tall=results_tall,
         )
 
     @staticmethod

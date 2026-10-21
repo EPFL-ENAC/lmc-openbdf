@@ -1295,6 +1295,7 @@ class ProjectRecordBase(SQLModel):
 
     building_useful_floor_area: Optional[Decimal] = Field(
         default=None,
+        gt=0,
         max_digits=18,
         decimal_places=4,
         description="Total area intended for primary use of the building zone.",
@@ -1313,6 +1314,7 @@ class ProjectRecordBase(SQLModel):
     )
 
     building_gross_floor_area: Decimal = Field(
+        gt=0,
         max_digits=18,
         decimal_places=4,
         description="Total gross floor area.",
@@ -1844,6 +1846,8 @@ class ProjectRecordBase(SQLModel):
 
     lca_data_cpr_share: Optional[Decimal] = Field(
         default=None,
+        ge=0,
+        le=1,
         max_digits=18,
         decimal_places=4,
         description="Share of the weighting basis documented with data from a declaration of performance and conformity.",
@@ -1863,6 +1867,8 @@ class ProjectRecordBase(SQLModel):
 
     lca_data_ecodesign_share: Optional[Decimal] = Field(
         default=None,
+        ge=0,
+        le=1,
         max_digits=18,
         decimal_places=4,
         description="Share documented with compatible data issued under product regulations adopted.",
@@ -1882,6 +1888,8 @@ class ProjectRecordBase(SQLModel):
 
     lca_data_project_specific_share: Optional[Decimal] = Field(
         default=None,
+        ge=0,
+        le=1,
         max_digits=18,
         decimal_places=4,
         description="Share documented with project-specific data calculated to EN 15804 or EN 50693 or a compatible standard. Usable only where national legislation permits it.",
@@ -1901,6 +1909,8 @@ class ProjectRecordBase(SQLModel):
 
     lca_data_product_specific_share: Optional[Decimal] = Field(
         default=None,
+        ge=0,
+        le=1,
         max_digits=18,
         decimal_places=4,
         description="Share documented with product-specific data calculated to EN 15804 or EN 50693 or a compatible standard. Usable only where national legislation permits it.",
@@ -1920,6 +1930,8 @@ class ProjectRecordBase(SQLModel):
 
     lca_data_product_group_average_share: Optional[Decimal] = Field(
         default=None,
+        ge=0,
+        le=1,
         max_digits=18,
         decimal_places=4,
         description="Share documented with sectoral data representing the average of multiple products from one or more companies, provided by an industrial association or equivalent body covering the product. Usable only where national legislation permits it.",
@@ -1939,6 +1951,8 @@ class ProjectRecordBase(SQLModel):
 
     lca_data_generic_share: Optional[Decimal] = Field(
         default=None,
+        ge=0,
+        le=1,
         max_digits=18,
         decimal_places=4,
         description="Share documented with generic data calculated to EN 15804 or EN 50693 or a compatible standard for a group of products for a country or region, neither site nor enterprise specific.",
@@ -1958,6 +1972,8 @@ class ProjectRecordBase(SQLModel):
 
     lca_data_default_share: Optional[Decimal] = Field(
         default=None,
+        ge=0,
+        le=1,
         max_digits=18,
         decimal_places=4,
         description="Share documented with default values used to fill data gaps where no other type of data is available, or to simplify the calculation.",
@@ -1977,6 +1993,8 @@ class ProjectRecordBase(SQLModel):
 
     lca_data_undeclared_share: Optional[Decimal] = Field(
         default=None,
+        ge=0,
+        le=1,
         max_digits=18,
         decimal_places=4,
         description="Share of the weighting basis whose data type is not declared.",
