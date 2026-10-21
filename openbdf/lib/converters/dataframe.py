@@ -11,24 +11,16 @@ from openbdf.lib.converters.translators import COMMON_CATEGORY_PROPERTIES, Docum
 from openbdf.lib.openbdf_tables import OpenBDFTables
 from openbdf.lib.types.fields import get_field_code
 from openbdf.lib.types.values import parse_value, serialize_value
-from openbdf.model.building_bill_materials_slim import (
-    BuildingBillMaterialsSlimRecordBase,
-    BuildingBillMaterialsSlimRecordBaseDraft,
-)
-from openbdf.model.general_info import ProjectRecordBase, ProjectRecordBaseDraft
-from openbdf.model.lca_results_full_wide import LCAResultsWideFullBase
-from openbdf.model.project_material_database import ProjectMaterialDatabaseBase, ProjectMaterialDatabaseBaseDraft
+from openbdf.model.building_bill_materials_slim import BuildingBillMaterialsSlimRecordBase
+from openbdf.model.general_info import ProjectRecordBase
+from openbdf.model.ingest import make_ingest_model
+from openbdf.model.project_material_database import ProjectMaterialDatabaseBase
 from openbdf.model.tables import (
     BuildingBillMaterialsSlimRecord,
-    BuildingBillMaterialsSlimRecordDraft,
     LCAResultsTallFullRecord,
-    LCAResultsTallFullRecordDraft,
     LCAResultsWideFullRecord,
-    LCAResultsWideFullRecordDraft,
     ProjectMaterialDatabaseRecord,
-    ProjectMaterialDatabaseRecordDraft,
     ProjectRecord,
-    ProjectRecordDraft,
 )
 
 PROJECT_EXCLUDED_FIELDS = {"id", "bill_of_materials"}
@@ -145,12 +137,16 @@ def horizontal_from_dataframe(
     document_translator: DocumentTranslator | None = None,
     drop_invalid: bool = False,
     required_model_cls: type[SQLModel] | None = None,
+    draft: bool = False,
 ) -> list[ModelT]:
     """
     Build a list of model instances from a horizontal dataframe.
 
     Dataframe columns are interpreted as field_code values.
     Unknown columns are ignored.
+
+    If draft is True, the records are built from an all-optional ingest model
+    derived from model_cls, so a row that misses a value is kept.
 
     If drop_invalid is True and required_model_cls is given, the required
     fields of required_model_cls are derived with is_required(). Rows that
@@ -165,6 +161,7 @@ def horizontal_from_dataframe(
         model_cls,
         excluded_fields=excluded_fields,
     )
+    record_cls = make_ingest_model(model_cls) if draft else model_cls
 
     required_names: set[str] = set()
     if drop_invalid and required_model_cls is not None:
@@ -242,7 +239,7 @@ def horizontal_from_dataframe(
                 )
                 continue
 
-        items.append(model_cls(**kwargs))
+        items.append(record_cls(**kwargs))
 
     return items
 
@@ -254,6 +251,7 @@ def model_from_vertical_dataframe(
     translator_category: str = COMMON_CATEGORY_PROPERTIES["project"]["name"],
     *,
     document_translator: DocumentTranslator | None = None,
+    draft: bool = False,
 ) -> ModelT:
     """
     Build a project model from a dataframe produced by project_to_dataframe().
@@ -263,6 +261,9 @@ def model_from_vertical_dataframe(
     - value
 
     Extra columns are ignored.
+
+    If draft is True, the record is built from an all-optional ingest model
+    derived from model_cls, so a missing value is kept as None.
     """
     required_columns = {"field_code", "value"}
     missing = required_columns - set(project_df.columns)
@@ -277,6 +278,7 @@ def model_from_vertical_dataframe(
         model_cls,
         excluded_fields=excluded_fields,
     )
+    record_cls = make_ingest_model(model_cls) if draft else model_cls
 
     kwargs: dict[str, Any] = {}
 
@@ -315,11 +317,14 @@ def model_from_vertical_dataframe(
                 document_translator,
             )
 
-    return model_cls(**kwargs)
+    return record_cls(**kwargs)
 
 
 def project_from_dataframe(
-    project_df: pd.DataFrame, document_translator: DocumentTranslator | None = None
+    project_df: pd.DataFrame,
+    document_translator: DocumentTranslator | None = None,
+    *,
+    draft: bool = False,
 ) -> ProjectRecordBase:
     """
     Build a ProjectRecord from a dataframe produced by project_to_dataframe().
@@ -329,6 +334,9 @@ def project_from_dataframe(
     - value
 
     Extra columns are ignored.
+
+    If draft is True, the record is built from an all-optional ingest model, so a
+    value that the sheet does not carry is kept as None.
     """
     return model_from_vertical_dataframe(
         project_df,
@@ -336,27 +344,7 @@ def project_from_dataframe(
         excluded_fields=PROJECT_EXCLUDED_FIELDS,
         translator_category=COMMON_CATEGORY_PROPERTIES["project"]["name"],
         document_translator=document_translator or DocumentTranslator(),
-    )
-
-
-def project_draft_from_dataframe(
-    project_df: pd.DataFrame, document_translator: DocumentTranslator | None = None
-) -> ProjectRecordBaseDraft:
-    """
-    Build a ProjectRecordDraft from a dataframe produced by project_to_dataframe().
-
-    Expected columns:
-    - field_code
-    - value
-
-    Extra columns are ignored.
-    """
-    return model_from_vertical_dataframe(
-        project_df,
-        ProjectRecordBaseDraft,
-        excluded_fields=PROJECT_EXCLUDED_FIELDS,
-        translator_category=COMMON_CATEGORY_PROPERTIES["project"]["name"],
-        document_translator=document_translator or DocumentTranslator(),
+        draft=draft,
     )
 
 
@@ -426,7 +414,7 @@ def _first_text(records: list[Any], field_name: str) -> str | None:
     return None
 
 
-def _bom_row_mass(row: BuildingBillMaterialsSlimRecordBaseDraft) -> Decimal:
+def _bom_row_mass(row: BuildingBillMaterialsSlimRecordBase) -> Decimal:
     """Return the mass a bill of materials row contributes, repeated once per floor unless stated."""
     repetitions = 1 if row.floor_repetition is None else row.floor_repetition
     return (row.material_weight_kg or Decimal(0)) * repetitions
@@ -499,9 +487,9 @@ def _validate_project_material_database_against_bom(
 
 
 def _merge_project_material_database_draft(
-    bill_of_materials: list[BuildingBillMaterialsSlimRecordBaseDraft],
-    project_material_database: list[ProjectMaterialDatabaseBaseDraft],
-) -> list[ProjectMaterialDatabaseBaseDraft]:
+    bill_of_materials: list[BuildingBillMaterialsSlimRecordBase],
+    project_material_database: list[ProjectMaterialDatabaseBase],
+) -> list[ProjectMaterialDatabaseBase]:
     """
     Merge the parsed project material database lines with the bill of materials.
     A material is the pair of its name and its EPD dataset name. Every bill of
@@ -511,14 +499,15 @@ def _merge_project_material_database_draft(
     automatic fields count zero.
     """
     bom_rows_by_pair = _group_by_material_pair(bill_of_materials)
+    line_cls = make_ingest_model(ProjectMaterialDatabaseBase)
 
-    first_line_by_pair: dict[MaterialPair, ProjectMaterialDatabaseBaseDraft] = {}
+    first_line_by_pair: dict[MaterialPair, ProjectMaterialDatabaseBase] = {}
     for pmd in project_material_database:
         pair = _material_pair(pmd.custom_material_name, pmd.lca_dataset_material_name)
         if pair is not None:
             first_line_by_pair.setdefault(pair, pmd)
 
-    ref_id_records: list[ProjectMaterialDatabaseBaseDraft | BuildingBillMaterialsSlimRecordBaseDraft] = [
+    ref_id_records: list[ProjectMaterialDatabaseBase | BuildingBillMaterialsSlimRecordBase] = [
         *project_material_database,
         *bill_of_materials,
     ]
@@ -527,12 +516,12 @@ def _merge_project_material_database_draft(
         default=0,
     )
 
-    generated_by_pair: dict[MaterialPair, ProjectMaterialDatabaseBaseDraft] = {}
+    generated_by_pair: dict[MaterialPair, ProjectMaterialDatabaseBase] = {}
     for pair, bom_rows in bom_rows_by_pair.items():
         if pair in first_line_by_pair:
             continue
         highest_ref_id += 1
-        generated_by_pair[pair] = ProjectMaterialDatabaseBaseDraft(
+        generated_by_pair[pair] = line_cls(
             custom_material_name=_first_text(bom_rows, "custom_material_name"),
             lca_dataset_material_name=_first_text(bom_rows, "lca_dataset_material_name"),
             lca_database_name=_first_text(bom_rows, "lca_database_name"),
@@ -563,11 +552,15 @@ def bom_from_dataframe(
     bom_df: pd.DataFrame,
     document_translator: DocumentTranslator | None = None,
     *,
+    draft: bool = False,
     drop_invalid: bool = False,
 ) -> list[BuildingBillMaterialsSlimRecordBase]:
     """
     Build a list of BuildingBillMaterialsSlimRecordBase from a dataframe
     produced by bom_to_dataframe().
+
+    If draft is True, the lines are built from an all-optional ingest model, so a
+    line that misses a required field is kept.
 
     If drop_invalid is True, lines that miss a required field are dropped
     and a message is printed for each dropped line.
@@ -579,31 +572,7 @@ def bom_from_dataframe(
         COMMON_CATEGORY_PROPERTIES["bom"]["name"],
         excluded_fields=BOM_EXCLUDED_FIELDS,
         document_translator=document_translator,
-        drop_invalid=drop_invalid,
-        required_model_cls=BuildingBillMaterialsSlimRecordBase,
-    )
-
-
-def bom_draft_from_dataframe(
-    bom_df: pd.DataFrame,
-    document_translator: DocumentTranslator | None = None,
-    *,
-    drop_invalid: bool = False,
-) -> list[BuildingBillMaterialsSlimRecordBaseDraft]:
-    """
-    Build a list of BuildingBillMaterialsSlimRecordBaseDraft from a dataframe
-    produced by bom_to_dataframe().
-
-    If drop_invalid is True, lines that miss a required field are dropped
-    and a message is printed for each dropped line.
-    """
-    bom_df = add_material_id_column_if_missing(bom_df)
-    return horizontal_from_dataframe(
-        bom_df,
-        BuildingBillMaterialsSlimRecordBaseDraft,
-        COMMON_CATEGORY_PROPERTIES["bom"]["name"],
-        excluded_fields=BOM_EXCLUDED_FIELDS,
-        document_translator=document_translator,
+        draft=draft,
         drop_invalid=drop_invalid,
         required_model_cls=BuildingBillMaterialsSlimRecordBase,
     )
@@ -612,32 +581,22 @@ def bom_draft_from_dataframe(
 def project_material_database_from_dataframe(
     project_material_database_df: pd.DataFrame,
     document_translator: DocumentTranslator | None = None,
+    *,
+    draft: bool = False,
 ) -> list[ProjectMaterialDatabaseBase]:
     """
     Build a list of ProjectMaterialDatabaseBase from a dataframe
     produced by the Project Material Database sheet.
+
+    If draft is True, the lines are built from an all-optional ingest model, so a
+    line that misses a required field is kept.
     """
     return horizontal_from_dataframe(
         project_material_database_df,
         ProjectMaterialDatabaseBase,
         COMMON_CATEGORY_PROPERTIES["material_database"]["name"],
         document_translator=document_translator,
-    )
-
-
-def project_material_database_draft_from_dataframe(
-    project_material_database_df: pd.DataFrame,
-    document_translator: DocumentTranslator | None = None,
-) -> list[ProjectMaterialDatabaseBaseDraft]:
-    """
-    Build a list of ProjectMaterialDatabaseBaseDraft from a dataframe
-    produced by the Project Material Database sheet.
-    """
-    return horizontal_from_dataframe(
-        project_material_database_df,
-        ProjectMaterialDatabaseBaseDraft,
-        COMMON_CATEGORY_PROPERTIES["material_database"]["name"],
-        document_translator=document_translator,
+        draft=draft,
     )
 
 
@@ -669,24 +628,6 @@ def results_wide_from_dataframe(
     )
 
 
-def results_wide_draft_from_dataframe(
-    results_wide_draft_df: pd.DataFrame,
-    document_translator: DocumentTranslator | None = None,
-) -> list[LCAResultsWideFullRecordDraft]:
-    """
-    Build a list of LCAResultsWideFullRecordDraft from a dataframe produced
-    by results_wide_to_dataframe().
-    """
-    results_wide_draft_df = add_material_id_column_if_missing(results_wide_draft_df)
-    return horizontal_from_dataframe(
-        results_wide_draft_df,
-        LCAResultsWideFullRecordDraft,
-        COMMON_CATEGORY_PROPERTIES["results_wide"]["name"],
-        excluded_fields=RESULTS_EXCLUDED_FIELDS,
-        document_translator=document_translator,
-    )
-
-
 def results_tall_from_dataframe(
     results_tall_df: pd.DataFrame,
     document_translator: DocumentTranslator | None = None,
@@ -698,23 +639,6 @@ def results_tall_from_dataframe(
     return horizontal_from_dataframe(
         results_tall_df,
         LCAResultsTallFullRecord,
-        COMMON_CATEGORY_PROPERTIES["results_tall"]["name"],
-        excluded_fields=RESULTS_EXCLUDED_FIELDS,
-        document_translator=document_translator,
-    )
-
-
-def results_tall_draft_from_dataframe(
-    results_tall_draft_df: pd.DataFrame,
-    document_translator: DocumentTranslator | None = None,
-) -> list[LCAResultsTallFullRecordDraft]:
-    """
-    Build a list of LCAResultsTallFullRecordDraft from a dataframe produced
-    by results_tall_to_dataframe().
-    """
-    return horizontal_from_dataframe(
-        results_tall_draft_df,
-        LCAResultsTallFullRecordDraft,
         COMMON_CATEGORY_PROPERTIES["results_tall"]["name"],
         excluded_fields=RESULTS_EXCLUDED_FIELDS,
         document_translator=document_translator,
@@ -738,10 +662,17 @@ def project_package_from_tables(
     tables: OpenBDFTables,
     document_translator: DocumentTranslator | None = None,
     *,
+    draft: bool = False,
     drop_invalid: bool = False,
 ) -> ProjectRecord:
     """
     Reconstruct a ProjectRecord and attach its bill of materials from logical tables.
+
+    In draft mode the records are built from the values that the sheets carry: a
+    missing value is kept, a missing project material database line is generated from
+    the bill of materials, and the automatic fields are recomputed. In strict mode the
+    records are validated and the project material database must match the bill of
+    materials.
 
     If drop_invalid is True, bill of materials lines that miss a required
     field are dropped and a message is printed for each dropped line.
@@ -750,24 +681,39 @@ def project_package_from_tables(
     if document_translator is None:
         document_translator = DocumentTranslator.default_openbdf_translator()
 
-    project_base = project_from_dataframe(tables.project, document_translator)
+    project_base = project_from_dataframe(tables.project, document_translator, draft=draft)
     bill_of_materials_base = bom_from_dataframe(
         tables.bill_of_materials,
         document_translator,
+        draft=draft,
         drop_invalid=drop_invalid,
     )
 
-    bill_of_materials = [BuildingBillMaterialsSlimRecord(**bom.model_dump()) for bom in bill_of_materials_base]
+    if draft:
+        project_material_database_base = (
+            project_material_database_from_dataframe(
+                tables.project_material_database,
+                document_translator,
+                draft=True,
+            )
+            if tables.project_material_database is not None
+            else []
+        )
+        project_material_database_base = _merge_project_material_database_draft(
+            bill_of_materials_base,
+            project_material_database_base,
+        )
+    else:
+        project_material_database_base = project_material_database_from_dataframe(
+            _require_project_material_database(tables.project_material_database),
+            document_translator,
+        )
+        _validate_project_material_database_against_bom(bill_of_materials_base, project_material_database_base)
 
-    project_material_database_base = project_material_database_from_dataframe(
-        _require_project_material_database(tables.project_material_database),
-        document_translator,
-    )
     project_material_database = [
         ProjectMaterialDatabaseRecord(**record.model_dump()) for record in project_material_database_base
     ]
-
-    _validate_project_material_database_against_bom(bill_of_materials_base, project_material_database_base)
+    bill_of_materials = [BuildingBillMaterialsSlimRecord(**bom.model_dump()) for bom in bill_of_materials_base]
 
     material_id_to_bom = {bom.material_id: bom for bom in bill_of_materials}
 
@@ -809,83 +755,3 @@ def project_package_from_tables(
     )
 
     return project
-
-
-def project_draft_package_from_tables(
-    tables: OpenBDFTables,
-    document_translator: DocumentTranslator | None = None,
-    *,
-    drop_invalid: bool = False,
-) -> ProjectRecordDraft:
-    """
-    Reconstruct a ProjectRecordDraft and attach its bill of materials from logical tables.
-
-    If drop_invalid is True, bill of materials lines that miss a required
-    field are dropped and a message is printed for each dropped line.
-    """
-
-    if document_translator is None:
-        document_translator = DocumentTranslator.default_openbdf_translator()
-
-    project_base = project_draft_from_dataframe(tables.project, document_translator)
-    bill_of_materials_base = bom_draft_from_dataframe(
-        tables.bill_of_materials,
-        document_translator,
-        drop_invalid=drop_invalid,
-    )
-
-    project_material_database_base = (
-        project_material_database_draft_from_dataframe(tables.project_material_database, document_translator)
-        if tables.project_material_database is not None
-        else []
-    )
-    project_material_database = [
-        ProjectMaterialDatabaseRecordDraft(**record.model_dump())
-        for record in _merge_project_material_database_draft(
-            bill_of_materials_base,
-            project_material_database_base,
-        )
-    ]
-
-    bill_of_materials = [BuildingBillMaterialsSlimRecordDraft(**bom.model_dump()) for bom in bill_of_materials_base]
-
-    material_id_to_bom = {bom.material_id: bom for bom in bill_of_materials}
-
-    results_wide: list[LCAResultsWideFullRecordDraft] = []
-    results_tall: list[LCAResultsTallFullRecordDraft] = []
-
-    if tables.results_wide is not None:
-        results_wide = results_wide_draft_from_dataframe(tables.results_wide, document_translator)
-        for result_wide in results_wide:
-            matching_bom = material_id_to_bom.get(result_wide.material_id, None)
-            if matching_bom is not None:
-                matching_bom.lca_results_full_record = result_wide
-
-    if tables.results_tall is not None:
-        results_tall = results_tall_draft_from_dataframe(tables.results_tall, document_translator)
-        for result_tall in results_tall:
-            matching_bom = material_id_to_bom.get(result_tall.material_id, None)
-            if matching_bom is not None:
-                matching_bom.lca_results_tall_full_records.append(result_tall)
-    elif results_wide:
-        results_tall = []
-        for result_wide in results_wide:
-            matching_bom = material_id_to_bom.get(result_wide.material_id, None)
-            if matching_bom is not None:
-                tall_results = lca_results_wide_to_tall(
-                    result_wide,
-                    matching_bom,
-                    LCAResultsTallFullRecordDraft,
-                )
-                matching_bom.lca_results_tall_full_records.extend(tall_results)
-                results_tall.extend(tall_results)
-
-    project_draft = ProjectRecordDraft(
-        **project_base.model_dump(),
-        bill_of_materials=bill_of_materials,
-        project_material_database=project_material_database,
-        results_wide=results_wide,
-        results_tall=results_tall,
-    )
-
-    return project_draft

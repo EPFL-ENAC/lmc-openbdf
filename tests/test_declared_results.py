@@ -213,7 +213,6 @@ def run_open(tmp_path: Path, monkeypatch, project_object: Any, *arguments: str) 
         Path(xlsx_path).write_text("exported")
 
     monkeypatch.setattr(main_module, "project_package_from_tables", lambda *args, **kwargs: project_object)
-    monkeypatch.setattr(main_module, "project_draft_package_from_tables", lambda *args, **kwargs: project_object)
     monkeypatch.setattr(main_module, "save_openbdf_to_xlsx", fake_save)
     result = runner.invoke(app, ["open", str(source), "--output-path", str(output), *arguments])
     return result, output

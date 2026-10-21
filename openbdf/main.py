@@ -3,7 +3,7 @@ from pathlib import Path
 import typer
 
 from openbdf.cli.save import save_openbdf_to_xlsx, save_translator
-from openbdf.lib.converters.dataframe import project_draft_package_from_tables, project_package_from_tables
+from openbdf.lib.converters.dataframe import project_package_from_tables
 from openbdf.lib.converters.translators import DocumentTranslator
 from openbdf.lib.openbdf_tables import OpenBDFTables
 from openbdf.lib.sources.excel_source import DuplicateSheetNamesError, ExcelSheetSource
@@ -137,10 +137,11 @@ def open(
         print("Failed to open the files. Please check the provided paths and formats.")
         return False
 
-    project = (
-        project_draft_package_from_tables(tables, document_translator, drop_invalid=drop_invalid_materials)
-        if draft
-        else project_package_from_tables(tables, document_translator, drop_invalid=drop_invalid_materials)
+    project = project_package_from_tables(
+        tables,
+        document_translator,
+        draft=draft,
+        drop_invalid=drop_invalid_materials,
     )
 
     try:
@@ -153,8 +154,7 @@ def open(
     for line in format_findings(findings):
         typer.echo(line, err=True)
 
-    # Draft and strict records expose the same fields used by the existing exporter.
-    save_openbdf_to_xlsx(  # type: ignore[arg-type]
+    save_openbdf_to_xlsx(
         xlsx_path=output_path,
         project=project,
     )

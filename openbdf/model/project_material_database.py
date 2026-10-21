@@ -6,7 +6,7 @@ from typing import Optional
 from sqlmodel import Enum as SAEnum
 from sqlmodel import Field, SQLModel
 
-from openbdf.model.draft import make_draft_model
+from openbdf.model.ingest import make_ingest_model
 
 from .enums.materials import DeclaredUnit, MaterialDataType, MaterialEPDMatch
 from .enums.references import Reference
@@ -318,8 +318,8 @@ class ProjectMaterialDatabaseBase(SQLModel):
     )
 
 
-_ProjectMaterialDatabaseBaseDraft = make_draft_model(ProjectMaterialDatabaseBase)
+_ProjectMaterialDatabaseBaseIngest = make_ingest_model(ProjectMaterialDatabaseBase)
 
 
-class ProjectMaterialDatabaseBaseDraft(_ProjectMaterialDatabaseBaseDraft):  # type: ignore[valid-type,misc]
+class ProjectMaterialDatabaseBaseIngest(_ProjectMaterialDatabaseBaseIngest):  # type: ignore[valid-type,misc]
     pass
