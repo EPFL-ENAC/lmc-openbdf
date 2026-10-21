@@ -1,4 +1,5 @@
-from .openbdf_enum import OpenBDFEnum
+from .openbdf_enum import OpenBDFEnum, enum_attribute
+from .references import Reference
 
 
 class LCIModelingApproach(OpenBDFEnum):
@@ -22,6 +23,7 @@ class LCIModelingApproach(OpenBDFEnum):
         "Other",
         "Alternative LCA modeling methodology.",
     )
+    reference = enum_attribute(Reference.ISO_14040_2006_ISO_14044_2006)
 
 
 class LifeCycleSystemBoundary(OpenBDFEnum):
@@ -50,6 +52,7 @@ class LifeCycleSystemBoundary(OpenBDFEnum):
         "Gate to Gate",
         "Focuses specifically on the production stage processes.",
     )
+    reference = enum_attribute(Reference.EN15978_2026_EU2026_52_ANNEX_III)
 
 
 class LifeCycleStage_ISO14040_44(OpenBDFEnum):
@@ -179,6 +182,7 @@ class LifeCycleModule_ISO14040_44(OpenBDFEnum):
 class LCAStageOrModuleOrSubModule(OpenBDFEnum):
     # Members follow the TypeDefinitions sheet order, which interleaves modules and their stage ranges,
     # so parent categories are linked after the class body.
+    reference = enum_attribute(Reference.EN15978_2026_EN15804_A2_5_2_EU2026_52_ANNEX_III)
     A1 = ("A1", "A1 Raw material supply")
     A1_A3 = ("A1-A3", "A1-A3 Product stage")
     A2 = ("A2", "A2 Transport")
@@ -271,6 +275,7 @@ class LCADatabase(OpenBDFEnum):
     EC3 = ("EC3", "EC3")
     ECOINVENT = ("ecoinvent", "Ecoinvent")
     OTHER = ("Other", "Other")
+    reference = enum_attribute(Reference.EN_15941_2024)
 
 
 class LCADatabaseSystemModel(OpenBDFEnum):
@@ -294,6 +299,7 @@ class LCADatabaseSystemModel(OpenBDFEnum):
         "Consequential (marginal, market-driven modelling)",
         "marginal, market-driven modelling",
     )
+    reference = enum_attribute(Reference.EN15804_A2_ECOINVENT_SYSTEM_MODELS)
 
 
 class DataWeightingBasis(OpenBDFEnum):
@@ -312,6 +318,7 @@ class DataWeightingBasis(OpenBDFEnum):
         "Not computed (shares not weighted)",
         "shares not weighted",
     )
+    reference = enum_attribute(Reference.GBDI)
 
 
 class BiogenicCarbonAccounting(OpenBDFEnum):
@@ -327,6 +334,7 @@ class BiogenicCarbonAccounting(OpenBDFEnum):
         "Ton-Year Accounting or Discounting Method",
     )
     OTHER = ("other", "Other")
+    reference = enum_attribute(Reference.EN15804_A2_EN15978_2026)
 
 
 class LCATemporalApproach(OpenBDFEnum):
@@ -334,6 +342,7 @@ class LCATemporalApproach(OpenBDFEnum):
     DYNAMIC = ("dynamic", "Dynamic (impacts distributed over time)")
     PROBABILISTIC = ("probabilistic", "Probabilistic")
     PROSPECTIVE = ("prospective", "Prospective")
+    reference = enum_attribute(Reference.EN15978_2026)
 
 
 class AssessmentType_EN15978(OpenBDFEnum):
@@ -347,6 +356,7 @@ class AssessmentType_EN15978(OpenBDFEnum):
         "Type 4 - fully detailed as designed or as built model",
         "Type 4 - fully detailed as designed or as built model",
     )
+    reference = enum_attribute(Reference.EN15978_2026)
 
 
 class LimitValueScopeReduction(OpenBDFEnum):
@@ -370,6 +380,7 @@ class LimitValueScopeReduction(OpenBDFEnum):
         "Both (parts of life-cycle stages and parts of the scope of building components left out)",
         "parts of life-cycle stages and parts of the scope of building components left out",
     )
+    reference = enum_attribute(Reference.EU2026_52_ANNEX_III)
 
 
 class LCIAMethodology(OpenBDFEnum):
@@ -378,3 +389,4 @@ class LCIAMethodology(OpenBDFEnum):
     EN_15978_2026 = ("EN 15978:2026", "EN 15978:2026")
     US_EPA_TRACI_2_1 = ("US EPA TRACI 2.1", "US EPA TRACI 2.1")
     OTHER = ("Other", "Other")
+    reference = enum_attribute(Reference.EN15804_A2_TRACI_RECIPE_2016_IPCC_AR6)

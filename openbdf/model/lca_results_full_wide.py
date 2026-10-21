@@ -8,6 +8,8 @@ from typing import Optional
 
 from sqlmodel import Field, SQLModel
 
+from openbdf.model.enums.references import ReferenceAlignment
+
 from .field_metadata import openbdf_field_metadata
 
 
@@ -34,6 +36,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Required",
             criticality="SHOULD",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -47,6 +50,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -60,6 +64,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -73,6 +78,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -86,6 +92,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -99,6 +106,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -112,6 +120,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI,
         ),
     )
 
@@ -125,6 +134,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI,
         ),
     )
 
@@ -138,6 +148,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI,
         ),
     )
 
@@ -151,6 +162,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI,
         ),
     )
 
@@ -164,6 +176,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -177,6 +190,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -190,6 +204,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -203,6 +218,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -216,6 +232,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -229,6 +246,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -242,6 +260,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -255,6 +274,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -268,6 +288,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -281,6 +302,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -294,6 +316,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -307,6 +330,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -320,6 +344,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -333,6 +358,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -346,6 +372,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -359,6 +386,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -372,6 +400,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -385,6 +414,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -398,6 +428,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -411,6 +442,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -424,6 +456,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -437,6 +470,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -450,6 +484,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -463,6 +498,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -476,6 +512,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -489,6 +526,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -502,6 +540,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -515,6 +554,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -528,6 +568,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -541,6 +582,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -554,6 +596,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -567,6 +610,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -580,6 +624,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -593,6 +638,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -606,6 +652,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -619,6 +666,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -632,6 +680,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -645,6 +694,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -658,6 +708,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -671,6 +722,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -684,6 +736,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -697,6 +750,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -710,6 +764,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -723,6 +778,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -736,6 +792,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -749,6 +806,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -762,6 +820,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -775,6 +834,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -788,6 +848,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -801,6 +862,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -814,6 +876,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -827,6 +890,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -840,6 +904,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -853,6 +918,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -866,6 +932,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -879,6 +946,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -892,6 +960,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -905,6 +974,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -918,6 +988,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -931,6 +1002,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -944,6 +1016,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -957,6 +1030,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -970,6 +1044,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -983,6 +1058,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -996,6 +1072,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1009,6 +1086,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1022,6 +1100,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1035,6 +1114,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1048,6 +1128,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1061,6 +1142,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1074,6 +1156,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1087,6 +1170,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1100,6 +1184,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1113,6 +1198,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1126,6 +1212,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1139,6 +1226,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1152,6 +1240,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1165,6 +1254,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1178,6 +1268,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1191,6 +1282,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1204,6 +1296,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1217,6 +1310,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1230,6 +1324,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1243,6 +1338,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1256,6 +1352,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1269,6 +1366,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1282,6 +1380,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1295,6 +1394,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1308,6 +1408,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1321,6 +1422,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1334,6 +1436,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1347,6 +1450,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1360,6 +1464,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1373,6 +1478,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CFC-11 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1386,6 +1492,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CFC-11 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1399,6 +1506,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CFC-11 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1412,6 +1520,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CFC-11 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1425,6 +1534,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CFC-11 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1438,6 +1548,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CFC-11 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1451,6 +1562,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CFC-11 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1464,6 +1576,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CFC-11 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1477,6 +1590,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CFC-11 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1490,6 +1604,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CFC-11 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1503,6 +1618,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CFC-11 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1516,6 +1632,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CFC-11 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1529,6 +1646,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CFC-11 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1542,6 +1660,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CFC-11 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1555,6 +1674,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CFC-11 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1568,6 +1688,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CFC-11 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1581,6 +1702,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CFC-11 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1594,6 +1716,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CFC-11 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1607,6 +1730,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CFC-11 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1620,6 +1744,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CFC-11 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1633,6 +1758,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CFC-11 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1646,6 +1772,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg CFC-11 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1659,6 +1786,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg SO₂ eq.",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1672,6 +1800,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg SO₂ eq.",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1685,6 +1814,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg SO₂ eq.",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1698,6 +1828,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg SO₂ eq.",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1711,6 +1842,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg SO₂ eq.",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1724,6 +1856,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg SO₂ eq.",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1737,6 +1870,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg SO₂ eq.",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1750,6 +1884,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg SO₂ eq.",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1763,6 +1898,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg SO₂ eq.",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1776,6 +1912,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg SO₂ eq.",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1789,6 +1926,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg SO₂ eq.",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1802,6 +1940,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg SO₂ eq.",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1815,6 +1954,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg SO₂ eq.",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1828,6 +1968,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg SO₂ eq.",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1841,6 +1982,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg SO₂ eq.",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1854,6 +1996,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg SO₂ eq.",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1867,6 +2010,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg SO₂ eq.",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1880,6 +2024,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg SO₂ eq.",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1893,6 +2038,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg SO₂ eq.",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1906,6 +2052,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg SO₂ eq.",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1919,6 +2066,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg SO₂ eq.",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1932,6 +2080,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg SO₂ eq.",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1945,6 +2094,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="mol H+ eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1958,6 +2108,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="mol H+ eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1971,6 +2122,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="mol H+ eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1984,6 +2136,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="mol H+ eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1997,6 +2150,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="mol H+ eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2010,6 +2164,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="mol H+ eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2023,6 +2178,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="mol H+ eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2036,6 +2192,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="mol H+ eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2049,6 +2206,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="mol H+ eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2062,6 +2220,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="mol H+ eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2075,6 +2234,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="mol H+ eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2088,6 +2248,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="mol H+ eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2101,6 +2262,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="mol H+ eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2114,6 +2276,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="mol H+ eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2127,6 +2290,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="mol H+ eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2140,6 +2304,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="mol H+ eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2153,6 +2318,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="mol H+ eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2166,6 +2332,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="mol H+ eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2179,6 +2346,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="mol H+ eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2192,6 +2360,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="mol H+ eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2205,6 +2374,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="mol H+ eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2218,6 +2388,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="mol H+ eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2231,6 +2402,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2244,6 +2416,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2257,6 +2430,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2270,6 +2444,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2283,6 +2458,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2296,6 +2472,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2309,6 +2486,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2322,6 +2500,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2335,6 +2514,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2348,6 +2528,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2361,6 +2542,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2374,6 +2556,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2387,6 +2570,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2400,6 +2584,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2413,6 +2598,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2426,6 +2612,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2439,6 +2626,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2452,6 +2640,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2465,6 +2654,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2478,6 +2668,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2491,6 +2682,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2504,6 +2696,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2517,6 +2710,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg PO4 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2530,6 +2724,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg PO4 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2543,6 +2738,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg PO4 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2556,6 +2752,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg PO4 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2569,6 +2766,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg PO4 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2582,6 +2780,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg PO4 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2595,6 +2794,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg PO4 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2608,6 +2808,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg PO4 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2621,6 +2822,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg PO4 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2634,6 +2836,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg PO4 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2647,6 +2850,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg PO4 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2660,6 +2864,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg PO4 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2673,6 +2878,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg PO4 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2686,6 +2892,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg PO4 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2699,6 +2906,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg PO4 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2712,6 +2920,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg PO4 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2725,6 +2934,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg PO4 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2738,6 +2948,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg PO4 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2751,6 +2962,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg PO4 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2764,6 +2976,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg PO4 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2777,6 +2990,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg PO4 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2790,6 +3004,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg PO4 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2803,6 +3018,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2816,6 +3032,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2829,6 +3046,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2842,6 +3060,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2855,6 +3074,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2868,6 +3088,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2881,6 +3102,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2894,6 +3116,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2907,6 +3130,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2920,6 +3144,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2933,6 +3158,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2946,6 +3172,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2959,6 +3186,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2972,6 +3200,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2985,6 +3214,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2998,6 +3228,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3011,6 +3242,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3024,6 +3256,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3037,6 +3270,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3050,6 +3284,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3063,6 +3298,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3076,6 +3312,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3089,6 +3326,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="mol N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3102,6 +3340,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="mol N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3115,6 +3354,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="mol N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3128,6 +3368,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="mol N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3141,6 +3382,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="mol N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3154,6 +3396,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="mol N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3167,6 +3410,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="mol N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3180,6 +3424,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="mol N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3193,6 +3438,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="mol N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3206,6 +3452,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="mol N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3219,6 +3466,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="mol N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3232,6 +3480,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="mol N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3245,6 +3494,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="mol N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3258,6 +3508,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="mol N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3271,6 +3522,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="mol N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3284,6 +3536,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="mol N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3297,6 +3550,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="mol N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3310,6 +3564,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="mol N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3323,6 +3578,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="mol N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3336,6 +3592,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="mol N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3349,6 +3606,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="mol N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3362,6 +3620,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="mol N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3375,6 +3634,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg C2H4 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3388,6 +3648,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg C2H4 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3401,6 +3662,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg C2H4 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3414,6 +3676,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg C2H4 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3427,6 +3690,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg C2H4 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3440,6 +3704,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg C2H4 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3453,6 +3718,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg C2H4 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3466,6 +3732,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg C2H4 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3479,6 +3746,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg C2H4 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3492,6 +3760,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg C2H4 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3505,6 +3774,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg C2H4 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3518,6 +3788,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg C2H4 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3531,6 +3802,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg C2H4 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3544,6 +3816,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg C2H4 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3557,6 +3830,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg C2H4 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3570,6 +3844,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg C2H4 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3583,6 +3858,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg C2H4 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3596,6 +3872,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg C2H4 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3609,6 +3886,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg C2H4 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3622,6 +3900,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg C2H4 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3635,6 +3914,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg C2H4 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3648,6 +3928,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg C2H4 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3661,6 +3942,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg O3 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3674,6 +3956,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg O3 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3687,6 +3970,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg O3 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3700,6 +3984,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg O3 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3713,6 +3998,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg O3 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3726,6 +4012,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg O3 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3739,6 +4026,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg O3 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3752,6 +4040,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg O3 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3765,6 +4054,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg O3 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3778,6 +4068,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg O3 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3791,6 +4082,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg O3 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3804,6 +4096,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg O3 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3817,6 +4110,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg O3 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3830,6 +4124,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg O3 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3843,6 +4138,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg O3 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3856,6 +4152,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg O3 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3869,6 +4166,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg O3 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3882,6 +4180,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg O3 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3895,6 +4194,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg O3 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3908,6 +4208,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg O3 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3921,6 +4222,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg O3 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3934,6 +4236,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg O3 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3947,6 +4250,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg NMVOC eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3960,6 +4264,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg NMVOC eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3973,6 +4278,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg NMVOC eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3986,6 +4292,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg NMVOC eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -3999,6 +4306,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg NMVOC eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4012,6 +4320,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg NMVOC eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4025,6 +4334,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg NMVOC eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4038,6 +4348,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg NMVOC eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4051,6 +4362,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg NMVOC eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4064,6 +4376,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg NMVOC eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4077,6 +4390,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg NMVOC eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4090,6 +4404,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg NMVOC eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4103,6 +4418,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg NMVOC eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4116,6 +4432,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg NMVOC eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4129,6 +4446,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg NMVOC eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4142,6 +4460,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg NMVOC eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4155,6 +4474,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg NMVOC eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4168,6 +4488,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg NMVOC eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4181,6 +4502,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg NMVOC eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4194,6 +4516,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg NMVOC eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4207,6 +4530,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg NMVOC eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4220,6 +4544,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg NMVOC eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4233,6 +4558,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg Sb eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4246,6 +4572,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg Sb eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4259,6 +4586,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg Sb eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4272,6 +4600,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg Sb eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4285,6 +4614,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg Sb eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4298,6 +4628,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg Sb eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4311,6 +4642,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg Sb eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4324,6 +4656,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg Sb eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4337,6 +4670,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg Sb eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4350,6 +4684,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg Sb eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4363,6 +4698,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg Sb eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4376,6 +4712,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg Sb eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4389,6 +4726,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg Sb eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4402,6 +4740,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg Sb eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4415,6 +4754,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg Sb eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4428,6 +4768,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg Sb eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4441,6 +4782,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg Sb eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4454,6 +4796,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg Sb eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4467,6 +4810,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg Sb eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4480,6 +4824,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg Sb eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4493,6 +4838,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg Sb eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4506,6 +4852,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kg Sb eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4519,6 +4866,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4532,6 +4880,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4545,6 +4894,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4558,6 +4908,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4571,6 +4922,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4584,6 +4936,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4597,6 +4950,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4610,6 +4964,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4623,6 +4978,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4636,6 +4992,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4649,6 +5006,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4662,6 +5020,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4675,6 +5034,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4688,6 +5048,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4701,6 +5062,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4714,6 +5076,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4727,6 +5090,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4740,6 +5104,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4753,6 +5118,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4766,6 +5132,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4779,6 +5146,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4792,6 +5160,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4805,6 +5174,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="m3 world eq deprived",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4818,6 +5188,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="m3 world eq deprived",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4831,6 +5202,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="m3 world eq deprived",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4844,6 +5216,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="m3 world eq deprived",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4857,6 +5230,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="m3 world eq deprived",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4870,6 +5244,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="m3 world eq deprived",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4883,6 +5258,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="m3 world eq deprived",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4896,6 +5272,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="m3 world eq deprived",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4909,6 +5286,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="m3 world eq deprived",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4922,6 +5300,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="m3 world eq deprived",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4935,6 +5314,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="m3 world eq deprived",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4948,6 +5328,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="m3 world eq deprived",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4961,6 +5342,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="m3 world eq deprived",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4974,6 +5356,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="m3 world eq deprived",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -4987,6 +5370,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="m3 world eq deprived",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5000,6 +5384,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="m3 world eq deprived",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5013,6 +5398,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="m3 world eq deprived",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5026,6 +5412,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="m3 world eq deprived",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5039,6 +5426,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="m3 world eq deprived",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5052,6 +5440,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="m3 world eq deprived",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5065,6 +5454,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="m3 world eq deprived",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5078,6 +5468,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="m3 world eq deprived",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5091,6 +5482,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5104,6 +5496,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5117,6 +5510,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5130,6 +5524,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5143,6 +5538,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5156,6 +5552,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5169,6 +5566,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5182,6 +5580,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5195,6 +5594,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5208,6 +5608,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5221,6 +5622,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5234,6 +5636,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5247,6 +5650,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5260,6 +5664,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5273,6 +5678,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5286,6 +5692,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5299,6 +5706,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5312,6 +5720,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5325,6 +5734,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5338,6 +5748,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5351,6 +5762,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5364,6 +5776,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5377,6 +5790,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5390,6 +5804,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5403,6 +5818,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5416,6 +5832,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5429,6 +5846,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5442,6 +5860,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5455,6 +5874,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5468,6 +5888,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5481,6 +5902,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5494,6 +5916,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5507,6 +5930,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5520,6 +5944,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5533,6 +5958,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5546,6 +5972,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5559,6 +5986,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5572,6 +6000,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5585,6 +6014,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5598,6 +6028,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5611,6 +6042,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5624,6 +6056,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5637,6 +6070,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5650,6 +6084,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5663,6 +6098,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5676,6 +6112,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5689,6 +6126,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5702,6 +6140,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5715,6 +6154,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5728,6 +6168,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5741,6 +6182,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5754,6 +6196,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5767,6 +6210,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5780,6 +6224,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5793,6 +6238,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5806,6 +6252,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5819,6 +6266,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5832,6 +6280,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5845,6 +6294,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5858,6 +6308,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5871,6 +6322,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5884,6 +6336,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5897,6 +6350,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5910,6 +6364,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5923,6 +6378,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5936,6 +6392,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5949,6 +6406,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5962,6 +6420,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5975,6 +6434,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -5988,6 +6448,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6001,6 +6462,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6014,6 +6476,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6027,6 +6490,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6040,6 +6504,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6053,6 +6518,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6066,6 +6532,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6079,6 +6546,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6092,6 +6560,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6105,6 +6574,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6118,6 +6588,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6131,6 +6602,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6144,6 +6616,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6157,6 +6630,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6170,6 +6644,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6183,6 +6658,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6196,6 +6672,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6209,6 +6686,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6222,6 +6700,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6235,6 +6714,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="disease incidence",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6248,6 +6728,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="disease incidence",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6261,6 +6742,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="disease incidence",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6274,6 +6756,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="disease incidence",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6287,6 +6770,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="disease incidence",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6300,6 +6784,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="disease incidence",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6313,6 +6798,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="disease incidence",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6326,6 +6812,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="disease incidence",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6339,6 +6826,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="disease incidence",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6352,6 +6840,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="disease incidence",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6365,6 +6854,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="disease incidence",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6378,6 +6868,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="disease incidence",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6391,6 +6882,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="disease incidence",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6404,6 +6896,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="disease incidence",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6417,6 +6910,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="disease incidence",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6430,6 +6924,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="disease incidence",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6443,6 +6938,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="disease incidence",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6456,6 +6952,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="disease incidence",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6469,6 +6966,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="disease incidence",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6482,6 +6980,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="disease incidence",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6495,6 +6994,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="disease incidence",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6508,6 +7008,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="disease incidence",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6521,6 +7022,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kBq U235 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6534,6 +7036,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kBq U235 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6547,6 +7050,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kBq U235 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6560,6 +7064,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kBq U235 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6573,6 +7078,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kBq U235 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6586,6 +7092,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kBq U235 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6599,6 +7106,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kBq U235 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6612,6 +7120,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kBq U235 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6625,6 +7134,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kBq U235 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6638,6 +7148,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kBq U235 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6651,6 +7162,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kBq U235 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6664,6 +7176,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kBq U235 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6677,6 +7190,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kBq U235 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6690,6 +7204,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kBq U235 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6703,6 +7218,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kBq U235 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6716,6 +7232,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kBq U235 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6729,6 +7246,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kBq U235 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6742,6 +7260,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kBq U235 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6755,6 +7274,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kBq U235 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6768,6 +7288,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kBq U235 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6781,6 +7302,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kBq U235 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6794,6 +7316,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="kBq U235 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6807,6 +7330,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUe",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6820,6 +7344,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUe",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6833,6 +7358,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUe",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6846,6 +7372,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUe",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6859,6 +7386,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUe",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6872,6 +7400,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUe",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6885,6 +7414,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUe",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6898,6 +7428,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUe",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6911,6 +7442,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUe",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6924,6 +7456,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUe",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6937,6 +7470,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUe",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6950,6 +7484,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUe",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6963,6 +7498,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUe",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6976,6 +7512,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUe",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -6989,6 +7526,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUe",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7002,6 +7540,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUe",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7015,6 +7554,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUe",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7028,6 +7568,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUe",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7041,6 +7582,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUe",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7054,6 +7596,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUe",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7067,6 +7610,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUe",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7080,6 +7624,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUe",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7093,6 +7638,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUh",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7106,6 +7652,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUh",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7119,6 +7666,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUh",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7132,6 +7680,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUh",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7145,6 +7694,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUh",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7158,6 +7708,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUh",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7171,6 +7722,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUh",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7184,6 +7736,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUh",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7197,6 +7750,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUh",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7210,6 +7764,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUh",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7223,6 +7778,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUh",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7236,6 +7792,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUh",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7249,6 +7806,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUh",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7262,6 +7820,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUh",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7275,6 +7834,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUh",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7288,6 +7848,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUh",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7301,6 +7862,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUh",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7314,6 +7876,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUh",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7327,6 +7890,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUh",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7340,6 +7904,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUh",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7353,6 +7918,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUh",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7366,6 +7932,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUh",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7379,6 +7946,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUh",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7392,6 +7960,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUh",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7405,6 +7974,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUh",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7418,6 +7988,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUh",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7431,6 +8002,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUh",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7444,6 +8016,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUh",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7457,6 +8030,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUh",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7470,6 +8044,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUh",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7483,6 +8058,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUh",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7496,6 +8072,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUh",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7509,6 +8086,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUh",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7522,6 +8100,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUh",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7535,6 +8114,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUh",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7548,6 +8128,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUh",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7561,6 +8142,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUh",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7574,6 +8156,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUh",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7587,6 +8170,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUh",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7600,6 +8184,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUh",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7613,6 +8198,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUh",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7626,6 +8212,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUh",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7639,6 +8226,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUh",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7652,6 +8240,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="CTUh",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7665,6 +8254,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="-",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7678,6 +8268,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="-",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7691,6 +8282,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="-",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7704,6 +8296,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="-",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7717,6 +8310,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="-",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7730,6 +8324,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="-",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7743,6 +8338,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="-",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7756,6 +8352,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="-",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7769,6 +8366,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="-",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7782,6 +8380,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="-",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7795,6 +8394,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="-",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7808,6 +8408,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="-",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7821,6 +8422,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="-",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7834,6 +8436,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="-",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7847,6 +8450,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="-",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7860,6 +8464,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="-",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7873,6 +8478,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="-",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7886,6 +8492,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="-",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7899,6 +8506,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="-",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7912,6 +8520,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="-",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7925,6 +8534,7 @@ class LCAResultsWideFullBase(SQLModel):
             units="-",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -7938,5 +8548,6 @@ class LCAResultsWideFullBase(SQLModel):
             units="-",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )

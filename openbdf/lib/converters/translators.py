@@ -424,7 +424,7 @@ class DocumentTranslator:
                     values_col=10,
                 ),
                 # Generated template layout (wide_to_xlsx): field codes in
-                # xlsx row 2, metadata rows 3-8, data from xlsx row 10.
+                # xlsx row 2, metadata rows 3-9, data from xlsx row 10.
                 SheetTranslation(
                     original_name=COMMON_CATEGORY_PROPERTIES["bom"]["name"],
                     translated_name=COMMON_CATEGORY_PROPERTIES["bom"]["name"],
@@ -433,15 +433,14 @@ class DocumentTranslator:
                     start_row=9,
                     start_col=1,
                 ),
-                # Project Material Database: field codes in xlsx row 2, data
-                # from xlsx row 9 in the 2026.10 target file; the generated
-                # template's blank row 9 is skipped as a blank record row.
+                # Project Material Database: field codes in xlsx row 2, metadata rows
+                # 3-9, data from xlsx row 10.
                 SheetTranslation(
                     original_name=COMMON_CATEGORY_PROPERTIES["material_database"]["name"],
                     translated_name=COMMON_CATEGORY_PROPERTIES["material_database"]["name"],
                     orientation=COMMON_CATEGORY_PROPERTIES["material_database"]["orientation"],
                     header_row=1,
-                    start_row=8,
+                    start_row=9,
                     start_col=1,
                 ),
                 SheetTranslation(

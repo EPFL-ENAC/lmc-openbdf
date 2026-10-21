@@ -10,6 +10,7 @@ from sqlmodel import Field, SQLModel
 
 from openbdf.model.enums.lca import LCAStageOrModuleOrSubModule
 from openbdf.model.enums.materials import MaterialFlowType
+from openbdf.model.enums.references import ReferenceAlignment
 
 from .field_metadata import openbdf_field_metadata
 
@@ -24,6 +25,7 @@ class LCAResultsTallBase(SQLModel):
             description="The unique identifier for the material within the project context, referencing the Bill of Materials.",
             requirements="Required",
             criticality="MUST",
+            reference_alignment=ReferenceAlignment.GBDI,
         ),
     )
 
@@ -35,6 +37,7 @@ class LCAResultsTallBase(SQLModel):
             description="Life-cycle stage or module or submodule of this result row, such as A1-A3 or A5 or A5.1 ",
             requirements="Required",
             criticality="MUST",
+            reference_alignment=ReferenceAlignment.EN15978_EN15978_2026,
         ),
     )
 
@@ -47,6 +50,7 @@ class LCAResultsTallBase(SQLModel):
             description="Life-cycle stage of the module, derived by the parser from Life cycle module.",
             requirements="Automatic",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15978_EN15978_2027,
         ),
     )
 
@@ -59,6 +63,7 @@ class LCAResultsTallBase(SQLModel):
             description="Life-cycle of the module, derived by the parser from Life cycle module.",
             requirements="Automatic",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15978_EN15978_2028,
         ),
     )
 
@@ -71,6 +76,7 @@ class LCAResultsTallBase(SQLModel):
             description="Sub-module where the standard defines one.",
             requirements="Automatic",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15978_EN15978_2029,
         ),
     )
 
@@ -84,6 +90,7 @@ class LCAResultsTallBase(SQLModel):
             units="year",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_EN15978_ISO_21930,
         ),
     )
 
@@ -97,6 +104,7 @@ class LCAResultsTallBase(SQLModel):
             units="None",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15978_ISO14040_14044,
         ),
     )
 
@@ -110,6 +118,7 @@ class LCAResultsTallBase(SQLModel):
             units="kg",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15978_ISO14040_14044,
         ),
     )
 
@@ -123,6 +132,7 @@ class LCAResultsTallBase(SQLModel):
             units="None",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15978,
         ),
     )
 
@@ -136,6 +146,7 @@ class LCAResultsTallBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_AND_TRACI,
         ),
     )
 
@@ -149,6 +160,7 @@ class LCAResultsTallBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2,
         ),
     )
 
@@ -162,6 +174,7 @@ class LCAResultsTallBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2,
         ),
     )
 
@@ -175,6 +188,7 @@ class LCAResultsTallBase(SQLModel):
             units="kg CO₂ eq",
             requirements="Recommended",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2,
         ),
     )
 
@@ -188,6 +202,7 @@ class LCAResultsTallBase(SQLModel):
             units="kg CFC-11 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_AND_TRACI,
         ),
     )
 
@@ -201,6 +216,7 @@ class LCAResultsTallBase(SQLModel):
             units="kg SO₂ eq.",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_AND_TRACI,
         ),
     )
 
@@ -214,6 +230,7 @@ class LCAResultsTallBase(SQLModel):
             units="mol H+ eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2,
         ),
     )
 
@@ -227,6 +244,7 @@ class LCAResultsTallBase(SQLModel):
             units="kg N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI,
         ),
     )
 
@@ -240,6 +258,7 @@ class LCAResultsTallBase(SQLModel):
             units="kg PO4 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2,
         ),
     )
 
@@ -253,6 +272,7 @@ class LCAResultsTallBase(SQLModel):
             units="kg N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2,
         ),
     )
 
@@ -266,6 +286,7 @@ class LCAResultsTallBase(SQLModel):
             units="mol N eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2,
         ),
     )
 
@@ -279,6 +300,7 @@ class LCAResultsTallBase(SQLModel):
             units="kg C2H4 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1,
         ),
     )
 
@@ -292,6 +314,7 @@ class LCAResultsTallBase(SQLModel):
             units="kg O3 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.TRACI,
         ),
     )
 
@@ -305,6 +328,7 @@ class LCAResultsTallBase(SQLModel):
             units="kg NMVOC eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2,
         ),
     )
 
@@ -318,6 +342,7 @@ class LCAResultsTallBase(SQLModel):
             units="kg Sb eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_AND_EN15804_A2,
         ),
     )
 
@@ -331,6 +356,7 @@ class LCAResultsTallBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_AND_EN15804_A2,
         ),
     )
 
@@ -344,6 +370,7 @@ class LCAResultsTallBase(SQLModel):
             units="m3 world eq deprived",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2_M3_WORLD_EQ_DEPRIVED,
         ),
     )
 
@@ -357,6 +384,7 @@ class LCAResultsTallBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_AND_EN15804_A2,
         ),
     )
 
@@ -370,6 +398,7 @@ class LCAResultsTallBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_AND_EN15804_A2,
         ),
     )
 
@@ -383,6 +412,7 @@ class LCAResultsTallBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_AND_EN15804_A2,
         ),
     )
 
@@ -396,6 +426,7 @@ class LCAResultsTallBase(SQLModel):
             units="MJ",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A1_AND_EN15804_A2,
         ),
     )
 
@@ -409,6 +440,7 @@ class LCAResultsTallBase(SQLModel):
             units="disease incidence",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2,
         ),
     )
 
@@ -422,6 +454,7 @@ class LCAResultsTallBase(SQLModel):
             units="kBq U235 eq",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2,
         ),
     )
 
@@ -435,6 +468,7 @@ class LCAResultsTallBase(SQLModel):
             units="CTUe",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2,
         ),
     )
 
@@ -448,6 +482,7 @@ class LCAResultsTallBase(SQLModel):
             units="CTUh",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2,
         ),
     )
 
@@ -461,6 +496,7 @@ class LCAResultsTallBase(SQLModel):
             units="CTUh",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2,
         ),
     )
 
@@ -474,5 +510,6 @@ class LCAResultsTallBase(SQLModel):
             units="-",
             requirements="Optional",
             criticality="MAY",
+            reference_alignment=ReferenceAlignment.EN15804_A2,
         ),
     )
