@@ -1,4 +1,5 @@
-from .openbdf_enum import OpenBDFEnum
+from .openbdf_enum import OpenBDFEnum, enum_attribute
+from .references import Reference
 
 
 class Country(OpenBDFEnum):
@@ -251,3 +252,4 @@ class Country(OpenBDFEnum):
     ZMB = ("zmb", "Zambia")
     ZWE = ("zwe", "Zimbabwe")
     ALA = ("ala", "Åland Islands")
+    reference = enum_attribute(Reference.ISO_3166_1_ALPHA_3)

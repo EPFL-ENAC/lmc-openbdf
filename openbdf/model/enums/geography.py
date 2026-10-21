@@ -1,4 +1,5 @@
-from .openbdf_enum import OpenBDFEnum
+from .openbdf_enum import OpenBDFEnum, enum_attribute
+from .references import Reference
 
 
 class ClimateZone(OpenBDFEnum):
@@ -66,6 +67,7 @@ class ClimateZone(OpenBDFEnum):
     KOPPEN_GEIGER_EF = ("KoppenGeiger_EF", "KoppenGeiger_EF")
     OTHER_NATIONAL = ("Other_National", "Other_National")
     UNKNOWN = ("Unknown", "Unknown")
+    reference = enum_attribute(Reference.ANSI_ASHRAE_169_IECC_KOPPEN_GEIGER)
 
 
 class ExtendedDefaultDataBasis(OpenBDFEnum):
@@ -89,6 +91,7 @@ class ExtendedDefaultDataBasis(OpenBDFEnum):
         "Other (stated in the assessor note)",
         "stated in the assessor note",
     )
+    reference = enum_attribute(Reference.EU2026_52_ANNEX_III)
 
 
 class FEMASeismicActivity(OpenBDFEnum):
@@ -122,6 +125,7 @@ class FEMASeismicActivity(OpenBDFEnum):
         "Severe High-Risk",
         "Severe expected ground shaking in areas near major active faults for high-risk buildings.",
     )
+    reference = enum_attribute(Reference.EN_1998_FEMA_P_2082)
 
 
 class SoilType(OpenBDFEnum):
@@ -155,3 +159,4 @@ class SoilType(OpenBDFEnum):
         "Soft Clay",
         "Clay with high water content and lower shear strength compared to standard clay.",
     )
+    reference = enum_attribute(Reference.EN_1997)

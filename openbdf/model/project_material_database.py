@@ -9,6 +9,7 @@ from sqlmodel import Field, SQLModel
 from openbdf.model.draft import make_draft_model
 
 from .enums.materials import DeclaredUnit, MaterialDataType, MaterialEPDMatch
+from .enums.references import Reference
 from .field_metadata import openbdf_field_metadata
 
 
@@ -22,6 +23,7 @@ class ProjectMaterialDatabaseBase(SQLModel):
             constraint="max 200 characters",
             requirements="Automatic",
             criticality="MUST",
+            reference=Reference.BILL_OF_MATERIALS,
         ),
     )
 
@@ -33,6 +35,7 @@ class ProjectMaterialDatabaseBase(SQLModel):
             description="Material name as built. as it appears in the model or the bill of quantities.",
             requirements="Automatic",
             criticality="MUST",
+            reference=Reference.BILL_OF_MATERIALS,
         ),
     )
 
@@ -44,6 +47,7 @@ class ProjectMaterialDatabaseBase(SQLModel):
             description="Product declared in the EPD from the dataset used.",
             requirements="Automatic",
             criticality="MUST",
+            reference=Reference.BILL_OF_MATERIALS,
         ),
     )
 
@@ -55,6 +59,7 @@ class ProjectMaterialDatabaseBase(SQLModel):
             description="EPD database name. ",
             requirements="Automatic",
             criticality="MUST",
+            reference=Reference.EN_15941,
         ),
     )
 
@@ -68,6 +73,7 @@ class ProjectMaterialDatabaseBase(SQLModel):
             description="Unit to which the declared impacts refer. Example: m3 for ready-mixed concrete, kg for reinforcing steel, m2 for a membrane.",
             requirements="Optional",
             criticality="MAY",
+            reference=Reference.EN15804_A2,
         ),
     )
 
@@ -79,6 +85,7 @@ class ProjectMaterialDatabaseBase(SQLModel):
             description="Number of Bill of Materials rows using this pairing. Example: 412, meaning this material appears on 412 Bill of Materials rows.",
             requirements="Automatic",
             criticality="MUST",
+            reference=Reference.BILL_OF_MATERIALS,
         ),
     )
 
@@ -91,6 +98,7 @@ class ProjectMaterialDatabaseBase(SQLModel):
             units="kg",
             requirements="Automatic",
             criticality="MUST",
+            reference=Reference.BILL_OF_MATERIALS,
         ),
     )
 
@@ -103,6 +111,7 @@ class ProjectMaterialDatabaseBase(SQLModel):
             units="%",
             requirements="Automatic",
             criticality="MUST",
+            reference=Reference.BILL_OF_MATERIALS,
         ),
     )
 
@@ -116,6 +125,7 @@ class ProjectMaterialDatabaseBase(SQLModel):
             description="Type of construction product data behind the dataset. Example: project_specific for an EPD commissioned for this project; generic for an OKOBAUDAT average.",
             requirements="Required",
             criticality="SHOULD",
+            reference=Reference.EU2026_52_ANNEX_III_EN15804_A2,
         ),
     )
 
@@ -129,6 +139,7 @@ class ProjectMaterialDatabaseBase(SQLModel):
             description="Representativeness of the EPD against the material built. Example: same_product_group when a sectoral average covers the product.",
             requirements="Required",
             criticality="SHOULD",
+            reference=Reference.EN_15941_2024,
         ),
     )
 
@@ -141,6 +152,7 @@ class ProjectMaterialDatabaseBase(SQLModel):
             description="Free note from the assessor. Example: No EPD for the sports floor.",
             requirements="Optional",
             criticality="MAY",
+            reference=Reference.GBDI,
         ),
     )
 
@@ -153,6 +165,7 @@ class ProjectMaterialDatabaseBase(SQLModel):
             description="Form in which the product is supplied. Example: Ready-mixed, precast, sheet, roll, board, profile.",
             requirements="Optional",
             criticality="MAY",
+            reference=Reference.EN15978_2026_ISO_21930,
         ),
     )
 
@@ -165,6 +178,7 @@ class ProjectMaterialDatabaseBase(SQLModel):
             description="Declared strength class of the concrete or grade of the structural steel. Example: C25/30 for concrete, S235 for structural steel, C24 for sawn timber.",
             requirements="Optional",
             criticality="MAY",
+            reference=Reference.EN_206_EN_10025,
         ),
     )
 
@@ -178,6 +192,7 @@ class ProjectMaterialDatabaseBase(SQLModel):
             units="MPa",
             requirements="Optional",
             criticality="MAY",
+            reference=Reference.EN_206_EN_1992_1_1_EN_10025_EN_771_EN_772_1,
         ),
     )
 
@@ -190,6 +205,7 @@ class ProjectMaterialDatabaseBase(SQLModel):
             description="Environmental exposure class of the concrete, stated with its standard. Example: XC3 for carbonation, XD1 for chlorides. EN 206 notation.",
             requirements="Optional",
             criticality="MAY",
+            reference=Reference.EN_206_ACI_318_CSA_A23_1,
         ),
     )
 
@@ -202,6 +218,7 @@ class ProjectMaterialDatabaseBase(SQLModel):
             description="Type of cement in the product. Example: CEM II/B-S 42,5 N. EN 197-1 notation.",
             requirements="Optional",
             criticality="MAY",
+            reference=Reference.EN_197_1,
         ),
     )
 
@@ -214,6 +231,7 @@ class ProjectMaterialDatabaseBase(SQLModel):
             description="Grade of the reinforcing steel, as designated in the national product standard. Example: B500B.",
             requirements="Optional",
             criticality="MAY",
+            reference=Reference.EN_1992_1_1_ANNEX_C,
         ),
     )
 
@@ -227,6 +245,7 @@ class ProjectMaterialDatabaseBase(SQLModel):
             units="kg/m3",
             requirements="Optional",
             criticality="MAY",
+            reference=Reference.EN15978_2026_EUROCODE_2_EN_1992,
         ),
     )
 
@@ -240,6 +259,7 @@ class ProjectMaterialDatabaseBase(SQLModel):
             units="%",
             requirements="Optional",
             criticality="MAY",
+            reference=Reference.ISO_14021_2016,
         ),
     )
 
@@ -252,6 +272,7 @@ class ProjectMaterialDatabaseBase(SQLModel):
             description="Production route of the material. Example: Electric arc furnace for steel; clinker substitution with blast furnace slag for cement.",
             requirements="Optional",
             criticality="MAY",
+            reference=Reference.EN15804_A2,
         ),
     )
 
@@ -265,6 +286,7 @@ class ProjectMaterialDatabaseBase(SQLModel):
             units="W/(m·K)",
             requirements="Optional",
             criticality="MAY",
+            reference=Reference.EN_ISO_10456,
         ),
     )
 
@@ -278,6 +300,7 @@ class ProjectMaterialDatabaseBase(SQLModel):
             units="kg C per declared unit",
             requirements="Optional",
             criticality="MAY",
+            reference=Reference.EN15804_A2_EN_16449,
         ),
     )
 
@@ -290,6 +313,7 @@ class ProjectMaterialDatabaseBase(SQLModel):
             description="End-of-life route of the material. Example: Concrete crushed and used as aggregate, C3 recycling with 5 per cent to landfill in C4.",
             requirements="Optional",
             criticality="MAY",
+            reference=Reference.EN15978_2026,
         ),
     )
 
