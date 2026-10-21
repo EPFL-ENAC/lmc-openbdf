@@ -7,6 +7,7 @@ from openbdf.lib.converters.dataframe import project_draft_package_from_tables, 
 from openbdf.lib.converters.translators import DocumentTranslator
 from openbdf.lib.openbdf_tables import OpenBDFTables
 from openbdf.lib.sources.excel_source import DuplicateSheetNamesError, ExcelSheetSource
+from openbdf.lib.validation import OpenBDFValidationErrors, check_declared_results, format_findings
 
 app = typer.Typer(help="CLI utilities for the project.")
 
@@ -141,6 +142,16 @@ def open(
         if draft
         else project_package_from_tables(tables, document_translator, drop_invalid=drop_invalid_materials)
     )
+
+    try:
+        findings = check_declared_results(project, draft=draft)
+    except OpenBDFValidationErrors as exc:
+        for line in format_findings(exc.findings):
+            typer.echo(line, err=True)
+        raise typer.Exit(code=1) from exc
+
+    for line in format_findings(findings):
+        typer.echo(line, err=True)
 
     # Draft and strict records expose the same fields used by the existing exporter.
     save_openbdf_to_xlsx(  # type: ignore[arg-type]
