@@ -11,6 +11,7 @@ from openbdf.model.draft import make_draft_model
 from .enums.buildings import AboveBelowGround
 from .enums.element_classifications import OpenBDFBuildingElementClassification
 from .enums.materials import MaterialDataType, MaterialEPDMatch, OpenBDFMaterialClassification
+from .enums.references import Reference
 from .field_metadata import openbdf_field_metadata
 
 
@@ -26,6 +27,7 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
             "Example: MAT-2. One row from the Bill of Materials and the key that the result rows connect on.",
             requirements="Automatic",
             criticality="MUST",
+            reference=Reference.GBDI,
         ),
     )
 
@@ -104,6 +106,7 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
             description="Hierarchical category of the custom or national building element classification.",
             requirements="Required",
             criticality="SHOULD",
+            reference=Reference.NATIONAL_ELEMENT_CLASSIFICATION_BEC_TRANSLATOR,
         ),
     )
 
@@ -132,6 +135,7 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
             "Example: 1.1 for foundations and piling, 2.1 for the frame.",
             requirements="Recommended",
             criticality="SHOULD",
+            reference=Reference.REGULATION_EU_2026_52_ANNEX_III_TABLE_4,
         ),
     )
 
@@ -186,6 +190,7 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
             description="The corresponding material classification from the standardized openBDF taxonomy. Example: Concrete, ready-mixed.",
             requirements="Recommended",
             criticality="SHOULD",
+            reference=Reference.INDICATE_BUILDING_MATERIAL_CLASSIFICATION,
         ),
     )
 
@@ -224,6 +229,7 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
             description="Name of the database.",
             requirements="Recommended",
             criticality="SHOULD",
+            reference=Reference.EN_15941_2024,
         ),
     )
 
@@ -252,6 +258,7 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
             description="Type of dataset in the data hierarchy.",
             requirements="Automatic",
             criticality="MAY",
+            reference=Reference.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -265,6 +272,7 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
             description="How the declared product relates to the material built.",
             requirements="Automatic",
             criticality="MAY",
+            reference=Reference.EN_15941_2024,
         ),
     )
 
@@ -278,6 +286,7 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
             units="years",
             requirements="Required",
             criticality="SHOULD",
+            reference=Reference.ISO_15686_EN15978_2026,
         ),
     )
 
@@ -291,6 +300,7 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
             units="years",
             requirements="Optional",
             criticality="MAY",
+            reference=Reference.EN15978_2026,
         ),
     )
 
@@ -305,6 +315,7 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
             constraint="None",
             requirements="Optional",
             criticality="MAY",
+            reference=Reference.EN15978_2026_EU2026_52_ANNEX_III,
         ),
     )
 

@@ -107,6 +107,10 @@ DISABLED_STYLE = NamedStyle(
 ModelT = TypeVar("ModelT", bound=SQLModel)
 ModelT2 = TypeVar("ModelT2", bound=SQLModel)
 
+# Row 9 of the horizontal sheets and column L of General Information hold the reference
+# or the reference alignment of the field, depending on the sheet.
+REFERENCE_LABELS = {"reference": "Reference", "reference_alignment": "Reference Alignment"}
+
 # Canonical TypeDefinitions column order for the template export.
 TEMPLATE_TYPE_DEFINITIONS: tuple[type, ...] = (
     RecordType,
@@ -280,6 +284,7 @@ def save_openbdf_to_xlsx(
             BuildingBillMaterialsSlimRecordBase,
             bom_sheet_name,
             enum_registry,
+            reference_attribute="reference",
         )
         wide_to_xlsx(
             writer,
@@ -287,6 +292,7 @@ def save_openbdf_to_xlsx(
             ProjectMaterialDatabaseBase,
             project_material_database_sheet_name,
             enum_registry,
+            reference_attribute="reference",
         )
         wide_to_xlsx(
             writer,
@@ -296,6 +302,7 @@ def save_openbdf_to_xlsx(
             LCAResultsWideFullBase,
             results_wide_sheet_name,
             enum_registry,
+            reference_attribute="reference_alignment",
         )
         wide_to_xlsx(
             writer,
@@ -310,6 +317,7 @@ def save_openbdf_to_xlsx(
             LCAResultsTallBase,
             results_tall_sheet_name,
             enum_registry,
+            reference_attribute="reference_alignment",
         )
 
         enum_registry.to_xlsx(writer)
@@ -379,6 +387,10 @@ def info_to_xlsx(writer: pd.ExcelWriter, project: ProjectRecord | None, sheet_na
         criticality = extra.get("criticality", "SHOULD")
         info_sheet.cell(row=cell_row, column=10, value=criticality)
 
+        reference = extra.get("reference")
+        ref = info_sheet.cell(row=cell_row, column=12, value=reference or "")
+        ref.style = INFO_STYLE.name if reference else DISABLED_STYLE.name
+
         v = info_sheet.cell(row=cell_row, column=11, value=getattr(project, field_code) if project else "")
         v.style = EDITABLE_VALUE_STYLE.name
 
@@ -413,6 +425,8 @@ def info_to_xlsx(writer: pd.ExcelWriter, project: ProjectRecord | None, sheet_na
     fc.style = ATTRIBUTES_NAME_STYLE.name
     fc = info_sheet.cell(row=1, column=11, value="Value")
     fc.style = ATTRIBUTES_NAME_STYLE.name
+    fc = info_sheet.cell(row=1, column=12, value="Reference")
+    fc.style = ATTRIBUTES_NAME_STYLE.name
 
     info_sheet.column_dimensions["A"].width = 10
     info_sheet.column_dimensions["B"].width = 20
@@ -425,8 +439,7 @@ def info_to_xlsx(writer: pd.ExcelWriter, project: ProjectRecord | None, sheet_na
     info_sheet.column_dimensions["I"].width = 15
     info_sheet.column_dimensions["J"].width = 15
     info_sheet.column_dimensions["K"].width = 25
-    # Reference alignment position (v2.0.0): column stays present but empty.
-    info_sheet.column_dimensions["L"].width = 20
+    info_sheet.column_dimensions["L"].width = 40
 
 
 def wide_to_xlsx(
@@ -435,6 +448,7 @@ def wide_to_xlsx(
     model_cls: type[ModelT2],
     sheet_name: str,
     enum_registry: EnumRegistry,
+    reference_attribute: str,
     min_rows: int = 100,
 ):
     if records is None:
@@ -504,7 +518,9 @@ def wide_to_xlsx(
         criticality = extra.get("criticality", "SHOULD")
         sheet.cell(row=8, column=cell_column, value=criticality)
 
-        # Reference alignment position (v2.0.0): row 9 stays present but empty.
+        reference = extra.get(reference_attribute)
+        ref = sheet.cell(row=9, column=cell_column, value=reference or "")
+        ref.style = INFO_STYLE.name if reference else DISABLED_STYLE.name
 
         dv = xlsx_validation_from_type(data_type, is_optional, metadata, enum_registry)  # type: ignore[arg-type]
         if dv:
@@ -533,7 +549,8 @@ def wide_to_xlsx(
     cr.style = ROW_HEADER_STYLE.name
     ct = sheet.cell(row=8, column=1, value="Criticality")
     ct.style = ROW_HEADER_STYLE.name
-    # Reference alignment position (v2.0.0): row 9 stays present but empty.
+    rf = sheet.cell(row=9, column=1, value=REFERENCE_LABELS[reference_attribute])
+    rf.style = ROW_HEADER_STYLE.name
 
     last_col = len(df.columns) + 1
     start_data_row = 10

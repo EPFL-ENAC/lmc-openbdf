@@ -1,4 +1,5 @@
-from .openbdf_enum import OpenBDFEnum
+from .openbdf_enum import OpenBDFEnum, enum_attribute
+from .references import Reference
 
 
 class BuildingTypology(OpenBDFEnum):
@@ -11,6 +12,7 @@ class BuildingTypology(OpenBDFEnum):
     HEA = ("hea", "Health (HEA)")
     HOR = ("hor", "Hotels and Restaurants (HOR)")
     OTH = ("oth", "Other non-residential buildings (OTH)")
+    reference = enum_attribute(Reference.EN15978_2026)
 
 
 class BuildingElementClassificationTier(OpenBDFEnum):
@@ -34,6 +36,7 @@ class BuildingElementClassificationTier(OpenBDFEnum):
         "Element Class (Tier 4): The quaternary (lowest-level) hierarchical category of the custom or national building element classification.",
         "The quaternary (lowest-level) hierarchical category of the custom or national building element classification.",
     )
+    reference = enum_attribute(Reference.EU2026_52_ANNEX_III)
 
 
 class BuildingClassificationCode(OpenBDFEnum):
@@ -132,6 +135,7 @@ class BuildingClassificationCode(OpenBDFEnum):
         "INT - ISO 12006-2 (international framework)",
         "International framework for classification of construction objects.",
     )
+    reference = enum_attribute(Reference.ISO_12006_3_2022)
 
 
 class RoofType(OpenBDFEnum):
@@ -144,6 +148,7 @@ class RoofType(OpenBDFEnum):
 class AboveBelowGround(OpenBDFEnum):
     ABOVE = ("above", "Above ground")
     BELOW = ("below", "Below ground")
+    reference = enum_attribute(Reference.ISO_9836_2017)
 
 
 class BuildingFacingDirection(OpenBDFEnum):
@@ -155,6 +160,7 @@ class BuildingFacingDirection(OpenBDFEnum):
     NORTH_WEST = ("NW", "Northwest", "Northwest-facing")
     SOUTH_EAST = ("SE", "Southeast", "Southeast-facing")
     SOUTH_WEST = ("SW", "Southwest", "Southwest-facing")
+    reference = enum_attribute(Reference.ISO_6709_2022)
 
 
 class FoundationType(OpenBDFEnum):
@@ -252,8 +258,10 @@ class FoundationType(OpenBDFEnum):
         "Specialized Foundations - Soil‑Specific Foundations (Clay, Sand, Silt, Rock) according to IBC Chapter 18.",
     )
 
+    # Gross Floor Area (GFA) Measurement Methods
+    reference = enum_attribute(Reference.EN_1997)
 
-# Gross Floor Area (GFA) Measurement Methods
+
 class GFAMeasurementMethod(OpenBDFEnum):
     IPMS = (
         "ipms",
@@ -295,6 +303,7 @@ class GFAMeasurementMethod(OpenBDFEnum):
     IPMS_2 = ("ipms_2", "IPMS 2 (building excluding external walls)")
     IPMS_3_1 = ("ipms_3_1", "IPMS 3.1 (occupier level, external)")
     IPMS_3_2 = ("ipms_3_2", "IPMS 3.2 (occupier level, internal)")
+    reference = enum_attribute(Reference.ISO_9836_2017_IPMS_ALL_BUILDINGS_EU2026_52_ANNEX_III)
 
 
 class BuildingStructureType(OpenBDFEnum):
@@ -322,6 +331,7 @@ class BuildingStructureType(OpenBDFEnum):
     MIXED_CONCRETE_MASONRY = ("Mixed_ConcreteMasonry", "Mixed_ConcreteMasonry")
     MIXED_OTHER = ("Mixed_Other", "Mixed_Other")
     OTHER_UNKNOWN = ("Other_Unknown", "Other_Unknown")
+    reference = enum_attribute(Reference.EN_1992_EN_1993_EN_1995_EN_1996)
 
 
 class SharedComponentAllocationRule(OpenBDFEnum):
@@ -350,6 +360,7 @@ class SharedComponentAllocationRule(OpenBDFEnum):
         "other (a national rule, stated in the assessor note)",
         "a national rule, stated in the assessor note",
     )
+    reference = enum_attribute(Reference.EU2026_52_ANNEX_III)
 
 
 class FloorAreaInclusions(OpenBDFEnum):
@@ -368,6 +379,7 @@ class FloorAreaInclusions(OpenBDFEnum):
     TECHNICAL_SPACE = ("technical_space", "Technical space")
     ANCILLARY_EXTERNAL_BUILDINGS = ("ancillary_external_buildings", "Ancillary external buildings")
     NONE_OF_THE_ABOVE = ("none_of_the_above", "None of the above")
+    reference = enum_attribute(Reference.EU2026_52_ANNEX_III)
 
 
 class GrossFloorAreaStandard(OpenBDFEnum):
@@ -495,3 +507,4 @@ class GrossFloorAreaStandard(OpenBDFEnum):
         "ura_singapore",
         "URA (Singapore), Gross Floor Area (GFA)",
     )
+    reference = enum_attribute(Reference.ISO_9836_2017_IPMS_ONORM_B_1800_DIN_277_SIA_416)
