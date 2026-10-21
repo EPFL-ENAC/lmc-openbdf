@@ -10,9 +10,7 @@ import pytest
 from pydantic import BaseModel
 
 from openbdf.lib.converters.dataframe import (
-    bom_draft_from_dataframe,
     bom_from_dataframe,
-    project_draft_package_from_tables,
     project_package_from_tables,
 )
 from openbdf.lib.openbdf_tables import OpenBDFTables
@@ -22,7 +20,7 @@ from openbdf.model.building_bill_materials_slim import BuildingBillMaterialsSlim
 from openbdf.model.general_info import ProjectRecordBase
 from openbdf.model.lca_results_full_tall import LCAResultsTallBase
 from openbdf.model.lca_results_full_wide import LCAResultsWideFullBase
-from openbdf.model.project_material_database import ProjectMaterialDatabaseBase, ProjectMaterialDatabaseBaseDraft
+from openbdf.model.project_material_database import ProjectMaterialDatabaseBase
 
 
 def value_for_annotation(annotation: Any) -> Any:
@@ -163,13 +161,13 @@ def test_project_package_from_tables_reports_a_missing_project_material_database
         project_package_from_tables(tables_without_project_material_database(bom))
 
 
-def test_project_draft_package_from_tables_generates_lines_when_the_sheet_is_missing():
+def test_project_package_from_tables_in_draft_mode_generates_lines_when_the_sheet_is_missing():
     bom = pd.DataFrame([
         bom_row("MAT-1", custom_material_name="Concrete", material_weight_kg="100"),
         bom_row("MAT-2", custom_material_name="Wood", material_weight_kg="50"),
     ])
 
-    project = project_draft_package_from_tables(tables_without_project_material_database(bom))
+    project = project_package_from_tables(tables_without_project_material_database(bom), draft=True)
 
     assert [
         (record.custom_material_name, record.material_ref_id, record.bom_row_count)
@@ -199,8 +197,8 @@ def test_bom_from_dataframe_drop_invalid_keeps_rows_missing_material_reference_s
     assert [item.material_id for item in result] == ["mat-1", "mat-2"]
 
 
-def test_bom_draft_from_dataframe_drop_invalid_keeps_rows_missing_material_reference_service_life():
-    result = bom_draft_from_dataframe(bom_df("mat-1", "mat-2"), drop_invalid=True)
+def test_bom_from_dataframe_in_draft_mode_drop_invalid_keeps_rows_missing_material_reference_service_life():
+    result = bom_from_dataframe(bom_df("mat-1", "mat-2"), drop_invalid=True, draft=True)
 
     assert [item.material_id for item in result] == ["mat-1", "mat-2"]
 
@@ -231,8 +229,8 @@ def test_project_package_from_tables_drop_invalid_drops_missing_required():
     assert [b.material_id for b in project.bill_of_materials] == ["mat-1"]
 
 
-def test_bom_draft_from_dataframe_allows_missing_material_reference_service_life():
-    records = bom_draft_from_dataframe(bom_df("mat-1"))
+def test_bom_from_dataframe_in_draft_mode_allows_missing_material_reference_service_life():
+    records = bom_from_dataframe(bom_df("mat-1"), draft=True)
 
     assert len(records) == 1
     assert records[0].material_reference_service_life is None
@@ -387,7 +385,7 @@ def test_project_package_from_tables_allows_empty_material_ref_ids_under_a_group
     assert [record.custom_material_name for record in project.project_material_database] == ["Concrete"]
 
 
-def test_project_draft_package_from_tables_adds_missing_project_material_database_lines():
+def test_project_package_from_tables_in_draft_mode_adds_missing_project_material_database_lines():
     bom = pd.DataFrame([
         bom_row("MAT-1", custom_material_name="Concrete", material_ref_id="M0001"),
         bom_row("MAT-2", custom_material_name="Wood", material_ref_id="M0003"),
@@ -395,7 +393,7 @@ def test_project_draft_package_from_tables_adds_missing_project_material_databas
     ])
     pmd = pd.DataFrame([project_material_database_row("M0001", "Concrete")])
 
-    project = project_draft_package_from_tables(tables(bom, project_material_database=pmd))
+    project = project_package_from_tables(tables(bom, project_material_database=pmd), draft=True)
 
     lines = project.project_material_database
     assert [(record.custom_material_name, record.material_ref_id) for record in lines] == [
@@ -403,16 +401,16 @@ def test_project_draft_package_from_tables_adds_missing_project_material_databas
         ("Wood", "M0004"),
         ("Glass", "M0005"),
     ]
-    assert all(isinstance(record, ProjectMaterialDatabaseBaseDraft) for record in lines)
+    assert all(isinstance(record, ProjectMaterialDatabaseBase) for record in lines)
 
 
-def test_project_draft_package_from_tables_generates_lines_from_an_empty_project_material_database():
+def test_project_package_from_tables_in_draft_mode_generates_lines_from_an_empty_project_material_database():
     bom = pd.DataFrame([
         bom_row("MAT-1", custom_material_name="Concrete", material_weight_kg="100"),
         bom_row("MAT-2", custom_material_name="Wood", material_weight_kg="50"),
     ])
 
-    project = project_draft_package_from_tables(tables(bom, project_material_database=pd.DataFrame()))
+    project = project_package_from_tables(tables(bom, project_material_database=pd.DataFrame()), draft=True)
 
     lines = project.project_material_database
     assert [(record.custom_material_name, record.material_ref_id) for record in lines] == [
@@ -421,12 +419,12 @@ def test_project_draft_package_from_tables_generates_lines_from_an_empty_project
     ]
     assert lines[0].material_mass_kg == Decimal("100")
     assert lines[1].material_mass_kg == Decimal("50")
-    assert all(isinstance(record, ProjectMaterialDatabaseBaseDraft) for record in lines)
+    assert all(isinstance(record, ProjectMaterialDatabaseBase) for record in lines)
     refs = {record.material_id: record.material_ref_id for record in project.bill_of_materials}
     assert refs == {"MAT-1": "M0001", "MAT-2": "M0002"}
 
 
-def test_project_draft_package_from_tables_keeps_existing_project_material_database_lines():
+def test_project_package_from_tables_in_draft_mode_keeps_existing_project_material_database_lines():
     bom = pd.DataFrame([
         bom_row("MAT-1", custom_material_name="Concrete", material_ref_id="M0001", material_weight_kg="123"),
         bom_row("MAT-2", custom_material_name="Wood"),
@@ -436,7 +434,7 @@ def test_project_draft_package_from_tables_keeps_existing_project_material_datab
         {"material_ref_id": "…", "custom_material_name": "…"},
     ])
 
-    project = project_draft_package_from_tables(tables(bom, project_material_database=pmd))
+    project = project_package_from_tables(tables(bom, project_material_database=pmd), draft=True)
 
     lines = project.project_material_database
     assert [record.custom_material_name for record in lines] == ["Concrete", "…", "Wood"]
@@ -452,7 +450,7 @@ def test_project_draft_package_from_tables_keeps_existing_project_material_datab
     assert wood.material_ref_id == "M0002"
 
 
-def test_project_draft_package_from_tables_back_fills_material_ref_ids():
+def test_project_package_from_tables_in_draft_mode_back_fills_material_ref_ids():
     bom = pd.DataFrame([
         bom_row("MAT-1", custom_material_name="Concrete", material_ref_id="M0001"),
         bom_row("MAT-2", custom_material_name="Concrete", material_ref_id="M0002"),
@@ -461,7 +459,7 @@ def test_project_draft_package_from_tables_back_fills_material_ref_ids():
     ])
     pmd = pd.DataFrame([project_material_database_row("M0001", "Concrete")])
 
-    project = project_draft_package_from_tables(tables(bom, project_material_database=pmd))
+    project = project_package_from_tables(tables(bom, project_material_database=pmd), draft=True)
 
     refs = {record.material_id: record.material_ref_id for record in project.bill_of_materials}
     assert refs["MAT-1"] == "M0001"
@@ -470,7 +468,7 @@ def test_project_draft_package_from_tables_back_fills_material_ref_ids():
     assert refs["MAT-4"] == "M0098"
 
 
-def test_project_draft_package_from_tables_generates_line_values_from_the_bom():
+def test_project_package_from_tables_in_draft_mode_generates_line_values_from_the_bom():
     bom = pd.DataFrame([
         bom_row("MAT-1", custom_material_name="Concrete", material_weight_kg="100"),
         bom_row(
@@ -490,7 +488,7 @@ def test_project_draft_package_from_tables_generates_line_values_from_the_bom():
     ])
     pmd = pd.DataFrame([project_material_database_row("M0001", "Concrete", material_mass_kg="999")])
 
-    project = project_draft_package_from_tables(tables(bom, project_material_database=pmd))
+    project = project_package_from_tables(tables(bom, project_material_database=pmd), draft=True)
 
     concrete = project.project_material_database[0]
     wood = project.project_material_database[1]
@@ -503,14 +501,14 @@ def test_project_draft_package_from_tables_generates_line_values_from_the_bom():
     assert concrete.material_mass_kg == Decimal("100")
 
 
-def test_project_draft_package_from_tables_ignores_rows_without_a_material_name():
+def test_project_package_from_tables_in_draft_mode_ignores_rows_without_a_material_name():
     bom = pd.DataFrame([
         bom_row("MAT-1", custom_material_name="Concrete", material_weight_kg="100"),
         bom_row("MAT-2", custom_material_name=None, material_ref_id="M0099", material_weight_kg="500"),
     ])
     pmd = pd.DataFrame([{"material_ref_id": "…", "custom_material_name": "…"}])
 
-    project = project_draft_package_from_tables(tables(bom, project_material_database=pmd))
+    project = project_package_from_tables(tables(bom, project_material_database=pmd), draft=True)
 
     lines = project.project_material_database
     assert [record.custom_material_name for record in lines] == ["…", "Concrete"]
@@ -524,7 +522,7 @@ def test_project_draft_package_from_tables_ignores_rows_without_a_material_name(
     assert refs["MAT-2"] == "M0099"
 
 
-def test_project_draft_package_from_tables_splits_one_material_name_by_epd_dataset():
+def test_project_package_from_tables_in_draft_mode_splits_one_material_name_by_epd_dataset():
     bom = pd.DataFrame([
         bom_row(
             "MAT-1",
@@ -546,7 +544,7 @@ def test_project_draft_package_from_tables_splits_one_material_name_by_epd_datas
         ),
     ])
 
-    project = project_draft_package_from_tables(tables(bom, project_material_database=pd.DataFrame()))
+    project = project_package_from_tables(tables(bom, project_material_database=pd.DataFrame()), draft=True)
 
     lines = project.project_material_database
     assert [(line.lca_dataset_material_name, line.material_ref_id) for line in lines] == [
@@ -565,14 +563,14 @@ def test_project_draft_package_from_tables_splits_one_material_name_by_epd_datas
     assert refs == ["M0001", "M0002", "M0001"]
 
 
-def test_project_draft_package_from_tables_treats_blank_epd_datasets_as_one_material():
+def test_project_package_from_tables_in_draft_mode_treats_blank_epd_datasets_as_one_material():
     bom = pd.DataFrame([
         bom_row("MAT-1", custom_material_name="Kies", lca_dataset_material_name=None, material_weight_kg="100"),
         bom_row("MAT-2", custom_material_name="Kies", lca_dataset_material_name="", material_weight_kg="100"),
         bom_row("MAT-3", custom_material_name="Kies", lca_dataset_material_name="   ", material_weight_kg="100"),
     ])
 
-    project = project_draft_package_from_tables(tables(bom, project_material_database=pd.DataFrame()))
+    project = project_package_from_tables(tables(bom, project_material_database=pd.DataFrame()), draft=True)
 
     lines = project.project_material_database
     assert len(lines) == 1
@@ -585,7 +583,7 @@ def test_project_draft_package_from_tables_treats_blank_epd_datasets_as_one_mate
     assert [record.material_ref_id for record in project.bill_of_materials] == ["M0001", "M0001", "M0001"]
 
 
-def test_project_draft_package_from_tables_matches_material_pairs_ignoring_case_and_spaces():
+def test_project_package_from_tables_in_draft_mode_matches_material_pairs_ignoring_case_and_spaces():
     bom = pd.DataFrame([
         bom_row(
             "MAT-1",
@@ -601,7 +599,7 @@ def test_project_draft_package_from_tables_matches_material_pairs_ignoring_case_
         ),
     ])
 
-    project = project_draft_package_from_tables(tables(bom, project_material_database=pd.DataFrame()))
+    project = project_package_from_tables(tables(bom, project_material_database=pd.DataFrame()), draft=True)
 
     lines = project.project_material_database
     assert len(lines) == 1
@@ -613,7 +611,7 @@ def test_project_draft_package_from_tables_matches_material_pairs_ignoring_case_
     assert [record.material_ref_id for record in project.bill_of_materials] == ["M0001", "M0001"]
 
 
-def test_project_draft_package_from_tables_recomputes_automatic_fields_of_a_matched_line():
+def test_project_package_from_tables_in_draft_mode_recomputes_automatic_fields_of_a_matched_line():
     bom = pd.DataFrame([
         bom_row("MAT-1", custom_material_name="Kies", material_ref_id="M0001", material_weight_kg="100"),
         bom_row("MAT-2", custom_material_name="Kies", material_ref_id="M0001", material_weight_kg="200"),
@@ -622,7 +620,7 @@ def test_project_draft_package_from_tables_recomputes_automatic_fields_of_a_matc
         project_material_database_row("M0001", "Kies", bom_row_count=99, material_mass_kg="1", material_mass_share="1"),
     ])
 
-    project = project_draft_package_from_tables(tables(bom, project_material_database=pmd))
+    project = project_package_from_tables(tables(bom, project_material_database=pmd), draft=True)
 
     lines = project.project_material_database
     assert len(lines) == 1
@@ -633,7 +631,7 @@ def test_project_draft_package_from_tables_recomputes_automatic_fields_of_a_matc
     assert line.material_mass_share == Decimal("100")
 
 
-def test_project_draft_package_from_tables_keeps_an_unmatched_line_and_generates_one_for_the_bom_pair():
+def test_project_package_from_tables_in_draft_mode_keeps_an_unmatched_line_and_generates_one_for_the_bom_pair():
     bom = pd.DataFrame([
         bom_row("MAT-1", custom_material_name="Kies", lca_dataset_material_name=None, material_weight_kg="100"),
     ])
@@ -648,7 +646,7 @@ def test_project_draft_package_from_tables_keeps_an_unmatched_line_and_generates
         ),
     ])
 
-    project = project_draft_package_from_tables(tables(bom, project_material_database=pmd))
+    project = project_package_from_tables(tables(bom, project_material_database=pmd), draft=True)
 
     lines = project.project_material_database
     assert [(line.custom_material_name, line.material_ref_id) for line in lines] == [
@@ -667,7 +665,7 @@ def test_project_draft_package_from_tables_keeps_an_unmatched_line_and_generates
     assert [record.material_ref_id for record in project.bill_of_materials] == ["M0002"]
 
 
-def test_project_draft_package_from_tables_ignores_rows_with_a_dataset_but_no_material_name():
+def test_project_package_from_tables_in_draft_mode_ignores_rows_with_a_dataset_but_no_material_name():
     bom = pd.DataFrame([
         bom_row("MAT-1", custom_material_name="Kies", material_weight_kg="100"),
         bom_row(
@@ -684,7 +682,7 @@ def test_project_draft_package_from_tables_ignores_rows_with_a_dataset_but_no_ma
         ),
     ])
 
-    project = project_draft_package_from_tables(tables(bom, project_material_database=pd.DataFrame()))
+    project = project_package_from_tables(tables(bom, project_material_database=pd.DataFrame()), draft=True)
 
     lines = project.project_material_database
     assert [(line.custom_material_name, line.material_ref_id, line.bom_row_count) for line in lines] == [
@@ -718,14 +716,14 @@ def test_project_package_from_tables_reports_a_dataset_mismatch_as_missing_and_o
     ) in message
 
 
-def test_project_draft_package_from_tables_counts_a_missing_floor_repetition_once_and_a_zero_never():
+def test_project_package_from_tables_in_draft_mode_counts_a_missing_floor_repetition_once_and_a_zero_never():
     bom = pd.DataFrame([
         bom_row("MAT-1", custom_material_name="Kies", material_weight_kg="100"),
         bom_row("MAT-2", custom_material_name="Kies", material_weight_kg="100", floor_repetition=None),
         bom_row("MAT-3", custom_material_name="Kies", material_weight_kg="100", floor_repetition=0),
     ])
 
-    project = project_draft_package_from_tables(tables(bom, project_material_database=pd.DataFrame()))
+    project = project_package_from_tables(tables(bom, project_material_database=pd.DataFrame()), draft=True)
 
     lines = project.project_material_database
     assert len(lines) == 1
