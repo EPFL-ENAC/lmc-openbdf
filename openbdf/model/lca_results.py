@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import Callable
 
 from openbdf.model.enums.lca import LCAStageOrModuleOrSubModule
+from openbdf.model.enums.references import ReferenceAlignment
 
 
 @dataclass(frozen=True)
@@ -23,9 +24,16 @@ class LCAResultIndicator:
     attribute_name: str
     units: str
     requirements: str
+    # Reference alignment of the wide stage columns and of the tall field. Both sheets
+    # cite the same standard in different words, so each one carries its own value.
+    wide_alignment: ReferenceAlignment
+    tall_alignment: ReferenceAlignment
     description: str | None = None
     required_in_wide: bool = False
     criticality: str = "MAY"
+    # Alignment of the b8, d1, d2 and total columns, which most indicators align with the
+    # regulation only. Five indicators align these columns with TRACI as well.
+    wide_total_alignment: ReferenceAlignment = ReferenceAlignment.EU2026_52_ANNEX_III
     # Wide-sheet label and description overrides reproduced from the target workbook:
     # some indicators label every stage column (and the total column) with a fixed
     # attribute instead of '<attribute> (<stage>)', and some use a fixed description.
@@ -90,6 +98,28 @@ OPTIONAL_STAGE_SUFFIXES = (
     "b8_3",
 )
 
+# Reference alignment of the sub-module columns. Only gwp_total carries them.
+SUB_MODULE_ALIGNMENTS: dict[str, ReferenceAlignment] = {
+    "a5_1": ReferenceAlignment.TRACI,
+    "a5_2": ReferenceAlignment.TRACI,
+    "a5_3": ReferenceAlignment.TRACI,
+    "a5_4": ReferenceAlignment.TRACI,
+    "b1_1": ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
+    "b1_2": ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
+    "b6_1": ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
+    "b6_2": ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
+    "b6_3": ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
+    "b7_1": ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
+    "b7_2": ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
+    "b7_3": ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
+    "b8_1": ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
+    "b8_2": ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
+    "b8_3": ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
+}
+
+# Stage columns that report an indicator total instead of a single stage.
+TOTAL_STAGE_SUFFIXES = ("b8", "d1", "d2")
+
 # Stage columns of the gwp_total indicator, which additionally carries the sub-module
 # columns of the target workbook, inserted directly after their parent module.
 GWP_TOTAL_STAGES: tuple[tuple[LCAStageOrModuleOrSubModule, str], ...] = (
@@ -140,6 +170,9 @@ INDICATORS: tuple[LCAResultIndicator, ...] = (
         attribute_name="Global Warming Potential - Total",
         units="kg CO₂ eq",
         requirements="Recommended",
+        wide_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
+        tall_alignment=ReferenceAlignment.EN15804_A1_A2_AND_TRACI,
+        wide_total_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         required_in_wide=True,
     ),
     LCAResultIndicator(
@@ -147,24 +180,33 @@ INDICATORS: tuple[LCAResultIndicator, ...] = (
         attribute_name="Global Warming Potential - Fossil",
         units="kg CO₂ eq",
         requirements="Recommended",
+        wide_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
+        tall_alignment=ReferenceAlignment.EN15804_A2,
     ),
     LCAResultIndicator(
         code="gwp_b",
         attribute_name="Global Warming Potential - Biogenic",
         units="kg CO₂ eq",
         requirements="Recommended",
+        wide_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
+        tall_alignment=ReferenceAlignment.EN15804_A2,
     ),
     LCAResultIndicator(
         code="gwp_luc",
         attribute_name="Global Warming Potential - Land Use and Land Use Change",
         units="kg CO₂ eq",
         requirements="Recommended",
+        wide_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
+        tall_alignment=ReferenceAlignment.EN15804_A2,
     ),
     LCAResultIndicator(
         code="odp",
         attribute_name="Ozone Depletion Potential",
         units="kg CFC-11 eq",
         requirements="Optional",
+        wide_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
+        tall_alignment=ReferenceAlignment.EN15804_A1_A2_AND_TRACI,
+        wide_total_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         description="Ozone Depletion Potential",
     ),
     LCAResultIndicator(
@@ -172,12 +214,17 @@ INDICATORS: tuple[LCAResultIndicator, ...] = (
         attribute_name="Acidification Potential",
         units="kg SO₂ eq.",
         requirements="Optional",
+        wide_alignment=ReferenceAlignment.EN15804_A1_TRACI_EU2026_52_ANNEX_III,
+        tall_alignment=ReferenceAlignment.EN15804_A1_AND_TRACI,
+        wide_total_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
     ),
     LCAResultIndicator(
         code="ap_ae",
         attribute_name="Acidification Potential - Accumulated Exceedance",
         units="mol H+ eq",
         requirements="Optional",
+        wide_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
+        tall_alignment=ReferenceAlignment.EN15804_A2,
         description="Acidification Potential.",
         wide_description="Acidification Potential (accumulated exceedance)",
     ),
@@ -186,12 +233,17 @@ INDICATORS: tuple[LCAResultIndicator, ...] = (
         attribute_name="Eutrophication Potential",
         units="kg N eq",
         requirements="Optional",
+        wide_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
+        tall_alignment=ReferenceAlignment.TRACI,
+        wide_total_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
     ),
     LCAResultIndicator(
         code="ep_af",
         attribute_name="Eutrophication Potential - Aquatic Freshwater",
         units="kg PO4 eq",
         requirements="Optional",
+        wide_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
+        tall_alignment=ReferenceAlignment.EN15804_A2,
         description="Eutrophication Potential - Aquatic Freshwater.",
         wide_b7_b8_attribute="Eutrophication Potential - Freshwater",
     ),
@@ -200,6 +252,8 @@ INDICATORS: tuple[LCAResultIndicator, ...] = (
         attribute_name="Eutrophication Potential - Aquatic Marine",
         units="kg N eq",
         requirements="Optional",
+        wide_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
+        tall_alignment=ReferenceAlignment.EN15804_A2,
         description="Eutrophication Potential - Aquatic Marine.",
     ),
     LCAResultIndicator(
@@ -207,6 +261,8 @@ INDICATORS: tuple[LCAResultIndicator, ...] = (
         attribute_name="Eutrophication Potential - Terrestrial",
         units="mol N eq",
         requirements="Optional",
+        wide_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
+        tall_alignment=ReferenceAlignment.EN15804_A2,
         description="Eutrophication Potential - Terrestrial.",
         wide_b7_b8_attribute="Eutrophication Potential - Aquatic Marine",
     ),
@@ -215,6 +271,8 @@ INDICATORS: tuple[LCAResultIndicator, ...] = (
         attribute_name="Photochemical Ozone Creation Potential",
         units="kg C2H4 eq",
         requirements="Optional",
+        wide_alignment=ReferenceAlignment.EN15804_A1_EU2026_52_ANNEX_III,
+        tall_alignment=ReferenceAlignment.EN15804_A1,
         description="Photochemical Ozone Creation Potential.",
         wide_b7_b8_attribute="Eutrophication Potential - Aquatic Marine",
     ),
@@ -223,6 +281,9 @@ INDICATORS: tuple[LCAResultIndicator, ...] = (
         attribute_name="Smog Forming Potential",
         units="kg O3 eq",
         requirements="Optional",
+        wide_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
+        tall_alignment=ReferenceAlignment.TRACI,
+        wide_total_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         description="Smog Forming Potential.",
         wide_b7_b8_attribute="Photochemical Ozone Creation Potential",
     ),
@@ -231,6 +292,8 @@ INDICATORS: tuple[LCAResultIndicator, ...] = (
         attribute_name="Formation potential of tropospheric ozone",
         units="kg NMVOC eq",
         requirements="Optional",
+        wide_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
+        tall_alignment=ReferenceAlignment.EN15804_A2,
         description="Photochemical Ozone Formation Potential.",
         wide_attribute="Photochemical Ozone Formation Potential",
         wide_stage_suffixed=True,
@@ -242,6 +305,8 @@ INDICATORS: tuple[LCAResultIndicator, ...] = (
         attribute_name="Abiotic Depletion Potential - Minerals and Metals",
         units="kg Sb eq",
         requirements="Optional",
+        wide_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
+        tall_alignment=ReferenceAlignment.EN15804_A1_AND_EN15804_A2,
         description="Abiotic Depletion Potential (Minerals and Metals).",
         wide_b7_b8_attribute="Photochemical Ozone Formation Potential",
     ),
@@ -251,6 +316,8 @@ INDICATORS: tuple[LCAResultIndicator, ...] = (
         attribute_name="Abiotic Depletion Potential - Fossil Fuels",
         units="MJ",
         requirements="Optional",
+        wide_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
+        tall_alignment=ReferenceAlignment.EN15804_A1_AND_EN15804_A2,
         description="Abiotic Depletion Potential (Fossil Fuels).",
         wide_total_attribute="Total Abiotic Depletion Potential (Fossil Fuels)",
     ),
@@ -259,6 +326,8 @@ INDICATORS: tuple[LCAResultIndicator, ...] = (
         attribute_name="Water Depletion Potential",
         units="m3 world eq deprived",
         requirements="Optional",
+        wide_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
+        tall_alignment=ReferenceAlignment.EN15804_A2_M3_WORLD_EQ_DEPRIVED,
         wide_b7_b8_attribute="Abiotic Depletion Potential (Fossil Fuels)",
     ),
     LCAResultIndicator(
@@ -266,6 +335,8 @@ INDICATORS: tuple[LCAResultIndicator, ...] = (
         attribute_name="Primary Energy Renewable - Energy Resources",
         units="MJ",
         requirements="Optional",
+        wide_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
+        tall_alignment=ReferenceAlignment.EN15804_A1_AND_EN15804_A2,
         description="Primary Energy Renewable (Energy resources).",
     ),
     LCAResultIndicator(
@@ -273,6 +344,8 @@ INDICATORS: tuple[LCAResultIndicator, ...] = (
         attribute_name="Primary Energy Non-Renewable - Energy Resources",
         units="MJ",
         requirements="Optional",
+        wide_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
+        tall_alignment=ReferenceAlignment.EN15804_A1_AND_EN15804_A2,
         description="Primary Energy Non-Renewable (Energy resources).",
     ),
     LCAResultIndicator(
@@ -280,6 +353,8 @@ INDICATORS: tuple[LCAResultIndicator, ...] = (
         attribute_name="Primary Energy Renewable Total",
         units="MJ",
         requirements="Optional",
+        wide_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
+        tall_alignment=ReferenceAlignment.EN15804_A1_AND_EN15804_A2,
         wide_b7_b8_attribute="Primary Energy Renewable (Energy resources)",
     ),
     LCAResultIndicator(
@@ -287,6 +362,8 @@ INDICATORS: tuple[LCAResultIndicator, ...] = (
         attribute_name="Primary Energy Non-Renewable Total",
         units="MJ",
         requirements="Optional",
+        wide_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
+        tall_alignment=ReferenceAlignment.EN15804_A1_AND_EN15804_A2,
         wide_b7_b8_attribute="Primary Energy Non-Renewable (Energy resources)",
     ),
     LCAResultIndicator(
@@ -294,6 +371,8 @@ INDICATORS: tuple[LCAResultIndicator, ...] = (
         attribute_name="Particulate Matter Emissions",
         units="disease incidence",
         requirements="Optional",
+        wide_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
+        tall_alignment=ReferenceAlignment.EN15804_A2,
         description="Particulate matter emissions",
         wide_constant_description="Particulate Matter Emissions",
         wide_total_attribute="Particulate Matter Emissions (total)",
@@ -303,6 +382,8 @@ INDICATORS: tuple[LCAResultIndicator, ...] = (
         attribute_name="Ionising Radiation - Human Health",
         units="kBq U235 eq",
         requirements="Optional",
+        wide_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
+        tall_alignment=ReferenceAlignment.EN15804_A2,
         description="Ionising radiation, human health",
         wide_constant_description="Ionising radiation, human health",
         wide_total_attribute="Ionising Radiation - Human Health (total)",
@@ -312,6 +393,8 @@ INDICATORS: tuple[LCAResultIndicator, ...] = (
         attribute_name="Ecotoxicity - Freshwater",
         units="CTUe",
         requirements="Optional",
+        wide_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
+        tall_alignment=ReferenceAlignment.EN15804_A2,
         description="Ecotoxicity, freshwater",
         wide_constant_description="Ecotoxicity - Freshwater",
         wide_total_attribute="Ecotoxicity - Freshwater (total)",
@@ -321,6 +404,8 @@ INDICATORS: tuple[LCAResultIndicator, ...] = (
         attribute_name="Human Toxicity - Cancer Effects",
         units="CTUh",
         requirements="Optional",
+        wide_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
+        tall_alignment=ReferenceAlignment.EN15804_A2,
         description="Human toxicity, cancer effects",
         wide_constant_description="Human Toxicity - Cancer Effects",
         wide_total_attribute="Human Toxicity - Cancer Effects (total)",
@@ -330,6 +415,8 @@ INDICATORS: tuple[LCAResultIndicator, ...] = (
         attribute_name="Human Toxicity - Non-cancer Effects",
         units="CTUh",
         requirements="Optional",
+        wide_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
+        tall_alignment=ReferenceAlignment.EN15804_A2,
         description="Human toxicity, non-cancer effects",
         wide_constant_description="Human Toxicity - Non-cancer Effects",
         wide_total_attribute="Human Toxicity - Non-cancer Effects (total)",
@@ -339,6 +426,8 @@ INDICATORS: tuple[LCAResultIndicator, ...] = (
         attribute_name="Soil Quality Index",
         units="-",
         requirements="Optional",
+        wide_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
+        tall_alignment=ReferenceAlignment.EN15804_A2,
         description="Soil quality index",
         wide_constant_description="Soil Quality Index",
         wide_total_attribute="Soil Quality Index (total)",
@@ -426,6 +515,7 @@ def _render_field(
     field_code: str,
     description: str,
     units: str | None,
+    reference_alignment: ReferenceAlignment | None = None,
     max_length: int | None = None,
 ) -> str:
     lines: list[str] = [f"    {name}: {type_} = Field("]
@@ -443,12 +533,14 @@ def _render_field(
     if requirements is not None:
         lines.append(f"            requirements={_q(requirements)},")
     lines.append(f"            criticality={_q(criticality)},")
+    if reference_alignment is not None:
+        lines.append(f"            reference_alignment=ReferenceAlignment.{reference_alignment.name},")
     lines.append("        ),")
     lines.append("    )")
     return "\n".join(lines)
 
 
-def _material_id_field() -> str:
+def _material_id_field(tall: bool) -> str:
     return _render_field(
         name="material_id",
         type_="str",
@@ -461,6 +553,8 @@ def _material_id_field() -> str:
             "The unique identifier for the material within the project context, referencing the Bill of Materials."
         ),
         units=None,
+        # The target workbook leaves the wide cell empty.
+        reference_alignment=ReferenceAlignment.GBDI if tall else None,
         max_length=200,
     )
 
@@ -476,6 +570,7 @@ def _lca_stage_module_submodule_field() -> str:
         field_code="lca_stage_module_submodule",
         description="Life-cycle stage or module or submodule of this result row, such as A1-A3 or A5 or A5.1 ",
         units=None,
+        reference_alignment=ReferenceAlignment.EN15978_EN15978_2026,
     )
 
 
@@ -490,6 +585,7 @@ def _lca_stage_field() -> str:
         field_code="lca_stage",
         description="Life-cycle stage of the module, derived by the parser from Life cycle module.",
         units=None,
+        reference_alignment=ReferenceAlignment.EN15978_EN15978_2027,
     )
 
 
@@ -504,6 +600,7 @@ def _lca_module_field() -> str:
         field_code="lca_module",
         description="Life-cycle of the module, derived by the parser from Life cycle module.",
         units=None,
+        reference_alignment=ReferenceAlignment.EN15978_EN15978_2028,
     )
 
 
@@ -518,6 +615,7 @@ def _lca_submodule_field() -> str:
         field_code="lca_submodule",
         description="Sub-module where the standard defines one.",
         units=None,
+        reference_alignment=ReferenceAlignment.EN15978_EN15978_2029,
     )
 
 
@@ -532,6 +630,7 @@ def _process_year_field() -> str:
         field_code="process_year",
         description="Year in which the activity occurs.",
         units="year",
+        reference_alignment=ReferenceAlignment.EN15804_EN15978_ISO_21930,
     )
 
 
@@ -546,6 +645,7 @@ def _material_flow_type_field() -> str:
         field_code="material_flow_type",
         description="Type of flow at this row.",
         units="None",
+        reference_alignment=ReferenceAlignment.EN15978_ISO14040_14044,
     )
 
 
@@ -560,6 +660,7 @@ def _material_flow_mass_kg_field() -> str:
         field_code="material_flow_mass_kg",
         description="Mass carried by the flow at this row.",
         units="kg",
+        reference_alignment=ReferenceAlignment.EN15978_ISO14040_14044,
     )
 
 
@@ -574,6 +675,7 @@ def _scenario_label_field() -> str:
         field_code="scenario_label",
         description="Scenario the result belongs to.",
         units="None",
+        reference_alignment=ReferenceAlignment.EN15978,
     )
 
 
@@ -588,6 +690,7 @@ def _tall_indicator_field(indicator: LCAResultIndicator) -> str:
         field_code=indicator.code,
         description=(indicator.description if indicator.description is not None else f"{indicator.attribute_name}."),
         units=indicator.units,
+        reference_alignment=indicator.tall_alignment,
     )
 
 
@@ -604,6 +707,12 @@ def _wide_stage_field(
     else:
         requirements = indicator.requirements
     field_code = f"{indicator.code}_{suffix}"
+    if suffix in SUB_MODULE_ALIGNMENTS:
+        reference_alignment = SUB_MODULE_ALIGNMENTS[suffix]
+    elif suffix in TOTAL_STAGE_SUFFIXES:
+        reference_alignment = indicator.wide_total_alignment
+    else:
+        reference_alignment = indicator.wide_alignment
     return _render_field(
         name=field_code,
         type_="Optional[Decimal]",
@@ -614,6 +723,7 @@ def _wide_stage_field(
         field_code=field_code,
         description=_wide_stage_description(indicator, stage, suffix),
         units=indicator.units,
+        reference_alignment=reference_alignment,
     )
 
 
@@ -639,6 +749,7 @@ def _wide_total_field(indicator: LCAResultIndicator) -> str:
         field_code=total_name,
         description=total_description,
         units=indicator.units,
+        reference_alignment=indicator.wide_total_alignment,
     )
 
 
@@ -648,7 +759,8 @@ _TALL_IMPORTS = (
     "from typing import Optional\n\n"
     "from sqlmodel import Field, SQLModel\n\n"
     "from openbdf.model.enums.lca import LCAStageOrModuleOrSubModule\n"
-    "from openbdf.model.enums.materials import MaterialFlowType\n\n"
+    "from openbdf.model.enums.materials import MaterialFlowType\n"
+    "from openbdf.model.enums.references import ReferenceAlignment\n\n"
     "from .field_metadata import openbdf_field_metadata\n\n\n"
 )
 
@@ -657,6 +769,7 @@ _WIDE_IMPORTS = (
     "from decimal import Decimal\n"
     "from typing import Optional\n\n"
     "from sqlmodel import Field, SQLModel\n\n"
+    "from openbdf.model.enums.references import ReferenceAlignment\n\n"
     "from .field_metadata import openbdf_field_metadata\n\n\n"
 )
 
@@ -664,7 +777,7 @@ _WIDE_IMPORTS = (
 def render_tall_module() -> str:
     """Render the source of the LCAResultsTallBase model module."""
     blocks: list[str] = [
-        _material_id_field(),
+        _material_id_field(tall=True),
         _lca_stage_module_submodule_field(),
         _lca_stage_field(),
         _lca_module_field(),
@@ -681,7 +794,7 @@ def render_tall_module() -> str:
 
 def render_wide_module() -> str:
     """Render the source of the LCAResultsWideFullBase model module."""
-    blocks: list[str] = [_material_id_field()]
+    blocks: list[str] = [_material_id_field(tall=False)]
     for indicator in INDICATORS:
         stages = GWP_TOTAL_STAGES if indicator.code == "gwp_total" else STAGES
         for stage, suffix in stages:

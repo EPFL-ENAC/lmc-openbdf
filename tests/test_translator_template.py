@@ -66,12 +66,21 @@ def test_openbdf_template_includes_criticality_metadata(tmp_path):
 
     workbook = load_workbook(output_path)
     info = workbook["General Information"]
-    assert [info.cell(row=1, column=column).value for column in range(9, 12)] == [
+    assert [info.cell(row=1, column=column).value for column in range(9, 13)] == [
         "Requirements",
         "Criticality",
         "Value",
+        "Reference",
     ]
     assert info.cell(row=2, column=10).value == "SHOULD"
+    assert info.cell(row=2, column=12).value == "ECHO; GBDB"
+
+    reference_labels = {
+        "Bill of Materials": "Reference",
+        "Project Material Database": "Reference",
+        "LCA Result (Wide)": "Reference Alignment",
+        "LCA Result (Tall)": "Reference Alignment",
+    }
 
     for sheet_name in FIELD_SHEET_NAMES[1:]:
         sheet = workbook[sheet_name]
@@ -82,8 +91,9 @@ def test_openbdf_template_includes_criticality_metadata(tmp_path):
         assert sheet["A6"].value == "Units"
         assert sheet["A7"].value == "Requirements"
         assert sheet["A8"].value == "Criticality"
-        # Reference alignment position (v2.0.0): row 9 stays present but empty.
-        assert sheet["A9"].value is None
+        assert sheet["A9"].value == reference_labels[sheet_name]
+        # The reference row keeps the first data row at row 10 on every field sheet.
+        assert sheet["A10"].value is None
         assert sheet.cell(row=2, column=2).value == (
             "material_ref_id" if sheet_name == "Project Material Database" else "material_id"
         )
@@ -93,6 +103,10 @@ def test_openbdf_template_includes_criticality_metadata(tmp_path):
     type_definitions = workbook["TypeDefinitions"]
     assert type_definitions["A1"].style == "AttributeName"
     assert type_definitions["B1"].style == "AttributeName"
+    assert type_definitions["A2"].value == "Reference"
+    assert type_definitions["B2"].value == "GBDI; SLiCe"
+    # Enum values still start at row 3, because row 2 holds the datatype reference.
+    assert type_definitions["B3"].value is not None
 
     theme = workbook.loaded_theme
     assert b'<a:latin typeface="Calibri"/>' in theme

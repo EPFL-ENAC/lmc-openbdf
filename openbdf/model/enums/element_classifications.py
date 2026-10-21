@@ -1,4 +1,5 @@
-from .openbdf_enum import OpenBDFEnum
+from .openbdf_enum import OpenBDFEnum, enum_attribute
+from .references import Reference
 
 
 class OpenBDFBuildingElementClassification(OpenBDFEnum):
@@ -878,3 +879,4 @@ class OpenBDFBuildingElementClassification(OpenBDFEnum):
         "Refurbishment/alteration to existing separate external small ancillary buildings (boiler houses, sub-stations, guard huts, bicycle stores). Small repairs to fencing/walls/barriers. Under-pinning to existing external walls.",
         MINOR_BUILDING_WORKS_833,
     )
+    reference = enum_attribute(Reference.RICS_WLCA_2ND_ED)

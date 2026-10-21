@@ -59,6 +59,7 @@ from .enums.project import (
     ProjectUnits,
     RecordType,
 )
+from .enums.references import Reference
 from .field_metadata import openbdf_field_metadata
 
 
@@ -76,8 +77,8 @@ class ProjectRecordBase(SQLModel):
             constraint="max 200 characters",
             requirements="Automatic",
             criticality="SHOULD",
-            reference_formats={"echo": True, "carbenmats": True, "clf": False},
             example="ABC1234",
+            reference=Reference.ECHO_GBDB,
         ),
     )
 
@@ -92,6 +93,7 @@ class ProjectRecordBase(SQLModel):
             description="Unique custom ID assigned to this specific project.",
             requirements="Optional",
             criticality="MAY",
+            reference=Reference.GBDI_SLICE,
         ),
     )
 
@@ -106,6 +108,7 @@ class ProjectRecordBase(SQLModel):
             description="Kind of object the submission describes",
             requirements="Required",
             criticality="MUST",
+            reference=Reference.GBDI_SLICE,
         ),
     )
 
@@ -121,6 +124,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Required",
             criticality="MUST",
             example="Metric, International Units System (SI)",
+            reference=Reference.ECHO,
         ),
     )
 
@@ -137,8 +141,8 @@ class ProjectRecordBase(SQLModel):
             constraint="max 200 characters",
             requirements="Recommended",
             criticality="MAY",
-            reference_formats={"echo": True, "carbenmats": False, "clf": True},
             example="Brilliant Group Hotel",
+            reference=Reference.ECHO,
         ),
     )
 
@@ -155,8 +159,8 @@ class ProjectRecordBase(SQLModel):
             constraint="max 500 characters",
             requirements="Optional",
             criticality="MAY",
-            reference_formats={"echo": False, "carbenmats": False, "clf": True},
             example="A new hotel on the harbour",
+            reference=Reference.ECHO,
         ),
     )
 
@@ -173,6 +177,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Required",
             criticality="SHOULD",
             example="New construction",
+            reference=Reference.EN15978_2026,
         ),
     )
 
@@ -189,6 +194,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Required",
             criticality="SHOULD",
             example="Afghanistan",
+            reference=Reference.ECHO,
         ),
     )
 
@@ -206,6 +212,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Optional",
             criticality="MAY",
             example="Potsdam",
+            reference=Reference.ECHO,
         ),
     )
 
@@ -223,6 +230,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="MAY",
             example="Brandenburg",
+            reference=Reference.ECHO,
         ),
     )
 
@@ -240,6 +248,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="MAY",
             example="Voorstrasse 20, 1417 Potsdam",
+            reference=Reference.ECHO,
         ),
     )
 
@@ -257,6 +266,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Optional",
             criticality="MAY",
             example="Mr. Brown Alter",
+            reference=Reference.ECHO,
         ),
     )
 
@@ -271,6 +281,7 @@ class ProjectRecordBase(SQLModel):
             description="Indicate if a sustainability certification was used for the project.",
             requirements="Recommended",
             criticality="MAY",
+            reference=Reference.ECHO,
         ),
     )
 
@@ -288,6 +299,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="MAY",
             example="LEED",
+            reference=Reference.ECHO,
         ),
     )
 
@@ -303,6 +315,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="MAY",
             example="08/02/2026",
+            reference=Reference.GBDI,
         ),
     )
 
@@ -320,6 +333,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Optional",
             criticality="MAY",
             example="ABC1234",
+            reference=Reference.GBDI,
         ),
     )
 
@@ -335,6 +349,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="MAY",
             example="08/02/2026",
+            reference=Reference.GBDI,
         ),
     )
 
@@ -352,6 +367,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="MAY",
             example="ABC1234",
+            reference=Reference.GBDI,
         ),
     )
 
@@ -367,6 +383,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Required",
             criticality="SHOULD",
             example="5",
+            reference=Reference.CLF,
         ),
     )
 
@@ -383,6 +400,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Required",
             criticality="SHOULD",
             example="Preliminary studies",
+            reference=Reference.RIBA_PLAN_OF_WORK_2020_HOAI_2021_AIA_SIA_112,
         ),
     )
 
@@ -398,6 +416,7 @@ class ProjectRecordBase(SQLModel):
             description="Project phase mapped to the common definition of design steps and project phases.",
             requirements="Automatic",
             criticality="MAY",
+            reference=Reference.IEA_EBC_ANNEX_72,
         ),
     )
 
@@ -412,6 +431,7 @@ class ProjectRecordBase(SQLModel):
             description="Granularity of the building model behind the assessment",
             requirements="Required",
             criticality="MUST",
+            reference=Reference.EN15978_2026,
         ),
     )
 
@@ -427,6 +447,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="MAY",
             example="08/02/2026",
+            reference=Reference.GBDI,
         ),
     )
 
@@ -444,6 +465,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Optional",
             criticality="MAY",
             example="Terranova Construction Company",
+            reference=Reference.GBDI,
         ),
     )
 
@@ -461,6 +483,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Optional",
             criticality="MAY",
             example="Seebachstrasse 21, 5100 Zurich",
+            reference=Reference.GBDI,
         ),
     )
 
@@ -478,6 +501,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Optional",
             criticality="MAY",
             example="Regionale Contractors",
+            reference=Reference.GBDI,
         ),
     )
 
@@ -495,6 +519,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Optional",
             criticality="MAY",
             example="Peter Sylon",
+            reference=Reference.GBDI,
         ),
     )
 
@@ -512,6 +537,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Optional",
             criticality="MAY",
             example="Peter Sylon",
+            reference=Reference.GBDI,
         ),
     )
 
@@ -529,6 +555,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Optional",
             criticality="MAY",
             example="Peter Sylon",
+            reference=Reference.GBDI,
         ),
     )
 
@@ -546,6 +573,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Optional",
             criticality="MAY",
             example="Environmental Design Consultants",
+            reference=Reference.GBDI,
         ),
     )
 
@@ -563,6 +591,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Optional",
             criticality="MAY",
             example="Thomas Casper",
+            reference=Reference.GBDI,
         ),
     )
 
@@ -577,6 +606,7 @@ class ProjectRecordBase(SQLModel):
             description="Construction period of the archetype, as given in the source stock dataset.",
             requirements="Optional",
             criticality="MAY",
+            reference=Reference.GBDI,
         ),
     )
 
@@ -595,6 +625,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="MAY",
             example="500",
+            reference=Reference.ECHO,
         ),
     )
 
@@ -610,6 +641,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Required",
             criticality="MUST",
             example="IPMS – International Property Measurement Standards",
+            reference=Reference.ISO_9836_IPMS_REGULATION_EU_2026_52_ANNEX_III,
         ),
     )
 
@@ -627,6 +659,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="MAY",
             example="ABC1234",
+            reference=Reference.GBDI,
         ),
     )
 
@@ -644,6 +677,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="MAY",
             example="41.40338, 2.17403",
+            reference=Reference.ISO_6709,
         ),
     )
 
@@ -660,6 +694,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="SHOULD",
             example="2A (Hot - Humid)",
+            reference=Reference.ASHRAE_169_IECC_KOPPEN_GEIGER,
         ),
     )
 
@@ -678,6 +713,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="MAY",
             example="200m or 400 ft.",
+            reference=Reference.GBDI,
         ),
     )
 
@@ -694,6 +730,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="MAY",
             example="SDC A: Minor expected ground shaking.",
+            reference=Reference.ECHO,
         ),
     )
 
@@ -710,6 +747,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Required",
             criticality="SHOULD",
             example="Multi-family buildings",
+            reference=Reference.EN15978_2026_ECHO_GBDB,
         ),
     )
 
@@ -725,6 +763,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="MAY",
             example="25",
+            reference=Reference.ECHO,
         ),
     )
 
@@ -742,6 +781,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Optional",
             criticality="MAY",
             example="100",
+            reference=Reference.GBDI,
         ),
     )
 
@@ -757,6 +797,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Optional",
             criticality="MAY",
             example="07/02/2026",
+            reference=Reference.ECHO,
         ),
     )
 
@@ -772,6 +813,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="MAY",
             example="07/02/2026",
+            reference=Reference.ECHO,
         ),
     )
 
@@ -790,6 +832,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Optional",
             criticality="MAY",
             example="500",
+            reference=Reference.ISO_9836,
         ),
     )
 
@@ -808,6 +851,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="MAY",
             example="500",
+            reference=Reference.ISO_9836,
         ),
     )
 
@@ -825,6 +869,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="SHOULD",
             example="2",
+            reference=Reference.ECHO,
         ),
     )
 
@@ -842,6 +887,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="SHOULD",
             example="3",
+            reference=Reference.ECHO,
         ),
     )
 
@@ -859,6 +905,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="MAY",
             example="5",
+            reference=Reference.ECHO_REGULATION_EU_2026_52_ANNEX_III,
         ),
     )
 
@@ -876,6 +923,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="MAY",
             example="6",
+            reference=Reference.ECHO_REGULATION_EU_2026_52_ANNEX_III,
         ),
     )
 
@@ -891,6 +939,7 @@ class ProjectRecordBase(SQLModel):
             description="Name of the custom or national building element classification code utilized.",
             requirements="Recommended",
             criticality="MAY",
+            reference=Reference.ISO_12006_2_REGULATION_EU_2026_52_ANNEX_III,
         ),
     )
 
@@ -907,6 +956,7 @@ class ProjectRecordBase(SQLModel):
             constraint="max 500 characters",
             requirements="Recommended",
             criticality="MAY",
+            reference=Reference.ISO_12006_2,
         ),
     )
 
@@ -921,6 +971,7 @@ class ProjectRecordBase(SQLModel):
             description="Version of the custom or national building element classification code utilized.",
             requirements="Recommended",
             criticality="MAY",
+            reference=Reference.ISO_12006_2,
         ),
     )
 
@@ -936,6 +987,7 @@ class ProjectRecordBase(SQLModel):
             description="Tiers of the custom or national building element classification covered",
             requirements="Recommended",
             criticality="MAY",
+            reference=Reference.REGULATION_EU_2026_52_ANNEX_III,
         ),
     )
 
@@ -952,6 +1004,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="SHOULD",
             example="Concrete (In-Situ)",
+            reference=Reference.EN_1992_EN_1993_EN_1995_EN_1996,
         ),
     )
 
@@ -967,6 +1020,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="MAY",
             example="Yes",
+            reference=Reference.EN15978_2026,
         ),
     )
 
@@ -983,6 +1037,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="MAY",
             example="sandy gravel",
+            reference=Reference.ECHO,
         ),
     )
 
@@ -999,6 +1054,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Required",
             criticality="SHOULD",
             example="Spread foundation- Pad Footings (Isolated)",
+            reference=Reference.ECHO,
         ),
     )
 
@@ -1016,6 +1072,7 @@ class ProjectRecordBase(SQLModel):
             units="years",
             requirements="Required",
             criticality="SHOULD",
+            reference=Reference.ISO_15686_1_ISO_15686_2,
         ),
     )
 
@@ -1032,6 +1089,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="MAY",
             example="A, B, A+",
+            reference=Reference.EN_ISO_52000_1,
         ),
     )
 
@@ -1047,6 +1105,7 @@ class ProjectRecordBase(SQLModel):
             description="Which energy code or standard the energy figures are calculated against",
             requirements="Optional",
             criticality="MAY",
+            reference=Reference.EN_ISO_52000_1,
         ),
     )
 
@@ -1065,6 +1124,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="MAY",
             example="100",
+            reference=Reference.EN_ISO_52000_1,
         ),
     )
 
@@ -1083,6 +1143,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="MAY",
             example="101",
+            reference=Reference.EN_ISO_52000_1,
         ),
     )
 
@@ -1101,6 +1162,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="MAY",
             example="102",
+            reference=Reference.EN_ISO_52000_1,
         ),
     )
 
@@ -1119,6 +1181,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="MAY",
             example="103",
+            reference=Reference.EN_ISO_52000_1,
         ),
     )
 
@@ -1135,6 +1198,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="MAY",
             example="Coal",
+            reference=Reference.EN_ISO_52000_1,
         ),
     )
 
@@ -1151,6 +1215,7 @@ class ProjectRecordBase(SQLModel):
             constraint="max 500 characters",
             requirements="Optional",
             criticality="MAY",
+            reference=Reference.EN15978_2026,
         ),
     )
 
@@ -1167,6 +1232,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="MAY",
             example="E",
+            reference=Reference.GBDI,
         ),
     )
 
@@ -1185,6 +1251,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="MAY",
             example="500",
+            reference=Reference.ECHO,
         ),
     )
 
@@ -1203,6 +1270,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="MAY",
             example="501",
+            reference=Reference.ECHO,
         ),
     )
 
@@ -1221,6 +1289,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="MAY",
             example="502",
+            reference=Reference.ECHO,
         ),
     )
 
@@ -1239,6 +1308,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Required",
             criticality="SHOULD",
             example="503",
+            reference=Reference.REGULATION_EU_2026_52_ANNEX_III_IPMS,
         ),
     )
 
@@ -1256,6 +1326,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Required",
             criticality="MUST",
             example="504",
+            reference=Reference.ECHO,
         ),
     )
 
@@ -1272,6 +1343,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="SHOULD",
             example="RICS (UK), Type 2: GIA (Gross Internal Area)",
+            reference=Reference.EN15978_2026,
         ),
     )
 
@@ -1288,6 +1360,7 @@ class ProjectRecordBase(SQLModel):
             constraint="multi-select",
             requirements="Required",
             criticality="SHOULD",
+            reference=Reference.REGULATION_EU_2026_52_ANNEX_III_ISO_9836,
         ),
     )
 
@@ -1306,6 +1379,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Optional",
             criticality="MAY",
             example="500",
+            reference=Reference.ISO_9836,
         ),
     )
 
@@ -1324,6 +1398,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Optional",
             criticality="MAY",
             example="501",
+            reference=Reference.ISO_9836,
         ),
     )
 
@@ -1342,6 +1417,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="MAY",
             example="502",
+            reference=Reference.ISO_9836,
         ),
     )
 
@@ -1360,6 +1436,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="MAY",
             example="503",
+            reference=Reference.ECHO,
         ),
     )
 
@@ -1378,6 +1455,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="MAY",
             example="504",
+            reference=Reference.ISO_9836,
         ),
     )
 
@@ -1396,6 +1474,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="MAY",
             example="505",
+            reference=Reference.ISO_9836,
         ),
     )
 
@@ -1414,6 +1493,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="MAY",
             example="506",
+            reference=Reference.EN15978_2026,
         ),
     )
 
@@ -1432,6 +1512,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="MAY",
             example="20",
+            reference=Reference.ECHO,
         ),
     )
 
@@ -1450,6 +1531,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="MAY",
             example="3",
+            reference=Reference.ISO_9836,
         ),
     )
 
@@ -1468,6 +1550,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="MAY",
             example="50",
+            reference=Reference.ISO_9836,
         ),
     )
 
@@ -1485,6 +1568,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="MAY",
             example="10",
+            reference=Reference.ECHO,
         ),
     )
 
@@ -1500,6 +1584,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="SHOULD",
             example="11/02/2026",
+            reference=Reference.ECHO,
         ),
     )
 
@@ -1515,6 +1600,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="MAY",
             example="True",
+            reference=Reference.ECHO,
         ),
     )
 
@@ -1532,6 +1618,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="MAY",
             example="Pullmann Consultants, Zurich",
+            reference=Reference.ECHO,
         ),
     )
 
@@ -1547,6 +1634,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Optional",
             criticality="MAY",
             example="07/02/2026",
+            reference=Reference.ECHO,
         ),
     )
 
@@ -1564,6 +1652,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Required",
             criticality="SHOULD",
             example="ASHRAE 204p",
+            reference=Reference.ECHO,
         ),
     )
 
@@ -1579,6 +1668,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Required",
             criticality="SHOULD",
             example="Permission from municipal corporation",
+            reference=Reference.EN15978_2026,
         ),
     )
 
@@ -1595,6 +1685,7 @@ class ProjectRecordBase(SQLModel):
             constraint="max 200 characters",
             requirements="Required",
             criticality="SHOULD",
+            reference=Reference.EN15978_2026,
         ),
     )
 
@@ -1611,6 +1702,7 @@ class ProjectRecordBase(SQLModel):
             constraint="max 200 characters",
             requirements="Required",
             criticality="SHOULD",
+            reference=Reference.EN15978_2026_REGULATION_EU_2026_52_ANNEX_III,
         ),
     )
 
@@ -1626,6 +1718,7 @@ class ProjectRecordBase(SQLModel):
             description="Rule used to count component replacements in module B4",
             requirements="Required",
             criticality="SHOULD",
+            reference=Reference.REGULATION_EU_2026_52_ANNEX_III,
         ),
     )
 
@@ -1642,6 +1735,7 @@ class ProjectRecordBase(SQLModel):
             constraint="max 200 characters",
             requirements="Required",
             criticality="SHOULD",
+            reference=Reference.EN15978_2026,
         ),
     )
 
@@ -1659,6 +1753,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="SHOULD",
             example="GBDI tool",
+            reference=Reference.ECHO,
         ),
     )
 
@@ -1676,6 +1771,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Optional",
             criticality="SHOULD",
             example="GBDI",
+            reference=Reference.EN15978_2026,
         ),
     )
 
@@ -1693,6 +1789,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Optional",
             criticality="MAY",
             example="v2.1.1",
+            reference=Reference.ECHO,
         ),
     )
 
@@ -1709,6 +1806,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Required",
             criticality="SHOULD",
             example="ecoinvent",
+            reference=Reference.EN_15941_2024,
         ),
     )
 
@@ -1723,6 +1821,7 @@ class ProjectRecordBase(SQLModel):
             description="System model of the background database",
             requirements="Required",
             criticality="MUST",
+            reference=Reference.ECOINVENT_EN15804_A2,
         ),
     )
 
@@ -1739,6 +1838,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Removed",
             criticality="",
             example="v3.1",
+            reference=Reference.EN15978_2026,
         ),
     )
 
@@ -1757,6 +1857,7 @@ class ProjectRecordBase(SQLModel):
             units="fraction",
             requirements="Automatic",
             criticality="SHOULD",
+            reference=Reference.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1775,6 +1876,7 @@ class ProjectRecordBase(SQLModel):
             units="fraction",
             requirements="Automatic",
             criticality="SHOULD",
+            reference=Reference.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1793,6 +1895,7 @@ class ProjectRecordBase(SQLModel):
             units="fraction",
             requirements="Automatic",
             criticality="SHOULD",
+            reference=Reference.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1811,6 +1914,7 @@ class ProjectRecordBase(SQLModel):
             units="fraction",
             requirements="Automatic",
             criticality="SHOULD",
+            reference=Reference.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1829,6 +1933,7 @@ class ProjectRecordBase(SQLModel):
             units="fraction",
             requirements="Automatic",
             criticality="SHOULD",
+            reference=Reference.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1847,6 +1952,7 @@ class ProjectRecordBase(SQLModel):
             units="fraction",
             requirements="Automatic",
             criticality="SHOULD",
+            reference=Reference.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1865,6 +1971,7 @@ class ProjectRecordBase(SQLModel):
             units="fraction",
             requirements="Automatic",
             criticality="SHOULD",
+            reference=Reference.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1882,6 +1989,7 @@ class ProjectRecordBase(SQLModel):
             units="%",
             requirements="Automatic",
             criticality="MAY",
+            reference=Reference.GBDI,
         ),
     )
 
@@ -1897,6 +2005,7 @@ class ProjectRecordBase(SQLModel):
             description="Quantity used to weight the data quality shares.",
             requirements="Automatic",
             criticality="MAY",
+            reference=Reference.GBDI,
         ),
     )
 
@@ -1914,6 +2023,7 @@ class ProjectRecordBase(SQLModel):
             units="%",
             requirements="Automatic",
             criticality="MAY",
+            reference=Reference.EN_15941_2024,
         ),
     )
 
@@ -1930,6 +2040,7 @@ class ProjectRecordBase(SQLModel):
             constraint="max 200 characters",
             requirements="Recommended",
             criticality="SHOULD",
+            reference=Reference.REGULATION_EU_2026_52_ANNEX_III_EN15804,
         ),
     )
 
@@ -1946,6 +2057,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Optional",
             criticality="SHOULD",
             example="Probabilistic",
+            reference=Reference.EN15978_2026_ISO_14040,
         ),
     )
 
@@ -1961,6 +2073,7 @@ class ProjectRecordBase(SQLModel):
             description="Approach chosen for allocating to the building the embodied emissions of on-site renewable energy production. Energy storage components are allocated to the building in full under every approach.",
             requirements="Recommended",
             criticality="SHOULD",
+            reference=Reference.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1976,6 +2089,7 @@ class ProjectRecordBase(SQLModel):
             description="Rule applied to allocate the emissions of building components shared by multiple buildings. Stated only when the submission covers more than one building.",
             requirements="Optional",
             criticality="MAY",
+            reference=Reference.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -1990,6 +2104,7 @@ class ProjectRecordBase(SQLModel):
             description="Whether the calculation was simplified through an extended use of default data.",
             requirements="Optional",
             criticality="MAY",
+            reference=Reference.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2005,6 +2120,7 @@ class ProjectRecordBase(SQLModel):
             description="The provision or circumstance under which the extended use of default data was applied.",
             requirements="Optional",
             criticality="MAY",
+            reference=Reference.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2019,6 +2135,7 @@ class ProjectRecordBase(SQLModel):
             description="Whether the result is calculated for the verification of compliance with a limit value rather than as a complete assessment.",
             requirements="Optional",
             criticality="MAY",
+            reference=Reference.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2034,6 +2151,7 @@ class ProjectRecordBase(SQLModel):
             description="The parts of life-cycle stages and of the scope of building components left out for the verification of compliance with a limit value.",
             requirements="Optional",
             criticality="MAY",
+            reference=Reference.EU2026_52_ANNEX_III,
         ),
     )
 
@@ -2050,6 +2168,7 @@ class ProjectRecordBase(SQLModel):
             constraint="max 200 characters",
             requirements="Recommended",
             criticality="SHOULD",
+            reference=Reference.EN15978_2026_REGULATION_EU_2026_52_ANNEX_III,
         ),
     )
 
@@ -2066,6 +2185,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Optional",
             criticality="SHOULD",
             example="Process-based",
+            reference=Reference.EN15978_2026,
         ),
     )
 
@@ -2081,6 +2201,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Required",
             criticality="MUST",
             example="Cradle to Gate with Options (A1–A3 + others)",
+            reference=Reference.EN15978_2026_REGULATION_EU_2026_52_ANNEX_III,
         ),
     )
 
@@ -2097,6 +2218,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Required",
             criticality="SHOULD",
             example="EN 15804+A2 (EF 3.0) - Current EU standard",
+            reference=Reference.EN15804_A2_EN15804_A1_TRACI,
         ),
     )
 
@@ -2113,6 +2235,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="SHOULD",
             example="-1/+1;",
+            reference=Reference.EN15978_2026,
         ),
     )
 
@@ -2128,6 +2251,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="SHOULD",
             example="Yes",
+            reference=Reference.ECHO,
         ),
     )
 
@@ -2144,6 +2268,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Required",
             criticality="SHOULD",
             example="BIM Model",
+            reference=Reference.ECHO,
         ),
     )
 
@@ -2159,6 +2284,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Required",
             criticality="SHOULD",
             example="Yes",
+            reference=Reference.EN15804_A1_A2_EN15978_2026_TRACI,
         ),
     )
 
@@ -2174,6 +2300,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="MAY",
             example="Yes",
+            reference=Reference.EN15804_A2_EN15978_2026,
         ),
     )
 
@@ -2189,6 +2316,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="MAY",
             example="Yes",
+            reference=Reference.EN15804_A2_EN15978_2026,
         ),
     )
 
@@ -2204,6 +2332,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="MAY",
             example="Yes",
+            reference=Reference.EN15804_A2_EN15978_2026,
         ),
     )
 
@@ -2219,6 +2348,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="MAY",
             example="Yes",
+            reference=Reference.EN15804_A1_A2_EN15978_2026_TRACI,
         ),
     )
 
@@ -2234,6 +2364,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="MAY",
             example="Yes",
+            reference=Reference.EN15804_A1_A2_EN15978_2026_TRACI,
         ),
     )
 
@@ -2249,6 +2380,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="MAY",
             example="Yes",
+            reference=Reference.EN15804_A1_TRACI,
         ),
     )
 
@@ -2264,6 +2396,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="MAY",
             example="No",
+            reference=Reference.EN15804_A1_TRACI,
         ),
     )
 
@@ -2279,6 +2412,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="MAY",
             example="Yes",
+            reference=Reference.EN15804_A2_EN15978_2026,
         ),
     )
 
@@ -2294,6 +2428,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="MAY",
             example="Yes",
+            reference=Reference.EN15804_A2_EN15978_2026,
         ),
     )
 
@@ -2309,6 +2444,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="MAY",
             example="Yes",
+            reference=Reference.EN15804_A2_EN15978_2026,
         ),
     )
 
@@ -2324,6 +2460,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="MAY",
             example="No",
+            reference=Reference.EN15804_A1_A2_EN15978_2026_TRACI,
         ),
     )
 
@@ -2339,6 +2476,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="MAY",
             example="No",
+            reference=Reference.EN15804_A1_A2_EN15978_2026_TRACI,
         ),
     )
 
@@ -2354,6 +2492,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="MAY",
             example="Yes",
+            reference=Reference.EN15804_A1_A2_EN15978_2026_TRACI,
         ),
     )
 
@@ -2369,6 +2508,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="MAY",
             example="Yes",
+            reference=Reference.EN15804_A1_A2_EN15978_2026_TRACI,
         ),
     )
 
@@ -2384,6 +2524,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="MAY",
             example="Yes",
+            reference=Reference.EN15804_A1_A2_EN15978_2026_TRACI,
         ),
     )
 
@@ -2399,6 +2540,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="MAY",
             example="Yes",
+            reference=Reference.EN15804_A2_EN15978_2026,
         ),
     )
 
@@ -2414,6 +2556,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="MAY",
             example="Yes",
+            reference=Reference.EN15804_A1_A2_EN15978_2026,
         ),
     )
 
@@ -2429,6 +2572,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="MAY",
             example="Yes",
+            reference=Reference.EN15804_A1_A2_EN15978_2026,
         ),
     )
 
@@ -2444,6 +2588,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="MAY",
             example="Yes",
+            reference=Reference.EN15804_A1_A2_EN15978_2026,
         ),
     )
 
@@ -2459,6 +2604,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="MAY",
             example="Yes",
+            reference=Reference.EN15804_A1_A2_EN15978_2026,
         ),
     )
 
@@ -2473,6 +2619,7 @@ class ProjectRecordBase(SQLModel):
             description="Total particulate matter emissions over modules A to C, excluding module D.",
             requirements="Optional",
             criticality="MAY",
+            reference=Reference.EN15804_A1_A2_EN15978_2026,
         ),
     )
 
@@ -2487,6 +2634,7 @@ class ProjectRecordBase(SQLModel):
             description="Total ionising radiation, human health over modules A to C, excluding module D.",
             requirements="Optional",
             criticality="MAY",
+            reference=Reference.EN15804_A1_A2_EN15978_2026,
         ),
     )
 
@@ -2501,6 +2649,7 @@ class ProjectRecordBase(SQLModel):
             description="Total ecotoxicity, freshwater over modules A to C, excluding module D.",
             requirements="Optional",
             criticality="MAY",
+            reference=Reference.EN15804_A1_A2_EN15978_2026,
         ),
     )
 
@@ -2515,6 +2664,7 @@ class ProjectRecordBase(SQLModel):
             description="Total human toxicity, cancer over modules A to C, excluding module D.",
             requirements="Optional",
             criticality="MAY",
+            reference=Reference.EN15804_A1_A2_EN15978_2026,
         ),
     )
 
@@ -2529,6 +2679,7 @@ class ProjectRecordBase(SQLModel):
             description="Total human toxicity, non-cancer over modules A to C, excluding module D.",
             requirements="Optional",
             criticality="MAY",
+            reference=Reference.EN15804_A1_A2_EN15978_2026,
         ),
     )
 
@@ -2543,6 +2694,7 @@ class ProjectRecordBase(SQLModel):
             description="Total land use related soil quality over modules A to C, excluding module D.",
             requirements="Optional",
             criticality="MAY",
+            reference=Reference.EN15804_A1_A2_EN15978_2026,
         ),
     )
 
@@ -2558,6 +2710,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="SHOULD",
             example="Yes",
+            reference=Reference.EN15804_A1_A2_EN15978_EN15978_2026,
         ),
     )
 
@@ -2573,6 +2726,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="SHOULD",
             example="No",
+            reference=Reference.EN15804_EN15978_EN15978_2026,
         ),
     )
 
@@ -2588,6 +2742,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="SHOULD",
             example="No",
+            reference=Reference.EN15804_EN15978_EN15978_2026,
         ),
     )
 
@@ -2603,6 +2758,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="SHOULD",
             example="No",
+            reference=Reference.EN15804_EN15978_EN15978_2026,
         ),
     )
 
@@ -2618,6 +2774,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="SHOULD",
             example="Yes",
+            reference=Reference.EN15978_EN15978_2026_RICS_WLCA,
         ),
     )
 
@@ -2633,6 +2790,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="SHOULD",
             example="Yes",
+            reference=Reference.EN15978_EN15978_2026_RICS_WLCA,
         ),
     )
 
@@ -2647,6 +2805,7 @@ class ProjectRecordBase(SQLModel):
             description="Life cycle sub-module included. Pre-construction demolition and site clearance.",
             requirements="Optional",
             criticality="MAY",
+            reference=Reference.EN15978_2026_RICS_WLCA,
         ),
     )
 
@@ -2661,6 +2820,7 @@ class ProjectRecordBase(SQLModel):
             description="Life cycle sub-module included. On-site construction and installation activities.",
             requirements="Optional",
             criticality="MAY",
+            reference=Reference.EN15978_2026_RICS_WLCA,
         ),
     )
 
@@ -2675,6 +2835,7 @@ class ProjectRecordBase(SQLModel):
             description="Life cycle sub-module included. Construction waste and its management.",
             requirements="Optional",
             criticality="MAY",
+            reference=Reference.EN15978_2026_RICS_WLCA,
         ),
     )
 
@@ -2689,6 +2850,7 @@ class ProjectRecordBase(SQLModel):
             description="Life cycle sub-module included. Transport of workers to and from the site.",
             requirements="Optional",
             criticality="MAY",
+            reference=Reference.EN15978_2026_RICS_WLCA,
         ),
     )
 
@@ -2704,6 +2866,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="SHOULD",
             example="Yes",
+            reference=Reference.EN15978_EN15978_2026,
         ),
     )
 
@@ -2718,6 +2881,7 @@ class ProjectRecordBase(SQLModel):
             description="Life cycle module included. Emissions from materials and carbonation within module B1.",
             requirements="Optional",
             criticality="MAY",
+            reference=Reference.EU2026_52_ANNEX_III_EN15978_2026,
         ),
     )
 
@@ -2732,6 +2896,7 @@ class ProjectRecordBase(SQLModel):
             description="Life cycle module included. Fugitive emissions of refrigerants within module B1.",
             requirements="Optional",
             criticality="MAY",
+            reference=Reference.EU2026_52_ANNEX_III_EN15978_2026,
         ),
     )
 
@@ -2747,6 +2912,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="SHOULD",
             example="Yes",
+            reference=Reference.EN15978_EN15978_2026,
         ),
     )
 
@@ -2762,6 +2928,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="SHOULD",
             example="Yes",
+            reference=Reference.EN15978_EN15978_2026,
         ),
     )
 
@@ -2777,6 +2944,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="SHOULD",
             example="Yes",
+            reference=Reference.EN15978_EN15978_2026,
         ),
     )
 
@@ -2792,6 +2960,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="SHOULD",
             example="Yes",
+            reference=Reference.EN15978_EN15978_2026,
         ),
     )
 
@@ -2807,6 +2976,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="SHOULD",
             example="Yes",
+            reference=Reference.EN15978_EN15978_2026,
         ),
     )
 
@@ -2821,6 +2991,7 @@ class ProjectRecordBase(SQLModel):
             description="Life cycle module included. Operational energy of regulated building-integrated systems.",
             requirements="Optional",
             criticality="MAY",
+            reference=Reference.EN15978_EN15978_2026,
         ),
     )
 
@@ -2835,6 +3006,7 @@ class ProjectRecordBase(SQLModel):
             description="Life cycle module included. Operational energy of non-regulated building-integrated systems.",
             requirements="Optional",
             criticality="MAY",
+            reference=Reference.EU2026_52_ANNEX_III_EN15978_2026,
         ),
     )
 
@@ -2849,6 +3021,7 @@ class ProjectRecordBase(SQLModel):
             description="Life cycle module included. Other operational energy related to building user activities.",
             requirements="Optional",
             criticality="MAY",
+            reference=Reference.EU2026_52_ANNEX_III_EN15978_2026,
         ),
     )
 
@@ -2864,6 +3037,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="SHOULD",
             example="Yes",
+            reference=Reference.EN15978_EN15978_2026,
         ),
     )
 
@@ -2878,6 +3052,7 @@ class ProjectRecordBase(SQLModel):
             description="Life cycle module included. Operational water of essential building-integrated systems.",
             requirements="Optional",
             criticality="MAY",
+            reference=Reference.EU2026_52_ANNEX_III_EN15978_2026,
         ),
     )
 
@@ -2892,6 +3067,7 @@ class ProjectRecordBase(SQLModel):
             description="Life cycle module included. Operational water of other building-integrated systems.",
             requirements="Optional",
             criticality="MAY",
+            reference=Reference.EU2026_52_ANNEX_III_EN15978_2026,
         ),
     )
 
@@ -2906,6 +3082,7 @@ class ProjectRecordBase(SQLModel):
             description="Life cycle module included. Operational water of non-building-integrated systems.",
             requirements="Optional",
             criticality="MAY",
+            reference=Reference.EU2026_52_ANNEX_III_EN15978_2026,
         ),
     )
 
@@ -2920,6 +3097,7 @@ class ProjectRecordBase(SQLModel):
             description="Life cycle module included. Building-integrated users activities not covered by B1 to B7. Optional stage.",
             requirements="Optional",
             criticality="MAY",
+            reference=Reference.EU2026_52_ANNEX_III_EN15978_2026,
         ),
     )
 
@@ -2934,6 +3112,7 @@ class ProjectRecordBase(SQLModel):
             description="Life cycle module included. Transport of persons to and from the building.",
             requirements="Optional",
             criticality="MAY",
+            reference=Reference.EU2026_52_ANNEX_III_EN15978_2026,
         ),
     )
 
@@ -2948,6 +3127,7 @@ class ProjectRecordBase(SQLModel):
             description="Life cycle module included. Charging of electric vehicles within the building site.",
             requirements="Optional",
             criticality="MAY",
+            reference=Reference.EU2026_52_ANNEX_III_EN15978_2026,
         ),
     )
 
@@ -2962,6 +3142,7 @@ class ProjectRecordBase(SQLModel):
             description="Life cycle module included. Other user activities, such as consumables and unfixed furniture.",
             requirements="Optional",
             criticality="MAY",
+            reference=Reference.EU2026_52_ANNEX_III_EN15978_2026,
         ),
     )
 
@@ -2977,6 +3158,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="SHOULD",
             example="Yes",
+            reference=Reference.EN15978_EN15978_2026,
         ),
     )
 
@@ -2992,6 +3174,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="SHOULD",
             example="Yes",
+            reference=Reference.EN15978_EN15978_2026,
         ),
     )
 
@@ -3007,6 +3190,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="SHOULD",
             example="Yes",
+            reference=Reference.EN15978_EN15978_2026,
         ),
     )
 
@@ -3022,6 +3206,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="SHOULD",
             example="Yes",
+            reference=Reference.EN15978_EN15978_2026,
         ),
     )
 
@@ -3037,6 +3222,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="SHOULD",
             example="Yes",
+            reference=Reference.EN15978_EN15978_2026,
         ),
     )
 
@@ -3052,6 +3238,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="SHOULD",
             example="Yes",
+            reference=Reference.EN15978_EN15978_2026,
         ),
     )
 
@@ -3067,6 +3254,7 @@ class ProjectRecordBase(SQLModel):
             requirements="Recommended",
             criticality="SHOULD",
             example="Yes",
+            reference=Reference.EN15978_EN15978_2026,
         ),
     )
 

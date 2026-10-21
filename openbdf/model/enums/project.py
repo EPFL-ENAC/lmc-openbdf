@@ -1,4 +1,5 @@
-from .openbdf_enum import OpenBDFEnum
+from .openbdf_enum import OpenBDFEnum, enum_attribute
+from .references import Reference
 
 
 class RecordType(OpenBDFEnum):
@@ -22,6 +23,7 @@ class RecordType(OpenBDFEnum):
         "parametric scenario (a generated variation)",
         "a generated variation",
     )
+    reference = enum_attribute(Reference.GBDI_SLICE_2)
 
 
 class ProjectPhase(OpenBDFEnum):
@@ -55,6 +57,7 @@ class ProjectPhase(OpenBDFEnum):
     SIA_CH_6 = ("SIA_CH_6_Bewirtschaftung", "SIA_CH_6_Bewirtschaftung")
     GBDI_END_OF_USE = ("GBDI_EndOfUse", "GBDI_EndOfUse")
     OTHER_NATIONAL = ("Other_National", "Other_National")
+    reference = enum_attribute(Reference.RIBA_PLAN_OF_WORK_2020_HOAI_2021_AIA_SIA_112)
 
 
 class ProjectPhaseCommon(OpenBDFEnum):
@@ -67,6 +70,7 @@ class ProjectPhaseCommon(OpenBDFEnum):
     PHASE_6 = ("6 Handover and commissioning", "6 Handover and commissioning")
     PHASE_7 = ("7 Operation and management", "7 Operation and management")
     PHASE_8 = ("8 End of use, re-cycling", "8 End of use, re-cycling")
+    reference = enum_attribute(Reference.IEA_EBC_ANNEX_72)
 
 
 class ConstructionType(OpenBDFEnum):
@@ -80,8 +84,10 @@ class ConstructionType(OpenBDFEnum):
         "major_renovation",
         "Major Renovation (with addition)",
     )
+    reference = enum_attribute(Reference.EN15978_2026)
 
 
 class ProjectUnits(OpenBDFEnum):
     IMPERIAL = ("imperial", "Imperial Units System (IP, USA)")
     METRIC = ("metric", "Metric, International Units System (SI)")
+    reference = enum_attribute(Reference.ISO_80000)

@@ -39,7 +39,7 @@ def default_openbdf_sheets() -> dict[str, pd.DataFrame]:
     results_wide.iloc[1, 1] = "material_id"
     results_wide.iloc[9, 1] = "MAT-1"
 
-    # Project Material Database in the repo wide layout: field codes in row 2, data from row 10.
+    # Project Material Database in the repo wide layout: field codes in row 2, Reference row 9, data from row 10.
     project_material_database = pd.DataFrame([[None] * 2 for _ in range(10)])
     project_material_database.iloc[1, 1] = "material_ref_id"
     project_material_database.iloc[9, 1] = "M0001"
@@ -82,10 +82,9 @@ def test_open_command_processes_sheets_split_across_files(tmp_path: Path, monkey
     assert drop_invalid is False
     assert tables.project.to_dict(orient="records") == [{"field_code": "project_name", "value": "Example project"}]
     assert tables.bill_of_materials.to_dict(orient="records") == [{"material_id": "MAT-1"}]
-    # start_row=8 keeps the repo wide layout's blank row 9 in the raw table; blank record rows are skipped downstream.
+    # start_row=9 skips the metadata rows, so the first record is the first data row.
     raw_project_material_database = tables.project_material_database.to_dict(orient="records")
-    assert pd.isna(raw_project_material_database[0]["material_ref_id"])
-    assert raw_project_material_database[1] == {"material_ref_id": "M0001"}
+    assert raw_project_material_database == [{"material_ref_id": "M0001"}]
     assert tables.results_wide.to_dict(orient="records") == [{"material_id": "MAT-1"}]
 
 

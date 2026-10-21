@@ -27,6 +27,8 @@ class FieldAnalysis(BaseModel):
     description: str | None = None
     requirements: str | None = None
     criticality: str | None = None
+    reference: str | None = None
+    reference_alignment: str | None = None
     constraint: str | None = None
     units: str | None = None
     enum_values: list[EnumValue] = Field(default_factory=list)
@@ -105,6 +107,8 @@ def analyze_model(model_name: str, field_names: list[str] | None = None) -> Mode
             description=metadata.get("description") or field_info.description,
             requirements=metadata.get("requirements"),
             criticality=metadata.get("criticality"),
+            reference=metadata.get("reference"),
+            reference_alignment=metadata.get("reference_alignment"),
             constraint=metadata.get("constraint"),
             units=metadata.get("units"),
             enum_values=enums,
@@ -131,6 +135,8 @@ def print_to_console(analysis: ModelAnalysis):
             "Description": field.description,
             "Requirements": field.requirements,
             "Criticality": field.criticality,
+            "Reference": field.reference,
+            "Reference Alignment": field.reference_alignment,
             "Constraint": field.constraint,
             "Units": field.units,
             "Data Type": field.data_type,
@@ -176,6 +182,10 @@ def generate_markdown(analysis: ModelAnalysis) -> str:
             lines.append(f"| Requirements | {field.requirements} |")
         if field.criticality:
             lines.append(f"| Criticality | {field.criticality} |")
+        if field.reference:
+            lines.append(f"| Reference | {field.reference} |")
+        if field.reference_alignment:
+            lines.append(f"| Reference Alignment | {field.reference_alignment} |")
         if field.constraint:
             lines.append(f"| Constraint | {field.constraint} |")
         if field.units:
