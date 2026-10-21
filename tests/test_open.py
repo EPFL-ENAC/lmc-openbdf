@@ -12,6 +12,7 @@ from openbdf.cli.save import save_openbdf_to_xlsx
 from openbdf.lib.types.annotations import unwrap_optional
 from openbdf.main import app
 from openbdf.model.building_bill_materials_slim import BuildingBillMaterialsSlimRecordBase
+from openbdf.model.enums.materials import MaterialDataType
 from openbdf.model.general_info import ProjectRecordBase
 from openbdf.model.lca_results_full_wide import LCAResultsWideFullBase
 from openbdf.model.project_material_database import ProjectMaterialDatabaseBase
@@ -52,13 +53,19 @@ def default_openbdf_sheets() -> dict[str, pd.DataFrame]:
     }
 
 
+def mock_validation(monkeypatch) -> None:
+    """This module tests the command wiring, so the fake converters skip the checks."""
+    monkeypatch.setattr(main_module, "validate_project", lambda *args, **kwargs: [])
+
+
 def mock_conversion_and_save(monkeypatch, captured_tables: list[Any]) -> None:
-    def convert(tables, document_translator, *, draft=False, drop_invalid=False):
+    def convert(tables, document_translator, *, findings=None, draft=False, drop_invalid=False):
         captured_tables.append((tables, drop_invalid))
         return object()
 
     monkeypatch.setattr(main_module, "project_package_from_tables", convert)
     monkeypatch.setattr(main_module, "save_openbdf_to_xlsx", lambda **kwargs: None)
+    mock_validation(monkeypatch)
 
 
 def test_open_command_processes_sheets_split_across_files(tmp_path: Path, monkeypatch):
@@ -105,12 +112,13 @@ def test_open_command_uses_draft_conversion(tmp_path: Path, monkeypatch):
     write_workbook(workbook, default_openbdf_sheets())
     captured: list[Any] = []
 
-    def convert(tables, document_translator, *, draft=False, drop_invalid=False):
+    def convert(tables, document_translator, *, findings=None, draft=False, drop_invalid=False):
         captured.append(draft)
         return object()
 
     monkeypatch.setattr(main_module, "project_package_from_tables", convert)
     monkeypatch.setattr(main_module, "save_openbdf_to_xlsx", lambda **kwargs: None)
+    mock_validation(monkeypatch)
 
     result = runner.invoke(app, ["open", str(workbook), "--draft"])
 
@@ -123,12 +131,13 @@ def test_open_command_drop_invalid_materials_passes_flag(tmp_path: Path, monkeyp
     write_workbook(workbook, default_openbdf_sheets())
     captured: list[Any] = []
 
-    def convert_strict(tables, document_translator, *, draft=False, drop_invalid=False):
+    def convert_strict(tables, document_translator, *, findings=None, draft=False, drop_invalid=False):
         captured.append(drop_invalid)
         return object()
 
     monkeypatch.setattr(main_module, "project_package_from_tables", convert_strict)
     monkeypatch.setattr(main_module, "save_openbdf_to_xlsx", lambda **kwargs: None)
+    mock_validation(monkeypatch)
 
     result = runner.invoke(app, ["open", str(workbook), "--drop-invalid-materials"])
 
@@ -141,12 +150,13 @@ def test_open_command_drop_invalid_materials_default_is_false(tmp_path: Path, mo
     write_workbook(workbook, default_openbdf_sheets())
     captured: list[Any] = []
 
-    def convert_strict(tables, document_translator, *, draft=False, drop_invalid=False):
+    def convert_strict(tables, document_translator, *, findings=None, draft=False, drop_invalid=False):
         captured.append(drop_invalid)
         return object()
 
     monkeypatch.setattr(main_module, "project_package_from_tables", convert_strict)
     monkeypatch.setattr(main_module, "save_openbdf_to_xlsx", lambda **kwargs: None)
+    mock_validation(monkeypatch)
 
     result = runner.invoke(app, ["open", str(workbook)])
 
@@ -221,12 +231,13 @@ def test_open_command_merges_multiple_translators(tmp_path: Path, monkeypatch):
     monkeypatch.setattr(main_module.DocumentTranslator, "from_xlsx", load_translator)
     captured_translators: list[Any] = []
 
-    def convert(tables, document_translator, *, draft=False, drop_invalid=False):
+    def convert(tables, document_translator, *, findings=None, draft=False, drop_invalid=False):
         captured_translators.append(document_translator)
         return object()
 
     monkeypatch.setattr(main_module, "project_package_from_tables", convert)
     monkeypatch.setattr(main_module, "save_openbdf_to_xlsx", lambda **kwargs: None)
+    mock_validation(monkeypatch)
 
     result = runner.invoke(
         app,
@@ -338,3 +349,58 @@ def test_document_translator_add_last_wins_on_category_conflict():
 
     merged = first + second
     assert merged._translators["cat"].translate("src") == ["second"]
+
+
+def test_open_command_collects_every_finding_of_a_workbook_with_bad_cells(tmp_path: Path):
+    template_path = tmp_path / "template.xlsx"
+    save_openbdf_to_xlsx(template_path, None)
+
+    workbook = load_workbook(template_path)
+    project_sheet = workbook["General Information"]
+    fill_required_vertical(project_sheet, ProjectRecordBase)
+    project_code_rows = {cell.value: cell.row for cell in project_sheet["D"] if cell.value}
+    project_sheet.cell(row=project_code_rows["building_gross_floor_area"], column=11, value=0)
+
+    project_material_database = workbook["Project Material Database"]
+    fill_required_horizontal(project_material_database, ProjectMaterialDatabaseBase)
+    database_codes = {cell.value: cell.column for cell in project_material_database[2] if cell.value}
+    project_material_database.cell(row=10, column=database_codes["material_ref_id"], value="M0001")
+    project_material_database.cell(row=10, column=database_codes["custom_material_name"], value="Concrete C30/37")
+    dataset_name = project_material_database.cell(row=10, column=database_codes["lca_dataset_material_name"]).value
+
+    bom = workbook["Bill of Materials"]
+    fill_required_horizontal(bom, BuildingBillMaterialsSlimRecordBase)
+    bom_codes = {cell.value: cell.column for cell in bom[2] if cell.value}
+    bom.cell(row=10, column=bom_codes["material_id"], value="MAT-1")
+    bom.cell(row=10, column=bom_codes["custom_material_name"], value="Concrete C30/37")
+    bom.cell(row=10, column=bom_codes["lca_dataset_material_name"], value=dataset_name)
+    bom.cell(row=10, column=bom_codes["material_data_type"], value="bogus")
+    for column in range(1, bom.max_column + 1):
+        bom.cell(row=11, column=column, value=bom.cell(row=10, column=column).value)
+    bom.cell(row=11, column=bom_codes["material_weight_kg"], value=100)
+    bom.cell(row=11, column=bom_codes["material_data_type"], value=MaterialDataType.CPR_DOPC.value)
+
+    wide = workbook["LCA Result (Wide)"]
+    fill_required_horizontal(wide, LCAResultsWideFullBase)
+    wide_codes = {cell.value: cell.column for cell in wide[2] if cell.value}
+    wide.cell(row=10, column=wide_codes["material_id"], value="MAT-2")
+    workbook.save(template_path)
+
+    output_path = tmp_path / "out.xlsx"
+    result = runner.invoke(app, ["open", str(template_path), "-o", str(output_path)])
+
+    assert result.exit_code == 1
+    floor_area_row = project_code_rows["building_gross_floor_area"]
+    assert result.output.splitlines() == [
+        "General Information:",
+        f"  Row {floor_area_row}: E17: Floor area must be greater than zero",
+        "Bill of Materials:",
+        "  E32: material_id 'MAT-1' is used by 2 bill of materials rows",
+        "  Row 10: E02: Value 'bogus' is not a valid MaterialDataType",
+        "  E16: Row 10 has no mass, material efficiency analysis is not possible",
+        "LCA Result (Wide):",
+        "  E05: Bill of Materials has 2 rows, LCA Result (Wide) has 1",
+        "  E06: Row 10: material_id MAT-1 in the inventory, MAT-2 in the results",
+        "The workbook has reject findings, so it was not saved. Use --draft to save it anyway.",
+    ]
+    assert not output_path.exists()
