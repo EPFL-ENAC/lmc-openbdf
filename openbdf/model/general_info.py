@@ -8,7 +8,7 @@ from sqlalchemy import Date
 from sqlalchemy import Enum as SAEnum
 from sqlmodel import Field, SQLModel
 
-from openbdf.model.draft import make_draft_model
+from openbdf.model.ingest import make_ingest_model
 
 from .enums.buildings import (
     BuildingClassificationCode,
@@ -3259,8 +3259,8 @@ class ProjectRecordBase(SQLModel):
     )
 
 
-_ProjectRecordBaseDraft = make_draft_model(ProjectRecordBase)
+_ProjectRecordBaseIngest = make_ingest_model(ProjectRecordBase)
 
 
-class ProjectRecordBaseDraft(_ProjectRecordBaseDraft):  # type: ignore[valid-type,misc]
+class ProjectRecordBaseIngest(_ProjectRecordBaseIngest):  # type: ignore[valid-type,misc]
     pass
