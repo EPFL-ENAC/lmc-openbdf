@@ -247,7 +247,8 @@ class SheetTranslation(BaseModel):
             header = df.iloc[header_start_row, header_start_col:header_end_col]
             values = df.iloc[(self.start_row or 1) : self.end_row, (self.start_col or 0) : self.end_col]
 
-            translated_df = pd.DataFrame(values.values, columns=header.values)
+            # The index stays the sheet row, so a finding can name the row the user sees.
+            translated_df = pd.DataFrame(values.values, columns=header.values, index=values.index)
         else:
             raise ValueError("Orientation must be either 'horizontal' or 'vertical'.")
 

@@ -7,7 +7,14 @@ from openbdf.lib.converters.dataframe import project_package_from_tables
 from openbdf.lib.converters.translators import DocumentTranslator
 from openbdf.lib.openbdf_tables import OpenBDFTables
 from openbdf.lib.sources.excel_source import DuplicateSheetNamesError, ExcelSheetSource
-from openbdf.lib.validation import OpenBDFValidationErrors, check_declared_results, format_findings
+from openbdf.lib.validation import (
+    DroppedLine,
+    OpenBDFValidationError,
+    Severity,
+    format_findings,
+    sort_findings,
+    validate_project,
+)
 
 app = typer.Typer(help="CLI utilities for the project.")
 
@@ -97,7 +104,7 @@ def open(
     drop_invalid_materials: bool = typer.Option(
         False,
         "--drop-invalid-materials",
-        help="Drop bill of materials lines that miss required fields and print which were dropped.",
+        help="Drop bill of materials lines that miss required fields and report them as warnings.",
     ),
     output_path: Path = typer.Option(
         Path("./output.xlsx"),
@@ -133,26 +140,37 @@ def open(
         typer.echo(f"Error: {exc}", err=True)
         raise typer.Exit(code=1) from exc
 
-    if tables is None or (not draft and tables.project_material_database is None):
-        print("Failed to open the files. Please check the provided paths and formats.")
-        return False
+    if tables is None:
+        typer.echo("Error: the files contain no project sheet or bill of materials sheet.", err=True)
+        raise typer.Exit(code=1)
 
+    findings: list[OpenBDFValidationError] = []
     project = project_package_from_tables(
         tables,
         document_translator,
+        findings=findings,
         draft=draft,
         drop_invalid=drop_invalid_materials,
     )
-
-    try:
-        findings = check_declared_results(project, draft=draft)
-    except OpenBDFValidationErrors as exc:
-        for line in format_findings(exc.findings):
-            typer.echo(line, err=True)
-        raise typer.Exit(code=1) from exc
+    findings.extend(
+        validate_project(
+            project,
+            tables,
+            document_translator=document_translator,
+            draft=draft,
+            dropped_rows=frozenset(
+                finding.row for finding in findings if isinstance(finding, DroppedLine) and finding.row is not None
+            ),
+        )
+    )
+    findings = sort_findings(findings)
 
     for line in format_findings(findings):
         typer.echo(line, err=True)
+
+    if not draft and any(finding.severity is Severity.REJECT for finding in findings):
+        typer.echo("The workbook has reject findings, so it was not saved. Use --draft to save it anyway.", err=True)
+        raise typer.Exit(code=1)
 
     save_openbdf_to_xlsx(
         xlsx_path=output_path,

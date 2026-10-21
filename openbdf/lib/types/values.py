@@ -70,10 +70,7 @@ def parse_value(annotation: Any, raw_value: Any, translator: DocumentTranslator 
         return Decimal(str(raw_value))
 
     if annotation is int:
-        try:
-            return int(raw_value)
-        except ValueError:
-            return None
+        return int(raw_value)
 
     if annotation is float:
         return float(raw_value)
