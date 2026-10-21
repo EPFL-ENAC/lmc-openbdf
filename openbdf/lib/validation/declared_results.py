@@ -8,9 +8,7 @@ from openbdf.lib.types.fields import field_metadata
 from openbdf.lib.validation.errors import (
     DeclaredIndicatorWithoutResults,
     OpenBDFValidationError,
-    OpenBDFValidationErrors,
     ResultsWithoutIndicatorDeclaration,
-    Severity,
 )
 from openbdf.model.enums.lca import LCIAMethodology
 from openbdf.model.lca_results import GWP_TOTAL_STAGES, INDICATORS
@@ -47,14 +45,13 @@ def wide_blocks() -> dict[str, tuple[tuple[str, str], ...]]:
     return {code: tuple(columns) for code, columns in blocks.items()}
 
 
-def check_declared_results(project: Any, *, draft: bool = False) -> list[OpenBDFValidationError]:
+def check_declared_results(project: Any) -> list[OpenBDFValidationError]:
     """
     Compare the lca_<indicator>_declared flags of the project with the LCA results of its materials.
 
     A declared indicator must fill every result column whose reference alignment contains the
     chosen LCIA methodology, an undeclared indicator must fill none of them. The check is
-    skipped when no methodology is given, and an empty flag means unknown. Findings are
-    returned unless one of them rejects the file, in which case they are raised as a group.
+    skipped when no methodology is given, and an empty flag means unknown.
     """
     methodology = getattr(project, "lcia_methodology", None)
     if methodology is None:
@@ -77,12 +74,6 @@ def check_declared_results(project: Any, *, draft: bool = False) -> list[OpenBDF
                 )
             )
 
-    # A draft file is always exported, so no finding may reject it.
-    if draft:
-        for finding in findings:
-            finding.severity = Severity.WARNING
-    if any(finding.severity is Severity.REJECT for finding in findings):
-        raise OpenBDFValidationErrors(findings)
     return findings
 
 

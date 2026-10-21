@@ -6,7 +6,6 @@ from enum import Enum
 from typing import Any
 
 import pandas as pd
-import pytest
 from pydantic import BaseModel
 
 from openbdf.lib.converters.dataframe import (
@@ -16,6 +15,7 @@ from openbdf.lib.converters.dataframe import (
 from openbdf.lib.openbdf_tables import OpenBDFTables
 from openbdf.lib.types.annotations import unwrap_optional
 from openbdf.lib.types.fields import get_field_code
+from openbdf.lib.validation import OpenBDFValidationError, Severity, sort_findings, validate_project
 from openbdf.model.building_bill_materials_slim import BuildingBillMaterialsSlimRecordBase
 from openbdf.model.general_info import ProjectRecordBase
 from openbdf.model.lca_results_full_tall import LCAResultsTallBase
@@ -154,11 +154,21 @@ def tables_without_project_material_database(bill_of_materials: pd.DataFrame) ->
     return loaded
 
 
+def collected_findings(loaded: OpenBDFTables, *, draft: bool = False) -> list[OpenBDFValidationError]:
+    """Run the ingest and the validation that the open command runs on the tables."""
+    findings: list[OpenBDFValidationError] = []
+    project = project_package_from_tables(loaded, findings=findings, draft=draft)
+    findings.extend(validate_project(project, loaded, draft=draft))
+    return sort_findings(findings)
+
+
 def test_project_package_from_tables_reports_a_missing_project_material_database():
     bom = pd.DataFrame([bom_row("MAT-1", custom_material_name="Concrete")])
 
-    with pytest.raises(ValueError, match="Project Material Database sheet is missing"):
-        project_package_from_tables(tables_without_project_material_database(bom))
+    findings = collected_findings(tables_without_project_material_database(bom))
+
+    assert [str(finding) for finding in findings] == ["E01: Sheet is missing or empty"]
+    assert findings[0].source == "Project Material Database"
 
 
 def test_project_package_from_tables_in_draft_mode_generates_lines_when_the_sheet_is_missing():
@@ -167,7 +177,12 @@ def test_project_package_from_tables_in_draft_mode_generates_lines_when_the_shee
         bom_row("MAT-2", custom_material_name="Wood", material_weight_kg="50"),
     ])
 
-    project = project_package_from_tables(tables_without_project_material_database(bom), draft=True)
+    loaded = tables_without_project_material_database(bom)
+    findings: list[OpenBDFValidationError] = []
+    project = project_package_from_tables(loaded, findings=findings, draft=True)
+    findings.extend(validate_project(project, loaded, draft=True))
+
+    assert findings == []
 
     assert [
         (record.custom_material_name, record.material_ref_id, record.bom_row_count)
@@ -190,15 +205,7 @@ def test_bom_from_dataframe_keeps_missing_material_reference_service_life():
 
 
 def test_bom_from_dataframe_drop_invalid_keeps_rows_missing_material_reference_service_life():
-    dataframe = bom_df("mat-1", "mat-2")
-
-    result = bom_from_dataframe(dataframe, drop_invalid=True)
-
-    assert [item.material_id for item in result] == ["mat-1", "mat-2"]
-
-
-def test_bom_from_dataframe_in_draft_mode_drop_invalid_keeps_rows_missing_material_reference_service_life():
-    result = bom_from_dataframe(bom_df("mat-1", "mat-2"), drop_invalid=True, draft=True)
+    result = bom_from_dataframe(bom_df("mat-1", "mat-2"), drop_invalid=True)
 
     assert [item.material_id for item in result] == ["mat-1", "mat-2"]
 
@@ -229,8 +236,35 @@ def test_project_package_from_tables_drop_invalid_drops_missing_required():
     assert [b.material_id for b in project.bill_of_materials] == ["mat-1"]
 
 
-def test_bom_from_dataframe_in_draft_mode_allows_missing_material_reference_service_life():
-    records = bom_from_dataframe(bom_df("mat-1"), draft=True)
+def test_dropped_line_is_reported_as_a_warning():
+    valid = bom_df("mat-1")
+    invalid = bom_df("mat-2").drop(columns=["custom_material_name"])
+    dataframe = pd.concat([valid, invalid], ignore_index=True)
+    findings: list[OpenBDFValidationError] = []
+
+    bom_from_dataframe(dataframe, findings=findings, drop_invalid=True)
+
+    assert [str(finding) for finding in findings] == [
+        "E33: Row 2: line dropped (material_id 'mat-2'): Field custom_material_name is required and was not provided"
+    ]
+    assert findings[0].severity is Severity.WARNING
+    assert findings[0].source == "Bill of Materials"
+    assert findings[0].row == 2
+
+
+def test_a_line_dropped_without_a_material_id_names_no_material():
+    invalid = pd.DataFrame([{"material_id": None, "custom_material_name": "Concrete"}])
+    findings: list[OpenBDFValidationError] = []
+
+    bom_from_dataframe(invalid, findings=findings, drop_invalid=True)
+
+    assert [str(finding) for finding in findings] == [
+        "E33: Row 1: line dropped: Field material_id is required and was not provided"
+    ]
+
+
+def test_bom_from_dataframe_allows_missing_material_reference_service_life():
+    records = bom_from_dataframe(bom_df("mat-1"))
 
     assert len(records) == 1
     assert records[0].material_reference_service_life is None
@@ -310,25 +344,24 @@ def test_project_package_from_tables_validates_consistent_project_material_datab
 def test_project_package_from_tables_reports_missing_project_material_database_lines():
     pmd = project_material_database_df("Material mat-1")
 
-    with pytest.raises(ValueError) as excinfo:
-        project_package_from_tables(tables(bom_df("mat-1", "mat-2"), project_material_database=pmd))
+    findings = collected_findings(tables(bom_df("mat-1", "mat-2"), project_material_database=pmd))
 
-    assert (
-        "bill of materials materials without a project material database line: "
-        "[\"'Material mat-2' with EPD dataset 'value'\"]"
-    ) in str(excinfo.value)
+    assert [str(finding) for finding in findings] == [
+        "E28: Bill of materials material 'Material mat-2' with EPD dataset 'value' "
+        "has no project material database line"
+    ]
+    assert findings[0].source == "Bill of Materials"
 
 
 def test_project_package_from_tables_reports_orphan_project_material_database_lines():
     pmd = project_material_database_df("Material mat-1", "Orphan material")
 
-    with pytest.raises(ValueError) as excinfo:
-        project_package_from_tables(tables(bom_df("mat-1"), project_material_database=pmd))
+    findings = collected_findings(tables(bom_df("mat-1"), project_material_database=pmd))
 
-    assert (
-        "project material database lines without a bill of materials material: "
-        "[\"'Orphan material' with EPD dataset 'value'\"]"
-    ) in str(excinfo.value)
+    assert [str(finding) for finding in findings] == [
+        "E27: Project material database line 'Orphan material' with EPD dataset 'value' "
+        "has no bill of materials material"
+    ]
 
 
 def test_project_package_from_tables_reports_duplicate_project_material_database_lines():
@@ -337,26 +370,24 @@ def test_project_package_from_tables_reports_duplicate_project_material_database
         project_material_database_row("M0002", "Material mat-1"),
     ])
 
-    with pytest.raises(ValueError) as excinfo:
-        project_package_from_tables(tables(bom_df("mat-1"), project_material_database=pmd))
+    findings = collected_findings(tables(bom_df("mat-1"), project_material_database=pmd))
 
-    assert (
-        "bill of materials materials with more than one project material database line: "
-        "[\"'Material mat-1' with EPD dataset 'value'\"]"
-    ) in str(excinfo.value)
+    assert [str(finding) for finding in findings] == [
+        "E29: Bill of materials material 'Material mat-1' with EPD dataset 'value' "
+        "has 2 project material database lines"
+    ]
 
 
 def test_project_package_from_tables_reports_contradicting_material_ref_ids():
     bom = pd.DataFrame([bom_row("MAT-1", custom_material_name="Concrete", material_ref_id="M0002")])
     pmd = project_material_database_df("Concrete")
 
-    with pytest.raises(ValueError) as excinfo:
-        project_package_from_tables(tables(bom, project_material_database=pmd))
+    findings = collected_findings(tables(bom, project_material_database=pmd))
 
-    assert (
-        "bill of materials rows of material 'Concrete' with EPD dataset 'value' carry material_ref_id values "
-        "that differ from the project material database material_ref_id 'M0001': ['M0002']"
-    ) in str(excinfo.value)
+    assert [str(finding) for finding in findings] == [
+        "E30: Bill of materials rows of material 'Concrete' with EPD dataset 'value' "
+        "carry material_ref_id 'M0002' instead of 'M0001'"
+    ]
 
 
 def test_project_package_from_tables_reports_duplicate_project_material_database_ids():
@@ -365,12 +396,11 @@ def test_project_package_from_tables_reports_duplicate_project_material_database
         project_material_database_row("M0001", "Material mat-2"),
     ])
 
-    with pytest.raises(ValueError) as excinfo:
-        project_package_from_tables(tables(bom_df("mat-1", "mat-2"), project_material_database=pmd))
+    findings = collected_findings(tables(bom_df("mat-1", "mat-2"), project_material_database=pmd))
 
-    assert "project material database material_ref_id values used by more than one line: ['M0001']" in str(
-        excinfo.value
-    )
+    assert [str(finding) for finding in findings] == [
+        "E31: material_ref_id 'M0001' is used by 2 project material database lines"
+    ]
 
 
 def test_project_package_from_tables_allows_empty_material_ref_ids_under_a_grouped_name():
@@ -702,18 +732,14 @@ def test_project_package_from_tables_reports_a_dataset_mismatch_as_missing_and_o
         project_material_database_row("M0001", "Kies", lca_dataset_material_name="Kies (Korngröße 2/32)"),
     ])
 
-    with pytest.raises(ValueError) as excinfo:
-        project_package_from_tables(tables(bom, project_material_database=pmd))
+    findings = collected_findings(tables(bom, project_material_database=pmd))
 
-    message = str(excinfo.value)
-    assert (
-        "project material database lines without a bill of materials material: "
-        "[\"'Kies' with EPD dataset 'Kies (Korngröße 2/32)'\"]"
-    ) in message
-    assert (
-        "bill of materials materials without a project material database line: "
-        "[\"'Kies' with EPD dataset 'Kies (Korngröße 0/16)'\"]"
-    ) in message
+    assert [str(finding) for finding in findings] == [
+        "E28: Bill of materials material 'Kies' with EPD dataset 'Kies (Korngröße 0/16)' "
+        "has no project material database line",
+        "E27: Project material database line 'Kies' with EPD dataset 'Kies (Korngröße 2/32)' "
+        "has no bill of materials material",
+    ]
 
 
 def test_project_package_from_tables_in_draft_mode_counts_a_missing_floor_repetition_once_and_a_zero_never():

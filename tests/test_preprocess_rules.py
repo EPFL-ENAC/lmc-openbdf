@@ -116,7 +116,6 @@ def test_parse_floor(value: str, expected_floor_level: str | None, expected_abov
     records = bom_from_dataframe(
         pd.DataFrame({"floor": [value]}),
         document_translator=translator,
-        draft=True,
     )
 
     record = records[0]
