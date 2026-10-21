@@ -6,7 +6,7 @@ from typing import Optional
 from sqlmodel import Enum as SAEnum
 from sqlmodel import Field, SQLModel
 
-from openbdf.model.draft import make_draft_model
+from openbdf.model.ingest import make_ingest_model
 
 from .enums.buildings import AboveBelowGround
 from .enums.element_classifications import OpenBDFBuildingElementClassification
@@ -400,8 +400,8 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
     )
 
 
-_BuildingBillMaterialsSlimRecordBaseDraft = make_draft_model(BuildingBillMaterialsSlimRecordBase)
+_BuildingBillMaterialsSlimRecordBaseIngest = make_ingest_model(BuildingBillMaterialsSlimRecordBase)
 
 
-class BuildingBillMaterialsSlimRecordBaseDraft(_BuildingBillMaterialsSlimRecordBaseDraft):  # type: ignore[valid-type,misc]
+class BuildingBillMaterialsSlimRecordBaseIngest(_BuildingBillMaterialsSlimRecordBaseIngest):  # type: ignore[valid-type,misc]
     pass
