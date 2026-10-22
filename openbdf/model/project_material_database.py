@@ -15,7 +15,8 @@ from .field_metadata import openbdf_field_metadata
 
 
 class ProjectMaterialDatabaseBase(SQLModel):
-    material_ref_id: str = Field(
+    material_ref_id: Optional[str] = Field(
+        default=None,
         description="Pairing of the same material. Example: M0001. Same value for every row that pairs the same material.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Material reference ID",
@@ -27,7 +28,8 @@ class ProjectMaterialDatabaseBase(SQLModel):
         ),
     )
 
-    custom_material_name: str = Field(
+    custom_material_name: Optional[str] = Field(
+        default=None,
         description="Material name as built. as it appears in the model or the bill of quantities.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Material Name (or ID)",
@@ -38,7 +40,8 @@ class ProjectMaterialDatabaseBase(SQLModel):
         ),
     )
 
-    lca_dataset_material_name: str = Field(
+    lca_dataset_material_name: Optional[str] = Field(
+        default=None,
         description="Product declared in the EPD from the dataset used.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Material name in EPD dataset",
@@ -49,7 +52,8 @@ class ProjectMaterialDatabaseBase(SQLModel):
         ),
     )
 
-    lca_database_name: str = Field(
+    lca_database_name: Optional[str] = Field(
+        default=None,
         description="EPD database name. ",
         schema_extra=openbdf_field_metadata(
             attribute_name="EPD database name",
@@ -73,7 +77,8 @@ class ProjectMaterialDatabaseBase(SQLModel):
         ),
     )
 
-    bom_row_count: int = Field(
+    bom_row_count: Optional[int] = Field(
+        default=None,
         description="Number of Bill of Materials rows using this pairing. Example: 412, meaning this material appears on 412 Bill of Materials rows.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Bill of Materials Row Count",
@@ -84,7 +89,8 @@ class ProjectMaterialDatabaseBase(SQLModel):
         ),
     )
 
-    material_mass_kg: Decimal = Field(
+    material_mass_kg: Optional[Decimal] = Field(
+        default=None,
         description="Total mass of this pairing. Example: 4522330.6, the sum over those rows, in kilograms.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Material Mass (kg)",
@@ -96,13 +102,19 @@ class ProjectMaterialDatabaseBase(SQLModel):
         ),
     )
 
-    material_mass_share: Decimal = Field(
-        description="Share of total inventory mass. Example: 68.8, meaning this pairing has 68.8% of the inventory mass.",
+    material_mass_share: Optional[Decimal] = Field(
+        default=None,
+        ge=0,
+        le=1,
+        max_digits=18,
+        decimal_places=4,
+        description="Share of total inventory mass. Example: 0.688, meaning this pairing holds 68.8 percent of the inventory mass.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Mass share",
             field_code="material_mass_share",
-            description="Share of total inventory mass. Example: 68.8, meaning this pairing has 68.8% of the inventory mass.",
-            units="%",
+            description="Share of total inventory mass. Example: 0.688, meaning this pairing holds 68.8 percent of the inventory mass.",
+            constraint="0 to 1",
+            units="fraction",
             requirements=Requirement.AUTOMATIC,
             reference=Reference.BILL_OF_MATERIALS,
         ),

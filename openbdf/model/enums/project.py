@@ -70,6 +70,7 @@ class ProjectPhaseCommon(OpenBDFEnum):
     PHASE_6 = ("6 Handover and commissioning", "6 Handover and commissioning")
     PHASE_7 = ("7 Operation and management", "7 Operation and management")
     PHASE_8 = ("8 End of use, re-cycling", "8 End of use, re-cycling")
+    OTHER = ("other", "Other")
     reference = enum_attribute(Reference.IEA_EBC_ANNEX_72)
 
 

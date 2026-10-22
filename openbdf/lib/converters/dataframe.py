@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from decimal import Decimal
 from enum import Enum
 from typing import Any, Optional, TypeVar
 
@@ -8,13 +7,13 @@ import pandas as pd
 from pydantic import ValidationError
 from sqlmodel import SQLModel
 
+from openbdf.lib.computed import fill_computed
 from openbdf.lib.converters.lca_results import lca_results_wide_to_tall
 from openbdf.lib.converters.translators import COMMON_CATEGORY_PROPERTIES, DocumentTranslator, PreprocessRule
 from openbdf.lib.openbdf_tables import OpenBDFTables
 from openbdf.lib.types.annotations import unwrap_optional
 from openbdf.lib.types.fields import get_field_code
 from openbdf.lib.types.values import parse_value, serialize_value
-from openbdf.lib.validation.collect import MaterialPair, group_by_material_pair, material_pair
 from openbdf.lib.validation.errors import (
     DroppedLine,
     DuplicateFieldCode,
@@ -466,97 +465,10 @@ def add_material_id_column_if_missing(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-def _material_ref_id_number(material_ref_id: str | None) -> int:
-    """Return the numeric suffix of an M%d material_ref_id, or 0."""
-    if material_ref_id and material_ref_id.startswith("M") and material_ref_id[1:].isdigit():
-        return int(material_ref_id[1:])
-    return 0
-
-
-def _first_text(records: list[Any], field_name: str) -> str | None:
-    """Return the first non-blank value of a text field, without its surrounding spaces."""
-    for record in records:
-        value = (getattr(record, field_name) or "").strip()
-        if value:
-            return value
-    return None
-
-
 def _dropped_line_message(row: int, material_id: Any, reasons: list[OpenBDFValidationError]) -> str:
     """Describe a dropped line and the reasons that made it invalid."""
     identifier = f" (material_id {material_id!r})" if material_id else ""
     return f"Row {row}: line dropped{identifier}: {'; '.join(reason.message for reason in reasons)}"
-
-
-def _bom_row_mass(row: BuildingBillMaterialsSlimRecordBase) -> Decimal:
-    """Return the mass a bill of materials row contributes, repeated once per floor unless stated."""
-    repetitions = 1 if row.floor_repetition is None else row.floor_repetition
-    return (row.material_weight_kg or Decimal(0)) * repetitions
-
-
-def _merge_project_material_database_draft(
-    bill_of_materials: list[BuildingBillMaterialsSlimRecordBase],
-    project_material_database: list[ProjectMaterialDatabaseBase],
-) -> list[ProjectMaterialDatabaseBase]:
-    """
-    Merge the parsed project material database lines with the bill of materials.
-    A material is the pair of its name and its EPD dataset name. Every bill of
-    materials pair without a line gets a generated one, the automatic fields of
-    every line are recomputed from its rows, and the rows are back-filled with the
-    line's material_ref_id. A line without bill of materials rows is kept and its
-    automatic fields count zero.
-    """
-    bom_rows_by_pair = group_by_material_pair(bill_of_materials)
-    line_cls = make_ingest_model(ProjectMaterialDatabaseBase)
-
-    first_line_by_pair: dict[MaterialPair, ProjectMaterialDatabaseBase] = {}
-    for pmd in project_material_database:
-        pair = material_pair(pmd.custom_material_name, pmd.lca_dataset_material_name)
-        if pair is not None:
-            first_line_by_pair.setdefault(pair, pmd)
-
-    ref_id_records: list[ProjectMaterialDatabaseBase | BuildingBillMaterialsSlimRecordBase] = [
-        *project_material_database,
-        *bill_of_materials,
-    ]
-    highest_ref_id = max(
-        (_material_ref_id_number(record.material_ref_id) for record in ref_id_records),
-        default=0,
-    )
-
-    generated_by_pair: dict[MaterialPair, ProjectMaterialDatabaseBase] = {}
-    for pair, bom_rows in bom_rows_by_pair.items():
-        if pair in first_line_by_pair:
-            continue
-        highest_ref_id += 1
-        generated_by_pair[pair] = line_cls(
-            custom_material_name=_first_text(bom_rows, "custom_material_name"),
-            lca_dataset_material_name=_first_text(bom_rows, "lca_dataset_material_name"),
-            lca_database_name=_first_text(bom_rows, "lca_database_name"),
-            material_ref_id=f"M{highest_ref_id:04d}",
-        )
-
-    total_mass = sum(
-        (_bom_row_mass(row) for bom_rows in bom_rows_by_pair.values() for row in bom_rows),
-        Decimal(0),
-    )
-    for pair, bom_rows in bom_rows_by_pair.items():
-        line = first_line_by_pair.get(pair) or generated_by_pair[pair]
-        line_mass = sum((_bom_row_mass(row) for row in bom_rows), Decimal(0))
-        line.bom_row_count = len(bom_rows)
-        line.material_mass_kg = line_mass
-        line.material_mass_share = line_mass / total_mass * 100 if total_mass else Decimal(0)
-        for row in bom_rows:
-            row.material_ref_id = line.material_ref_id
-
-    for pmd in project_material_database:
-        pair = material_pair(pmd.custom_material_name, pmd.lca_dataset_material_name)
-        if pair is None or pair not in bom_rows_by_pair:
-            pmd.bom_row_count = 0
-            pmd.material_mass_kg = Decimal(0)
-            pmd.material_mass_share = Decimal(0)
-
-    return [*project_material_database, *generated_by_pair.values()]
 
 
 def bom_from_dataframe(
@@ -670,9 +582,9 @@ def project_package_from_tables(
     Reconstruct a ProjectRecord and attach its bill of materials from logical tables.
 
     In draft mode a missing project material database line is generated from the bill
-    of materials and the automatic fields are recomputed. Every record is validated
-    and its findings are added to the findings list, so the caller can report all of
-    them and decide whether to export the file.
+    of materials. Every record is validated and its findings are added to the findings
+    list, so the caller can report all of them and decide whether to export the file.
+    The automatic fields are filled last, so the validation reads the derived values.
 
     If drop_invalid is True, bill of materials lines that miss a required
     field are dropped and a message is printed for each dropped line.
@@ -700,11 +612,6 @@ def project_package_from_tables(
         if tables.project_material_database is not None
         else []
     )
-    if draft:
-        project_material_database_base = _merge_project_material_database_draft(
-            bill_of_materials_base,
-            project_material_database_base,
-        )
 
     project_material_database = [
         ProjectMaterialDatabaseRecord(**record.model_dump()) for record in project_material_database_base
@@ -755,5 +662,6 @@ def project_package_from_tables(
         results_wide=results_wide,
         results_tall=results_tall,
     )
+    fill_computed(project, document_translator, findings=findings, draft=draft)
 
     return project
