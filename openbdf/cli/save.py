@@ -97,6 +97,8 @@ RECOMMENDED_STYLE = NamedStyle("Recommended", font=Font(name="Calibri"), fill=Pa
 SUGGESTED_STYLE = NamedStyle("Suggested", font=Font(name="Calibri"), fill=PatternFill("solid", fgColor="9dd2f3"))
 OPTIONAL_STYLE = NamedStyle("Optional", font=Font(name="Calibri"), fill=PatternFill("solid", fgColor="e9f7fe"))
 AUTOMATIC_STYLE = NamedStyle("Automatic", font=Font(name="Calibri"), fill=PatternFill("solid", fgColor="d5e6e2"))
+METADATA_STYLE = NamedStyle("Metadata", font=Font(name="Calibri"), fill=PatternFill("solid", fgColor="d5e6e2"))
+FIRST_ROW_HEIGHT = 38
 REQUIREMENT_STYLES: dict[Requirement, NamedStyle] = {
     Requirement.REQUIRED: REQUIRED_STYLE,
     Requirement.STRONGLY_RECOMMENDED: STRONGLY_RECOMMENDED_STYLE,
@@ -105,7 +107,6 @@ REQUIREMENT_STYLES: dict[Requirement, NamedStyle] = {
     Requirement.OPTIONAL: OPTIONAL_STYLE,
     Requirement.AUTOMATIC: AUTOMATIC_STYLE,
 }
-ROW_HEADER_STYLE = NamedStyle("RowHeader", font=Font(name="Calibri", bold=True), alignment=Alignment(vertical="top"))
 EDITABLE_VALUE_STYLE = NamedStyle(
     "EditableValue",
     font=Font(name="Calibri"),
@@ -196,7 +197,7 @@ ALL_NAMED_STYLES: list[NamedStyle] = [
     STRONGLY_RECOMMENDED_STYLE,
     SUGGESTED_STYLE,
     AUTOMATIC_STYLE,
-    ROW_HEADER_STYLE,
+    METADATA_STYLE,
     EDITABLE_VALUE_STYLE,
     AUTOMATIC_VALUE_STYLE,
     DISABLED_STYLE,
@@ -347,6 +348,18 @@ def save_openbdf_to_xlsx(
         )
 
         enum_registry.to_xlsx(writer)
+        style_first_rows(writer)
+
+
+def style_first_rows(writer: pd.ExcelWriter, header_style: str | None = None) -> None:
+    """Make the header row of every sheet taller, align its text bottom left and optionally restyle it."""
+    for sheet in writer.book.worksheets:
+        sheet.row_dimensions[1].height = FIRST_ROW_HEIGHT
+        style_header = header_style is not None and sheet.title != ABOUT_SHEET_NAME
+        for cell in sheet[1]:
+            cell.alignment = Alignment(horizontal="left", vertical="bottom")
+            if style_header:
+                cell.style = header_style
 
 
 def info_to_xlsx(writer: pd.ExcelWriter, project: ProjectRecord | None, sheet_name: str, enum_registry: EnumRegistry):
@@ -390,24 +403,18 @@ def info_to_xlsx(writer: pd.ExcelWriter, project: ProjectRecord | None, sheet_na
 
         constraints = extra.get("constraint")
         c = info_sheet.cell(row=cell_row, column=7, value=constraints)
-        if constraints:
-            c.style = INFO_STYLE.name
-        else:
-            c.style = DISABLED_STYLE.name
+        c.style = METADATA_STYLE.name
 
         units = extra.get("units", "")
         u = info_sheet.cell(row=cell_row, column=8, value=units)
-        if units:
-            u.style = INFO_STYLE.name
-        else:
-            u.style = DISABLED_STYLE.name
+        u.style = METADATA_STYLE.name
 
         r = info_sheet.cell(row=cell_row, column=9, value=requirements.display_name)
         r.style = REQUIREMENT_STYLES[requirements].name
 
         reference = extra.get("reference")
         ref = info_sheet.cell(row=cell_row, column=11, value=reference or "")
-        ref.style = INFO_STYLE.name if reference else DISABLED_STYLE.name
+        ref.style = METADATA_STYLE.name
 
         v = info_sheet.cell(row=cell_row, column=10, value=getattr(project, field_code) if project else "")
         v.style = AUTOMATIC_VALUE_STYLE.name if requirements is Requirement.AUTOMATIC else EDITABLE_VALUE_STYLE.name
@@ -512,17 +519,11 @@ def wide_to_xlsx(
 
         constraints = extra.get("constraint") or human_readable_constraints(metadata)
         c = sheet.cell(row=5, column=cell_column, value=constraints)
-        if constraints:
-            c.style = INFO_STYLE.name
-        else:
-            c.style = DISABLED_STYLE.name
+        c.style = METADATA_STYLE.name
 
         unit = extra.get("units", "")
         u = sheet.cell(row=6, column=cell_column, value=unit)
-        if unit:
-            u.style = INFO_STYLE.name
-        else:
-            u.style = DISABLED_STYLE.name
+        u.style = METADATA_STYLE.name
 
         r = sheet.cell(row=7, column=cell_column, value=requirements.display_name)
         r.style = REQUIREMENT_STYLES[requirements].name
@@ -531,7 +532,7 @@ def wide_to_xlsx(
 
         reference = extra.get(reference_attribute)
         ref = sheet.cell(row=8, column=cell_column, value=reference or "")
-        ref.style = INFO_STYLE.name if reference else DISABLED_STYLE.name
+        ref.style = METADATA_STYLE.name
 
         dv = xlsx_validation_from_type(data_type, is_optional, metadata, enum_registry)  # type: ignore[arg-type]
         if dv:
@@ -544,22 +545,11 @@ def wide_to_xlsx(
             15, len(attribute_name) + 5
         )  # Set column width based on header length
 
-    a = sheet.cell(row=1, column=1, value="Attribute")
-    a.style = ROW_HEADER_STYLE.name
-    d = sheet.cell(row=2, column=1, value="Field Code")
-    d.style = ROW_HEADER_STYLE.name
-    dt = sheet.cell(row=3, column=1, value="Description")
-    dt.style = ROW_HEADER_STYLE.name
-    c = sheet.cell(row=4, column=1, value="Data Type")
-    c.style = ROW_HEADER_STYLE.name
-    u = sheet.cell(row=5, column=1, value="Constraint")
-    u.style = ROW_HEADER_STYLE.name
-    r = sheet.cell(row=6, column=1, value="Units")
-    r.style = ROW_HEADER_STYLE.name
-    cr = sheet.cell(row=7, column=1, value="Requirements")
-    cr.style = ROW_HEADER_STYLE.name
-    rf = sheet.cell(row=8, column=1, value=REFERENCE_LABELS[reference_attribute])
-    rf.style = ROW_HEADER_STYLE.name
+    for row_idx, label in enumerate(
+        ["Attribute", "Field Code", "Description", "Data Type", "Constraint", "Units", "Requirements", ""], start=1
+    ):
+        header = sheet.cell(row=row_idx, column=1, value=label or REFERENCE_LABELS[reference_attribute])
+        header.style = ATTRIBUTES_NAME_STYLE.name
 
     last_col = len(df.columns) + 1
     start_data_row = 9
@@ -612,6 +602,7 @@ def save_translator(
         export_all_enums_in_model_to_translator(writer, BuildingBillMaterialsSlimRecordBase.model_fields)
         export_all_enums_in_model_to_translator(writer, ProjectMaterialDatabaseBase.model_fields)
         make_translator_floor_level(writer, FLOOR_LEVEL_CATEGORY)
+        style_first_rows(writer, ATTRIBUTES_NAME_STYLE.name)
 
 
 def make_translations_library_template_xlsx(writer: pd.ExcelWriter, sheet_name: str):
@@ -633,6 +624,12 @@ def make_translations_library_template_xlsx(writer: pd.ExcelWriter, sheet_name: 
         info_sheet.cell(row=cell_row, column=2, value=model["name"])
         info_sheet.cell(row=cell_row, column=3, value=model["orientation"])
         info_sheet.cell(row=cell_row, column=4, value=0)
+
+    # The contributor fills everything but the OpenBDF side of the mapping.
+    for cell_row in range(2, len(models) + 2):
+        for column in range(1, 11):
+            if column != 2:
+                info_sheet.cell(row=cell_row, column=column).style = EDITABLE_VALUE_STYLE.name
 
     info_sheet.column_dimensions["A"].width = 30
     info_sheet.column_dimensions["B"].width = 30
@@ -666,6 +663,9 @@ def make_translator_openbdf_pydantic(writer: pd.ExcelWriter, sheet_name: str, mo
         extra = get_field_extra(metadata)
         data_type, is_optional = unwrap_optional(metadata.annotation)
         requirements = requirement_of(extra, is_optional)
+
+        code_cell = info_sheet.cell(row=cell_row, column=1, value="")
+        code_cell.style = EDITABLE_VALUE_STYLE.name
 
         fc = info_sheet.cell(row=cell_row, column=2, value=field_code)
         fc.style = FIELD_CODE_STYLE.name
@@ -733,6 +733,9 @@ def make_translator_openbdfenum(writer: pd.ExcelWriter, sheet_name: str, enum: t
         display_name = getattr(item, "display_name", None)
         description = getattr(item, "description", None)
         parent_category = getattr(item, "parent_category", None)
+
+        value_cell = info_sheet.cell(row=cell_row, column=1, value="")
+        value_cell.style = EDITABLE_VALUE_STYLE.name
 
         fc = info_sheet.cell(row=cell_row, column=2, value=str(item.value))
         fc.style = FIELD_CODE_STYLE.name

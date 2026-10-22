@@ -73,7 +73,7 @@ class EnumRegistry:
 
         # Row 2 holds the reference of each datatype, written by the enum classes themselves.
         reference_label = sheet.cell(row=2, column=1, value="Reference")
-        reference_label.style = "RowHeader"
+        reference_label.style = "AttributeName"
 
         for entry in self._registry.values():
             enum_cls = entry.enum_cls
@@ -90,8 +90,8 @@ class EnumRegistry:
             reference_cell = sheet.cell(
                 row=2, column=entry.column_index, value=reference.display_name if reference else ""
             )
-            reference_cell.style = "Info" if reference else "Disabled"
+            reference_cell.style = "Metadata"
 
             for idx, (_, display_name) in enumerate(enum_cls.choices(), start=3):
                 member_cell = sheet.cell(row=idx, column=entry.column_index, value=display_name)
-                member_cell.style = "Normal"
+                member_cell.style = "Metadata"
