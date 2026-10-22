@@ -29,21 +29,21 @@ def write_workbook(path: Path, sheets: dict[str, pd.DataFrame]) -> None:
 def default_openbdf_sheets() -> dict[str, pd.DataFrame]:
     project = pd.DataFrame([[None] * 11])
     project.iloc[0, 3] = "project_name"
-    project.iloc[0, 10] = "Example project"
+    project.iloc[0, 9] = "Example project"
 
-    # Generated template layout: field codes in row 2, data from row 10.
-    bill_of_materials = pd.DataFrame([[None] * 2 for _ in range(10)])
+    # Generated template layout: field codes in row 2, data from row 9.
+    bill_of_materials = pd.DataFrame([[None] * 2 for _ in range(9)])
     bill_of_materials.iloc[1, 1] = "material_id"
-    bill_of_materials.iloc[9, 1] = "MAT-1"
+    bill_of_materials.iloc[8, 1] = "MAT-1"
 
-    results_wide = pd.DataFrame([[None] * 2 for _ in range(10)])
+    results_wide = pd.DataFrame([[None] * 2 for _ in range(9)])
     results_wide.iloc[1, 1] = "material_id"
-    results_wide.iloc[9, 1] = "MAT-1"
+    results_wide.iloc[8, 1] = "MAT-1"
 
-    # Project Material Database in the repo wide layout: field codes in row 2, Reference row 9, data from row 10.
-    project_material_database = pd.DataFrame([[None] * 2 for _ in range(10)])
+    # Project Material Database in the repo wide layout: field codes in row 2, Reference row 8, data from row 9.
+    project_material_database = pd.DataFrame([[None] * 2 for _ in range(9)])
     project_material_database.iloc[1, 1] = "material_ref_id"
-    project_material_database.iloc[9, 1] = "M0001"
+    project_material_database.iloc[8, 1] = "M0001"
 
     return {
         "General Information": project,
@@ -89,7 +89,7 @@ def test_open_command_processes_sheets_split_across_files(tmp_path: Path, monkey
     assert drop_invalid is False
     assert tables.project.to_dict(orient="records") == [{"field_code": "project_name", "value": "Example project"}]
     assert tables.bill_of_materials.to_dict(orient="records") == [{"material_id": "MAT-1"}]
-    # start_row=9 skips the metadata rows, so the first record is the first data row.
+    # start_row=8 skips the metadata rows, so the first record is the first data row.
     raw_project_material_database = tables.project_material_database.to_dict(orient="records")
     assert raw_project_material_database == [{"material_ref_id": "M0001"}]
     assert tables.results_wide.to_dict(orient="records") == [{"material_id": "MAT-1"}]
@@ -267,7 +267,7 @@ def fill_required_vertical(sheet, model_cls) -> None:
     field_code_rows = {sheet.cell(row=row, column=4).value: row for row in range(2, sheet.max_row + 1)}
     for name, info in model_cls.model_fields.items():
         if info.is_required() and name in field_code_rows:
-            sheet.cell(row=field_code_rows[name], column=11, value=valid_template_value(info))
+            sheet.cell(row=field_code_rows[name], column=10, value=valid_template_value(info))
 
 
 def fill_required_horizontal(sheet, model_cls) -> None:
@@ -275,7 +275,7 @@ def fill_required_horizontal(sheet, model_cls) -> None:
     field_code_cols = {cell.value: cell.column for cell in sheet[2] if cell.value}
     for name, info in model_cls.model_fields.items():
         if info.is_required() and name in field_code_cols:
-            sheet.cell(row=10, column=field_code_cols[name], value=valid_template_value(info))
+            sheet.cell(row=9, column=field_code_cols[name], value=valid_template_value(info))
 
 
 def test_open_command_opens_filled_generated_template_as_single_file(tmp_path: Path):
@@ -288,27 +288,27 @@ def test_open_command_opens_filled_generated_template_as_single_file(tmp_path: P
     bom = workbook["Bill of Materials"]
     fill_required_horizontal(bom, BuildingBillMaterialsSlimRecordBase)
     bom_codes = {cell.value: cell.column for cell in bom[2] if cell.value}
-    bom.cell(row=10, column=bom_codes["material_id"], value="MAT-1")
-    bom.cell(row=10, column=bom_codes["custom_material_name"], value="Concrete C30/37")
-    bom.cell(row=10, column=bom_codes["material_reference_service_life"], value=50)
+    bom.cell(row=9, column=bom_codes["material_id"], value="MAT-1")
+    bom.cell(row=9, column=bom_codes["custom_material_name"], value="Concrete C30/37")
+    bom.cell(row=9, column=bom_codes["material_reference_service_life"], value=50)
 
     project_material_database = workbook["Project Material Database"]
     fill_required_horizontal(project_material_database, ProjectMaterialDatabaseBase)
     pmd_codes = {cell.value: cell.column for cell in project_material_database[2] if cell.value}
-    project_material_database.cell(row=10, column=pmd_codes["material_ref_id"], value="M0001")
-    project_material_database.cell(row=10, column=pmd_codes["custom_material_name"], value="Concrete C30/37")
+    project_material_database.cell(row=9, column=pmd_codes["material_ref_id"], value="M0001")
+    project_material_database.cell(row=9, column=pmd_codes["custom_material_name"], value="Concrete C30/37")
     # A material is the pair of its name and its EPD dataset name, so both sheets must agree on it.
     bom.cell(
-        row=10,
+        row=9,
         column=bom_codes["lca_dataset_material_name"],
-        value=project_material_database.cell(row=10, column=pmd_codes["lca_dataset_material_name"]).value,
+        value=project_material_database.cell(row=9, column=pmd_codes["lca_dataset_material_name"]).value,
     )
 
     wide = workbook["LCA Result (Wide)"]
     fill_required_horizontal(wide, LCAResultsWideFullBase)
     wide_codes = {cell.value: cell.column for cell in wide[2] if cell.value}
-    wide.cell(row=10, column=wide_codes["material_id"], value="MAT-1")
-    wide.cell(row=10, column=wide_codes["gwp_total_a1_a3"], value=123.45)
+    wide.cell(row=9, column=wide_codes["material_id"], value="MAT-1")
+    wide.cell(row=9, column=wide_codes["gwp_total_a1_a3"], value=123.45)
     workbook.save(template_path)
 
     output_path = tmp_path / "out.xlsx"
@@ -318,17 +318,17 @@ def test_open_command_opens_filled_generated_template_as_single_file(tmp_path: P
     out = load_workbook(output_path)
     out_bom_codes = {cell.value: cell.column for cell in out["Bill of Materials"][2] if cell.value}
     out_bom = out["Bill of Materials"]
-    assert out_bom.cell(row=10, column=out_bom_codes["material_id"]).value == "MAT-1"
-    assert out_bom.cell(row=10, column=out_bom_codes["custom_material_name"]).value == "Concrete C30/37"
-    assert out_bom.cell(row=10, column=out_bom_codes["material_reference_service_life"]).value == "50"
+    assert out_bom.cell(row=9, column=out_bom_codes["material_id"]).value == "MAT-1"
+    assert out_bom.cell(row=9, column=out_bom_codes["custom_material_name"]).value == "Concrete C30/37"
+    assert out_bom.cell(row=9, column=out_bom_codes["material_reference_service_life"]).value == "50"
     out_wide_codes = {cell.value: cell.column for cell in out["LCA Result (Wide)"][2] if cell.value}
     out_wide = out["LCA Result (Wide)"]
-    assert out_wide.cell(row=10, column=out_wide_codes["material_id"]).value == "MAT-1"
-    assert out_wide.cell(row=10, column=out_wide_codes["gwp_total_a1_a3"]).value == "123.45"
+    assert out_wide.cell(row=9, column=out_wide_codes["material_id"]).value == "MAT-1"
+    assert out_wide.cell(row=9, column=out_wide_codes["gwp_total_a1_a3"]).value == "123.45"
     out_pmd_codes = {cell.value: cell.column for cell in out["Project Material Database"][2] if cell.value}
     out_pmd = out["Project Material Database"]
-    assert out_pmd.cell(row=10, column=out_pmd_codes["material_ref_id"]).value == "M0001"
-    assert out_pmd.cell(row=10, column=out_pmd_codes["custom_material_name"]).value == "Concrete C30/37"
+    assert out_pmd.cell(row=9, column=out_pmd_codes["material_ref_id"]).value == "M0001"
+    assert out_pmd.cell(row=9, column=out_pmd_codes["custom_material_name"]).value == "Concrete C30/37"
 
 
 def test_document_translator_add_last_wins_on_category_conflict():
@@ -359,31 +359,31 @@ def test_open_command_collects_every_finding_of_a_workbook_with_bad_cells(tmp_pa
     project_sheet = workbook["General Information"]
     fill_required_vertical(project_sheet, ProjectRecordBase)
     project_code_rows = {cell.value: cell.row for cell in project_sheet["D"] if cell.value}
-    project_sheet.cell(row=project_code_rows["building_gross_floor_area"], column=11, value=0)
+    project_sheet.cell(row=project_code_rows["building_gross_floor_area"], column=10, value=0)
 
     project_material_database = workbook["Project Material Database"]
     fill_required_horizontal(project_material_database, ProjectMaterialDatabaseBase)
     database_codes = {cell.value: cell.column for cell in project_material_database[2] if cell.value}
-    project_material_database.cell(row=10, column=database_codes["material_ref_id"], value="M0001")
-    project_material_database.cell(row=10, column=database_codes["custom_material_name"], value="Concrete C30/37")
-    dataset_name = project_material_database.cell(row=10, column=database_codes["lca_dataset_material_name"]).value
+    project_material_database.cell(row=9, column=database_codes["material_ref_id"], value="M0001")
+    project_material_database.cell(row=9, column=database_codes["custom_material_name"], value="Concrete C30/37")
+    dataset_name = project_material_database.cell(row=9, column=database_codes["lca_dataset_material_name"]).value
 
     bom = workbook["Bill of Materials"]
     fill_required_horizontal(bom, BuildingBillMaterialsSlimRecordBase)
     bom_codes = {cell.value: cell.column for cell in bom[2] if cell.value}
-    bom.cell(row=10, column=bom_codes["material_id"], value="MAT-1")
-    bom.cell(row=10, column=bom_codes["custom_material_name"], value="Concrete C30/37")
-    bom.cell(row=10, column=bom_codes["lca_dataset_material_name"], value=dataset_name)
-    bom.cell(row=10, column=bom_codes["material_data_type"], value="bogus")
+    bom.cell(row=9, column=bom_codes["material_id"], value="MAT-1")
+    bom.cell(row=9, column=bom_codes["custom_material_name"], value="Concrete C30/37")
+    bom.cell(row=9, column=bom_codes["lca_dataset_material_name"], value=dataset_name)
+    bom.cell(row=9, column=bom_codes["material_data_type"], value="bogus")
     for column in range(1, bom.max_column + 1):
-        bom.cell(row=11, column=column, value=bom.cell(row=10, column=column).value)
-    bom.cell(row=11, column=bom_codes["material_weight_kg"], value=100)
-    bom.cell(row=11, column=bom_codes["material_data_type"], value=MaterialDataType.CPR_DOPC.value)
+        bom.cell(row=10, column=column, value=bom.cell(row=9, column=column).value)
+    bom.cell(row=10, column=bom_codes["material_weight_kg"], value=100)
+    bom.cell(row=10, column=bom_codes["material_data_type"], value=MaterialDataType.CPR_DOPC.value)
 
     wide = workbook["LCA Result (Wide)"]
     fill_required_horizontal(wide, LCAResultsWideFullBase)
     wide_codes = {cell.value: cell.column for cell in wide[2] if cell.value}
-    wide.cell(row=10, column=wide_codes["material_id"], value="MAT-2")
+    wide.cell(row=9, column=wide_codes["material_id"], value="MAT-2")
     workbook.save(template_path)
 
     output_path = tmp_path / "out.xlsx"
@@ -396,11 +396,11 @@ def test_open_command_collects_every_finding_of_a_workbook_with_bad_cells(tmp_pa
         f"  Row {floor_area_row}: E17: Floor area must be greater than zero",
         "Bill of Materials:",
         "  E32: material_id 'MAT-1' is used by 2 bill of materials rows",
-        "  Row 10: E02: Value 'bogus' is not a valid MaterialDataType",
-        "  E16: Row 10 has no mass, material efficiency analysis is not possible",
+        "  Row 9: E02: Value 'bogus' is not a valid MaterialDataType",
+        "  E16: Row 9 has no mass, material efficiency analysis is not possible",
         "LCA Result (Wide):",
         "  E05: Bill of Materials has 2 rows, LCA Result (Wide) has 1",
-        "  E06: Row 10: material_id MAT-1 in the inventory, MAT-2 in the results",
+        "  E06: Row 9: material_id MAT-1 in the inventory, MAT-2 in the results",
         "The workbook has reject findings, so it was not saved. Use --draft to save it anyway.",
     ]
     assert not output_path.exists()

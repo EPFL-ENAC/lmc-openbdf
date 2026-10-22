@@ -9,6 +9,7 @@ from typing import Optional
 from sqlmodel import Field, SQLModel
 
 from openbdf.model.enums.references import ReferenceAlignment
+from openbdf.model.enums.requirement import Requirement
 
 from .field_metadata import openbdf_field_metadata
 
@@ -21,8 +22,7 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Material ID",
             field_code="material_id",
             description="The unique identifier for the material within the project context, referencing the Bill of Materials.",
-            requirements="Required",
-            criticality="MUST",
+            requirements=Requirement.REQUIRED,
         ),
     )
 
@@ -34,8 +34,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_total_a1_a3",
             description="Global Warming Potential - Total for module A1-A3.",
             units="kg CO₂ eq",
-            requirements="Required",
-            criticality="SHOULD",
+            requirements=Requirement.STRONGLY_RECOMMENDED,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -48,8 +47,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_total_a1",
             description="Global Warming Potential - Total for module A1.",
             units="kg CO₂ eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -62,8 +60,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_total_a2",
             description="Global Warming Potential - Total for module A2.",
             units="kg CO₂ eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -76,8 +73,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_total_a3",
             description="Global Warming Potential - Total for module A3.",
             units="kg CO₂ eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -90,8 +86,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_total_a4",
             description="Global Warming Potential - Total for module A4.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -104,8 +99,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_total_a5",
             description="Global Warming Potential - Total for module A5.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -118,8 +112,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_total_a5_1",
             description="Global Warming Potential - Total for module A5.1.",
             units="kg CO₂ eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI,
         ),
     )
@@ -132,8 +125,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_total_a5_2",
             description="Global Warming Potential - Total for module A5.2.",
             units="kg CO₂ eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI,
         ),
     )
@@ -146,8 +138,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_total_a5_3",
             description="Global Warming Potential - Total for module A5.3.",
             units="kg CO₂ eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI,
         ),
     )
@@ -160,8 +151,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_total_a5_4",
             description="Global Warming Potential - Total for module A5.4.",
             units="kg CO₂ eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI,
         ),
     )
@@ -174,8 +164,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_total_b1",
             description="Global Warming Potential - Total for module B1.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -188,8 +177,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_total_b1_1",
             description="Global Warming Potential - Total for module B1.1.",
             units="kg CO₂ eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -202,8 +190,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_total_b1_2",
             description="Global Warming Potential - Total for module B1.2.",
             units="kg CO₂ eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -216,8 +203,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_total_b2",
             description="Global Warming Potential - Total for module B2.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -230,8 +216,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_total_b3",
             description="Global Warming Potential - Total for module B3.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -244,8 +229,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_total_b4",
             description="Global Warming Potential - Total for module B4.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -258,8 +242,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_total_b5",
             description="Global Warming Potential - Total for module B5.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -272,8 +255,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_total_b6",
             description="Global Warming Potential - Total for module B6.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -286,8 +268,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_total_b6_1",
             description="Global Warming Potential - Total for module B6.1.",
             units="kg CO₂ eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -300,8 +281,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_total_b6_2",
             description="Global Warming Potential - Total for module B6.2.",
             units="kg CO₂ eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -314,8 +294,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_total_b6_3",
             description="Global Warming Potential - Total for module B6.3.",
             units="kg CO₂ eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -328,8 +307,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_total_b7",
             description="Global Warming Potential - Total for module B7.",
             units="kg CO₂ eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -342,8 +320,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_total_b7_1",
             description="Global Warming Potential - Total for module B7.1.",
             units="kg CO₂ eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -356,8 +333,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_total_b7_2",
             description="Global Warming Potential - Total for module B7.2.",
             units="kg CO₂ eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -370,8 +346,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_total_b7_3",
             description="Global Warming Potential - Total for module B7.3.",
             units="kg CO₂ eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -384,8 +359,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_total_b8",
             description="Global Warming Potential - Total for module B8.",
             units="kg CO₂ eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -398,8 +372,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_total_b8_1",
             description="Global Warming Potential - Total for module B8.1.",
             units="kg CO₂ eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -412,8 +385,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_total_b8_2",
             description="Global Warming Potential - Total for module B8.2.",
             units="kg CO₂ eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -426,8 +398,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_total_b8_3",
             description="Global Warming Potential - Total for module B8.3.",
             units="kg CO₂ eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -440,8 +411,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_total_c1",
             description="Global Warming Potential - Total for module C1.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -454,8 +424,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_total_c2",
             description="Global Warming Potential - Total for module C2.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -468,8 +437,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_total_c3",
             description="Global Warming Potential - Total for module C3.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -482,8 +450,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_total_c4",
             description="Global Warming Potential - Total for module C4.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -496,8 +463,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_total_d",
             description="Global Warming Potential - Total for module D.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -510,8 +476,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_total_d1",
             description="Global Warming Potential - Total for module D1.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -524,8 +489,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_total_d2",
             description="Global Warming Potential - Total for module D2.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -538,8 +502,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_total_total",
             description="Total Global Warming Potential - Total.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -552,8 +515,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_f_a1_a3",
             description="Global Warming Potential - Fossil for module A1-A3.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -566,8 +528,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_f_a1",
             description="Global Warming Potential - Fossil for module A1.",
             units="kg CO₂ eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -580,8 +541,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_f_a2",
             description="Global Warming Potential - Fossil for module A2.",
             units="kg CO₂ eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -594,8 +554,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_f_a3",
             description="Global Warming Potential - Fossil for module A3.",
             units="kg CO₂ eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -608,8 +567,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_f_a4",
             description="Global Warming Potential - Fossil for module A4.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -622,8 +580,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_f_a5",
             description="Global Warming Potential - Fossil for module A5.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -636,8 +593,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_f_b1",
             description="Global Warming Potential - Fossil for module B1.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -650,8 +606,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_f_b2",
             description="Global Warming Potential - Fossil for module B2.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -664,8 +619,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_f_b3",
             description="Global Warming Potential - Fossil for module B3.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -678,8 +632,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_f_b4",
             description="Global Warming Potential - Fossil for module B4.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -692,8 +645,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_f_b5",
             description="Global Warming Potential - Fossil for module B5.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -706,8 +658,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_f_b6",
             description="Global Warming Potential - Fossil for module B6.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -720,8 +671,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_f_b7",
             description="Global Warming Potential - Fossil for module B7.",
             units="kg CO₂ eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -734,8 +684,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_f_b8",
             description="Global Warming Potential - Fossil for module B8.",
             units="kg CO₂ eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -748,8 +697,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_f_c1",
             description="Global Warming Potential - Fossil for module C1.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -762,8 +710,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_f_c2",
             description="Global Warming Potential - Fossil for module C2.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -776,8 +723,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_f_c3",
             description="Global Warming Potential - Fossil for module C3.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -790,8 +736,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_f_c4",
             description="Global Warming Potential - Fossil for module C4.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -804,8 +749,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_f_d",
             description="Global Warming Potential - Fossil for module D.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -818,8 +762,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_f_d1",
             description="Global Warming Potential - Fossil for module D1.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -832,8 +775,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_f_d2",
             description="Global Warming Potential - Fossil for module D2.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -846,8 +788,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_f_total",
             description="Total Global Warming Potential - Fossil.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -860,8 +801,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_b_a1_a3",
             description="Global Warming Potential - Biogenic for module A1-A3.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -874,8 +814,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_b_a1",
             description="Global Warming Potential - Biogenic for module A1.",
             units="kg CO₂ eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -888,8 +827,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_b_a2",
             description="Global Warming Potential - Biogenic for module A2.",
             units="kg CO₂ eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -902,8 +840,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_b_a3",
             description="Global Warming Potential - Biogenic for module A3.",
             units="kg CO₂ eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -916,8 +853,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_b_a4",
             description="Global Warming Potential - Biogenic for module A4.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -930,8 +866,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_b_a5",
             description="Global Warming Potential - Biogenic for module A5.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -944,8 +879,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_b_b1",
             description="Global Warming Potential - Biogenic for module B1.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -958,8 +892,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_b_b2",
             description="Global Warming Potential - Biogenic for module B2.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -972,8 +905,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_b_b3",
             description="Global Warming Potential - Biogenic for module B3.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -986,8 +918,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_b_b4",
             description="Global Warming Potential - Biogenic for module B4.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -1000,8 +931,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_b_b5",
             description="Global Warming Potential - Biogenic for module B5.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -1014,8 +944,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_b_b6",
             description="Global Warming Potential - Biogenic for module B6.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -1028,8 +957,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_b_b7",
             description="Global Warming Potential - Biogenic for module B7.",
             units="kg CO₂ eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -1042,8 +970,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_b_b8",
             description="Global Warming Potential - Biogenic for module B8.",
             units="kg CO₂ eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -1056,8 +983,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_b_c1",
             description="Global Warming Potential - Biogenic for module C1.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -1070,8 +996,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_b_c2",
             description="Global Warming Potential - Biogenic for module C2.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -1084,8 +1009,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_b_c3",
             description="Global Warming Potential - Biogenic for module C3.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -1098,8 +1022,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_b_c4",
             description="Global Warming Potential - Biogenic for module C4.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -1112,8 +1035,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_b_d",
             description="Global Warming Potential - Biogenic for module D.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -1126,8 +1048,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_b_d1",
             description="Global Warming Potential - Biogenic for module D1.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -1140,8 +1061,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_b_d2",
             description="Global Warming Potential - Biogenic for module D2.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -1154,8 +1074,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_b_total",
             description="Total Global Warming Potential - Biogenic.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -1168,8 +1087,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_luc_a1_a3",
             description="Global Warming Potential - Land Use and Land Use Change for module A1-A3.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -1182,8 +1100,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_luc_a1",
             description="Global Warming Potential - Land Use and Land Use Change for module A1.",
             units="kg CO₂ eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -1196,8 +1113,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_luc_a2",
             description="Global Warming Potential - Land Use and Land Use Change for module A2.",
             units="kg CO₂ eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -1210,8 +1126,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_luc_a3",
             description="Global Warming Potential - Land Use and Land Use Change for module A3.",
             units="kg CO₂ eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -1224,8 +1139,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_luc_a4",
             description="Global Warming Potential - Land Use and Land Use Change for module A4.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -1238,8 +1152,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_luc_a5",
             description="Global Warming Potential - Land Use and Land Use Change for module A5.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -1252,8 +1165,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_luc_b1",
             description="Global Warming Potential - Land Use and Land Use Change for module B1.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -1266,8 +1178,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_luc_b2",
             description="Global Warming Potential - Land Use and Land Use Change for module B2.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -1280,8 +1191,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_luc_b3",
             description="Global Warming Potential - Land Use and Land Use Change for module B3.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -1294,8 +1204,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_luc_b4",
             description="Global Warming Potential - Land Use and Land Use Change for module B4.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -1308,8 +1217,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_luc_b5",
             description="Global Warming Potential - Land Use and Land Use Change for module B5.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -1322,8 +1230,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_luc_b6",
             description="Global Warming Potential - Land Use and Land Use Change for module B6.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -1336,8 +1243,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_luc_b7",
             description="Global Warming Potential - Land Use and Land Use Change for module B7.",
             units="kg CO₂ eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -1350,8 +1256,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_luc_b8",
             description="Global Warming Potential - Land Use and Land Use Change for module B8.",
             units="kg CO₂ eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -1364,8 +1269,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_luc_c1",
             description="Global Warming Potential - Land Use and Land Use Change for module C1.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -1378,8 +1282,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_luc_c2",
             description="Global Warming Potential - Land Use and Land Use Change for module C2.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -1392,8 +1295,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_luc_c3",
             description="Global Warming Potential - Land Use and Land Use Change for module C3.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -1406,8 +1308,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_luc_c4",
             description="Global Warming Potential - Land Use and Land Use Change for module C4.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -1420,8 +1321,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_luc_d",
             description="Global Warming Potential - Land Use and Land Use Change for module D.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -1434,8 +1334,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_luc_d1",
             description="Global Warming Potential - Land Use and Land Use Change for module D1.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -1448,8 +1347,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_luc_d2",
             description="Global Warming Potential - Land Use and Land Use Change for module D2.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -1462,8 +1360,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="gwp_luc_total",
             description="Total Global Warming Potential - Land Use and Land Use Change.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -1476,8 +1373,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="odp_a1_a3",
             description="Ozone Depletion Potential for module A1-A3.",
             units="kg CFC-11 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -1490,8 +1386,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="odp_a1",
             description="Ozone Depletion Potential for module A1.",
             units="kg CFC-11 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -1504,8 +1399,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="odp_a2",
             description="Ozone Depletion Potential for module A2.",
             units="kg CFC-11 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -1518,8 +1412,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="odp_a3",
             description="Ozone Depletion Potential for module A3.",
             units="kg CFC-11 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -1532,8 +1425,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="odp_a4",
             description="Ozone Depletion Potential for module A4.",
             units="kg CFC-11 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -1546,8 +1438,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="odp_a5",
             description="Ozone Depletion Potential for module A5.",
             units="kg CFC-11 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -1560,8 +1451,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="odp_b1",
             description="Ozone Depletion Potential for module B1.",
             units="kg CFC-11 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -1574,8 +1464,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="odp_b2",
             description="Ozone Depletion Potential for module B2.",
             units="kg CFC-11 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -1588,8 +1477,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="odp_b3",
             description="Ozone Depletion Potential for module B3.",
             units="kg CFC-11 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -1602,8 +1490,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="odp_b4",
             description="Ozone Depletion Potential for module B4.",
             units="kg CFC-11 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -1616,8 +1503,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="odp_b5",
             description="Ozone Depletion Potential for module B5.",
             units="kg CFC-11 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -1630,8 +1516,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="odp_b6",
             description="Ozone Depletion Potential for module B6.",
             units="kg CFC-11 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -1644,8 +1529,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="odp_b7",
             description="Ozone Depletion Potential for module B7.",
             units="kg CFC-11 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -1658,8 +1542,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="odp_b8",
             description="Ozone Depletion Potential for module B8.",
             units="kg CFC-11 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -1672,8 +1555,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="odp_c1",
             description="Ozone Depletion Potential for module C1.",
             units="kg CFC-11 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -1686,8 +1568,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="odp_c2",
             description="Ozone Depletion Potential for module C2.",
             units="kg CFC-11 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -1700,8 +1581,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="odp_c3",
             description="Ozone Depletion Potential for module C3.",
             units="kg CFC-11 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -1714,8 +1594,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="odp_c4",
             description="Ozone Depletion Potential for module C4.",
             units="kg CFC-11 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -1728,8 +1607,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="odp_d",
             description="Ozone Depletion Potential for module D.",
             units="kg CFC-11 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -1742,8 +1620,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="odp_d1",
             description="Ozone Depletion Potential for module D1.",
             units="kg CFC-11 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -1756,8 +1633,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="odp_d2",
             description="Ozone Depletion Potential for module D2.",
             units="kg CFC-11 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -1770,8 +1646,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="odp_total",
             description="Total Ozone Depletion Potential.",
             units="kg CFC-11 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -1784,8 +1659,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ap_a1_a3",
             description="Acidification Potential for module A1-A3.",
             units="kg SO₂ eq.",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -1798,8 +1672,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ap_a1",
             description="Acidification Potential for module A1.",
             units="kg SO₂ eq.",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -1812,8 +1685,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ap_a2",
             description="Acidification Potential for module A2.",
             units="kg SO₂ eq.",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -1826,8 +1698,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ap_a3",
             description="Acidification Potential for module A3.",
             units="kg SO₂ eq.",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -1840,8 +1711,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ap_a4",
             description="Acidification Potential for module A4.",
             units="kg SO₂ eq.",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -1854,8 +1724,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ap_a5",
             description="Acidification Potential for module A5.",
             units="kg SO₂ eq.",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -1868,8 +1737,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ap_b1",
             description="Acidification Potential for module B1.",
             units="kg SO₂ eq.",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -1882,8 +1750,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ap_b2",
             description="Acidification Potential for module B2.",
             units="kg SO₂ eq.",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -1896,8 +1763,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ap_b3",
             description="Acidification Potential for module B3.",
             units="kg SO₂ eq.",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -1910,8 +1776,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ap_b4",
             description="Acidification Potential for module B4.",
             units="kg SO₂ eq.",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -1924,8 +1789,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ap_b5",
             description="Acidification Potential for module B5.",
             units="kg SO₂ eq.",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -1938,8 +1802,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ap_b6",
             description="Acidification Potential for module B6.",
             units="kg SO₂ eq.",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -1952,8 +1815,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ap_b7",
             description="Acidification Potential for module B7.",
             units="kg SO₂ eq.",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -1966,8 +1828,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ap_b8",
             description="Acidification Potential for module B8.",
             units="kg SO₂ eq.",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -1980,8 +1841,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ap_c1",
             description="Acidification Potential for module C1.",
             units="kg SO₂ eq.",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -1994,8 +1854,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ap_c2",
             description="Acidification Potential for module C2.",
             units="kg SO₂ eq.",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -2008,8 +1867,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ap_c3",
             description="Acidification Potential for module C3.",
             units="kg SO₂ eq.",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -2022,8 +1880,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ap_c4",
             description="Acidification Potential for module C4.",
             units="kg SO₂ eq.",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -2036,8 +1893,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ap_d",
             description="Acidification Potential for module D.",
             units="kg SO₂ eq.",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -2050,8 +1906,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ap_d1",
             description="Acidification Potential for module D1.",
             units="kg SO₂ eq.",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -2064,8 +1919,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ap_d2",
             description="Acidification Potential for module D2.",
             units="kg SO₂ eq.",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -2078,8 +1932,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ap_total",
             description="Total Acidification Potential.",
             units="kg SO₂ eq.",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -2092,8 +1945,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ap_ae_a1_a3",
             description="Acidification Potential (accumulated exceedance) for module A1-A3.",
             units="mol H+ eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -2106,8 +1958,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ap_ae_a1",
             description="Acidification Potential (accumulated exceedance) for module A1.",
             units="mol H+ eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -2120,8 +1971,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ap_ae_a2",
             description="Acidification Potential (accumulated exceedance) for module A2.",
             units="mol H+ eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -2134,8 +1984,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ap_ae_a3",
             description="Acidification Potential (accumulated exceedance) for module A3.",
             units="mol H+ eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -2148,8 +1997,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ap_ae_a4",
             description="Acidification Potential (accumulated exceedance) for module A4.",
             units="mol H+ eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -2162,8 +2010,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ap_ae_a5",
             description="Acidification Potential (accumulated exceedance) for module A5.",
             units="mol H+ eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -2176,8 +2023,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ap_ae_b1",
             description="Acidification Potential (accumulated exceedance) for module B1.",
             units="mol H+ eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -2190,8 +2036,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ap_ae_b2",
             description="Acidification Potential (accumulated exceedance) for module B2.",
             units="mol H+ eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -2204,8 +2049,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ap_ae_b3",
             description="Acidification Potential (accumulated exceedance) for module B3.",
             units="mol H+ eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -2218,8 +2062,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ap_ae_b4",
             description="Acidification Potential (accumulated exceedance) for module B4.",
             units="mol H+ eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -2232,8 +2075,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ap_ae_b5",
             description="Acidification Potential (accumulated exceedance) for module B5.",
             units="mol H+ eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -2246,8 +2088,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ap_ae_b6",
             description="Acidification Potential (accumulated exceedance) for module B6.",
             units="mol H+ eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -2260,8 +2101,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ap_ae_b7",
             description="Acidification Potential (accumulated exceedance) for module B7.",
             units="mol H+ eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -2274,8 +2114,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ap_ae_b8",
             description="Acidification Potential (accumulated exceedance) for module B8.",
             units="mol H+ eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -2288,8 +2127,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ap_ae_c1",
             description="Acidification Potential (accumulated exceedance) for module C1.",
             units="mol H+ eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -2302,8 +2140,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ap_ae_c2",
             description="Acidification Potential (accumulated exceedance) for module C2.",
             units="mol H+ eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -2316,8 +2153,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ap_ae_c3",
             description="Acidification Potential (accumulated exceedance) for module C3.",
             units="mol H+ eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -2330,8 +2166,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ap_ae_c4",
             description="Acidification Potential (accumulated exceedance) for module C4.",
             units="mol H+ eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -2344,8 +2179,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ap_ae_d",
             description="Acidification Potential (accumulated exceedance) for module D.",
             units="mol H+ eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -2358,8 +2192,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ap_ae_d1",
             description="Acidification Potential (accumulated exceedance) for module D1.",
             units="mol H+ eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -2372,8 +2205,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ap_ae_d2",
             description="Acidification Potential (accumulated exceedance) for module D2.",
             units="mol H+ eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -2386,8 +2218,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ap_ae_total",
             description="Total Acidification Potential (accumulated exceedance).",
             units="mol H+ eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -2400,8 +2231,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_a1_a3",
             description="Eutrophication Potential for module A1-A3.",
             units="kg N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -2414,8 +2244,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_a1",
             description="Eutrophication Potential for module A1.",
             units="kg N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -2428,8 +2257,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_a2",
             description="Eutrophication Potential for module A2.",
             units="kg N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -2442,8 +2270,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_a3",
             description="Eutrophication Potential for module A3.",
             units="kg N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -2456,8 +2283,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_a4",
             description="Eutrophication Potential for module A4.",
             units="kg N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -2470,8 +2296,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_a5",
             description="Eutrophication Potential for module A5.",
             units="kg N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -2484,8 +2309,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_b1",
             description="Eutrophication Potential for module B1.",
             units="kg N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -2498,8 +2322,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_b2",
             description="Eutrophication Potential for module B2.",
             units="kg N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -2512,8 +2335,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_b3",
             description="Eutrophication Potential for module B3.",
             units="kg N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -2526,8 +2348,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_b4",
             description="Eutrophication Potential for module B4.",
             units="kg N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -2540,8 +2361,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_b5",
             description="Eutrophication Potential for module B5.",
             units="kg N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -2554,8 +2374,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_b6",
             description="Eutrophication Potential for module B6.",
             units="kg N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -2568,8 +2387,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_b7",
             description="Eutrophication Potential for module B7.",
             units="kg N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -2582,8 +2400,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_b8",
             description="Eutrophication Potential for module B8.",
             units="kg N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -2596,8 +2413,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_c1",
             description="Eutrophication Potential for module C1.",
             units="kg N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -2610,8 +2426,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_c2",
             description="Eutrophication Potential for module C2.",
             units="kg N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -2624,8 +2439,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_c3",
             description="Eutrophication Potential for module C3.",
             units="kg N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -2638,8 +2452,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_c4",
             description="Eutrophication Potential for module C4.",
             units="kg N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -2652,8 +2465,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_d",
             description="Eutrophication Potential for module D.",
             units="kg N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -2666,8 +2478,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_d1",
             description="Eutrophication Potential for module D1.",
             units="kg N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -2680,8 +2491,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_d2",
             description="Eutrophication Potential for module D2.",
             units="kg N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -2694,8 +2504,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_total",
             description="Total Eutrophication Potential.",
             units="kg N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -2708,8 +2517,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_af_a1_a3",
             description="Eutrophication Potential - Aquatic Freshwater for module A1-A3.",
             units="kg PO4 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -2722,8 +2530,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_af_a1",
             description="Eutrophication Potential - Aquatic Freshwater for module A1.",
             units="kg PO4 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -2736,8 +2543,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_af_a2",
             description="Eutrophication Potential - Aquatic Freshwater for module A2.",
             units="kg PO4 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -2750,8 +2556,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_af_a3",
             description="Eutrophication Potential - Aquatic Freshwater for module A3.",
             units="kg PO4 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -2764,8 +2569,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_af_a4",
             description="Eutrophication Potential - Aquatic Freshwater for module A4.",
             units="kg PO4 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -2778,8 +2582,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_af_a5",
             description="Eutrophication Potential - Aquatic Freshwater for module A5.",
             units="kg PO4 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -2792,8 +2595,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_af_b1",
             description="Eutrophication Potential - Aquatic Freshwater for module B1.",
             units="kg PO4 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -2806,8 +2608,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_af_b2",
             description="Eutrophication Potential - Aquatic Freshwater for module B2.",
             units="kg PO4 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -2820,8 +2621,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_af_b3",
             description="Eutrophication Potential - Aquatic Freshwater for module B3.",
             units="kg PO4 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -2834,8 +2634,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_af_b4",
             description="Eutrophication Potential - Aquatic Freshwater for module B4.",
             units="kg PO4 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -2848,8 +2647,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_af_b5",
             description="Eutrophication Potential - Aquatic Freshwater for module B5.",
             units="kg PO4 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -2862,8 +2660,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_af_b6",
             description="Eutrophication Potential - Aquatic Freshwater for module B6.",
             units="kg PO4 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -2876,8 +2673,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_af_b7",
             description="Eutrophication Potential - Aquatic Freshwater for module B7.",
             units="kg PO4 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -2890,8 +2686,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_af_b8",
             description="Eutrophication Potential - Aquatic Freshwater for module B8.",
             units="kg PO4 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -2904,8 +2699,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_af_c1",
             description="Eutrophication Potential - Aquatic Freshwater for module C1.",
             units="kg PO4 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -2918,8 +2712,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_af_c2",
             description="Eutrophication Potential - Aquatic Freshwater for module C2.",
             units="kg PO4 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -2932,8 +2725,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_af_c3",
             description="Eutrophication Potential - Aquatic Freshwater for module C3.",
             units="kg PO4 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -2946,8 +2738,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_af_c4",
             description="Eutrophication Potential - Aquatic Freshwater for module C4.",
             units="kg PO4 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -2960,8 +2751,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_af_d",
             description="Eutrophication Potential - Aquatic Freshwater for module D.",
             units="kg PO4 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -2974,8 +2764,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_af_d1",
             description="Eutrophication Potential - Aquatic Freshwater for module D1.",
             units="kg PO4 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -2988,8 +2777,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_af_d2",
             description="Eutrophication Potential - Aquatic Freshwater for module D2.",
             units="kg PO4 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -3002,8 +2790,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_af_total",
             description="Total Eutrophication Potential - Aquatic Freshwater.",
             units="kg PO4 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -3016,8 +2803,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_am_a1_a3",
             description="Eutrophication Potential - Aquatic Marine for module A1-A3.",
             units="kg N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -3030,8 +2816,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_am_a1",
             description="Eutrophication Potential - Aquatic Marine for module A1.",
             units="kg N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -3044,8 +2829,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_am_a2",
             description="Eutrophication Potential - Aquatic Marine for module A2.",
             units="kg N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -3058,8 +2842,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_am_a3",
             description="Eutrophication Potential - Aquatic Marine for module A3.",
             units="kg N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -3072,8 +2855,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_am_a4",
             description="Eutrophication Potential - Aquatic Marine for module A4.",
             units="kg N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -3086,8 +2868,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_am_a5",
             description="Eutrophication Potential - Aquatic Marine for module A5.",
             units="kg N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -3100,8 +2881,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_am_b1",
             description="Eutrophication Potential - Aquatic Marine for module B1.",
             units="kg N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -3114,8 +2894,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_am_b2",
             description="Eutrophication Potential - Aquatic Marine for module B2.",
             units="kg N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -3128,8 +2907,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_am_b3",
             description="Eutrophication Potential - Aquatic Marine for module B3.",
             units="kg N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -3142,8 +2920,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_am_b4",
             description="Eutrophication Potential - Aquatic Marine for module B4.",
             units="kg N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -3156,8 +2933,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_am_b5",
             description="Eutrophication Potential - Aquatic Marine for module B5.",
             units="kg N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -3170,8 +2946,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_am_b6",
             description="Eutrophication Potential - Aquatic Marine for module B6.",
             units="kg N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -3184,8 +2959,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_am_b7",
             description="Eutrophication Potential - Aquatic Marine for module B7.",
             units="kg N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -3198,8 +2972,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_am_b8",
             description="Eutrophication Potential - Aquatic Marine for module B8.",
             units="kg N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -3212,8 +2985,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_am_c1",
             description="Eutrophication Potential - Aquatic Marine for module C1.",
             units="kg N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -3226,8 +2998,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_am_c2",
             description="Eutrophication Potential - Aquatic Marine for module C2.",
             units="kg N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -3240,8 +3011,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_am_c3",
             description="Eutrophication Potential - Aquatic Marine for module C3.",
             units="kg N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -3254,8 +3024,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_am_c4",
             description="Eutrophication Potential - Aquatic Marine for module C4.",
             units="kg N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -3268,8 +3037,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_am_d",
             description="Eutrophication Potential - Aquatic Marine for module D.",
             units="kg N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -3282,8 +3050,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_am_d1",
             description="Eutrophication Potential - Aquatic Marine for module D1.",
             units="kg N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -3296,8 +3063,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_am_d2",
             description="Eutrophication Potential - Aquatic Marine for module D2.",
             units="kg N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -3310,8 +3076,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_am_total",
             description="Total Eutrophication Potential - Aquatic Marine.",
             units="kg N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -3324,8 +3089,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_t_a1_a3",
             description="Eutrophication Potential - Terrestrial for module A1-A3.",
             units="mol N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -3338,8 +3102,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_t_a1",
             description="Eutrophication Potential - Terrestrial for module A1.",
             units="mol N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -3352,8 +3115,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_t_a2",
             description="Eutrophication Potential - Terrestrial for module A2.",
             units="mol N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -3366,8 +3128,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_t_a3",
             description="Eutrophication Potential - Terrestrial for module A3.",
             units="mol N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -3380,8 +3141,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_t_a4",
             description="Eutrophication Potential - Terrestrial for module A4.",
             units="mol N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -3394,8 +3154,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_t_a5",
             description="Eutrophication Potential - Terrestrial for module A5.",
             units="mol N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -3408,8 +3167,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_t_b1",
             description="Eutrophication Potential - Terrestrial for module B1.",
             units="mol N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -3422,8 +3180,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_t_b2",
             description="Eutrophication Potential - Terrestrial for module B2.",
             units="mol N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -3436,8 +3193,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_t_b3",
             description="Eutrophication Potential - Terrestrial for module B3.",
             units="mol N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -3450,8 +3206,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_t_b4",
             description="Eutrophication Potential - Terrestrial for module B4.",
             units="mol N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -3464,8 +3219,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_t_b5",
             description="Eutrophication Potential - Terrestrial for module B5.",
             units="mol N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -3478,8 +3232,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_t_b6",
             description="Eutrophication Potential - Terrestrial for module B6.",
             units="mol N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -3492,8 +3245,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_t_b7",
             description="Eutrophication Potential - Terrestrial for module B7.",
             units="mol N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -3506,8 +3258,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_t_b8",
             description="Eutrophication Potential - Terrestrial for module B8.",
             units="mol N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -3520,8 +3271,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_t_c1",
             description="Eutrophication Potential - Terrestrial for module C1.",
             units="mol N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -3534,8 +3284,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_t_c2",
             description="Eutrophication Potential - Terrestrial for module C2.",
             units="mol N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -3548,8 +3297,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_t_c3",
             description="Eutrophication Potential - Terrestrial for module C3.",
             units="mol N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -3562,8 +3310,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_t_c4",
             description="Eutrophication Potential - Terrestrial for module C4.",
             units="mol N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -3576,8 +3323,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_t_d",
             description="Eutrophication Potential - Terrestrial for module D.",
             units="mol N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -3590,8 +3336,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_t_d1",
             description="Eutrophication Potential - Terrestrial for module D1.",
             units="mol N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -3604,8 +3349,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_t_d2",
             description="Eutrophication Potential - Terrestrial for module D2.",
             units="mol N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -3618,8 +3362,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="ep_t_total",
             description="Total Eutrophication Potential - Terrestrial.",
             units="mol N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -3632,8 +3375,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pocp_a1_a3",
             description="Photochemical Ozone Creation Potential for module A1-A3.",
             units="kg C2H4 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_EU2026_52_ANNEX_III,
         ),
     )
@@ -3646,8 +3388,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pocp_a1",
             description="Photochemical Ozone Creation Potential for module A1.",
             units="kg C2H4 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_EU2026_52_ANNEX_III,
         ),
     )
@@ -3660,8 +3401,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pocp_a2",
             description="Photochemical Ozone Creation Potential for module A2.",
             units="kg C2H4 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_EU2026_52_ANNEX_III,
         ),
     )
@@ -3674,8 +3414,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pocp_a3",
             description="Photochemical Ozone Creation Potential for module A3.",
             units="kg C2H4 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_EU2026_52_ANNEX_III,
         ),
     )
@@ -3688,8 +3427,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pocp_a4",
             description="Photochemical Ozone Creation Potential for module A4.",
             units="kg C2H4 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_EU2026_52_ANNEX_III,
         ),
     )
@@ -3702,8 +3440,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pocp_a5",
             description="Photochemical Ozone Creation Potential for module A5.",
             units="kg C2H4 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_EU2026_52_ANNEX_III,
         ),
     )
@@ -3716,8 +3453,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pocp_b1",
             description="Photochemical Ozone Creation Potential for module B1.",
             units="kg C2H4 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_EU2026_52_ANNEX_III,
         ),
     )
@@ -3730,8 +3466,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pocp_b2",
             description="Photochemical Ozone Creation Potential for module B2.",
             units="kg C2H4 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_EU2026_52_ANNEX_III,
         ),
     )
@@ -3744,8 +3479,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pocp_b3",
             description="Photochemical Ozone Creation Potential for module B3.",
             units="kg C2H4 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_EU2026_52_ANNEX_III,
         ),
     )
@@ -3758,8 +3492,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pocp_b4",
             description="Photochemical Ozone Creation Potential for module B4.",
             units="kg C2H4 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_EU2026_52_ANNEX_III,
         ),
     )
@@ -3772,8 +3505,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pocp_b5",
             description="Photochemical Ozone Creation Potential for module B5.",
             units="kg C2H4 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_EU2026_52_ANNEX_III,
         ),
     )
@@ -3786,8 +3518,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pocp_b6",
             description="Photochemical Ozone Creation Potential for module B6.",
             units="kg C2H4 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_EU2026_52_ANNEX_III,
         ),
     )
@@ -3800,8 +3531,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pocp_b7",
             description="Photochemical Ozone Creation Potential for module B7.",
             units="kg C2H4 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_EU2026_52_ANNEX_III,
         ),
     )
@@ -3814,8 +3544,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pocp_b8",
             description="Photochemical Ozone Creation Potential for module B8.",
             units="kg C2H4 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -3828,8 +3557,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pocp_c1",
             description="Photochemical Ozone Creation Potential for module C1.",
             units="kg C2H4 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_EU2026_52_ANNEX_III,
         ),
     )
@@ -3842,8 +3570,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pocp_c2",
             description="Photochemical Ozone Creation Potential for module C2.",
             units="kg C2H4 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_EU2026_52_ANNEX_III,
         ),
     )
@@ -3856,8 +3583,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pocp_c3",
             description="Photochemical Ozone Creation Potential for module C3.",
             units="kg C2H4 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_EU2026_52_ANNEX_III,
         ),
     )
@@ -3870,8 +3596,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pocp_c4",
             description="Photochemical Ozone Creation Potential for module C4.",
             units="kg C2H4 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_EU2026_52_ANNEX_III,
         ),
     )
@@ -3884,8 +3609,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pocp_d",
             description="Photochemical Ozone Creation Potential for module D.",
             units="kg C2H4 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_EU2026_52_ANNEX_III,
         ),
     )
@@ -3898,8 +3622,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pocp_d1",
             description="Photochemical Ozone Creation Potential for module D1.",
             units="kg C2H4 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -3912,8 +3635,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pocp_d2",
             description="Photochemical Ozone Creation Potential for module D2.",
             units="kg C2H4 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -3926,8 +3648,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pocp_total",
             description="Total Photochemical Ozone Creation Potential.",
             units="kg C2H4 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -3940,8 +3661,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="sfp_a1_a3",
             description="Smog Forming Potential for module A1-A3.",
             units="kg O3 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -3954,8 +3674,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="sfp_a1",
             description="Smog Forming Potential for module A1.",
             units="kg O3 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -3968,8 +3687,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="sfp_a2",
             description="Smog Forming Potential for module A2.",
             units="kg O3 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -3982,8 +3700,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="sfp_a3",
             description="Smog Forming Potential for module A3.",
             units="kg O3 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -3996,8 +3713,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="sfp_a4",
             description="Smog Forming Potential for module A4.",
             units="kg O3 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -4010,8 +3726,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="sfp_a5",
             description="Smog Forming Potential for module A5.",
             units="kg O3 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -4024,8 +3739,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="sfp_b1",
             description="Smog Forming Potential for module B1.",
             units="kg O3 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -4038,8 +3752,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="sfp_b2",
             description="Smog Forming Potential for module B2.",
             units="kg O3 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -4052,8 +3765,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="sfp_b3",
             description="Smog Forming Potential for module B3.",
             units="kg O3 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -4066,8 +3778,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="sfp_b4",
             description="Smog Forming Potential for module B4.",
             units="kg O3 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -4080,8 +3791,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="sfp_b5",
             description="Smog Forming Potential for module B5.",
             units="kg O3 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -4094,8 +3804,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="sfp_b6",
             description="Smog Forming Potential for module B6.",
             units="kg O3 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -4108,8 +3817,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="sfp_b7",
             description="Smog Forming Potential for module B7.",
             units="kg O3 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -4122,8 +3830,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="sfp_b8",
             description="Smog Forming Potential for module B8.",
             units="kg O3 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -4136,8 +3843,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="sfp_c1",
             description="Smog Forming Potential for module C1.",
             units="kg O3 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -4150,8 +3856,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="sfp_c2",
             description="Smog Forming Potential for module C2.",
             units="kg O3 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -4164,8 +3869,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="sfp_c3",
             description="Smog Forming Potential for module C3.",
             units="kg O3 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -4178,8 +3882,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="sfp_c4",
             description="Smog Forming Potential for module C4.",
             units="kg O3 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -4192,8 +3895,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="sfp_d",
             description="Smog Forming Potential for module D.",
             units="kg O3 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -4206,8 +3908,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="sfp_d1",
             description="Smog Forming Potential for module D1.",
             units="kg O3 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -4220,8 +3921,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="sfp_d2",
             description="Smog Forming Potential for module D2.",
             units="kg O3 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -4234,8 +3934,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="sfp_total",
             description="Total Smog Forming Potential.",
             units="kg O3 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
         ),
     )
@@ -4248,8 +3947,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pofp_a1_a3",
             description="Photochemical Ozone Formation Potential for module A1-A3.",
             units="kg NMVOC eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -4262,8 +3960,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pofp_a1",
             description="Photochemical Ozone Formation Potential for module A1.",
             units="kg NMVOC eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -4276,8 +3973,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pofp_a2",
             description="Photochemical Ozone Formation Potential for module A2.",
             units="kg NMVOC eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -4290,8 +3986,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pofp_a3",
             description="Photochemical Ozone Formation Potential for module A3.",
             units="kg NMVOC eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -4304,8 +3999,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pofp_a4",
             description="Photochemical Ozone Formation Potential for module A4.",
             units="kg NMVOC eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -4318,8 +4012,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pofp_a5",
             description="Photochemical Ozone Formation Potential for module A5.",
             units="kg NMVOC eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -4332,8 +4025,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pofp_b1",
             description="Photochemical Ozone Formation Potential for module B1.",
             units="kg NMVOC eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -4346,8 +4038,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pofp_b2",
             description="Photochemical Ozone Formation Potential for module B2.",
             units="kg NMVOC eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -4360,8 +4051,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pofp_b3",
             description="Photochemical Ozone Formation Potential for module B3.",
             units="kg NMVOC eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -4374,8 +4064,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pofp_b4",
             description="Photochemical Ozone Formation Potential for module B4.",
             units="kg NMVOC eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -4388,8 +4077,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pofp_b5",
             description="Photochemical Ozone Formation Potential for module B5.",
             units="kg NMVOC eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -4402,8 +4090,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pofp_b6",
             description="Photochemical Ozone Formation Potential for module B6.",
             units="kg NMVOC eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -4416,8 +4103,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pofp_b7",
             description="Photochemical Ozone Formation Potential for module B7.",
             units="kg NMVOC eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -4430,8 +4116,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pofp_b8",
             description="Photochemical Ozone Formation Potential for module B8.",
             units="kg NMVOC eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -4444,8 +4129,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pofp_c1",
             description="Photochemical Ozone Formation Potential for module C1.",
             units="kg NMVOC eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -4458,8 +4142,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pofp_c2",
             description="Photochemical Ozone Formation Potential for module C2.",
             units="kg NMVOC eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -4472,8 +4155,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pofp_c3",
             description="Photochemical Ozone Formation Potential for module C3.",
             units="kg NMVOC eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -4486,8 +4168,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pofp_c4",
             description="Photochemical Ozone Formation Potential for module C4.",
             units="kg NMVOC eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -4500,8 +4181,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pofp_d",
             description="Photochemical Ozone Formation Potential for module D.",
             units="kg NMVOC eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -4514,8 +4194,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pofp_d1",
             description="Photochemical Ozone Formation Potential for module D1.",
             units="kg NMVOC eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -4528,8 +4207,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pofp_d2",
             description="Photochemical Ozone Formation Potential for module D2.",
             units="kg NMVOC eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -4542,8 +4220,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pofp_total",
             description="Total Photochemical Ozone Formation Potential.",
             units="kg NMVOC eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -4556,8 +4233,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="adpmm_a1_a3",
             description="Abiotic Depletion Potential (Minerals and Metals) for module A1-A3.",
             units="kg Sb eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -4570,8 +4246,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="adpmm_a1",
             description="Abiotic Depletion Potential (Minerals and Metals) for module A1.",
             units="kg Sb eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -4584,8 +4259,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="adpmm_a2",
             description="Abiotic Depletion Potential (Minerals and Metals) for module A2.",
             units="kg Sb eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -4598,8 +4272,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="adpmm_a3",
             description="Abiotic Depletion Potential (Minerals and Metals) for module A3.",
             units="kg Sb eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -4612,8 +4285,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="adpmm_a4",
             description="Abiotic Depletion Potential (Minerals and Metals) for module A4.",
             units="kg Sb eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -4626,8 +4298,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="adpmm_a5",
             description="Abiotic Depletion Potential (Minerals and Metals) for module A5.",
             units="kg Sb eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -4640,8 +4311,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="adpmm_b1",
             description="Abiotic Depletion Potential (Minerals and Metals) for module B1.",
             units="kg Sb eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -4654,8 +4324,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="adpmm_b2",
             description="Abiotic Depletion Potential (Minerals and Metals) for module B2.",
             units="kg Sb eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -4668,8 +4337,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="adpmm_b3",
             description="Abiotic Depletion Potential (Minerals and Metals) for module B3.",
             units="kg Sb eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -4682,8 +4350,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="adpmm_b4",
             description="Abiotic Depletion Potential (Minerals and Metals) for module B4.",
             units="kg Sb eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -4696,8 +4363,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="adpmm_b5",
             description="Abiotic Depletion Potential (Minerals and Metals) for module B5.",
             units="kg Sb eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -4710,8 +4376,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="adpmm_b6",
             description="Abiotic Depletion Potential (Minerals and Metals) for module B6.",
             units="kg Sb eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -4724,8 +4389,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="adpmm_b7",
             description="Abiotic Depletion Potential (Minerals and Metals) for module B7.",
             units="kg Sb eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -4738,8 +4402,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="adpmm_b8",
             description="Abiotic Depletion Potential (Minerals and Metals) for module B8.",
             units="kg Sb eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -4752,8 +4415,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="adpmm_c1",
             description="Abiotic Depletion Potential (Minerals and Metals) for module C1.",
             units="kg Sb eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -4766,8 +4428,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="adpmm_c2",
             description="Abiotic Depletion Potential (Minerals and Metals) for module C2.",
             units="kg Sb eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -4780,8 +4441,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="adpmm_c3",
             description="Abiotic Depletion Potential (Minerals and Metals) for module C3.",
             units="kg Sb eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -4794,8 +4454,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="adpmm_c4",
             description="Abiotic Depletion Potential (Minerals and Metals) for module C4.",
             units="kg Sb eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -4808,8 +4467,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="adpmm_d",
             description="Abiotic Depletion Potential (Minerals and Metals) for module D.",
             units="kg Sb eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -4822,8 +4480,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="adpmm_d1",
             description="Abiotic Depletion Potential (Minerals and Metals) for module D1.",
             units="kg Sb eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -4836,8 +4493,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="adpmm_d2",
             description="Abiotic Depletion Potential (Minerals and Metals) for module D2.",
             units="kg Sb eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -4850,8 +4506,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="adpmm_total",
             description="Total Abiotic Depletion Potential (Minerals and Metals).",
             units="kg Sb eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -4864,8 +4519,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="adpf_a1_a3",
             description="Abiotic Depletion Potential (Fossil Fuels) for module A1-A3.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -4878,8 +4532,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="adpf_a1",
             description="Abiotic Depletion Potential (Fossil Fuels) for module A1.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -4892,8 +4545,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="adpf_a2",
             description="Abiotic Depletion Potential (Fossil Fuels) for module A2.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -4906,8 +4558,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="adpf_a3",
             description="Abiotic Depletion Potential (Fossil Fuels) for module A3.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -4920,8 +4571,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="adpf_a4",
             description="Abiotic Depletion Potential (Fossil Fuels) for module A4.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -4934,8 +4584,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="adpf_a5",
             description="Abiotic Depletion Potential (Fossil Fuels) for module A5.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -4948,8 +4597,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="adpf_b1",
             description="Abiotic Depletion Potential (Fossil Fuels) for module B1.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -4962,8 +4610,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="adpf_b2",
             description="Abiotic Depletion Potential (Fossil Fuels) for module B2.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -4976,8 +4623,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="adpf_b3",
             description="Abiotic Depletion Potential (Fossil Fuels) for module B3.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -4990,8 +4636,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="adpf_b4",
             description="Abiotic Depletion Potential (Fossil Fuels) for module B4.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -5004,8 +4649,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="adpf_b5",
             description="Abiotic Depletion Potential (Fossil Fuels) for module B5.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -5018,8 +4662,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="adpf_b6",
             description="Abiotic Depletion Potential (Fossil Fuels) for module B6.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -5032,8 +4675,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="adpf_b7",
             description="Abiotic Depletion Potential (Fossil Fuels) for module B7.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -5046,8 +4688,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="adpf_b8",
             description="Abiotic Depletion Potential (Fossil Fuels) for module B8.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -5060,8 +4701,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="adpf_c1",
             description="Abiotic Depletion Potential (Fossil Fuels) for module C1.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -5074,8 +4714,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="adpf_c2",
             description="Abiotic Depletion Potential (Fossil Fuels) for module C2.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -5088,8 +4727,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="adpf_c3",
             description="Abiotic Depletion Potential (Fossil Fuels) for module C3.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -5102,8 +4740,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="adpf_c4",
             description="Abiotic Depletion Potential (Fossil Fuels) for module C4.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -5116,8 +4753,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="adpf_d",
             description="Abiotic Depletion Potential (Fossil Fuels) for module D.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -5130,8 +4766,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="adpf_d1",
             description="Abiotic Depletion Potential (Fossil Fuels) for module D1.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -5144,8 +4779,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="adpf_d2",
             description="Abiotic Depletion Potential (Fossil Fuels) for module D2.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -5158,8 +4792,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="adpf_total",
             description="Total Abiotic Depletion Potential (Fossil Fuels).",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -5172,8 +4805,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="wdp_a1_a3",
             description="Water Depletion Potential for module A1-A3.",
             units="m3 world eq deprived",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -5186,8 +4818,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="wdp_a1",
             description="Water Depletion Potential for module A1.",
             units="m3 world eq deprived",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -5200,8 +4831,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="wdp_a2",
             description="Water Depletion Potential for module A2.",
             units="m3 world eq deprived",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -5214,8 +4844,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="wdp_a3",
             description="Water Depletion Potential for module A3.",
             units="m3 world eq deprived",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -5228,8 +4857,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="wdp_a4",
             description="Water Depletion Potential for module A4.",
             units="m3 world eq deprived",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -5242,8 +4870,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="wdp_a5",
             description="Water Depletion Potential for module A5.",
             units="m3 world eq deprived",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -5256,8 +4883,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="wdp_b1",
             description="Water Depletion Potential for module B1.",
             units="m3 world eq deprived",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -5270,8 +4896,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="wdp_b2",
             description="Water Depletion Potential for module B2.",
             units="m3 world eq deprived",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -5284,8 +4909,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="wdp_b3",
             description="Water Depletion Potential for module B3.",
             units="m3 world eq deprived",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -5298,8 +4922,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="wdp_b4",
             description="Water Depletion Potential for module B4.",
             units="m3 world eq deprived",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -5312,8 +4935,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="wdp_b5",
             description="Water Depletion Potential for module B5.",
             units="m3 world eq deprived",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -5326,8 +4948,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="wdp_b6",
             description="Water Depletion Potential for module B6.",
             units="m3 world eq deprived",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -5340,8 +4961,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="wdp_b7",
             description="Water Depletion Potential for module B7.",
             units="m3 world eq deprived",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -5354,8 +4974,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="wdp_b8",
             description="Water Depletion Potential for module B8.",
             units="m3 world eq deprived",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -5368,8 +4987,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="wdp_c1",
             description="Water Depletion Potential for module C1.",
             units="m3 world eq deprived",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -5382,8 +5000,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="wdp_c2",
             description="Water Depletion Potential for module C2.",
             units="m3 world eq deprived",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -5396,8 +5013,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="wdp_c3",
             description="Water Depletion Potential for module C3.",
             units="m3 world eq deprived",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -5410,8 +5026,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="wdp_c4",
             description="Water Depletion Potential for module C4.",
             units="m3 world eq deprived",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -5424,8 +5039,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="wdp_d",
             description="Water Depletion Potential for module D.",
             units="m3 world eq deprived",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -5438,8 +5052,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="wdp_d1",
             description="Water Depletion Potential for module D1.",
             units="m3 world eq deprived",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -5452,8 +5065,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="wdp_d2",
             description="Water Depletion Potential for module D2.",
             units="m3 world eq deprived",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -5466,8 +5078,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="wdp_total",
             description="Total Water Depletion Potential.",
             units="m3 world eq deprived",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -5480,8 +5091,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pere_a1_a3",
             description="Primary Energy Renewable (Energy resources) for module A1-A3.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -5494,8 +5104,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pere_a1",
             description="Primary Energy Renewable (Energy resources) for module A1.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -5508,8 +5117,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pere_a2",
             description="Primary Energy Renewable (Energy resources) for module A2.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -5522,8 +5130,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pere_a3",
             description="Primary Energy Renewable (Energy resources) for module A3.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -5536,8 +5143,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pere_a4",
             description="Primary Energy Renewable (Energy resources) for module A4.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -5550,8 +5156,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pere_a5",
             description="Primary Energy Renewable (Energy resources) for module A5.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -5564,8 +5169,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pere_b1",
             description="Primary Energy Renewable (Energy resources) for module B1.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -5578,8 +5182,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pere_b2",
             description="Primary Energy Renewable (Energy resources) for module B2.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -5592,8 +5195,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pere_b3",
             description="Primary Energy Renewable (Energy resources) for module B3.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -5606,8 +5208,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pere_b4",
             description="Primary Energy Renewable (Energy resources) for module B4.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -5620,8 +5221,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pere_b5",
             description="Primary Energy Renewable (Energy resources) for module B5.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -5634,8 +5234,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pere_b6",
             description="Primary Energy Renewable (Energy resources) for module B6.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -5648,8 +5247,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pere_b7",
             description="Primary Energy Renewable (Energy resources) for module B7.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -5662,8 +5260,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pere_b8",
             description="Primary Energy Renewable (Energy resources) for module B8.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -5676,8 +5273,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pere_c1",
             description="Primary Energy Renewable (Energy resources) for module C1.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -5690,8 +5286,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pere_c2",
             description="Primary Energy Renewable (Energy resources) for module C2.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -5704,8 +5299,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pere_c3",
             description="Primary Energy Renewable (Energy resources) for module C3.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -5718,8 +5312,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pere_c4",
             description="Primary Energy Renewable (Energy resources) for module C4.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -5732,8 +5325,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pere_d",
             description="Primary Energy Renewable (Energy resources) for module D.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -5746,8 +5338,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pere_d1",
             description="Primary Energy Renewable (Energy resources) for module D1.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -5760,8 +5351,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pere_d2",
             description="Primary Energy Renewable (Energy resources) for module D2.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -5774,8 +5364,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pere_total",
             description="Total Primary Energy Renewable (Energy resources).",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -5788,8 +5377,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="penre_a1_a3",
             description="Primary Energy Non-Renewable (Energy resources) for module A1-A3.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -5802,8 +5390,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="penre_a1",
             description="Primary Energy Non-Renewable (Energy resources) for module A1.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -5816,8 +5403,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="penre_a2",
             description="Primary Energy Non-Renewable (Energy resources) for module A2.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -5830,8 +5416,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="penre_a3",
             description="Primary Energy Non-Renewable (Energy resources) for module A3.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -5844,8 +5429,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="penre_a4",
             description="Primary Energy Non-Renewable (Energy resources) for module A4.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -5858,8 +5442,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="penre_a5",
             description="Primary Energy Non-Renewable (Energy resources) for module A5.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -5872,8 +5455,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="penre_b1",
             description="Primary Energy Non-Renewable (Energy resources) for module B1.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -5886,8 +5468,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="penre_b2",
             description="Primary Energy Non-Renewable (Energy resources) for module B2.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -5900,8 +5481,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="penre_b3",
             description="Primary Energy Non-Renewable (Energy resources) for module B3.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -5914,8 +5494,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="penre_b4",
             description="Primary Energy Non-Renewable (Energy resources) for module B4.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -5928,8 +5507,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="penre_b5",
             description="Primary Energy Non-Renewable (Energy resources) for module B5.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -5942,8 +5520,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="penre_b6",
             description="Primary Energy Non-Renewable (Energy resources) for module B6.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -5956,8 +5533,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="penre_b7",
             description="Primary Energy Non-Renewable (Energy resources) for module B7.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -5970,8 +5546,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="penre_b8",
             description="Primary Energy Non-Renewable (Energy resources) for module B8.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -5984,8 +5559,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="penre_c1",
             description="Primary Energy Non-Renewable (Energy resources) for module C1.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -5998,8 +5572,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="penre_c2",
             description="Primary Energy Non-Renewable (Energy resources) for module C2.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -6012,8 +5585,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="penre_c3",
             description="Primary Energy Non-Renewable (Energy resources) for module C3.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -6026,8 +5598,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="penre_c4",
             description="Primary Energy Non-Renewable (Energy resources) for module C4.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -6040,8 +5611,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="penre_d",
             description="Primary Energy Non-Renewable (Energy resources) for module D.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -6054,8 +5624,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="penre_d1",
             description="Primary Energy Non-Renewable (Energy resources) for module D1.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -6068,8 +5637,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="penre_d2",
             description="Primary Energy Non-Renewable (Energy resources) for module D2.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -6082,8 +5650,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="penre_total",
             description="Total Primary Energy Non-Renewable (Energy resources).",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -6096,8 +5663,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pert_a1_a3",
             description="Primary Energy Renewable Total for module A1-A3.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -6110,8 +5676,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pert_a1",
             description="Primary Energy Renewable Total for module A1.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -6124,8 +5689,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pert_a2",
             description="Primary Energy Renewable Total for module A2.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -6138,8 +5702,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pert_a3",
             description="Primary Energy Renewable Total for module A3.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -6152,8 +5715,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pert_a4",
             description="Primary Energy Renewable Total for module A4.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -6166,8 +5728,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pert_a5",
             description="Primary Energy Renewable Total for module A5.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -6180,8 +5741,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pert_b1",
             description="Primary Energy Renewable Total for module B1.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -6194,8 +5754,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pert_b2",
             description="Primary Energy Renewable Total for module B2.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -6208,8 +5767,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pert_b3",
             description="Primary Energy Renewable Total for module B3.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -6222,8 +5780,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pert_b4",
             description="Primary Energy Renewable Total for module B4.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -6236,8 +5793,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pert_b5",
             description="Primary Energy Renewable Total for module B5.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -6250,8 +5806,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pert_b6",
             description="Primary Energy Renewable Total for module B6.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -6264,8 +5819,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pert_b7",
             description="Primary Energy Renewable Total for module B7.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -6278,8 +5832,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pert_b8",
             description="Primary Energy Renewable Total for module B8.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -6292,8 +5845,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pert_c1",
             description="Primary Energy Renewable Total for module C1.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -6306,8 +5858,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pert_c2",
             description="Primary Energy Renewable Total for module C2.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -6320,8 +5871,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pert_c3",
             description="Primary Energy Renewable Total for module C3.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -6334,8 +5884,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pert_c4",
             description="Primary Energy Renewable Total for module C4.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -6348,8 +5897,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pert_d",
             description="Primary Energy Renewable Total for module D.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -6362,8 +5910,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pert_d1",
             description="Primary Energy Renewable Total for module D1.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -6376,8 +5923,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pert_d2",
             description="Primary Energy Renewable Total for module D2.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -6390,8 +5936,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pert_total",
             description="Total Primary Energy Renewable Total.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -6404,8 +5949,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="penrt_a1_a3",
             description="Primary Energy Non-Renewable Total for module A1-A3.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -6418,8 +5962,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="penrt_a1",
             description="Primary Energy Non-Renewable Total for module A1.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -6432,8 +5975,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="penrt_a2",
             description="Primary Energy Non-Renewable Total for module A2.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -6446,8 +5988,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="penrt_a3",
             description="Primary Energy Non-Renewable Total for module A3.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -6460,8 +6001,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="penrt_a4",
             description="Primary Energy Non-Renewable Total for module A4.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -6474,8 +6014,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="penrt_a5",
             description="Primary Energy Non-Renewable Total for module A5.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -6488,8 +6027,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="penrt_b1",
             description="Primary Energy Non-Renewable Total for module B1.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -6502,8 +6040,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="penrt_b2",
             description="Primary Energy Non-Renewable Total for module B2.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -6516,8 +6053,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="penrt_b3",
             description="Primary Energy Non-Renewable Total for module B3.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -6530,8 +6066,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="penrt_b4",
             description="Primary Energy Non-Renewable Total for module B4.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -6544,8 +6079,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="penrt_b5",
             description="Primary Energy Non-Renewable Total for module B5.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -6558,8 +6092,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="penrt_b6",
             description="Primary Energy Non-Renewable Total for module B6.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -6572,8 +6105,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="penrt_b7",
             description="Primary Energy Non-Renewable Total for module B7.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -6586,8 +6118,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="penrt_b8",
             description="Primary Energy Non-Renewable Total for module B8.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -6600,8 +6131,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="penrt_c1",
             description="Primary Energy Non-Renewable Total for module C1.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -6614,8 +6144,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="penrt_c2",
             description="Primary Energy Non-Renewable Total for module C2.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -6628,8 +6157,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="penrt_c3",
             description="Primary Energy Non-Renewable Total for module C3.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -6642,8 +6170,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="penrt_c4",
             description="Primary Energy Non-Renewable Total for module C4.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -6656,8 +6183,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="penrt_d",
             description="Primary Energy Non-Renewable Total for module D.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A1_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -6670,8 +6196,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="penrt_d1",
             description="Primary Energy Non-Renewable Total for module D1.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -6684,8 +6209,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="penrt_d2",
             description="Primary Energy Non-Renewable Total for module D2.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -6698,8 +6222,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="penrt_total",
             description="Total Primary Energy Non-Renewable Total.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -6712,8 +6235,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pm_a1_a3",
             description="Particulate Matter Emissions",
             units="disease incidence",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -6726,8 +6248,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pm_a1",
             description="Particulate Matter Emissions",
             units="disease incidence",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -6740,8 +6261,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pm_a2",
             description="Particulate Matter Emissions",
             units="disease incidence",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -6754,8 +6274,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pm_a3",
             description="Particulate Matter Emissions",
             units="disease incidence",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -6768,8 +6287,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pm_a4",
             description="Particulate Matter Emissions",
             units="disease incidence",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -6782,8 +6300,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pm_a5",
             description="Particulate Matter Emissions",
             units="disease incidence",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -6796,8 +6313,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pm_b1",
             description="Particulate Matter Emissions",
             units="disease incidence",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -6810,8 +6326,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pm_b2",
             description="Particulate Matter Emissions",
             units="disease incidence",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -6824,8 +6339,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pm_b3",
             description="Particulate Matter Emissions",
             units="disease incidence",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -6838,8 +6352,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pm_b4",
             description="Particulate Matter Emissions",
             units="disease incidence",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -6852,8 +6365,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pm_b5",
             description="Particulate Matter Emissions",
             units="disease incidence",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -6866,8 +6378,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pm_b6",
             description="Particulate Matter Emissions",
             units="disease incidence",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -6880,8 +6391,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pm_b7",
             description="Particulate Matter Emissions",
             units="disease incidence",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -6894,8 +6404,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pm_b8",
             description="Particulate Matter Emissions",
             units="disease incidence",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -6908,8 +6417,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pm_c1",
             description="Particulate Matter Emissions",
             units="disease incidence",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -6922,8 +6430,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pm_c2",
             description="Particulate Matter Emissions",
             units="disease incidence",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -6936,8 +6443,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pm_c3",
             description="Particulate Matter Emissions",
             units="disease incidence",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -6950,8 +6456,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pm_c4",
             description="Particulate Matter Emissions",
             units="disease incidence",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -6964,8 +6469,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pm_d",
             description="Particulate Matter Emissions",
             units="disease incidence",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -6978,8 +6482,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pm_d1",
             description="Particulate Matter Emissions",
             units="disease incidence",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -6992,8 +6495,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pm_d2",
             description="Particulate Matter Emissions",
             units="disease incidence",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -7006,8 +6508,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="pm_total",
             description="Particulate Matter Emissions",
             units="disease incidence",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -7020,8 +6521,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="irp_a1_a3",
             description="Ionising radiation, human health",
             units="kBq U235 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -7034,8 +6534,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="irp_a1",
             description="Ionising radiation, human health",
             units="kBq U235 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -7048,8 +6547,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="irp_a2",
             description="Ionising radiation, human health",
             units="kBq U235 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -7062,8 +6560,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="irp_a3",
             description="Ionising radiation, human health",
             units="kBq U235 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -7076,8 +6573,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="irp_a4",
             description="Ionising radiation, human health",
             units="kBq U235 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -7090,8 +6586,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="irp_a5",
             description="Ionising radiation, human health",
             units="kBq U235 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -7104,8 +6599,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="irp_b1",
             description="Ionising radiation, human health",
             units="kBq U235 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -7118,8 +6612,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="irp_b2",
             description="Ionising radiation, human health",
             units="kBq U235 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -7132,8 +6625,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="irp_b3",
             description="Ionising radiation, human health",
             units="kBq U235 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -7146,8 +6638,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="irp_b4",
             description="Ionising radiation, human health",
             units="kBq U235 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -7160,8 +6651,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="irp_b5",
             description="Ionising radiation, human health",
             units="kBq U235 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -7174,8 +6664,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="irp_b6",
             description="Ionising radiation, human health",
             units="kBq U235 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -7188,8 +6677,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="irp_b7",
             description="Ionising radiation, human health",
             units="kBq U235 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -7202,8 +6690,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="irp_b8",
             description="Ionising radiation, human health",
             units="kBq U235 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -7216,8 +6703,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="irp_c1",
             description="Ionising radiation, human health",
             units="kBq U235 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -7230,8 +6716,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="irp_c2",
             description="Ionising radiation, human health",
             units="kBq U235 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -7244,8 +6729,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="irp_c3",
             description="Ionising radiation, human health",
             units="kBq U235 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -7258,8 +6742,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="irp_c4",
             description="Ionising radiation, human health",
             units="kBq U235 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -7272,8 +6755,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="irp_d",
             description="Ionising radiation, human health",
             units="kBq U235 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -7286,8 +6768,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="irp_d1",
             description="Ionising radiation, human health",
             units="kBq U235 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -7300,8 +6781,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="irp_d2",
             description="Ionising radiation, human health",
             units="kBq U235 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -7314,8 +6794,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="irp_total",
             description="Ionising radiation, human health",
             units="kBq U235 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -7328,8 +6807,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="etp_fw_a1_a3",
             description="Ecotoxicity - Freshwater",
             units="CTUe",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -7342,8 +6820,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="etp_fw_a1",
             description="Ecotoxicity - Freshwater",
             units="CTUe",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -7356,8 +6833,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="etp_fw_a2",
             description="Ecotoxicity - Freshwater",
             units="CTUe",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -7370,8 +6846,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="etp_fw_a3",
             description="Ecotoxicity - Freshwater",
             units="CTUe",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -7384,8 +6859,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="etp_fw_a4",
             description="Ecotoxicity - Freshwater",
             units="CTUe",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -7398,8 +6872,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="etp_fw_a5",
             description="Ecotoxicity - Freshwater",
             units="CTUe",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -7412,8 +6885,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="etp_fw_b1",
             description="Ecotoxicity - Freshwater",
             units="CTUe",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -7426,8 +6898,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="etp_fw_b2",
             description="Ecotoxicity - Freshwater",
             units="CTUe",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -7440,8 +6911,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="etp_fw_b3",
             description="Ecotoxicity - Freshwater",
             units="CTUe",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -7454,8 +6924,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="etp_fw_b4",
             description="Ecotoxicity - Freshwater",
             units="CTUe",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -7468,8 +6937,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="etp_fw_b5",
             description="Ecotoxicity - Freshwater",
             units="CTUe",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -7482,8 +6950,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="etp_fw_b6",
             description="Ecotoxicity - Freshwater",
             units="CTUe",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -7496,8 +6963,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="etp_fw_b7",
             description="Ecotoxicity - Freshwater",
             units="CTUe",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -7510,8 +6976,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="etp_fw_b8",
             description="Ecotoxicity - Freshwater",
             units="CTUe",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -7524,8 +6989,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="etp_fw_c1",
             description="Ecotoxicity - Freshwater",
             units="CTUe",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -7538,8 +7002,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="etp_fw_c2",
             description="Ecotoxicity - Freshwater",
             units="CTUe",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -7552,8 +7015,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="etp_fw_c3",
             description="Ecotoxicity - Freshwater",
             units="CTUe",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -7566,8 +7028,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="etp_fw_c4",
             description="Ecotoxicity - Freshwater",
             units="CTUe",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -7580,8 +7041,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="etp_fw_d",
             description="Ecotoxicity - Freshwater",
             units="CTUe",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -7594,8 +7054,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="etp_fw_d1",
             description="Ecotoxicity - Freshwater",
             units="CTUe",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -7608,8 +7067,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="etp_fw_d2",
             description="Ecotoxicity - Freshwater",
             units="CTUe",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -7622,8 +7080,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="etp_fw_total",
             description="Ecotoxicity - Freshwater",
             units="CTUe",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -7636,8 +7093,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="htp_c_a1_a3",
             description="Human Toxicity - Cancer Effects",
             units="CTUh",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -7650,8 +7106,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="htp_c_a1",
             description="Human Toxicity - Cancer Effects",
             units="CTUh",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -7664,8 +7119,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="htp_c_a2",
             description="Human Toxicity - Cancer Effects",
             units="CTUh",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -7678,8 +7132,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="htp_c_a3",
             description="Human Toxicity - Cancer Effects",
             units="CTUh",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -7692,8 +7145,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="htp_c_a4",
             description="Human Toxicity - Cancer Effects",
             units="CTUh",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -7706,8 +7158,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="htp_c_a5",
             description="Human Toxicity - Cancer Effects",
             units="CTUh",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -7720,8 +7171,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="htp_c_b1",
             description="Human Toxicity - Cancer Effects",
             units="CTUh",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -7734,8 +7184,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="htp_c_b2",
             description="Human Toxicity - Cancer Effects",
             units="CTUh",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -7748,8 +7197,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="htp_c_b3",
             description="Human Toxicity - Cancer Effects",
             units="CTUh",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -7762,8 +7210,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="htp_c_b4",
             description="Human Toxicity - Cancer Effects",
             units="CTUh",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -7776,8 +7223,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="htp_c_b5",
             description="Human Toxicity - Cancer Effects",
             units="CTUh",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -7790,8 +7236,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="htp_c_b6",
             description="Human Toxicity - Cancer Effects",
             units="CTUh",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -7804,8 +7249,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="htp_c_b7",
             description="Human Toxicity - Cancer Effects",
             units="CTUh",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -7818,8 +7262,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="htp_c_b8",
             description="Human Toxicity - Cancer Effects",
             units="CTUh",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -7832,8 +7275,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="htp_c_c1",
             description="Human Toxicity - Cancer Effects",
             units="CTUh",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -7846,8 +7288,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="htp_c_c2",
             description="Human Toxicity - Cancer Effects",
             units="CTUh",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -7860,8 +7301,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="htp_c_c3",
             description="Human Toxicity - Cancer Effects",
             units="CTUh",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -7874,8 +7314,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="htp_c_c4",
             description="Human Toxicity - Cancer Effects",
             units="CTUh",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -7888,8 +7327,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="htp_c_d",
             description="Human Toxicity - Cancer Effects",
             units="CTUh",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -7902,8 +7340,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="htp_c_d1",
             description="Human Toxicity - Cancer Effects",
             units="CTUh",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -7916,8 +7353,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="htp_c_d2",
             description="Human Toxicity - Cancer Effects",
             units="CTUh",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -7930,8 +7366,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="htp_c_total",
             description="Human Toxicity - Cancer Effects",
             units="CTUh",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -7944,8 +7379,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="htp_nc_a1_a3",
             description="Human Toxicity - Non-cancer Effects",
             units="CTUh",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -7958,8 +7392,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="htp_nc_a1",
             description="Human Toxicity - Non-cancer Effects",
             units="CTUh",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -7972,8 +7405,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="htp_nc_a2",
             description="Human Toxicity - Non-cancer Effects",
             units="CTUh",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -7986,8 +7418,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="htp_nc_a3",
             description="Human Toxicity - Non-cancer Effects",
             units="CTUh",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -8000,8 +7431,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="htp_nc_a4",
             description="Human Toxicity - Non-cancer Effects",
             units="CTUh",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -8014,8 +7444,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="htp_nc_a5",
             description="Human Toxicity - Non-cancer Effects",
             units="CTUh",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -8028,8 +7457,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="htp_nc_b1",
             description="Human Toxicity - Non-cancer Effects",
             units="CTUh",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -8042,8 +7470,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="htp_nc_b2",
             description="Human Toxicity - Non-cancer Effects",
             units="CTUh",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -8056,8 +7483,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="htp_nc_b3",
             description="Human Toxicity - Non-cancer Effects",
             units="CTUh",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -8070,8 +7496,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="htp_nc_b4",
             description="Human Toxicity - Non-cancer Effects",
             units="CTUh",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -8084,8 +7509,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="htp_nc_b5",
             description="Human Toxicity - Non-cancer Effects",
             units="CTUh",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -8098,8 +7522,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="htp_nc_b6",
             description="Human Toxicity - Non-cancer Effects",
             units="CTUh",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -8112,8 +7535,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="htp_nc_b7",
             description="Human Toxicity - Non-cancer Effects",
             units="CTUh",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -8126,8 +7548,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="htp_nc_b8",
             description="Human Toxicity - Non-cancer Effects",
             units="CTUh",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -8140,8 +7561,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="htp_nc_c1",
             description="Human Toxicity - Non-cancer Effects",
             units="CTUh",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -8154,8 +7574,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="htp_nc_c2",
             description="Human Toxicity - Non-cancer Effects",
             units="CTUh",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -8168,8 +7587,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="htp_nc_c3",
             description="Human Toxicity - Non-cancer Effects",
             units="CTUh",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -8182,8 +7600,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="htp_nc_c4",
             description="Human Toxicity - Non-cancer Effects",
             units="CTUh",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -8196,8 +7613,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="htp_nc_d",
             description="Human Toxicity - Non-cancer Effects",
             units="CTUh",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -8210,8 +7626,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="htp_nc_d1",
             description="Human Toxicity - Non-cancer Effects",
             units="CTUh",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -8224,8 +7639,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="htp_nc_d2",
             description="Human Toxicity - Non-cancer Effects",
             units="CTUh",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -8238,8 +7652,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="htp_nc_total",
             description="Human Toxicity - Non-cancer Effects",
             units="CTUh",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -8252,8 +7665,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="sqp_a1_a3",
             description="Soil Quality Index",
             units="-",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -8266,8 +7678,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="sqp_a1",
             description="Soil Quality Index",
             units="-",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -8280,8 +7691,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="sqp_a2",
             description="Soil Quality Index",
             units="-",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -8294,8 +7704,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="sqp_a3",
             description="Soil Quality Index",
             units="-",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -8308,8 +7717,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="sqp_a4",
             description="Soil Quality Index",
             units="-",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -8322,8 +7730,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="sqp_a5",
             description="Soil Quality Index",
             units="-",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -8336,8 +7743,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="sqp_b1",
             description="Soil Quality Index",
             units="-",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -8350,8 +7756,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="sqp_b2",
             description="Soil Quality Index",
             units="-",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -8364,8 +7769,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="sqp_b3",
             description="Soil Quality Index",
             units="-",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -8378,8 +7782,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="sqp_b4",
             description="Soil Quality Index",
             units="-",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -8392,8 +7795,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="sqp_b5",
             description="Soil Quality Index",
             units="-",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -8406,8 +7808,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="sqp_b6",
             description="Soil Quality Index",
             units="-",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -8420,8 +7821,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="sqp_b7",
             description="Soil Quality Index",
             units="-",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -8434,8 +7834,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="sqp_b8",
             description="Soil Quality Index",
             units="-",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -8448,8 +7847,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="sqp_c1",
             description="Soil Quality Index",
             units="-",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -8462,8 +7860,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="sqp_c2",
             description="Soil Quality Index",
             units="-",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -8476,8 +7873,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="sqp_c3",
             description="Soil Quality Index",
             units="-",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -8490,8 +7886,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="sqp_c4",
             description="Soil Quality Index",
             units="-",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -8504,8 +7899,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="sqp_d",
             description="Soil Quality Index",
             units="-",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EN15804_A2_EU2026_52_ANNEX_III,
         ),
     )
@@ -8518,8 +7912,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="sqp_d1",
             description="Soil Quality Index",
             units="-",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -8532,8 +7925,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="sqp_d2",
             description="Soil Quality Index",
             units="-",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )
@@ -8546,8 +7938,7 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="sqp_total",
             description="Soil Quality Index",
             units="-",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.EU2026_52_ANNEX_III,
         ),
     )

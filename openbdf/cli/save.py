@@ -72,6 +72,7 @@ from openbdf.model.enums.materials import (
 )
 from openbdf.model.enums.openbdf_enum import OpenBDFEnum
 from openbdf.model.enums.project import ConstructionType, ProjectPhase, ProjectPhaseCommon, ProjectUnits, RecordType
+from openbdf.model.enums.requirement import Requirement
 from openbdf.model.general_info import ProjectRecordBase
 from openbdf.model.lca_results_full_tall import LCAResultsTallBase
 from openbdf.model.lca_results_full_wide import LCAResultsWideFullBase
@@ -87,9 +88,22 @@ INFO_STYLE = NamedStyle("Info", font=Font(name="Calibri", italic=True))
 FIELD_CODE_STYLE = NamedStyle(
     "FieldCode", font=Font(name="Calibri", color="FFFFFF"), fill=PatternFill("solid", fgColor="010101")
 )
-REQUIRED_STYLE = NamedStyle("Required", font=Font(name="Calibri"), fill=PatternFill("solid", fgColor="a3d3bd"))
-RECOMMENDED_STYLE = NamedStyle("Recommended", font=Font(name="Calibri"), fill=PatternFill("solid", fgColor="a9d2f6"))
-OPTIONAL_STYLE = NamedStyle("Optional", font=Font(name="Calibri"), fill=PatternFill("solid", fgColor="d8e6e2"))
+REQUIRED_STYLE = NamedStyle("Required", font=Font(name="Calibri"), fill=PatternFill("solid", fgColor="189d7e"))
+STRONGLY_RECOMMENDED_STYLE = NamedStyle(
+    "Strongly recommended", font=Font(name="Calibri"), fill=PatternFill("solid", fgColor="31658d")
+)
+RECOMMENDED_STYLE = NamedStyle("Recommended", font=Font(name="Calibri"), fill=PatternFill("solid", fgColor="3592e3"))
+SUGGESTED_STYLE = NamedStyle("Suggested", font=Font(name="Calibri"), fill=PatternFill("solid", fgColor="9dd2f3"))
+OPTIONAL_STYLE = NamedStyle("Optional", font=Font(name="Calibri"), fill=PatternFill("solid", fgColor="e9f7fe"))
+AUTOMATIC_STYLE = NamedStyle("Automatic", font=Font(name="Calibri"), fill=PatternFill("solid", fgColor="bcc4c2"))
+REQUIREMENT_STYLES: dict[Requirement, NamedStyle] = {
+    Requirement.REQUIRED: REQUIRED_STYLE,
+    Requirement.STRONGLY_RECOMMENDED: STRONGLY_RECOMMENDED_STYLE,
+    Requirement.RECOMMENDED: RECOMMENDED_STYLE,
+    Requirement.SUGGESTED: SUGGESTED_STYLE,
+    Requirement.OPTIONAL: OPTIONAL_STYLE,
+    Requirement.AUTOMATIC: AUTOMATIC_STYLE,
+}
 ROW_HEADER_STYLE = NamedStyle("RowHeader", font=Font(name="Calibri", bold=True), alignment=Alignment(vertical="top"))
 EDITABLE_VALUE_STYLE = NamedStyle(
     "EditableValue",
@@ -171,6 +185,9 @@ ALL_NAMED_STYLES: list[NamedStyle] = [
     REQUIRED_STYLE,
     RECOMMENDED_STYLE,
     OPTIONAL_STYLE,
+    STRONGLY_RECOMMENDED_STYLE,
+    SUGGESTED_STYLE,
+    AUTOMATIC_STYLE,
     ROW_HEADER_STYLE,
     EDITABLE_VALUE_STYLE,
     DISABLED_STYLE,
@@ -181,6 +198,11 @@ def register_named_styles(writer: pd.ExcelWriter) -> None:
     """Register the shared named styles on the workbook once."""
     for style in ALL_NAMED_STYLES:
         writer.book.add_named_style(style)
+
+
+def requirement_of(extra: dict, is_optional: bool) -> Requirement:
+    """Requirement metadata of a field, defaulting on its Python optionality."""
+    return extra.get("requirements", Requirement.OPTIONAL if is_optional else Requirement.REQUIRED)
 
 
 def set_theme_fonts(writer: pd.ExcelWriter) -> None:
@@ -336,7 +358,7 @@ def info_to_xlsx(writer: pd.ExcelWriter, project: ProjectRecord | None, sheet_na
 
         extra = get_field_extra(metadata)
         data_type, is_optional = unwrap_optional(metadata.annotation)
-        requirements = extra.get("requirements", "Optional" if is_optional else "Required")
+        requirements = requirement_of(extra, is_optional)
 
         header_cells = []
 
@@ -376,22 +398,14 @@ def info_to_xlsx(writer: pd.ExcelWriter, project: ProjectRecord | None, sheet_na
         else:
             u.style = DISABLED_STYLE.name
 
-        r = info_sheet.cell(row=cell_row, column=9, value=requirements)
-        if requirements == "Required":
-            r.style = REQUIRED_STYLE.name
-        elif requirements == "Recommended":
-            r.style = RECOMMENDED_STYLE.name
-        else:
-            r.style = OPTIONAL_STYLE.name
-
-        criticality = extra.get("criticality", "SHOULD")
-        info_sheet.cell(row=cell_row, column=10, value=criticality)
+        r = info_sheet.cell(row=cell_row, column=9, value=requirements.display_name)
+        r.style = REQUIREMENT_STYLES[requirements].name
 
         reference = extra.get("reference")
-        ref = info_sheet.cell(row=cell_row, column=12, value=reference or "")
+        ref = info_sheet.cell(row=cell_row, column=11, value=reference or "")
         ref.style = INFO_STYLE.name if reference else DISABLED_STYLE.name
 
-        v = info_sheet.cell(row=cell_row, column=11, value=getattr(project, field_code) if project else "")
+        v = info_sheet.cell(row=cell_row, column=10, value=getattr(project, field_code) if project else "")
         v.style = EDITABLE_VALUE_STYLE.name
 
         dv = xlsx_validation_from_type(data_type, is_optional, metadata, enum_registry)  # type: ignore[arg-type]
@@ -399,7 +413,7 @@ def info_to_xlsx(writer: pd.ExcelWriter, project: ProjectRecord | None, sheet_na
             dv.add(v)
             info_sheet.add_data_validation(dv)
 
-        if requirements == "Required":
+        if requirements is Requirement.REQUIRED:
             for c in header_cells:
                 c.style = REQUIRED_STYLE.name
 
@@ -421,11 +435,9 @@ def info_to_xlsx(writer: pd.ExcelWriter, project: ProjectRecord | None, sheet_na
     fc.style = ATTRIBUTES_NAME_STYLE.name
     fc = info_sheet.cell(row=1, column=9, value="Requirements")
     fc.style = ATTRIBUTES_NAME_STYLE.name
-    fc = info_sheet.cell(row=1, column=10, value="Criticality")
+    fc = info_sheet.cell(row=1, column=10, value="Value")
     fc.style = ATTRIBUTES_NAME_STYLE.name
-    fc = info_sheet.cell(row=1, column=11, value="Value")
-    fc.style = ATTRIBUTES_NAME_STYLE.name
-    fc = info_sheet.cell(row=1, column=12, value="Reference")
+    fc = info_sheet.cell(row=1, column=11, value="Reference")
     fc.style = ATTRIBUTES_NAME_STYLE.name
 
     info_sheet.column_dimensions["A"].width = 10
@@ -436,10 +448,9 @@ def info_to_xlsx(writer: pd.ExcelWriter, project: ProjectRecord | None, sheet_na
     info_sheet.column_dimensions["F"].width = 30
     info_sheet.column_dimensions["G"].width = 25
     info_sheet.column_dimensions["H"].width = 15
-    info_sheet.column_dimensions["I"].width = 15
-    info_sheet.column_dimensions["J"].width = 15
-    info_sheet.column_dimensions["K"].width = 25
-    info_sheet.column_dimensions["L"].width = 40
+    info_sheet.column_dimensions["I"].width = 25
+    info_sheet.column_dimensions["J"].width = 25
+    info_sheet.column_dimensions["K"].width = 40
 
 
 def wide_to_xlsx(
@@ -473,7 +484,7 @@ def wide_to_xlsx(
 
         extra = get_field_extra(metadata)
         data_type, is_optional = unwrap_optional(metadata.annotation)
-        requirements = extra.get("requirements", "Optional" if is_optional else "Required")
+        requirements = requirement_of(extra, is_optional)
 
         attribute_name = extra.get("attribute_name", field_code)
         an = sheet.cell(row=1, column=cell_column, value=attribute_name)
@@ -507,25 +518,17 @@ def wide_to_xlsx(
         else:
             u.style = DISABLED_STYLE.name
 
-        r = sheet.cell(row=7, column=cell_column, value=requirements)
-        if requirements == "Required":
-            r.style = REQUIRED_STYLE.name
-        elif requirements == "Recommended":
-            r.style = RECOMMENDED_STYLE.name
-        else:
-            r.style = OPTIONAL_STYLE.name
-
-        criticality = extra.get("criticality", "SHOULD")
-        sheet.cell(row=8, column=cell_column, value=criticality)
+        r = sheet.cell(row=7, column=cell_column, value=requirements.display_name)
+        r.style = REQUIREMENT_STYLES[requirements].name
 
         reference = extra.get(reference_attribute)
-        ref = sheet.cell(row=9, column=cell_column, value=reference or "")
+        ref = sheet.cell(row=8, column=cell_column, value=reference or "")
         ref.style = INFO_STYLE.name if reference else DISABLED_STYLE.name
 
         dv = xlsx_validation_from_type(data_type, is_optional, metadata, enum_registry)  # type: ignore[arg-type]
         if dv:
             dv.add(
-                f"{column_letter}10:{column_letter}1048576"
+                f"{column_letter}9:{column_letter}1048576"
             )  # Apply validation to the whole column starting from the first data row
             sheet.add_data_validation(dv)
 
@@ -547,13 +550,11 @@ def wide_to_xlsx(
     r.style = ROW_HEADER_STYLE.name
     cr = sheet.cell(row=7, column=1, value="Requirements")
     cr.style = ROW_HEADER_STYLE.name
-    ct = sheet.cell(row=8, column=1, value="Criticality")
-    ct.style = ROW_HEADER_STYLE.name
-    rf = sheet.cell(row=9, column=1, value=REFERENCE_LABELS[reference_attribute])
+    rf = sheet.cell(row=8, column=1, value=REFERENCE_LABELS[reference_attribute])
     rf.style = ROW_HEADER_STYLE.name
 
     last_col = len(df.columns) + 1
-    start_data_row = 10
+    start_data_row = 9
     end_data_row = start_data_row + max(len(df) - 1, min_rows)
 
     rows = df.itertuples(index=False, name=None)
@@ -655,7 +656,7 @@ def make_translator_openbdf_pydantic(writer: pd.ExcelWriter, sheet_name: str, mo
 
         extra = get_field_extra(metadata)
         data_type, is_optional = unwrap_optional(metadata.annotation)
-        requirements = extra.get("requirements", "Optional" if is_optional else "Required")
+        requirements = requirement_of(extra, is_optional)
 
         fc = info_sheet.cell(row=cell_row, column=2, value=field_code)
         fc.style = FIELD_CODE_STYLE.name
@@ -666,13 +667,8 @@ def make_translator_openbdf_pydantic(writer: pd.ExcelWriter, sheet_name: str, mo
         r = info_sheet.cell(row=cell_row, column=4, value=human_readable_type(data_type))
         r.style = INFO_STYLE.name
 
-        req = info_sheet.cell(row=cell_row, column=5, value=requirements)
-        if requirements == "Required":
-            req.style = REQUIRED_STYLE.name
-        elif requirements == "Recommended":
-            req.style = RECOMMENDED_STYLE.name
-        else:
-            req.style = OPTIONAL_STYLE.name
+        req = info_sheet.cell(row=cell_row, column=5, value=requirements.display_name)
+        req.style = REQUIREMENT_STYLES[requirements].name
 
         default_cell = info_sheet.cell(row=cell_row, column=6, value="")
         default_cell.style = EDITABLE_VALUE_STYLE.name
