@@ -74,6 +74,13 @@ def test_openbdf_template_requirements_and_reference_layout(tmp_path):
     assert info.cell(row=2, column=9).value == "Automatic"
     assert info.cell(row=2, column=11).value == "ECHO; GBDB"
 
+    # An automatic value is grey, so a contributor sees which values the tool computes.
+    automatic_rows = [cell.row for cell in info["I"] if cell.value == "Automatic"]
+    editable_rows = [cell.row for cell in info["I"] if cell.row > 1 and cell.value not in ("Automatic", None)]
+    assert automatic_rows and editable_rows
+    assert {info.cell(row=row, column=10).style for row in automatic_rows} == {"AutomaticValue"}
+    assert {info.cell(row=row, column=10).style for row in editable_rows} == {"EditableValue"}
+
     first_field_requirements = {
         "Bill of Materials": "Automatic",
         "Project Material Database": "Automatic",
@@ -98,6 +105,10 @@ def test_openbdf_template_requirements_and_reference_layout(tmp_path):
         assert sheet["A8"].value == reference_labels[sheet_name]
         # The reference row keeps the first data row at row 9 on every field sheet.
         assert sheet["A9"].value is None
+        for cell in sheet[7]:
+            if cell.column > 1 and cell.value:
+                expected = "AutomaticValue" if cell.value == "Automatic" else "EditableValue"
+                assert sheet.cell(row=9, column=cell.column).style == expected
         assert sheet.cell(row=2, column=2).value == (
             "material_ref_id" if sheet_name == "Project Material Database" else "material_id"
         )

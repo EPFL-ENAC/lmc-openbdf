@@ -329,6 +329,10 @@ def test_open_command_opens_filled_generated_template_as_single_file(tmp_path: P
     out_pmd = out["Project Material Database"]
     assert out_pmd.cell(row=9, column=out_pmd_codes["material_ref_id"]).value == "M0001"
     assert out_pmd.cell(row=9, column=out_pmd_codes["custom_material_name"]).value == "Concrete C30/37"
+    # The exported file keeps the grey of the automatic fields.
+    assert out_bom.cell(row=9, column=out_bom_codes["common_floor_level"]).style == "AutomaticValue"
+    assert out_bom.cell(row=9, column=out_bom_codes["custom_floor_level"]).style == "EditableValue"
+    assert out_pmd.cell(row=9, column=out_pmd_codes["material_ref_id"]).style == "AutomaticValue"
 
 
 def test_document_translator_add_last_wins_on_category_conflict():
@@ -395,6 +399,7 @@ def test_open_command_collects_every_finding_of_a_workbook_with_bad_cells(tmp_pa
         "General Information:",
         f"  Row {floor_area_row}: E17: Floor area must be greater than zero",
         "Bill of Materials:",
+        "  E19: 'Concrete C30/37' has no mapping; the field was left empty and not guessed",
         "  E32: material_id 'MAT-1' is used by 2 bill of materials rows",
         "  Row 9: E02: Value 'bogus' is not a valid MaterialDataType",
         "  E16: Row 9 has no mass, material efficiency analysis is not possible",

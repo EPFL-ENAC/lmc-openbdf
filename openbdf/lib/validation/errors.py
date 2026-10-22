@@ -54,6 +54,13 @@ class TypeMismatch(OpenBDFValidationError):
     code = "E03"
 
 
+class AutomaticFieldSupplied(OpenBDFValidationError):
+    """E04: a field the tool derives carries a contributor value."""
+
+    code = "E04"
+    severity = Severity.WARNING
+
+
 class RowCountMismatch(OpenBDFValidationError):
     """E05: the bill of materials and the wide results sheet do not have the same number of rows."""
 
@@ -72,6 +79,12 @@ class ShareOutOfRange(OpenBDFValidationError):
     code = "E13"
 
 
+class ShareSumMismatch(OpenBDFValidationError):
+    """E14: the eight data type shares do not add up to 1."""
+
+    code = "E14"
+
+
 class MissingMass(OpenBDFValidationError):
     """E16: a bill of materials row carries no mass."""
 
@@ -83,6 +96,13 @@ class FloorAreaNotPositive(OpenBDFValidationError):
     """E17: a floor area is zero or negative."""
 
     code = "E17"
+
+
+class UnmappedNationalValue(OpenBDFValidationError):
+    """E19: a national value has no OpenBDF mapping, so the field is left empty."""
+
+    code = "E19"
+    severity = Severity.WARNING
 
 
 class DuplicateFieldCode(OpenBDFValidationError):

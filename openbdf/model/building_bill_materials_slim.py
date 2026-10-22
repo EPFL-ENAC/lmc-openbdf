@@ -87,7 +87,7 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
             field_code="common_above_below_ground",
             description="Position of the finished floor level relative to the natural or finished ground elevation. "
             "Example: Below ground for a foundation slab, Above ground for a facade.",
-            requirements=Requirement.SUGGESTED,
+            requirements=Requirement.AUTOMATIC,
         ),
     )
 
@@ -126,7 +126,7 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
             field_code="bec_openbdf",
             description="The highest applicable tier of the building element within the standardized openBDF framework. "
             "Example: 1.1 for foundations and piling, 2.1 for the frame.",
-            requirements=Requirement.RECOMMENDED,
+            requirements=Requirement.AUTOMATIC,
             reference=Reference.REGULATION_EU_2026_52_ANNEX_III_TABLE_4,
         ),
     )
@@ -177,7 +177,7 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
             attribute_name="OpenBDF Material Classification",
             field_code="common_material_name",
             description="The corresponding material classification from the standardized openBDF taxonomy. Example: Concrete, ready-mixed.",
-            requirements=Requirement.RECOMMENDED,
+            requirements=Requirement.AUTOMATIC,
             reference=Reference.INDICATE_BUILDING_MATERIAL_CLASSIFICATION,
         ),
     )

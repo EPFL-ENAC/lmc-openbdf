@@ -19,6 +19,7 @@ from openbdf.lib.converters.enums_registry import Boolean, EnumRegistry
 from openbdf.lib.converters.translators import (
     ABOUT_SHEET_NAME,
     COMMON_CATEGORY_PROPERTIES,
+    FLOOR_LEVEL_CATEGORY,
     SHEETS_PROPERTIES_HEADERS,
 )
 from openbdf.lib.types.annotations import unwrap_optional
@@ -72,7 +73,7 @@ from openbdf.model.enums.materials import (
 )
 from openbdf.model.enums.openbdf_enum import OpenBDFEnum
 from openbdf.model.enums.project import ConstructionType, ProjectPhase, ProjectPhaseCommon, ProjectUnits, RecordType
-from openbdf.model.enums.requirement import Requirement
+from openbdf.model.enums.requirement import Requirement, requirement_of
 from openbdf.model.general_info import ProjectRecordBase
 from openbdf.model.lca_results_full_tall import LCAResultsTallBase
 from openbdf.model.lca_results_full_wide import LCAResultsWideFullBase
@@ -95,7 +96,7 @@ STRONGLY_RECOMMENDED_STYLE = NamedStyle(
 RECOMMENDED_STYLE = NamedStyle("Recommended", font=Font(name="Calibri"), fill=PatternFill("solid", fgColor="3592e3"))
 SUGGESTED_STYLE = NamedStyle("Suggested", font=Font(name="Calibri"), fill=PatternFill("solid", fgColor="9dd2f3"))
 OPTIONAL_STYLE = NamedStyle("Optional", font=Font(name="Calibri"), fill=PatternFill("solid", fgColor="e9f7fe"))
-AUTOMATIC_STYLE = NamedStyle("Automatic", font=Font(name="Calibri"), fill=PatternFill("solid", fgColor="bcc4c2"))
+AUTOMATIC_STYLE = NamedStyle("Automatic", font=Font(name="Calibri"), fill=PatternFill("solid", fgColor="d5e6e2"))
 REQUIREMENT_STYLES: dict[Requirement, NamedStyle] = {
     Requirement.REQUIRED: REQUIRED_STYLE,
     Requirement.STRONGLY_RECOMMENDED: STRONGLY_RECOMMENDED_STYLE,
@@ -109,6 +110,13 @@ EDITABLE_VALUE_STYLE = NamedStyle(
     "EditableValue",
     font=Font(name="Calibri"),
     fill=PatternFill("solid", fgColor="feffb3"),
+    border=Border(top=thin_side, left=thin_side, right=thin_side, bottom=thin_side),
+    protection=Protection(locked=False),
+)
+AUTOMATIC_VALUE_STYLE = NamedStyle(
+    "AutomaticValue",
+    font=Font(name="Calibri"),
+    fill=PatternFill("solid", fgColor="d5e6e2"),
     border=Border(top=thin_side, left=thin_side, right=thin_side, bottom=thin_side),
     protection=Protection(locked=False),
 )
@@ -190,6 +198,7 @@ ALL_NAMED_STYLES: list[NamedStyle] = [
     AUTOMATIC_STYLE,
     ROW_HEADER_STYLE,
     EDITABLE_VALUE_STYLE,
+    AUTOMATIC_VALUE_STYLE,
     DISABLED_STYLE,
 ]
 
@@ -198,11 +207,6 @@ def register_named_styles(writer: pd.ExcelWriter) -> None:
     """Register the shared named styles on the workbook once."""
     for style in ALL_NAMED_STYLES:
         writer.book.add_named_style(style)
-
-
-def requirement_of(extra: dict, is_optional: bool) -> Requirement:
-    """Requirement metadata of a field, defaulting on its Python optionality."""
-    return extra.get("requirements", Requirement.OPTIONAL if is_optional else Requirement.REQUIRED)
 
 
 def set_theme_fonts(writer: pd.ExcelWriter) -> None:
@@ -406,7 +410,7 @@ def info_to_xlsx(writer: pd.ExcelWriter, project: ProjectRecord | None, sheet_na
         ref.style = INFO_STYLE.name if reference else DISABLED_STYLE.name
 
         v = info_sheet.cell(row=cell_row, column=10, value=getattr(project, field_code) if project else "")
-        v.style = EDITABLE_VALUE_STYLE.name
+        v.style = AUTOMATIC_VALUE_STYLE.name if requirements is Requirement.AUTOMATIC else EDITABLE_VALUE_STYLE.name
 
         dv = xlsx_validation_from_type(data_type, is_optional, metadata, enum_registry)  # type: ignore[arg-type]
         if dv:
@@ -468,7 +472,9 @@ def wide_to_xlsx(
     df = horizontal_to_dataframe(records, model_cls)  # type: ignore[misc]
     style_arrays = named_style_arrays(writer)
     editable_array = style_arrays[EDITABLE_VALUE_STYLE.name]
+    automatic_array = style_arrays[AUTOMATIC_VALUE_STYLE.name]
     disabled_array = style_arrays[DISABLED_STYLE.name]
+    automatic_columns: set[int] = set()
 
     sheet = writer.book.create_sheet(sheet_name)
     # sheet.protection.sheet = True  # Lock the sheet to prevent accidental edits
@@ -520,6 +526,8 @@ def wide_to_xlsx(
 
         r = sheet.cell(row=7, column=cell_column, value=requirements.display_name)
         r.style = REQUIREMENT_STYLES[requirements].name
+        if requirements is Requirement.AUTOMATIC:
+            automatic_columns.add(cell_column)
 
         reference = extra.get(reference_attribute)
         ref = sheet.cell(row=8, column=cell_column, value=reference or "")
@@ -563,7 +571,7 @@ def wide_to_xlsx(
         row_values = next(rows, None)
         for col_idx in range(2, last_col + 1):
             cell = sheet.cell(row=row_idx, column=col_idx)
-            cell._style = copy(editable_array)
+            cell._style = copy(automatic_array if col_idx in automatic_columns else editable_array)
             if row_values is not None:
                 value = row_values[col_idx - 2]
                 if isinstance(value, np.generic):
@@ -603,6 +611,7 @@ def save_translator(
         export_all_enums_in_model_to_translator(writer, ProjectRecordBase.model_fields)
         export_all_enums_in_model_to_translator(writer, BuildingBillMaterialsSlimRecordBase.model_fields)
         export_all_enums_in_model_to_translator(writer, ProjectMaterialDatabaseBase.model_fields)
+        make_translator_floor_level(writer, FLOOR_LEVEL_CATEGORY)
 
 
 def make_translations_library_template_xlsx(writer: pd.ExcelWriter, sheet_name: str):
@@ -690,6 +699,22 @@ def export_all_enums_in_model_to_translator(writer: pd.ExcelWriter, model: dict[
         data_type, _ = unwrap_optional(annotation)
         if isinstance(data_type, type) and issubclass(data_type, OpenBDFEnum):
             make_translator_openbdfenum(writer, data_type.__name__, data_type)
+
+
+def make_translator_floor_level(writer: pd.ExcelWriter, sheet_name: str):
+    """The floor level sheet maps a storey label to an OpenBDF floor number."""
+    if sheet_name in writer.book.sheetnames:
+        return
+
+    info_sheet = writer.book.create_sheet(sheet_name)
+
+    info_sheet.cell(row=1, column=1, value="Value in your format")
+    info_sheet.cell(row=1, column=2, value="OpenBDF floor level")
+    info_sheet.cell(row=1, column=3, value="Leave the floor level empty to take the number carried by the label")
+
+    info_sheet.column_dimensions["A"].width = 30
+    info_sheet.column_dimensions["B"].width = 30
+    info_sheet.column_dimensions["C"].width = 80
 
 
 def make_translator_openbdfenum(writer: pd.ExcelWriter, sheet_name: str, enum: type[OpenBDFEnum]):
