@@ -1896,7 +1896,8 @@ class ProjectRecordBase(SQLModel):
             attribute_name="Undeclared share",
             field_code="lca_data_undeclared_share",
             description="Share of the weighting basis whose data type is not declared.",
-            units="%",
+            constraint="0 to 1",
+            units="fraction",
             requirements=Requirement.AUTOMATIC,
             reference=Reference.GBDI,
         ),
@@ -1919,6 +1920,8 @@ class ProjectRecordBase(SQLModel):
 
     lca_completeness_score: Optional[Decimal] = Field(
         default=None,
+        ge=0,
+        le=1,
         max_digits=18,
         decimal_places=4,
         description="Share of fields actually populated.",
@@ -1928,7 +1931,8 @@ class ProjectRecordBase(SQLModel):
             attribute_name="Submission completeness",
             field_code="lca_completeness_score",
             description="Share of fields actually populated.",
-            units="%",
+            constraint="0 to 1",
+            units="fraction",
             requirements=Requirement.AUTOMATIC,
             reference=Reference.EN_15941_2024,
         ),
