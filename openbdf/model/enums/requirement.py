@@ -37,3 +37,8 @@ class Requirement(OpenBDFEnum):
         "Automatic",
         "Computed by the tool. Do not enter the value manually.",
     )
+
+
+def requirement_of(extra: dict, is_optional: bool) -> Requirement:
+    """Requirement metadata of a field, defaulting on its Python optionality."""
+    return extra.get("requirements", Requirement.OPTIONAL if is_optional else Requirement.REQUIRED)

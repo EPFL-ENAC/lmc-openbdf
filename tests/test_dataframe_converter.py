@@ -137,9 +137,12 @@ def bom_material_names(bom: pd.DataFrame) -> list[str]:
 def project_material_database_row(material_ref_id: str, custom_material_name: str, **overrides: Any) -> dict[str, Any]:
     return required_horizontal_row(
         ProjectMaterialDatabaseBase,
-        material_ref_id=material_ref_id,
-        custom_material_name=custom_material_name,
-        **overrides,
+        **{
+            "material_ref_id": material_ref_id,
+            "custom_material_name": custom_material_name,
+            "lca_dataset_material_name": "value",
+            **overrides,
+        },
     )
 
 
@@ -167,8 +170,11 @@ def test_project_package_from_tables_reports_a_missing_project_material_database
 
     findings = collected_findings(tables_without_project_material_database(bom))
 
-    assert [str(finding) for finding in findings] == ["E01: Sheet is missing or empty"]
-    assert findings[0].source == "Project Material Database"
+    assert [str(finding) for finding in findings] == [
+        "E19: 'Concrete' has no mapping; the field was left empty and not guessed",
+        "E01: Sheet is missing or empty",
+    ]
+    assert findings[1].source == "Project Material Database"
 
 
 def test_project_package_from_tables_in_draft_mode_generates_lines_when_the_sheet_is_missing():
@@ -182,7 +188,10 @@ def test_project_package_from_tables_in_draft_mode_generates_lines_when_the_shee
     project = project_package_from_tables(loaded, findings=findings, draft=True)
     findings.extend(validate_project(project, loaded, draft=True))
 
-    assert findings == []
+    assert [str(finding) for finding in findings] == [
+        "E19: 'Concrete' has no mapping; the field was left empty and not guessed",
+        "E19: 'Wood' has no mapping; the field was left empty and not guessed",
+    ]
 
     assert [
         (record.custom_material_name, record.material_ref_id, record.bom_row_count)
@@ -347,8 +356,10 @@ def test_project_package_from_tables_reports_missing_project_material_database_l
     findings = collected_findings(tables(bom_df("mat-1", "mat-2"), project_material_database=pmd))
 
     assert [str(finding) for finding in findings] == [
+        "E19: 'Material mat-1' has no mapping; the field was left empty and not guessed",
+        "E19: 'Material mat-2' has no mapping; the field was left empty and not guessed",
         "E28: Bill of materials material 'Material mat-2' with EPD dataset 'value' "
-        "has no project material database line"
+        "has no project material database line",
     ]
     assert findings[0].source == "Bill of Materials"
 
@@ -359,8 +370,9 @@ def test_project_package_from_tables_reports_orphan_project_material_database_li
     findings = collected_findings(tables(bom_df("mat-1"), project_material_database=pmd))
 
     assert [str(finding) for finding in findings] == [
+        "E19: 'Material mat-1' has no mapping; the field was left empty and not guessed",
         "E27: Project material database line 'Orphan material' with EPD dataset 'value' "
-        "has no bill of materials material"
+        "has no bill of materials material",
     ]
 
 
@@ -373,21 +385,25 @@ def test_project_package_from_tables_reports_duplicate_project_material_database
     findings = collected_findings(tables(bom_df("mat-1"), project_material_database=pmd))
 
     assert [str(finding) for finding in findings] == [
+        "E19: 'Material mat-1' has no mapping; the field was left empty and not guessed",
         "E29: Bill of materials material 'Material mat-1' with EPD dataset 'value' "
-        "has 2 project material database lines"
+        "has 2 project material database lines",
     ]
 
 
-def test_project_package_from_tables_reports_contradicting_material_ref_ids():
+def test_project_package_from_tables_aligns_a_contradicting_material_ref_id_and_warns():
     bom = pd.DataFrame([bom_row("MAT-1", custom_material_name="Concrete", material_ref_id="M0002")])
     pmd = project_material_database_df("Concrete")
 
-    findings = collected_findings(tables(bom, project_material_database=pmd))
+    findings: list[OpenBDFValidationError] = []
+    project = project_package_from_tables(tables(bom, project_material_database=pmd), findings=findings)
+    findings.extend(validate_project(project, tables(bom, project_material_database=pmd)))
 
-    assert [str(finding) for finding in findings] == [
-        "E30: Bill of materials rows of material 'Concrete' with EPD dataset 'value' "
-        "carry material_ref_id 'M0002' instead of 'M0001'"
+    assert [str(finding) for finding in sort_findings(findings)] == [
+        "E04: Field material_ref_id is derived; the given value was discarded",
+        "E19: 'Concrete' has no mapping; the field was left empty and not guessed",
     ]
+    assert [record.material_ref_id for record in project.bill_of_materials] == ["M0001"]
 
 
 def test_project_package_from_tables_reports_duplicate_project_material_database_ids():
@@ -399,7 +415,9 @@ def test_project_package_from_tables_reports_duplicate_project_material_database
     findings = collected_findings(tables(bom_df("mat-1", "mat-2"), project_material_database=pmd))
 
     assert [str(finding) for finding in findings] == [
-        "E31: material_ref_id 'M0001' is used by 2 project material database lines"
+        "E19: 'Material mat-1' has no mapping; the field was left empty and not guessed",
+        "E19: 'Material mat-2' has no mapping; the field was left empty and not guessed",
+        "E31: material_ref_id 'M0001' is used by 2 project material database lines",
     ]
 
 
@@ -460,7 +478,7 @@ def test_project_package_from_tables_in_draft_mode_keeps_existing_project_materi
         bom_row("MAT-2", custom_material_name="Wood"),
     ])
     pmd = pd.DataFrame([
-        project_material_database_row("M0001", "Concrete", material_mass_kg="999", material_mass_share="5"),
+        project_material_database_row("M0001", "Concrete", material_mass_kg="999", material_mass_share="0.5"),
         {"material_ref_id": "…", "custom_material_name": "…"},
     ])
 
@@ -472,7 +490,7 @@ def test_project_package_from_tables_in_draft_mode_keeps_existing_project_materi
     assert concrete.material_ref_id == "M0001"
     assert concrete.bom_row_count == 1
     assert concrete.material_mass_kg == Decimal("123")
-    assert concrete.material_mass_share == Decimal("100")
+    assert concrete.material_mass_share == Decimal("1.0000")
     assert placeholder.material_ref_id == "…"
     assert placeholder.bom_row_count == 0
     assert placeholder.material_mass_kg == Decimal("0")
@@ -525,7 +543,7 @@ def test_project_package_from_tables_in_draft_mode_generates_line_values_from_th
     assert wood.material_ref_id == "M0002"
     assert wood.bom_row_count == 2
     assert wood.material_mass_kg == Decimal("250")
-    assert wood.material_mass_share == Decimal("250") / Decimal("350") * 100
+    assert wood.material_mass_share == Decimal("0.7143")
     assert wood.lca_dataset_material_name == "Wood EPD"
     assert wood.lca_database_name == "OKOBAUDAT"
     assert concrete.material_mass_kg == Decimal("100")
@@ -546,7 +564,7 @@ def test_project_package_from_tables_in_draft_mode_ignores_rows_without_a_materi
     assert concrete.material_ref_id == "M0100"
     assert concrete.bom_row_count == 1
     assert concrete.material_mass_kg == Decimal("100")
-    assert concrete.material_mass_share == Decimal("100")
+    assert concrete.material_mass_share == Decimal("1.0000")
     refs = {record.material_id: record.material_ref_id for record in project.bill_of_materials}
     assert refs["MAT-1"] == "M0100"
     assert refs["MAT-2"] == "M0099"
@@ -586,9 +604,9 @@ def test_project_package_from_tables_in_draft_mode_splits_one_material_name_by_e
     assert coarse.material_mass_kg == Decimal("500")
     assert fine.bom_row_count == 1
     assert fine.material_mass_kg == Decimal("100")
-    assert coarse.material_mass_share == Decimal("500") / Decimal("600") * 100
-    assert fine.material_mass_share == Decimal("100") / Decimal("600") * 100
-    assert coarse.material_mass_share + fine.material_mass_share == Decimal("100")
+    assert coarse.material_mass_share == Decimal("0.8333")
+    assert fine.material_mass_share == Decimal("0.1667")
+    assert coarse.material_mass_share + fine.material_mass_share == Decimal("1.0000")
     refs = [record.material_ref_id for record in project.bill_of_materials]
     assert refs == ["M0001", "M0002", "M0001"]
 
@@ -609,7 +627,7 @@ def test_project_package_from_tables_in_draft_mode_treats_blank_epd_datasets_as_
     assert line.lca_dataset_material_name is None
     assert line.bom_row_count == 3
     assert line.material_mass_kg == Decimal("300")
-    assert line.material_mass_share == Decimal("100")
+    assert line.material_mass_share == Decimal("1.0000")
     assert [record.material_ref_id for record in project.bill_of_materials] == ["M0001", "M0001", "M0001"]
 
 
@@ -658,7 +676,7 @@ def test_project_package_from_tables_in_draft_mode_recomputes_automatic_fields_o
     assert line.material_ref_id == "M0001"
     assert line.bom_row_count == 2
     assert line.material_mass_kg == Decimal("300")
-    assert line.material_mass_share == Decimal("100")
+    assert line.material_mass_share == Decimal("1.0000")
 
 
 def test_project_package_from_tables_in_draft_mode_keeps_an_unmatched_line_and_generates_one_for_the_bom_pair():
@@ -672,7 +690,7 @@ def test_project_package_from_tables_in_draft_mode_keeps_an_unmatched_line_and_g
             lca_dataset_material_name="Kies (Korngröße 2/32)",
             bom_row_count=7,
             material_mass_kg="7",
-            material_mass_share="7",
+            material_mass_share="0.7",
         ),
     ])
 
@@ -691,7 +709,7 @@ def test_project_package_from_tables_in_draft_mode_keeps_an_unmatched_line_and_g
     assert generated.lca_dataset_material_name is None
     assert generated.bom_row_count == 1
     assert generated.material_mass_kg == Decimal("100")
-    assert generated.material_mass_share == Decimal("100")
+    assert generated.material_mass_share == Decimal("1.0000")
     assert [record.material_ref_id for record in project.bill_of_materials] == ["M0002"]
 
 
@@ -719,7 +737,7 @@ def test_project_package_from_tables_in_draft_mode_ignores_rows_with_a_dataset_b
         ("Kies", "M0001", 1)
     ]
     assert lines[0].material_mass_kg == Decimal("100")
-    assert lines[0].material_mass_share == Decimal("100")
+    assert lines[0].material_mass_share == Decimal("1.0000")
     refs = {record.material_id: record.material_ref_id for record in project.bill_of_materials}
     assert refs == {"MAT-1": "M0001", "MAT-2": None, "MAT-3": None}
 
@@ -735,6 +753,7 @@ def test_project_package_from_tables_reports_a_dataset_mismatch_as_missing_and_o
     findings = collected_findings(tables(bom, project_material_database=pmd))
 
     assert [str(finding) for finding in findings] == [
+        "E19: 'Kies' has no mapping; the field was left empty and not guessed",
         "E28: Bill of materials material 'Kies' with EPD dataset 'Kies (Korngröße 0/16)' "
         "has no project material database line",
         "E27: Project material database line 'Kies' with EPD dataset 'Kies (Korngröße 2/32)' "
@@ -755,4 +774,4 @@ def test_project_package_from_tables_in_draft_mode_counts_a_missing_floor_repeti
     assert len(lines) == 1
     assert lines[0].bom_row_count == 3
     assert lines[0].material_mass_kg == Decimal("200")
-    assert lines[0].material_mass_share == Decimal("100")
+    assert lines[0].material_mass_share == Decimal("1.0000")

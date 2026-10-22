@@ -54,10 +54,11 @@ class PreprocessRule:
 @dataclass(frozen=True)
 class TranslationRule:
     predicate: Callable[[str], bool]
-    output: str
+    # A rule with no output keeps the value unchanged, so the field is derived from the label itself.
+    output: str | None
 
     @staticmethod
-    def fromString(code: str, output: str) -> "TranslationRule":
+    def fromString(code: str, output: str | None) -> "TranslationRule":
         if code.startswith("@REGEX"):
             pattern_text = code.removeprefix("@REGEX")
             if not pattern_text:
@@ -69,6 +70,21 @@ class TranslationRule:
                 return bool(pattern.fullmatch(value))
 
             return TranslationRule(predicate=predicate, output=output)
+
+        bare_kind = re.fullmatch(r"@(?P<kind>INT|FLOAT)", code.strip())
+        if bare_kind:
+            kind = bare_kind.group("kind")
+
+            def any_number(value: str) -> bool:
+                if kind == "INT":
+                    return bool(re.fullmatch(r"[+-]?\d+", value))
+                try:
+                    float(value)
+                except ValueError:
+                    return False
+                return True
+
+            return TranslationRule(predicate=any_number, output=output)
 
         match = re.fullmatch(
             r"@(?P<kind>INT|FLOAT)(?P<op>>=|<=|==|!=|>|<)(?P<value>.+)",
@@ -163,14 +179,17 @@ class CategoryTranslator:
 
         for idx, (raw_key, output) in enumerate(zip(df.iloc[:, attribute_name_col], df.iloc[:, translated_name_col])):
             raw_key = str(raw_key)
-            output = str(output)
+            output = None if _is_missing(output) else str(output)
 
             if raw_key.startswith("@"):
                 rules.append(TranslationRule.fromString(raw_key, output))
-            else:
+            elif output is not None:
                 if raw_key not in translation_dict:
                     translation_dict[raw_key] = []
                 translation_dict[raw_key].append(output)
+
+            if output is None:
+                continue
 
             if has_default_col:
                 default_value = df.iloc[idx, default_value_col]
@@ -193,8 +212,8 @@ class CategoryTranslator:
             return self._translation_dict[attribute_name]  # Return all translated names
 
         for rule in self._rules:
-            if rule.predicate(attribute_name):
-                return [rule.output]
+            if isinstance(attribute_name, str) and rule.predicate(attribute_name):
+                return [attribute_name] if rule.output is None else [rule.output]
 
         return [attribute_name]
 
@@ -468,6 +487,10 @@ COMMON_CATEGORY_PROPERTIES: dict[str, CategoryProperties] = {
     "results_wide": {"name": "LCA Result (Wide)", "orientation": "horizontal"},
     "results_tall": {"name": "LCA Result (Tall)", "orientation": "horizontal"},
 }
+
+# Category that maps a national storey label to an OpenBDF floor number. It carries no
+# enum, so the blank translator template generates it separately.
+FLOOR_LEVEL_CATEGORY = "FloorLevel"
 
 SHEETS_PROPERTIES_HEADERS = {
     "original_name": "Sheet name in your format",
