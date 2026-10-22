@@ -56,25 +56,30 @@ def test_translator_template_adds_default_and_preprocess_columns(tmp_path):
         "material_reference_service_life",
         "Reference Service Life (RSL)",
         "Decimal",
-        "Required",
+        "Strongly recommended",
     ]
 
 
-def test_openbdf_template_includes_criticality_metadata(tmp_path):
+def test_openbdf_template_requirements_and_reference_layout(tmp_path):
     output_path = tmp_path / "openbdf_template.xlsx"
     save_openbdf_to_xlsx(output_path, None)
 
     workbook = load_workbook(output_path)
     info = workbook["General Information"]
-    assert [info.cell(row=1, column=column).value for column in range(9, 13)] == [
+    assert [info.cell(row=1, column=column).value for column in range(9, 12)] == [
         "Requirements",
-        "Criticality",
         "Value",
         "Reference",
     ]
-    assert info.cell(row=2, column=10).value == "SHOULD"
-    assert info.cell(row=2, column=12).value == "ECHO; GBDB"
+    assert info.cell(row=2, column=9).value == "Automatic"
+    assert info.cell(row=2, column=11).value == "ECHO; GBDB"
 
+    first_field_requirements = {
+        "Bill of Materials": "Automatic",
+        "Project Material Database": "Automatic",
+        "LCA Result (Wide)": "Required",
+        "LCA Result (Tall)": "Required",
+    }
     reference_labels = {
         "Bill of Materials": "Reference",
         "Project Material Database": "Reference",
@@ -90,15 +95,13 @@ def test_openbdf_template_includes_criticality_metadata(tmp_path):
         assert sheet["A5"].value == "Constraint"
         assert sheet["A6"].value == "Units"
         assert sheet["A7"].value == "Requirements"
-        assert sheet["A8"].value == "Criticality"
-        assert sheet["A9"].value == reference_labels[sheet_name]
-        # The reference row keeps the first data row at row 10 on every field sheet.
-        assert sheet["A10"].value is None
+        assert sheet["A8"].value == reference_labels[sheet_name]
+        # The reference row keeps the first data row at row 9 on every field sheet.
+        assert sheet["A9"].value is None
         assert sheet.cell(row=2, column=2).value == (
             "material_ref_id" if sheet_name == "Project Material Database" else "material_id"
         )
-        # The first field is MUST in format v2.0.0 on every field sheet.
-        assert sheet.cell(row=8, column=2).value == "MUST"
+        assert sheet.cell(row=7, column=2).value == first_field_requirements[sheet_name]
 
     type_definitions = workbook["TypeDefinitions"]
     assert type_definitions["A1"].style == "AttributeName"

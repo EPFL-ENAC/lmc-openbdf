@@ -422,26 +422,26 @@ class DocumentTranslator:
                     orientation=COMMON_CATEGORY_PROPERTIES["project"]["orientation"],
                     header_row=0,
                     header_col=3,
-                    values_col=10,
+                    values_col=9,
                 ),
                 # Generated template layout (wide_to_xlsx): field codes in
-                # xlsx row 2, metadata rows 3-9, data from xlsx row 10.
+                # xlsx row 2, metadata rows 3-8, data from xlsx row 9.
                 SheetTranslation(
                     original_name=COMMON_CATEGORY_PROPERTIES["bom"]["name"],
                     translated_name=COMMON_CATEGORY_PROPERTIES["bom"]["name"],
                     orientation=COMMON_CATEGORY_PROPERTIES["bom"]["orientation"],
                     header_row=1,
-                    start_row=9,
+                    start_row=8,
                     start_col=1,
                 ),
                 # Project Material Database: field codes in xlsx row 2, metadata rows
-                # 3-9, data from xlsx row 10.
+                # 3-8, data from xlsx row 9.
                 SheetTranslation(
                     original_name=COMMON_CATEGORY_PROPERTIES["material_database"]["name"],
                     translated_name=COMMON_CATEGORY_PROPERTIES["material_database"]["name"],
                     orientation=COMMON_CATEGORY_PROPERTIES["material_database"]["orientation"],
                     header_row=1,
-                    start_row=9,
+                    start_row=8,
                     start_col=1,
                 ),
                 SheetTranslation(
@@ -449,7 +449,7 @@ class DocumentTranslator:
                     translated_name=COMMON_CATEGORY_PROPERTIES["results_wide"]["name"],
                     orientation=COMMON_CATEGORY_PROPERTIES["results_wide"]["orientation"],
                     header_row=1,
-                    start_row=9,
+                    start_row=8,
                     start_col=1,
                 ),
             ])

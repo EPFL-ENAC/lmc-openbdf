@@ -26,7 +26,6 @@ class FieldAnalysis(BaseModel):
     group_info: str | None = None
     description: str | None = None
     requirements: str | None = None
-    criticality: str | None = None
     reference: str | None = None
     reference_alignment: str | None = None
     constraint: str | None = None
@@ -105,8 +104,7 @@ def analyze_model(model_name: str, field_names: list[str] | None = None) -> Mode
             attribute_name=metadata.get("attribute_name"),
             group_info=f"{metadata.get('group')} > {metadata.get('sub_group')}" if metadata.get("group") else None,
             description=metadata.get("description") or field_info.description,
-            requirements=metadata.get("requirements"),
-            criticality=metadata.get("criticality"),
+            requirements=metadata["requirements"].display_name if metadata.get("requirements") else None,
             reference=metadata.get("reference"),
             reference_alignment=metadata.get("reference_alignment"),
             constraint=metadata.get("constraint"),
@@ -134,7 +132,6 @@ def print_to_console(analysis: ModelAnalysis):
             "Group": field.group_info,
             "Description": field.description,
             "Requirements": field.requirements,
-            "Criticality": field.criticality,
             "Reference": field.reference,
             "Reference Alignment": field.reference_alignment,
             "Constraint": field.constraint,
@@ -180,8 +177,6 @@ def generate_markdown(analysis: ModelAnalysis) -> str:
             lines.append(f"| Group | {field.group_info} |")
         if field.requirements:
             lines.append(f"| Requirements | {field.requirements} |")
-        if field.criticality:
-            lines.append(f"| Criticality | {field.criticality} |")
         if field.reference:
             lines.append(f"| Reference | {field.reference} |")
         if field.reference_alignment:
