@@ -37,7 +37,7 @@ class OpenBDFValidationError(ValueError):
 
 
 class MissingRequiredField(OpenBDFValidationError):
-    """E01: a field whose criticality is MUST carries no value."""
+    """E01: a field whose requirement is required carries no value."""
 
     code = "E01"
 
