@@ -15,8 +15,10 @@ from openbdf.lib.converters.dataframe import (
 from openbdf.lib.openbdf_tables import OpenBDFTables
 from openbdf.lib.types.annotations import unwrap_optional
 from openbdf.lib.types.fields import get_field_code
+from openbdf.lib.types.values import parse_value
 from openbdf.lib.validation import OpenBDFValidationError, Severity, sort_findings, validate_project
 from openbdf.model.building_bill_materials_slim import BuildingBillMaterialsSlimRecordBase
+from openbdf.model.enums.energy import BuildingEnergyClassificationSystem
 from openbdf.model.general_info import ProjectRecordBase
 from openbdf.model.lca_results_full_tall import LCAResultsTallBase
 from openbdf.model.lca_results_full_wide import LCAResultsWideFullBase
@@ -775,3 +777,8 @@ def test_project_package_from_tables_in_draft_mode_counts_a_missing_floor_repeti
     assert lines[0].bom_row_count == 3
     assert lines[0].material_mass_kg == Decimal("200")
     assert lines[0].material_mass_share == Decimal("100.0000")
+
+
+def test_parse_value_tries_an_enum_before_the_blank_aliases():
+    assert parse_value(BuildingEnergyClassificationSystem | None, "None") is BuildingEnergyClassificationSystem.NONE
+    assert parse_value(str | None, "None") is None
