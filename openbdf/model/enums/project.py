@@ -85,6 +85,7 @@ class ConstructionType(OpenBDFEnum):
         "major_renovation",
         "Major Renovation (with addition)",
     )
+    UNKNOWN = ("unknown", "Unknown")
     reference = enum_attribute(Reference.EN15978_2026)
 
 
