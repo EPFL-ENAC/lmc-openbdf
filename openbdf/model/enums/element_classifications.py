@@ -676,7 +676,7 @@ class OpenBDFBuildingElementClassification(OpenBDFEnum):
     )
     DUCTWORK_5242 = (
         "5.2.4.2",
-        "5.2.4.2 Ductwork & ancilleries",
+        "5.2.4.2 Ductwork & ancillaries",
         "Ductwork, insulation, support, fire rated ductwork, support.",
         VENT_TERMINALS_DUCTWORK_524,
     )

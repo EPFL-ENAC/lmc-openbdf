@@ -4,7 +4,7 @@ from typing import Any
 from openpyxl.worksheet.datavalidation import DataValidation
 from sqlmodel.main import FieldInfo
 
-from openbdf.lib.converters.enums_registry import EnumRegistry
+from openbdf.lib.converters.enums_registry import Boolean, EnumRegistry
 from openbdf.model.enums.openbdf_enum import OpenBDFEnum
 
 
@@ -34,7 +34,7 @@ def xlsx_validation_from_type(
     elif data_type == bool:
         return DataValidation(
             type="list",
-            formula1='"True,False"',
+            formula1=enum_registry.get_validation_formula(Boolean),
             allow_blank=is_optional,
         )
 

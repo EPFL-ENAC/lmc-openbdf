@@ -8,7 +8,8 @@ from typing import Optional
 
 from sqlmodel import Field, SQLModel
 
-from openbdf.model.enums.lca import LCAStageOrModule
+from openbdf.model.enums.lca import LCAStageOrModuleOrSubModule
+from openbdf.model.enums.materials import MaterialFlowType
 
 from .field_metadata import openbdf_field_metadata
 
@@ -22,26 +23,106 @@ class LCAResultsTallBase(SQLModel):
             field_code="material_id",
             description="The unique identifier for the material within the project context, referencing the Bill of Materials.",
             requirements="Required",
+            criticality="MUST",
         ),
     )
 
-    lca_service_life: Decimal = Field(
-        description="Declared reference service life.",
+    lca_stage_module_submodule: LCAStageOrModuleOrSubModule = Field(
+        description="Life-cycle stage or module or submodule of this result row, such as A1-A3 or A5 or A5.1 ",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Service life",
-            field_code="lca_service_life",
-            description="Declared reference service life.",
-            units="years",
-        ),
-    )
-
-    lca_stage_or_module: LCAStageOrModule = Field(
-        description="Life cycle assessment stage or module for this result row.",
-        schema_extra=openbdf_field_metadata(
-            attribute_name="LCA stage or module",
-            field_code="lca_stage_or_module",
-            description="Life cycle assessment stage or module for this result row.",
+            attribute_name="Life cycle stage or module or submodule",
+            field_code="lca_stage_module_submodule",
+            description="Life-cycle stage or module or submodule of this result row, such as A1-A3 or A5 or A5.1 ",
             requirements="Required",
+            criticality="MUST",
+        ),
+    )
+
+    lca_stage: Optional[LCAStageOrModuleOrSubModule] = Field(
+        default=None,
+        description="Life-cycle stage of the module, derived by the parser from Life cycle module.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Life cycle stage",
+            field_code="lca_stage",
+            description="Life-cycle stage of the module, derived by the parser from Life cycle module.",
+            requirements="Automatic",
+            criticality="MAY",
+        ),
+    )
+
+    lca_module: Optional[LCAStageOrModuleOrSubModule] = Field(
+        default=None,
+        description="Life-cycle of the module, derived by the parser from Life cycle module.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Life cycle module",
+            field_code="lca_module",
+            description="Life-cycle of the module, derived by the parser from Life cycle module.",
+            requirements="Automatic",
+            criticality="MAY",
+        ),
+    )
+
+    lca_submodule: Optional[LCAStageOrModuleOrSubModule] = Field(
+        default=None,
+        description="Sub-module where the standard defines one.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Life cycle sub-module",
+            field_code="lca_submodule",
+            description="Sub-module where the standard defines one.",
+            requirements="Automatic",
+            criticality="MAY",
+        ),
+    )
+
+    process_year: Optional[int] = Field(
+        default=None,
+        description="Year in which the activity occurs.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Process year",
+            field_code="process_year",
+            description="Year in which the activity occurs.",
+            units="year",
+            requirements="Recommended",
+            criticality="MAY",
+        ),
+    )
+
+    material_flow_type: Optional[MaterialFlowType] = Field(
+        default=None,
+        description="Type of flow at this row.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Material flow type",
+            field_code="material_flow_type",
+            description="Type of flow at this row.",
+            units="None",
+            requirements="Recommended",
+            criticality="MAY",
+        ),
+    )
+
+    material_flow_mass_kg: Optional[Decimal] = Field(
+        default=None,
+        description="Mass carried by the flow at this row.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Material Flow Mass (kg)",
+            field_code="material_flow_mass_kg",
+            description="Mass carried by the flow at this row.",
+            units="kg",
+            requirements="Recommended",
+            criticality="MAY",
+        ),
+    )
+
+    scenario_label: Optional[str] = Field(
+        default=None,
+        description="Scenario the result belongs to.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Scenario label",
+            field_code="scenario_label",
+            description="Scenario the result belongs to.",
+            units="None",
+            requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -54,6 +135,7 @@ class LCAResultsTallBase(SQLModel):
             description="Global Warming Potential - Total.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -66,6 +148,7 @@ class LCAResultsTallBase(SQLModel):
             description="Global Warming Potential - Fossil.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -78,6 +161,7 @@ class LCAResultsTallBase(SQLModel):
             description="Global Warming Potential - Biogenic.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -90,18 +174,20 @@ class LCAResultsTallBase(SQLModel):
             description="Global Warming Potential - Land Use and Land Use Change.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
     odp: Optional[Decimal] = Field(
         default=None,
-        description="Ozone Depletion Potential.",
+        description="Ozone Depletion Potential",
         schema_extra=openbdf_field_metadata(
             attribute_name="Ozone Depletion Potential",
             field_code="odp",
-            description="Ozone Depletion Potential.",
-            units="kg R11 eq / kg CFC-11 eq.",
+            description="Ozone Depletion Potential",
+            units="kg CFC-11 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -114,6 +200,20 @@ class LCAResultsTallBase(SQLModel):
             description="Acidification Potential.",
             units="kg SO₂ eq.",
             requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    ap_ae: Optional[Decimal] = Field(
+        default=None,
+        description="Acidification Potential.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Acidification Potential - Accumulated Exceedance",
+            field_code="ap_ae",
+            description="Acidification Potential.",
+            units="mol H+ eq",
+            requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -126,6 +226,7 @@ class LCAResultsTallBase(SQLModel):
             description="Eutrophication Potential.",
             units="kg N eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -138,6 +239,7 @@ class LCAResultsTallBase(SQLModel):
             description="Eutrophication Potential - Aquatic Freshwater.",
             units="kg PO4 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -150,6 +252,7 @@ class LCAResultsTallBase(SQLModel):
             description="Eutrophication Potential - Aquatic Marine.",
             units="kg N eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -160,8 +263,9 @@ class LCAResultsTallBase(SQLModel):
             attribute_name="Eutrophication Potential - Terrestrial",
             field_code="ep_t",
             description="Eutrophication Potential - Terrestrial.",
-            units="mol Ne eq",
+            units="mol N eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -174,6 +278,7 @@ class LCAResultsTallBase(SQLModel):
             description="Photochemical Ozone Creation Potential.",
             units="kg C2H4 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -186,6 +291,7 @@ class LCAResultsTallBase(SQLModel):
             description="Smog Forming Potential.",
             units="kg O3 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -193,11 +299,12 @@ class LCAResultsTallBase(SQLModel):
         default=None,
         description="Photochemical Ozone Formation Potential.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Photochemical Ozone Formation Potential",
+            attribute_name="Formation potential of tropospheric ozone",
             field_code="pofp",
             description="Photochemical Ozone Formation Potential.",
             units="kg NMVOC eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -205,11 +312,12 @@ class LCAResultsTallBase(SQLModel):
         default=None,
         description="Abiotic Depletion Potential (Minerals and Metals).",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Abiotic Depletion Potential (Minerals and Metals)",
+            attribute_name="Abiotic Depletion Potential - Minerals and Metals",
             field_code="adpmm",
             description="Abiotic Depletion Potential (Minerals and Metals).",
             units="kg Sb eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -217,11 +325,12 @@ class LCAResultsTallBase(SQLModel):
         default=None,
         description="Abiotic Depletion Potential (Fossil Fuels).",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Abiotic Depletion Potential (Fossil Fuels)",
+            attribute_name="Abiotic Depletion Potential - Fossil Fuels",
             field_code="adpf",
             description="Abiotic Depletion Potential (Fossil Fuels).",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -232,8 +341,9 @@ class LCAResultsTallBase(SQLModel):
             attribute_name="Water Depletion Potential",
             field_code="wdp",
             description="Water Depletion Potential.",
-            units="m3 world eq",
+            units="m3 world eq deprived",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -241,11 +351,12 @@ class LCAResultsTallBase(SQLModel):
         default=None,
         description="Primary Energy Renewable (Energy resources).",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Primary Energy Renewable (Energy resources)",
+            attribute_name="Primary Energy Renewable - Energy Resources",
             field_code="pere",
             description="Primary Energy Renewable (Energy resources).",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -253,11 +364,12 @@ class LCAResultsTallBase(SQLModel):
         default=None,
         description="Primary Energy Non-Renewable (Energy resources).",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Primary Energy Non-Renewable (Energy resources)",
+            attribute_name="Primary Energy Non-Renewable - Energy Resources",
             field_code="penre",
             description="Primary Energy Non-Renewable (Energy resources).",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -270,6 +382,7 @@ class LCAResultsTallBase(SQLModel):
             description="Primary Energy Renewable Total.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -282,5 +395,84 @@ class LCAResultsTallBase(SQLModel):
             description="Primary Energy Non-Renewable Total.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    pm: Optional[Decimal] = Field(
+        default=None,
+        description="Particulate matter emissions",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Particulate Matter Emissions",
+            field_code="pm",
+            description="Particulate matter emissions",
+            units="disease incidence",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    irp: Optional[Decimal] = Field(
+        default=None,
+        description="Ionising radiation, human health",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Ionising Radiation - Human Health",
+            field_code="irp",
+            description="Ionising radiation, human health",
+            units="kBq U235 eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    etp_fw: Optional[Decimal] = Field(
+        default=None,
+        description="Ecotoxicity, freshwater",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Ecotoxicity - Freshwater",
+            field_code="etp_fw",
+            description="Ecotoxicity, freshwater",
+            units="CTUe",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    htp_c: Optional[Decimal] = Field(
+        default=None,
+        description="Human toxicity, cancer effects",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Human Toxicity - Cancer Effects",
+            field_code="htp_c",
+            description="Human toxicity, cancer effects",
+            units="CTUh",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    htp_nc: Optional[Decimal] = Field(
+        default=None,
+        description="Human toxicity, non-cancer effects",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Human Toxicity - Non-cancer Effects",
+            field_code="htp_nc",
+            description="Human toxicity, non-cancer effects",
+            units="CTUh",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    sqp: Optional[Decimal] = Field(
+        default=None,
+        description="Soil quality index",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Soil Quality Index",
+            field_code="sqp",
+            description="Soil quality index",
+            units="-",
+            requirements="Optional",
+            criticality="MAY",
         ),
     )

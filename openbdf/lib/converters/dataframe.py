@@ -6,7 +6,7 @@ import pandas as pd
 from sqlmodel import SQLModel
 
 from openbdf.lib.converters.lca_results import lca_results_wide_to_tall
-from openbdf.lib.converters.translators import COMMON_CATEGORY_PROPERTIES, DocumentTranslator
+from openbdf.lib.converters.translators import COMMON_CATEGORY_PROPERTIES, DocumentTranslator, PreprocessRule
 from openbdf.lib.openbdf_tables import OpenBDFTables
 from openbdf.lib.types.fields import get_field_code
 from openbdf.lib.types.values import parse_value, serialize_value
@@ -168,26 +168,41 @@ def horizontal_from_dataframe(
             if field_info.is_required():
                 required_names.add(req_field)
 
+    # The column set is fixed for all rows, so translation, field resolution
+    # and default parsing run once instead of once per row.
+    column_plans: list[list[tuple[str, Any, PreprocessRule | None]]] = []
+    for column in df.columns:
+        column_plan: list[tuple[str, Any, PreprocessRule | None]] = []
+        for translated_code in document_translator.translate(translator_category, str(column)):
+            field_name = code_to_name.get(translated_code)
+            if field_name is None:
+                continue
+            column_plan.append((
+                field_name,
+                fields[field_name].annotation,
+                document_translator.get_preprocess_rule(translator_category, field_name),
+            ))
+        column_plans.append(column_plan)
+
+    # parse_value returns only immutable scalars, so the parsed defaults can
+    # be shared across all rows.
+    default_plans: list[tuple[str, Any]] = []
+    for field_code, default_field_name in code_to_name.items():
+        default_value = document_translator.get_default(translator_category, field_code)
+        if default_value is not None:
+            default_plans.append((
+                default_field_name,
+                parse_value(fields[default_field_name].annotation, default_value, document_translator),
+            ))
+
     items: list[ModelT] = []
 
-    for row_number, (_, row) in enumerate(df.iterrows(), start=1):
+    for row_number, row_values in enumerate(df.itertuples(index=False, name=None), start=1):
         kwargs: dict[str, Any] = {}
 
-        for column in df.columns.tolist():
-            translated_codes = document_translator.translate(
-                translator_category,
-                str(column),
-            )
-            for translated_code in translated_codes:
-                field_name = code_to_name.get(translated_code)
-                if field_name is None:
-                    continue
-
-                field_info = fields[field_name]
-                annotation = field_info.annotation
-
-                raw_value = row[column]
-                preprocess_rule = document_translator.get_preprocess_rule(translator_category, field_name)
+        for column_plan, raw_cell in zip(column_plans, row_values):
+            for field_name, annotation, preprocess_rule in column_plan:
+                raw_value = raw_cell
                 if preprocess_rule:
                     result = preprocess_rule.execute(raw_value)
                     if result.valid:
@@ -201,17 +216,10 @@ def horizontal_from_dataframe(
                     document_translator,
                 )
 
-        for field_code, default_field_name in code_to_name.items():
-            if kwargs.get(default_field_name) is not None:
+        for field_name, default_parsed in default_plans:
+            if kwargs.get(field_name) is not None:
                 continue
-            default_value = document_translator.get_default(translator_category, field_code)
-            if default_value is not None:
-                field_info = fields[default_field_name]
-                kwargs[default_field_name] = parse_value(
-                    field_info.annotation,
-                    default_value,
-                    document_translator,
-                )
+            kwargs[field_name] = default_parsed
 
         if not any(value is not None for value in kwargs.values()):
             continue
