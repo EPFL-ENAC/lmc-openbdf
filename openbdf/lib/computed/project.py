@@ -24,7 +24,7 @@ from .write import write_automatic
 
 PROJECT_SHEET = COMMON_CATEGORY_PROPERTIES["project"]["name"]
 SHARE_QUANTUM = Decimal("0.0001")
-SHARE_TOLERANCE = Decimal("0.001")
+SHARE_TOLERANCE = Decimal("0.1")
 
 # The common definition of the design steps is an OpenBDF enum, so the mapping between the
 # national phase and the common phase is fixed in the code and not in a translator sheet.
@@ -143,7 +143,7 @@ def _fill_shares(
     shares = dict.fromkeys(SHARE_FIELDS, Decimal(0))
     for line in lines:
         field_name = SHARE_FIELD.get(line.material_data_type, "lca_data_undeclared_share")
-        shares[field_name] += weights.get(id(line), Decimal(0)) / total
+        shares[field_name] += weights.get(id(line), Decimal(0)) / total * 100
 
     for field_name, share in shares.items():
         write_automatic(
@@ -155,13 +155,13 @@ def _fill_shares(
         )
 
     written = [getattr(project, field_name) for field_name in SHARE_FIELDS]
-    if all(share is not None for share in written) and abs(sum(written, Decimal(0)) - 1) > SHARE_TOLERANCE:
-        findings.append(ShareSumMismatch("The eight data type shares must add up to 1", source=PROJECT_SHEET))
+    if all(share is not None for share in written) and abs(sum(written, Decimal(0)) - 100) > SHARE_TOLERANCE:
+        findings.append(ShareSumMismatch("The eight data type shares must add up to 100", source=PROJECT_SHEET))
 
 
 def _completeness(project: ProjectRecord) -> Decimal | None:
     """
-    Return the share of the required and strongly recommended fields that carry a value.
+    Return the percentage of the required and strongly recommended fields that carry a value.
 
     A field that repeats over the rows of a sheet counts once, and it is filled when any
     row carries a value. Automatic fields are left out: the tool writes them, so they say
@@ -183,7 +183,7 @@ def _completeness(project: ProjectRecord) -> Decimal | None:
 
     if not counted:
         return None
-    return (Decimal(filled) / Decimal(counted)).quantize(SHARE_QUANTUM, rounding=ROUND_HALF_UP)
+    return (Decimal(filled) / Decimal(counted) * 100).quantize(SHARE_QUANTUM, rounding=ROUND_HALF_UP)
 
 
 def _sheets(project: ProjectRecord) -> list[tuple[type[Any], list[Any]]]:

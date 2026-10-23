@@ -74,13 +74,13 @@ class MaterialIdMisalignment(OpenBDFValidationError):
 
 
 class ShareOutOfRange(OpenBDFValidationError):
-    """E13: a share is outside the 0 to 1 range."""
+    """E13: a share is outside the 0 to 100 range."""
 
     code = "E13"
 
 
 class ShareSumMismatch(OpenBDFValidationError):
-    """E14: the eight data type shares do not add up to 1."""
+    """E14: the eight data type shares do not add up to 100."""
 
     code = "E14"
 
@@ -230,7 +230,7 @@ def findings_from_validation_error(
                 )
             )
         elif kind in {"greater_than_equal", "less_than_equal"} and code.endswith("_share"):
-            findings.append(ShareOutOfRange(f"Field {code} must lie between 0 and 1", source=source, row=finding_row))
+            findings.append(ShareOutOfRange(f"Field {code} must lie between 0 and 100", source=source, row=finding_row))
         elif kind == "greater_than" and code in FLOOR_AREA_FIELDS:
             findings.append(
                 FloorAreaNotPositive("Floor area must be greater than zero", source=source, row=finding_row)

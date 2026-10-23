@@ -490,7 +490,7 @@ def test_project_package_from_tables_in_draft_mode_keeps_existing_project_materi
     assert concrete.material_ref_id == "M0001"
     assert concrete.bom_row_count == 1
     assert concrete.material_mass_kg == Decimal("123")
-    assert concrete.material_mass_share == Decimal("1.0000")
+    assert concrete.material_mass_share == Decimal("100.0000")
     assert placeholder.material_ref_id == "…"
     assert placeholder.bom_row_count == 0
     assert placeholder.material_mass_kg == Decimal("0")
@@ -543,7 +543,7 @@ def test_project_package_from_tables_in_draft_mode_generates_line_values_from_th
     assert wood.material_ref_id == "M0002"
     assert wood.bom_row_count == 2
     assert wood.material_mass_kg == Decimal("250")
-    assert wood.material_mass_share == Decimal("0.7143")
+    assert wood.material_mass_share == Decimal("71.4286")
     assert wood.lca_dataset_material_name == "Wood EPD"
     assert wood.lca_database_name == "OKOBAUDAT"
     assert concrete.material_mass_kg == Decimal("100")
@@ -564,7 +564,7 @@ def test_project_package_from_tables_in_draft_mode_ignores_rows_without_a_materi
     assert concrete.material_ref_id == "M0100"
     assert concrete.bom_row_count == 1
     assert concrete.material_mass_kg == Decimal("100")
-    assert concrete.material_mass_share == Decimal("1.0000")
+    assert concrete.material_mass_share == Decimal("100.0000")
     refs = {record.material_id: record.material_ref_id for record in project.bill_of_materials}
     assert refs["MAT-1"] == "M0100"
     assert refs["MAT-2"] == "M0099"
@@ -604,9 +604,9 @@ def test_project_package_from_tables_in_draft_mode_splits_one_material_name_by_e
     assert coarse.material_mass_kg == Decimal("500")
     assert fine.bom_row_count == 1
     assert fine.material_mass_kg == Decimal("100")
-    assert coarse.material_mass_share == Decimal("0.8333")
-    assert fine.material_mass_share == Decimal("0.1667")
-    assert coarse.material_mass_share + fine.material_mass_share == Decimal("1.0000")
+    assert coarse.material_mass_share == Decimal("83.3333")
+    assert fine.material_mass_share == Decimal("16.6667")
+    assert coarse.material_mass_share + fine.material_mass_share == Decimal("100.0000")
     refs = [record.material_ref_id for record in project.bill_of_materials]
     assert refs == ["M0001", "M0002", "M0001"]
 
@@ -627,7 +627,7 @@ def test_project_package_from_tables_in_draft_mode_treats_blank_epd_datasets_as_
     assert line.lca_dataset_material_name is None
     assert line.bom_row_count == 3
     assert line.material_mass_kg == Decimal("300")
-    assert line.material_mass_share == Decimal("1.0000")
+    assert line.material_mass_share == Decimal("100.0000")
     assert [record.material_ref_id for record in project.bill_of_materials] == ["M0001", "M0001", "M0001"]
 
 
@@ -676,7 +676,7 @@ def test_project_package_from_tables_in_draft_mode_recomputes_automatic_fields_o
     assert line.material_ref_id == "M0001"
     assert line.bom_row_count == 2
     assert line.material_mass_kg == Decimal("300")
-    assert line.material_mass_share == Decimal("1.0000")
+    assert line.material_mass_share == Decimal("100.0000")
 
 
 def test_project_package_from_tables_in_draft_mode_keeps_an_unmatched_line_and_generates_one_for_the_bom_pair():
@@ -709,7 +709,7 @@ def test_project_package_from_tables_in_draft_mode_keeps_an_unmatched_line_and_g
     assert generated.lca_dataset_material_name is None
     assert generated.bom_row_count == 1
     assert generated.material_mass_kg == Decimal("100")
-    assert generated.material_mass_share == Decimal("1.0000")
+    assert generated.material_mass_share == Decimal("100.0000")
     assert [record.material_ref_id for record in project.bill_of_materials] == ["M0002"]
 
 
@@ -737,7 +737,7 @@ def test_project_package_from_tables_in_draft_mode_ignores_rows_with_a_dataset_b
         ("Kies", "M0001", 1)
     ]
     assert lines[0].material_mass_kg == Decimal("100")
-    assert lines[0].material_mass_share == Decimal("1.0000")
+    assert lines[0].material_mass_share == Decimal("100.0000")
     refs = {record.material_id: record.material_ref_id for record in project.bill_of_materials}
     assert refs == {"MAT-1": "M0001", "MAT-2": None, "MAT-3": None}
 
@@ -774,4 +774,4 @@ def test_project_package_from_tables_in_draft_mode_counts_a_missing_floor_repeti
     assert len(lines) == 1
     assert lines[0].bom_row_count == 3
     assert lines[0].material_mass_kg == Decimal("200")
-    assert lines[0].material_mass_share == Decimal("1.0000")
+    assert lines[0].material_mass_share == Decimal("100.0000")
