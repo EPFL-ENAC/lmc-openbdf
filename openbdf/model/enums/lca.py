@@ -1,7 +1,7 @@
 from .openbdf_enum import OpenBDFEnum
 
 
-class LCIModelingApproach_ISO14040_44(OpenBDFEnum):
+class LCIModelingApproach(OpenBDFEnum):
     PROCESS_BASED = (
         "process_based",
         "Process-based (Typically bottom-up, highly specific data)",
@@ -24,7 +24,7 @@ class LCIModelingApproach_ISO14040_44(OpenBDFEnum):
     )
 
 
-class LifeCycleSystemBoundary_ISO14040_43(OpenBDFEnum):
+class LifeCycleSystemBoundary(OpenBDFEnum):
     CRADLE_TO_GATE = (
         "cradle_to_gate",
         "Cradle to Gate (A1–A3)",
@@ -176,45 +176,149 @@ class LifeCycleModule_ISO14040_44(OpenBDFEnum):
         return mapping.get(stage, [])
 
 
-class LCAStageOrModule(OpenBDFEnum):
-    # --- TIER 1 ---
+class LCAStageOrModuleOrSubModule(OpenBDFEnum):
+    # Members follow the TypeDefinitions sheet order, which interleaves modules and their stage ranges,
+    # so parent categories are linked after the class body.
+    A1 = ("A1", "A1 Raw material supply")
     A1_A3 = ("A1-A3", "A1-A3 Product stage")
+    A2 = ("A2", "A2 Transport")
+    A3 = ("A3", "A3 Manufacturing")
+    A4 = ("A4", "A4 Transport to site")
     A4_A5 = ("A4-A5", "A4-A5 Construction process stage")
+    A5 = ("A5", "A5 Construction and installation process")
+    A5_1 = ("A5.1", "A5.1")
+    A5_2 = ("A5.2", "A5.2")
+    A5_3 = ("A5.3", "A5.3")
+    A5_4 = ("A5.4", "A5.4")
+    B1 = ("B1", "B1 Use")
+    B1_1 = ("B1.1", "B1.1")
+    B1_2 = ("B1.2", "B1.2")
     B1_B7 = ("B1-B7", "B1-B7 Use stage")
+    B2 = ("B2", "B2 Maintenance")
+    B3 = ("B3", "B3 Repair")
+    B4 = ("B4", "B4 Replacement")
+    B5 = ("B5", "B5 Refurbishment")
+    B6 = ("B6", "B6 Operational energy use")
+    B6_1 = ("B6.1", "B6.1")
+    B6_2 = ("B6.2", "B6.2")
+    B6_3 = ("B6.3", "B6.3")
+    B7 = ("B7", "B7 Operational water use")
+    B7_1 = ("B7.1", "B7.1")
+    B7_2 = ("B7.2", "B7.2")
+    B7_3 = ("B7.3", "B7.3")
+    B7_4 = ("B7.4", "B7.4")
+    B8 = ("B8", "B8")
+    B8_1 = ("B8.1", "B8.1")
+    B8_2 = ("B8.2", "B8.2")
+    B8_3 = ("B8.3", "B8.3")
+    C1 = ("C1", "C1 Deconstruction and demolition")
     C1_C4 = ("C1-C4", "C1-C4 End-of-life stage")
+    C2 = ("C2", "C2 Transport")
+    C3 = ("C3", "C3 Waste processing")
+    C4 = ("C4", "C4 Disposal")
+    D1 = ("D1", "D1 Reuse, recovery, and recycling potential")
+    D2 = ("D2", "D2 Net benefits beyond the system boundary")
+    D = ("D", "D Benefits and loads beyond the system boundary")
     D_D2 = ("D-D2", "D-D2 Beyond the system boundary")
 
-    # --- TIER 2 ---
-    A1 = ("A1", "A1 Raw material supply", None, A1_A3)
-    A2 = ("A2", "A2 Transport", None, A1_A3)
-    A3 = ("A3", "A3 Manufacturing", None, A1_A3)
 
-    A4 = ("A4", "A4 Transport to site", None, A4_A5)
-    A5 = ("A5", "A5 Construction and installation process", None, A4_A5)
+for _child, _parent in (
+    ("A1", "A1_A3"),
+    ("A2", "A1_A3"),
+    ("A3", "A1_A3"),
+    ("A4", "A4_A5"),
+    ("A5", "A4_A5"),
+    ("A5_1", "A5"),
+    ("A5_2", "A5"),
+    ("A5_3", "A5"),
+    ("A5_4", "A5"),
+    ("B1", "B1_B7"),
+    ("B1_1", "B1"),
+    ("B1_2", "B1"),
+    ("B2", "B1_B7"),
+    ("B3", "B1_B7"),
+    ("B4", "B1_B7"),
+    ("B5", "B1_B7"),
+    ("B6", "B1_B7"),
+    ("B6_1", "B6"),
+    ("B6_2", "B6"),
+    ("B6_3", "B6"),
+    ("B7", "B1_B7"),
+    ("B7_1", "B7"),
+    ("B7_2", "B7"),
+    ("B7_3", "B7"),
+    ("B7_4", "B7"),
+    ("B8", "B1_B7"),
+    ("B8_1", "B8"),
+    ("B8_2", "B8"),
+    ("B8_3", "B8"),
+    ("C1", "C1_C4"),
+    ("C2", "C1_C4"),
+    ("C3", "C1_C4"),
+    ("C4", "C1_C4"),
+    ("D", "D_D2"),
+    ("D1", "D_D2"),
+    ("D2", "D_D2"),
+):
+    getattr(LCAStageOrModuleOrSubModule, _child).parent_category = getattr(LCAStageOrModuleOrSubModule, _parent)
 
-    B1 = ("B1", "B1 Use", None, B1_B7)
-    B2 = ("B2", "B2 Maintenance", None, B1_B7)
-    B3 = ("B3", "B3 Repair", None, B1_B7)
-    B4 = ("B4", "B4 Replacement", None, B1_B7)
-    B5 = ("B5", "B5 Refurbishment", None, B1_B7)
-    B6 = ("B6", "B6 Operational energy use", None, B1_B7)
-    B7 = ("B7", "B7 Operational water use", None, B1_B7)
 
-    C1 = ("C1", "C1 Deconstruction and demolition", None, C1_C4)
-    C2 = ("C2", "C2 Transport", None, C1_C4)
-    C3 = ("C3", "C3 Waste processing", None, C1_C4)
-    C4 = ("C4", "C4 Disposal", None, C1_C4)
+class LCADatabase(OpenBDFEnum):
+    OKOBAUDAT_20_23_050 = ("OKOBAUDAT_20.23.050", "OKOBAUDAT_20.23.050")
+    OKOBAUDAT_20_24_070 = ("OKOBAUDAT_20.24.070", "OKOBAUDAT_20.24.070")
+    HABITAT2030_BIGTEN = ("habitat2030_BIGTEN", "habitat2030_BIGTEN")
+    IBU_DATA = ("IBU_Data", "IBU_Data")
+    EC3 = ("EC3", "EC3")
+    ECOINVENT = ("ecoinvent", "Ecoinvent")
+    OTHER = ("Other", "Other")
 
-    D = ("D", "D Benefits and loads beyond the system boundary", None, D_D2)
-    D1 = ("D1", "D1 Reuse, recovery, and recycling potential", None, D_D2)
-    D2 = ("D2", "D2 Net benefits beyond the system boundary", None, D_D2)
+
+class LCADatabaseSystemModel(OpenBDFEnum):
+    CUT_OFF = (
+        "cut_off",
+        "Cut off (recycled content approach, ecoinvent cut-off)",
+        "recycled content approach, ecoinvent cut-off",
+    )
+    CUT_OFF_EN15804 = (
+        "cut_off_en15804",
+        "Cut off EN15804 (ecoinvent system model aligned with EN 15804)",
+        "ecoinvent system model aligned with EN 15804",
+    )
+    APOS = (
+        "apos",
+        "APOS (allocation at the point of substitution)",
+        "allocation at the point of substitution",
+    )
+    CONSEQUENTIAL = (
+        "consequential",
+        "Consequential (marginal, market-driven modelling)",
+        "marginal, market-driven modelling",
+    )
+
+
+class DataWeightingBasis(OpenBDFEnum):
+    GWP_FOSSIL_A1_A3 = (
+        "gwp_fossil_a1_a3",
+        "GWP fossil a1 a3 (shares weighted by fossil global warming potential of modules A1 to A3)",
+        "shares weighted by fossil global warming potential of modules A1 to A3",
+    )
+    MASS = (
+        "mass",
+        "Mass (shares weighted by mass)",
+        "shares weighted by mass",
+    )
+    NOT_COMPUTED = (
+        "not_computed",
+        "Not computed (shares not weighted)",
+        "shares not weighted",
+    )
 
 
 class BiogenicCarbonAccounting(OpenBDFEnum):
-    ZERO_ZERO = ("0/0", "0/0", "Neutral accounting (no sequestration/no emission)")
+    ZERO_ZERO = ("0/0", "0/0 (biogenic carbon not counted)", "Neutral accounting (no sequestration/no emission)")
     MINUS_ONE_PLUS_ONE = (
         "-1/+1",
-        "-1/+1",
+        "-1/+1 (uptake counted as negative and release as positive)",
         "Credit at start / burden at end of life",
     )
     DYNAMIC_LCA = ("dynamic_lca", "Dynamic LCA")
@@ -226,40 +330,51 @@ class BiogenicCarbonAccounting(OpenBDFEnum):
 
 
 class LCATemporalApproach(OpenBDFEnum):
-    STATIC = ("static", "Static")
-    DYNAMIC = ("dynamic", "Dynamic")
+    STATIC = ("static", "Static (impacts not distributed over time)")
+    DYNAMIC = ("dynamic", "Dynamic (impacts distributed over time)")
     PROBABILISTIC = ("probabilistic", "Probabilistic")
     PROSPECTIVE = ("prospective", "Prospective")
 
 
+class AssessmentType_EN15978(OpenBDFEnum):
+    TYPE_1 = ("Type 1 - early building model, concept design", "Type 1 - early building model, concept design")
+    TYPE_2 = (
+        "Type 2 - building model, building permit design",
+        "Type 2 - building model, building permit design",
+    )
+    TYPE_3 = ("Type 3 - as designed building model", "Type 3 - as designed building model")
+    TYPE_4 = (
+        "Type 4 - fully detailed as designed or as built model",
+        "Type 4 - fully detailed as designed or as built model",
+    )
+
+
+class LimitValueScopeReduction(OpenBDFEnum):
+    NONE = (
+        "none",
+        "None (nothing left out, the result is a complete assessment)",
+        "nothing left out, the result is a complete assessment",
+    )
+    LIFE_CYCLE_STAGES = (
+        "life_cycle_stages",
+        "Life cycle stages",
+        "parts of life-cycle stages left out",
+    )
+    SCOPE_OF_BUILDING_COMPONENTS = (
+        "scope_of_building_components",
+        "Scope of building components",
+        "parts of the scope of building components left out",
+    )
+    BOTH = (
+        "both",
+        "Both (parts of life-cycle stages and parts of the scope of building components left out)",
+        "parts of life-cycle stages and parts of the scope of building components left out",
+    )
+
+
 class LCIAMethodology(OpenBDFEnum):
-    EN_15804_A2 = (
-        "en_15804_a2",
-        "EN 15804+A2 (EF 3.0) - Current EU standard",
-        "Current EU standard for environmental product declarations.",
-    )
-    EN_15804_A1 = (
-        "en_15804_a1",
-        "EN 15804+A1 (CML 2001) - Older EU standard",
-        "Older EU standard for environmental product declarations.",
-    )
-    TRACI_2_1 = (
-        "traci_2_1",
-        "TRACI 2.1 - Standard for North America/LEED",
-        "Standard for North America/LEED (The Tool for Reduction and Assessment of Chemical and Other Environmental Impacts).",
-    )
-    RECIPE_2016 = (
-        "recipe_2016",
-        "ReCiPe 2016",
-        "A harmonized life cycle impact assessment method at midpoint and endpoint level.",
-    )
-    IPCC_AR6 = (
-        "ipcc_ar6",
-        "IPCC AR6 (2021)",
-        "Intergovernmental Panel on Climate Change Sixth Assessment Report.",
-    )
-    OTHER = (
-        "other",
-        "Other",
-        "Other non-specified LCIA methodology.",
-    )
+    EN_15804_2012_A1_2013 = ("EN 15804:2012+A1:2013", "EN 15804:2012+A1:2013")
+    EN_15804_2012_A2_2019 = ("EN 15804:2012+A2:2019", "EN 15804:2012+A2:2019")
+    EN_15978_2026 = ("EN 15978:2026", "EN 15978:2026")
+    US_EPA_TRACI_2_1 = ("US EPA TRACI 2.1", "US EPA TRACI 2.1")
+    OTHER = ("Other", "Other")
