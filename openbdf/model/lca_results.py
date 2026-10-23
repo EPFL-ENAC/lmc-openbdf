@@ -494,7 +494,8 @@ def _wide_stage_description(indicator: LCAResultIndicator, stage: LCAStageOrModu
     """Description of one wide stage field for an indicator."""
     if indicator.wide_constant_description is not None:
         return indicator.wide_constant_description
-    return f"{_wide_description_base(indicator)} for module {stage.value}."
+    kind = "submodule" if "." in stage.value else "module"
+    return f"{_wide_description_base(indicator)} for {kind} {stage.value}."
 
 
 def _wide_stage_attribute(indicator: LCAResultIndicator, stage: LCAStageOrModuleOrSubModule, suffix: str) -> str:
