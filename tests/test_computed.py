@@ -141,7 +141,7 @@ def test_material_ref_id_is_kept_or_taken_from_a_row_or_allocated_after_the_high
     assert [row.material_ref_id for row in allocated.bill_of_materials] == ["M0001", "M0002"]
 
 
-def test_mass_and_row_count_use_floor_repetition_and_the_share_is_a_fraction_of_the_total_mass():
+def test_mass_and_row_count_use_floor_repetition_and_the_share_is_a_percentage_of_the_total_mass():
     project = project_record(
         project_material_database=[database_line("Concrete", "M0001"), database_line("Wood", "M0002")],
         bill_of_materials=[
@@ -158,12 +158,12 @@ def test_mass_and_row_count_use_floor_repetition_and_the_share_is_a_fraction_of_
     assert (concrete.bom_row_count, concrete.material_mass_kg, concrete.material_mass_share) == (
         1,
         Decimal(100),
-        Decimal("0.2500"),
+        Decimal("25.0000"),
     )
     assert (wood.bom_row_count, wood.material_mass_kg, wood.material_mass_share) == (
         2,
         Decimal(300),
-        Decimal("0.7500"),
+        Decimal("75.0000"),
     )
 
 
@@ -185,14 +185,14 @@ def test_the_data_type_shares_divide_the_mass_and_the_undeclared_line_falls_in_t
 
     # No row carries a wide result, so the shares use the mass basis of 100, 200 and 100 kg.
     assert {field_name: getattr(project, field_name) for field_name in SHARE_FIELDS} == {
-        "lca_data_cpr_share": Decimal("0.2500"),
+        "lca_data_cpr_share": Decimal("25.0000"),
         "lca_data_ecodesign_share": Decimal("0.0000"),
         "lca_data_project_specific_share": Decimal("0.0000"),
         "lca_data_product_specific_share": Decimal("0.0000"),
         "lca_data_product_group_average_share": Decimal("0.0000"),
-        "lca_data_generic_share": Decimal("0.5000"),
+        "lca_data_generic_share": Decimal("50.0000"),
         "lca_data_default_share": Decimal("0.0000"),
-        "lca_data_undeclared_share": Decimal("0.2500"),
+        "lca_data_undeclared_share": Decimal("25.0000"),
     }
 
 
@@ -212,8 +212,8 @@ def test_the_weighting_basis_is_mass_and_the_shares_stay_empty_without_a_basis()
 
     # Every line has a mass and no row has a fossil A1-A3 result, so the mass weights the shares.
     assert weighted.lca_data_weighting_basis is DataWeightingBasis.MASS
-    assert weighted.lca_data_cpr_share == Decimal("0.2500")
-    assert weighted.lca_data_generic_share == Decimal("0.7500")
+    assert weighted.lca_data_cpr_share == Decimal("25.0000")
+    assert weighted.lca_data_generic_share == Decimal("75.0000")
 
     unweighted = project_record(bill_of_materials=[bom_row("MAT-1", "Concrete", material_weight_kg=Decimal(100))])
 
@@ -240,10 +240,10 @@ def test_a_normal_fill_does_not_report_a_share_sum_mismatch():
 
     findings = fill_computed(project)
 
-    # The filler divides the same weights that it adds up, so the eight shares add up to 1 on their own.
+    # The filler divides the same weights that it adds up, so the eight shares add up to 100 on their own.
     written = [getattr(project, field_name) for field_name in SHARE_FIELDS]
     assert all(share is not None for share in written)
-    assert sum((share for share in written if share is not None), Decimal(0)) == Decimal(1)
+    assert sum((share for share in written if share is not None), Decimal(0)) == Decimal(100)
     assert [finding for finding in findings if finding.code == "E14"] == []
 
 
@@ -360,7 +360,7 @@ def test_project_phase_common_maps_the_national_phase_and_stays_empty_without_on
     assert unmapped.project_phase_common is None
 
 
-def test_lca_completeness_score_is_a_fraction_between_zero_and_one_for_a_partly_filled_project():
+def test_lca_completeness_score_is_a_percentage_between_zero_and_one_hundred_for_a_partly_filled_project():
     project = project_record(
         project_material_database=[database_line("Concrete", "M0001")],
         bill_of_materials=[bom_row("MAT-1", "Concrete", material_weight_kg=Decimal(100))],
@@ -370,7 +370,7 @@ def test_lca_completeness_score_is_a_fraction_between_zero_and_one_for_a_partly_
 
     score = project.lca_completeness_score
     assert score is not None
-    assert Decimal(0) < score < Decimal(1)
+    assert Decimal(0) < score < Decimal(100)
 
 
 def test_a_material_data_type_on_a_row_without_a_database_line_is_cleared_without_e19():

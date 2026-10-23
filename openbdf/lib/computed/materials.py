@@ -158,7 +158,7 @@ def _row_mass(row: Any) -> Decimal:
 
 
 def _share(part: Decimal, total: Decimal) -> Decimal:
-    """Return the share of a total as a fraction from 0 to 1."""
+    """Return the share of a total as a percentage from 0 to 100."""
     if not total:
         return Decimal(0)
-    return (part / total).quantize(SHARE_QUANTUM, rounding=ROUND_HALF_UP)
+    return (part / total * 100).quantize(SHARE_QUANTUM, rounding=ROUND_HALF_UP)
