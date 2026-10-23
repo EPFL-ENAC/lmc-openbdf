@@ -106,11 +106,11 @@ class LCAResultsWideFullBase(SQLModel):
 
     gwp_total_a5_1: Optional[Decimal] = Field(
         default=None,
-        description="Global Warming Potential - Total for module A5.1.",
+        description="Global Warming Potential - Total for submodule A5.1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Total (A5.1)",
             field_code="gwp_total_a5_1",
-            description="Global Warming Potential - Total for module A5.1.",
+            description="Global Warming Potential - Total for submodule A5.1.",
             units="kg CO₂ eq",
             requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI,
@@ -119,11 +119,11 @@ class LCAResultsWideFullBase(SQLModel):
 
     gwp_total_a5_2: Optional[Decimal] = Field(
         default=None,
-        description="Global Warming Potential - Total for module A5.2.",
+        description="Global Warming Potential - Total for submodule A5.2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Total (A5.2)",
             field_code="gwp_total_a5_2",
-            description="Global Warming Potential - Total for module A5.2.",
+            description="Global Warming Potential - Total for submodule A5.2.",
             units="kg CO₂ eq",
             requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI,
@@ -132,11 +132,11 @@ class LCAResultsWideFullBase(SQLModel):
 
     gwp_total_a5_3: Optional[Decimal] = Field(
         default=None,
-        description="Global Warming Potential - Total for module A5.3.",
+        description="Global Warming Potential - Total for submodule A5.3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Total (A5.3)",
             field_code="gwp_total_a5_3",
-            description="Global Warming Potential - Total for module A5.3.",
+            description="Global Warming Potential - Total for submodule A5.3.",
             units="kg CO₂ eq",
             requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI,
@@ -145,11 +145,11 @@ class LCAResultsWideFullBase(SQLModel):
 
     gwp_total_a5_4: Optional[Decimal] = Field(
         default=None,
-        description="Global Warming Potential - Total for module A5.4.",
+        description="Global Warming Potential - Total for submodule A5.4.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Total (A5.4)",
             field_code="gwp_total_a5_4",
-            description="Global Warming Potential - Total for module A5.4.",
+            description="Global Warming Potential - Total for submodule A5.4.",
             units="kg CO₂ eq",
             requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI,
@@ -171,11 +171,11 @@ class LCAResultsWideFullBase(SQLModel):
 
     gwp_total_b1_1: Optional[Decimal] = Field(
         default=None,
-        description="Global Warming Potential - Total for module B1.1.",
+        description="Global Warming Potential - Total for submodule B1.1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Total (B1.1)",
             field_code="gwp_total_b1_1",
-            description="Global Warming Potential - Total for module B1.1.",
+            description="Global Warming Potential - Total for submodule B1.1.",
             units="kg CO₂ eq",
             requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
@@ -184,11 +184,11 @@ class LCAResultsWideFullBase(SQLModel):
 
     gwp_total_b1_2: Optional[Decimal] = Field(
         default=None,
-        description="Global Warming Potential - Total for module B1.2.",
+        description="Global Warming Potential - Total for submodule B1.2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Total (B1.2)",
             field_code="gwp_total_b1_2",
-            description="Global Warming Potential - Total for module B1.2.",
+            description="Global Warming Potential - Total for submodule B1.2.",
             units="kg CO₂ eq",
             requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
@@ -262,11 +262,11 @@ class LCAResultsWideFullBase(SQLModel):
 
     gwp_total_b6_1: Optional[Decimal] = Field(
         default=None,
-        description="Global Warming Potential - Total for module B6.1.",
+        description="Global Warming Potential - Total for submodule B6.1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Total (B6.1)",
             field_code="gwp_total_b6_1",
-            description="Global Warming Potential - Total for module B6.1.",
+            description="Global Warming Potential - Total for submodule B6.1.",
             units="kg CO₂ eq",
             requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
@@ -275,11 +275,11 @@ class LCAResultsWideFullBase(SQLModel):
 
     gwp_total_b6_2: Optional[Decimal] = Field(
         default=None,
-        description="Global Warming Potential - Total for module B6.2.",
+        description="Global Warming Potential - Total for submodule B6.2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Total (B6.2)",
             field_code="gwp_total_b6_2",
-            description="Global Warming Potential - Total for module B6.2.",
+            description="Global Warming Potential - Total for submodule B6.2.",
             units="kg CO₂ eq",
             requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
@@ -288,11 +288,11 @@ class LCAResultsWideFullBase(SQLModel):
 
     gwp_total_b6_3: Optional[Decimal] = Field(
         default=None,
-        description="Global Warming Potential - Total for module B6.3.",
+        description="Global Warming Potential - Total for submodule B6.3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Total (B6.3)",
             field_code="gwp_total_b6_3",
-            description="Global Warming Potential - Total for module B6.3.",
+            description="Global Warming Potential - Total for submodule B6.3.",
             units="kg CO₂ eq",
             requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
@@ -314,11 +314,11 @@ class LCAResultsWideFullBase(SQLModel):
 
     gwp_total_b7_1: Optional[Decimal] = Field(
         default=None,
-        description="Global Warming Potential - Total for module B7.1.",
+        description="Global Warming Potential - Total for submodule B7.1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Total (B7.1)",
             field_code="gwp_total_b7_1",
-            description="Global Warming Potential - Total for module B7.1.",
+            description="Global Warming Potential - Total for submodule B7.1.",
             units="kg CO₂ eq",
             requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
@@ -327,11 +327,11 @@ class LCAResultsWideFullBase(SQLModel):
 
     gwp_total_b7_2: Optional[Decimal] = Field(
         default=None,
-        description="Global Warming Potential - Total for module B7.2.",
+        description="Global Warming Potential - Total for submodule B7.2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Total (B7.2)",
             field_code="gwp_total_b7_2",
-            description="Global Warming Potential - Total for module B7.2.",
+            description="Global Warming Potential - Total for submodule B7.2.",
             units="kg CO₂ eq",
             requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
@@ -340,11 +340,11 @@ class LCAResultsWideFullBase(SQLModel):
 
     gwp_total_b7_3: Optional[Decimal] = Field(
         default=None,
-        description="Global Warming Potential - Total for module B7.3.",
+        description="Global Warming Potential - Total for submodule B7.3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Total (B7.3)",
             field_code="gwp_total_b7_3",
-            description="Global Warming Potential - Total for module B7.3.",
+            description="Global Warming Potential - Total for submodule B7.3.",
             units="kg CO₂ eq",
             requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
@@ -366,11 +366,11 @@ class LCAResultsWideFullBase(SQLModel):
 
     gwp_total_b8_1: Optional[Decimal] = Field(
         default=None,
-        description="Global Warming Potential - Total for module B8.1.",
+        description="Global Warming Potential - Total for submodule B8.1.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Total (B8.1)",
             field_code="gwp_total_b8_1",
-            description="Global Warming Potential - Total for module B8.1.",
+            description="Global Warming Potential - Total for submodule B8.1.",
             units="kg CO₂ eq",
             requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
@@ -379,11 +379,11 @@ class LCAResultsWideFullBase(SQLModel):
 
     gwp_total_b8_2: Optional[Decimal] = Field(
         default=None,
-        description="Global Warming Potential - Total for module B8.2.",
+        description="Global Warming Potential - Total for submodule B8.2.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Total (B8.2)",
             field_code="gwp_total_b8_2",
-            description="Global Warming Potential - Total for module B8.2.",
+            description="Global Warming Potential - Total for submodule B8.2.",
             units="kg CO₂ eq",
             requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
@@ -392,11 +392,11 @@ class LCAResultsWideFullBase(SQLModel):
 
     gwp_total_b8_3: Optional[Decimal] = Field(
         default=None,
-        description="Global Warming Potential - Total for module B8.3.",
+        description="Global Warming Potential - Total for submodule B8.3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Total (B8.3)",
             field_code="gwp_total_b8_3",
-            description="Global Warming Potential - Total for module B8.3.",
+            description="Global Warming Potential - Total for submodule B8.3.",
             units="kg CO₂ eq",
             requirements=Requirement.OPTIONAL,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
