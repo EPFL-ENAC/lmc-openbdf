@@ -302,6 +302,9 @@ def test_open_command_opens_filled_generated_template_as_single_file(tmp_path: P
     pmd_codes = {cell.value: cell.column for cell in project_material_database[2] if cell.value}
     project_material_database.cell(row=9, column=pmd_codes["material_ref_id"], value="M0001")
     project_material_database.cell(row=9, column=pmd_codes["custom_material_name"], value="Concrete C30/37")
+    project_material_database.cell(
+        row=9, column=pmd_codes["material_data_type"], value=next(iter(MaterialDataType)).value
+    )
     # A material is the pair of its name and its EPD dataset name, so both sheets must agree on it.
     bom.cell(
         row=9,
@@ -334,10 +337,20 @@ def test_open_command_opens_filled_generated_template_as_single_file(tmp_path: P
     out_pmd = out["Project Material Database"]
     assert out_pmd.cell(row=9, column=out_pmd_codes["material_ref_id"]).value == "M0001"
     assert out_pmd.cell(row=9, column=out_pmd_codes["custom_material_name"]).value == "Concrete C30/37"
+    # Enum cells show the display name instead of the field code.
+    assert general_information_value(output_path, "record_type") == RecordType.REAL_BUILDING.display_name
+    expected_data_type = next(iter(MaterialDataType)).display_name
+    assert out_pmd.cell(row=9, column=out_pmd_codes["material_data_type"]).value == expected_data_type
+    assert out_bom.cell(row=9, column=out_bom_codes["material_data_type"]).value == expected_data_type
     # The exported file keeps the grey of the automatic fields.
     assert out_bom.cell(row=9, column=out_bom_codes["common_floor_level"]).style == "AutomaticValue"
     assert out_bom.cell(row=9, column=out_bom_codes["custom_floor_level"]).style == "EditableValue"
     assert out_pmd.cell(row=9, column=out_pmd_codes["material_ref_id"]).style == "AutomaticValue"
+
+    roundtrip_path = tmp_path / "roundtrip.xlsx"
+    result = runner.invoke(app, ["open", str(output_path), "-o", str(roundtrip_path)])
+    assert result.exit_code == 0
+    assert general_information_value(roundtrip_path, "record_type") == RecordType.REAL_BUILDING.display_name
 
 
 def test_document_translator_add_last_wins_on_category_conflict():
