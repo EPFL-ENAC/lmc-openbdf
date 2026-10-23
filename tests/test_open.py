@@ -1,11 +1,19 @@
+from decimal import Decimal
+from enum import Enum
 from pathlib import Path
 from typing import Any
 
 import pandas as pd
+from openpyxl import load_workbook
 from typer.testing import CliRunner
 
 import openbdf.main as main_module
+from openbdf.cli.save import save_openbdf_to_xlsx
+from openbdf.lib.types.annotations import unwrap_optional
 from openbdf.main import app
+from openbdf.model.building_bill_materials_slim import BuildingBillMaterialsSlimRecordBase
+from openbdf.model.general_info import ProjectRecordBase
+from openbdf.model.lca_results_full_wide import LCAResultsWideFullBase
 
 runner = CliRunner()
 
@@ -17,17 +25,18 @@ def write_workbook(path: Path, sheets: dict[str, pd.DataFrame]) -> None:
 
 
 def default_openbdf_sheets() -> dict[str, pd.DataFrame]:
-    project = pd.DataFrame([[None] * 10])
+    project = pd.DataFrame([[None] * 11])
     project.iloc[0, 3] = "project_name"
-    project.iloc[0, 9] = "Example project"
+    project.iloc[0, 10] = "Example project"
 
-    bill_of_materials = pd.DataFrame([[None] * 2 for _ in range(9)])
-    bill_of_materials.iloc[7, 1] = "material_id"
-    bill_of_materials.iloc[8, 1] = "MAT-1"
+    # Generated template layout: field codes in row 2, data from row 10.
+    bill_of_materials = pd.DataFrame([[None] * 2 for _ in range(10)])
+    bill_of_materials.iloc[1, 1] = "material_id"
+    bill_of_materials.iloc[9, 1] = "MAT-1"
 
-    results_wide = pd.DataFrame([[None] * 2 for _ in range(8)])
-    results_wide.iloc[6, 1] = "material_id"
-    results_wide.iloc[7, 1] = "MAT-1"
+    results_wide = pd.DataFrame([[None] * 2 for _ in range(10)])
+    results_wide.iloc[1, 1] = "material_id"
+    results_wide.iloc[9, 1] = "MAT-1"
 
     return {
         "General Information": project,
@@ -221,6 +230,70 @@ def test_open_command_merges_multiple_translators(tmp_path: Path, monkeypatch):
     merged = captured_translators[0]
     assert merged._translators["General Information"] == translator_a_obj._translators["General Information"]
     assert merged._translators["Bill of Materials"] == translator_b_obj._translators["Bill of Materials"]
+
+
+def valid_template_value(field_info: Any) -> Any:
+    annotation, _ = unwrap_optional(field_info.annotation)
+    if isinstance(annotation, type) and issubclass(annotation, Enum):
+        return next(iter(annotation)).value
+    if annotation is bool:
+        return True
+    if annotation in (int, Decimal):
+        return 1
+    return "test"
+
+
+def fill_required_vertical(sheet, model_cls) -> None:
+    """Fill required fields into a generated template's vertical sheet."""
+    field_code_rows = {sheet.cell(row=row, column=4).value: row for row in range(2, sheet.max_row + 1)}
+    for name, info in model_cls.model_fields.items():
+        if info.is_required() and name in field_code_rows:
+            sheet.cell(row=field_code_rows[name], column=11, value=valid_template_value(info))
+
+
+def fill_required_horizontal(sheet, model_cls) -> None:
+    """Fill required fields into the first data row of a generated template's horizontal sheet."""
+    field_code_cols = {cell.value: cell.column for cell in sheet[2] if cell.value}
+    for name, info in model_cls.model_fields.items():
+        if info.is_required() and name in field_code_cols:
+            sheet.cell(row=10, column=field_code_cols[name], value=valid_template_value(info))
+
+
+def test_open_command_opens_filled_generated_template_as_single_file(tmp_path: Path):
+    template_path = tmp_path / "template.xlsx"
+    save_openbdf_to_xlsx(template_path, None)
+
+    workbook = load_workbook(template_path)
+    fill_required_vertical(workbook["General Information"], ProjectRecordBase)
+
+    bom = workbook["Bill of Materials"]
+    fill_required_horizontal(bom, BuildingBillMaterialsSlimRecordBase)
+    bom_codes = {cell.value: cell.column for cell in bom[2] if cell.value}
+    bom.cell(row=10, column=bom_codes["material_id"], value="MAT-1")
+    bom.cell(row=10, column=bom_codes["custom_material_name"], value="Concrete C30/37")
+    bom.cell(row=10, column=bom_codes["material_reference_service_life"], value=50)
+
+    wide = workbook["LCA Result (Wide)"]
+    fill_required_horizontal(wide, LCAResultsWideFullBase)
+    wide_codes = {cell.value: cell.column for cell in wide[2] if cell.value}
+    wide.cell(row=10, column=wide_codes["material_id"], value="MAT-1")
+    wide.cell(row=10, column=wide_codes["gwp_total_a1_a3"], value=123.45)
+    workbook.save(template_path)
+
+    output_path = tmp_path / "out.xlsx"
+    result = runner.invoke(app, ["open", str(template_path), "-o", str(output_path)])
+
+    assert result.exit_code == 0
+    out = load_workbook(output_path)
+    out_bom_codes = {cell.value: cell.column for cell in out["Bill of Materials"][2] if cell.value}
+    out_bom = out["Bill of Materials"]
+    assert out_bom.cell(row=10, column=out_bom_codes["material_id"]).value == "MAT-1"
+    assert out_bom.cell(row=10, column=out_bom_codes["custom_material_name"]).value == "Concrete C30/37"
+    assert out_bom.cell(row=10, column=out_bom_codes["material_reference_service_life"]).value == "50"
+    out_wide_codes = {cell.value: cell.column for cell in out["LCA Result (Wide)"][2] if cell.value}
+    out_wide = out["LCA Result (Wide)"]
+    assert out_wide.cell(row=10, column=out_wide_codes["material_id"]).value == "MAT-1"
+    assert out_wide.cell(row=10, column=out_wide_codes["gwp_total_a1_a3"]).value == "123.45"
 
 
 def test_document_translator_add_last_wins_on_category_conflict():

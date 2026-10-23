@@ -180,14 +180,63 @@ def test_excel_sheet_source_rejects_empty_input():
         ExcelSheetSource([])
 
 
+def cola_translator_args() -> dict:
+    return {
+        "attribute_name_col": 0,
+        "translated_name_col": 1,
+        "default_value_col": 5,
+        "preprocess_rule_col": 6,
+        "header_row": 0,
+    }
+
+
+def translator_path(filename: str) -> Path:
+    return Path(__file__).parents[1] / "translators" / filename
+
+
 def test_cola_translator_maps_lca_service_life():
-    translator_path = Path(__file__).parents[1] / "translators" / "cola" / "translator.xlsx"
     translator = DocumentTranslator.from_xlsx(
-        translator_path,
-        attribute_name_col=0,
-        translated_name_col=1,
-        default_value_col=5,
-        preprocess_rule_col=6,
+        translator_path("translator_at_v2.0.0.xlsx"),
+        **cola_translator_args(),
     )
 
     assert translator.translate("Bill of Materials", "Lebensdauer (Jahre)") == ["lca_service_life"]
+
+
+def test_bec_translator_maps_building_element_classification():
+    translator = DocumentTranslator.from_xlsx(
+        translator_path("translator_bec_at_v2.0.0.xlsx"),
+        **cola_translator_args(),
+    )
+
+    assert translator.translate("OpenBDFBuildingElementClassific", "2 Bauwerk-Rohbau") == ["2"]
+    assert translator.translate("OpenBDFBuildingElementClassific", "2C Gründungen, Unterbau") == ["1.1"]
+    assert translator.translate("OpenBDFBuildingElementClassific", "2E Vertikale Rohbaukonstruktionen") == ["2.1"]
+
+
+def test_bmc_translator_maps_material_classification():
+    translator = DocumentTranslator.from_xlsx(
+        translator_path("translator_bmc_at_v2.0.0.xlsx"),
+        **cola_translator_args(),
+    )
+
+    assert translator.translate("OpenBDFMaterialClassification", "i9") == ["1.1"]
+    assert translator.translate("OpenBDFMaterialClassification", "n") == ["2.1"]
+    assert translator.translate("OpenBDFMaterialClassification", "n6") == ["2.2"]
+
+
+def test_cola_translator_set_maps_attributes_and_classification():
+    translator = DocumentTranslator()
+    for filename in (
+        "translator_at_v2.0.0.xlsx",
+        "translator_bec_at_v2.0.0.xlsx",
+        "translator_bmc_at_v2.0.0.xlsx",
+    ):
+        translator = translator + DocumentTranslator.from_xlsx(
+            translator_path(filename),
+            **cola_translator_args(),
+        )
+
+    assert translator.translate("Bill of Materials", "Lebensdauer (Jahre)") == ["lca_service_life"]
+    assert translator.translate("OpenBDFBuildingElementClassific", "2 Bauwerk-Rohbau") == ["2"]
+    assert translator.translate("OpenBDFMaterialClassification", "i9") == ["1.1"]

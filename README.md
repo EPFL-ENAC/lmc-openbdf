@@ -28,9 +28,10 @@ To convert project files into an openbdf file (`output.xslx`), run (COLA example
 ```
 uv run openbdf open \
   path/to/cola_file.xlsx \
-  path/to/cola_building_information.xlsx \
-  -t translators/cola/translator.xlsx
-  -t translators/cola/bec/at.xlsx
+  path/to/cola_general_info.xlsx \
+  -t translators/translator_at_v2.0.0.xlsx
+  -t translators/translator_bec_at_v2.0.0.xlsx
+  -t translators/translator_bmc_at_v2.0.0.xlsx
   --drop-invalid-materials
   -o output.xslx
 ```
@@ -55,3 +56,13 @@ make check-lca-results-classes
 ```
 
 The test `tests/test_generated_lca_results_classes.py` also checks that the committed generated files stay in sync with the registry.
+
+
+## Export templates
+
+To export the OpenBDF and attribute translator Excel templates, run:
+
+```bash
+openbdf save-template openbdf_template_v2.0.0.xlsx
+openbdf save-translator-template translators/templates/translator_template_v2.0.0.xlsx
+```

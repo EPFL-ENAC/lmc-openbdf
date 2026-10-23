@@ -7,7 +7,7 @@ import pytest
 
 from openbdf.lib.converters.lca_results import STAGES, lca_results_wide_to_tall
 from openbdf.model.enums.buildings import AboveBelowGround
-from openbdf.model.enums.lca import LCAStageOrModule
+from openbdf.model.enums.lca import LCAStageOrModuleOrSubModule
 from openbdf.model.tables import (
     BuildingBillMaterialsSlimRecord,
     LCAResultsTallFullRecord,
@@ -19,14 +19,14 @@ def bill_material(
     *,
     material_id: str = "mat-1",
     record_id: int | None = 42,
-    lca_service_life: Decimal = Decimal(50),
+    material_reference_service_life: Decimal = Decimal(50),
 ) -> BuildingBillMaterialsSlimRecord:
     return BuildingBillMaterialsSlimRecord(
         id=record_id,
         material_id=material_id,
-        material_name_custom="Test material",
-        above_below_ground=AboveBelowGround.ABOVE,
-        lca_service_life=lca_service_life,
+        custom_material_name="Test material",
+        common_above_below_ground=AboveBelowGround.ABOVE,
+        material_reference_service_life=material_reference_service_life,
         project_id=1,
     )
 
@@ -49,11 +49,11 @@ def test_maps_all_supported_stages_in_stable_order():
 
     results = lca_results_wide_to_tall(
         wide_result(**stage_values),
-        bill_material(lca_service_life=Decimal(60)),
+        bill_material(material_reference_service_life=Decimal(60)),
         LCAResultsTallFullRecord,
     )
 
-    assert [result.lca_stage_or_module for result in results] == [stage for stage, _ in STAGES]
+    assert [result.lca_stage_module_submodule for result in results] == [stage for stage, _ in STAGES]
     assert [result.gwp_f for result in results] == [Decimal(index) for index in range(1, len(STAGES) + 1)]
 
 
@@ -66,15 +66,15 @@ def test_combines_indicators_for_the_same_stage_and_omits_empty_stages():
             penrt_b6=Decimal(0),
             ap_c2=Decimal("7.25"),
         ),
-        bill_material(lca_service_life=Decimal(75)),
+        bill_material(material_reference_service_life=Decimal(75)),
         LCAResultsTallFullRecord,
     )
 
-    assert [result.lca_stage_or_module for result in results] == [
-        LCAStageOrModule.A1_A3,
-        LCAStageOrModule.A4,
-        LCAStageOrModule.B6,
-        LCAStageOrModule.C2,
+    assert [result.lca_stage_module_submodule for result in results] == [
+        LCAStageOrModuleOrSubModule.A1_A3,
+        LCAStageOrModuleOrSubModule.A4,
+        LCAStageOrModuleOrSubModule.B6,
+        LCAStageOrModuleOrSubModule.C2,
     ]
     assert results[1].gwp_f is exact_value
     assert results[1].odp == Decimal("0.003")
@@ -91,22 +91,47 @@ def test_ignores_overall_summary_fields():
     )
 
     assert len(results) == 1
-    assert results[0].lca_stage_or_module is LCAStageOrModule.A1_A3
+    assert results[0].lca_stage_module_submodule is LCAStageOrModuleOrSubModule.A1_A3
     assert results[0].odp is None
 
 
+def test_derives_lca_stage_module_and_submodule_from_the_enum_parent_chain():
+    results = lca_results_wide_to_tall(
+        wide_result(gwp_total_a5=Decimal(2), gwp_total_a5_1=Decimal(3)),
+        bill_material(),
+        LCAResultsTallFullRecord,
+    )
+
+    by_stage = {result.lca_stage_module_submodule: result for result in results}
+
+    stage_row = by_stage[LCAStageOrModuleOrSubModule.A1_A3]
+    assert stage_row.lca_stage is LCAStageOrModuleOrSubModule.A1_A3
+    assert stage_row.lca_module is None
+    assert stage_row.lca_submodule is None
+
+    module_row = by_stage[LCAStageOrModuleOrSubModule.A5]
+    assert module_row.lca_stage is LCAStageOrModuleOrSubModule.A4_A5
+    assert module_row.lca_module is LCAStageOrModuleOrSubModule.A5
+    assert module_row.lca_submodule is None
+
+    submodule_row = by_stage[LCAStageOrModuleOrSubModule.A5_1]
+    assert submodule_row.lca_stage is LCAStageOrModuleOrSubModule.A4_A5
+    assert submodule_row.lca_module is LCAStageOrModuleOrSubModule.A5
+    assert submodule_row.lca_submodule is LCAStageOrModuleOrSubModule.A5_1
+    assert submodule_row.gwp_total == Decimal(3)
+    assert submodule_row.gwp_f is None
+
+
 @pytest.mark.parametrize("record_id", [42, None])
-def test_copies_identifiers_and_service_life_without_attaching_relationships(record_id: int | None):
+def test_copies_identifiers_without_attaching_relationships(record_id: int | None):
     wide = wide_result()
-    service_life = Decimal("80.00")
-    bom = bill_material(record_id=record_id, lca_service_life=service_life)
+    bom = bill_material(record_id=record_id)
     wide_before = wide.model_dump()
     bom_before = bom.model_dump()
 
     results = lca_results_wide_to_tall(wide, bom, LCAResultsTallFullRecord)
 
     assert all(result.material_id == "mat-1" for result in results)
-    assert all(result.lca_service_life is service_life for result in results)
     assert all(result.building_bill_materials_slim_record_id == record_id for result in results)
     assert all(result.building_bill_materials_slim_record is None for result in results)
     assert bom.lca_results_tall_full_records == []
