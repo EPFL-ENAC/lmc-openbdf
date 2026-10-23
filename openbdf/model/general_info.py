@@ -175,7 +175,7 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    project_country: Optional[Country] = Field(  # type: ignore[call-overload]
+    project_country: Country = Field(  # type: ignore[call-overload]
         default=None,
         sa_type=SAEnum(Country),
         description="Country where the project is located.",
@@ -185,7 +185,7 @@ class ProjectRecordBase(SQLModel):
             attribute_name="Country",
             field_code="project_country",
             description="Country where the project is located.",
-            requirements=Requirement.STRONGLY_RECOMMENDED,
+            requirements=Requirement.REQUIRED,
             example="Afghanistan",
             reference=Reference.ECHO,
         ),
