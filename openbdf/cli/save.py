@@ -3,7 +3,7 @@ import itertools
 import re
 from copy import copy
 from pathlib import Path
-from typing import TypeVar
+from typing import Any, TypeVar
 
 import numpy as np
 import pandas as pd
@@ -25,6 +25,7 @@ from openbdf.lib.converters.translators import (
 from openbdf.lib.types.annotations import unwrap_optional
 from openbdf.lib.types.human_readable import human_readable_constraints, human_readable_type
 from openbdf.lib.types.xlsx import xlsx_validation_from_type
+from openbdf.lib.validation.errors import AutomaticFieldSupplied, OpenBDFValidationError
 from openbdf.model.building_bill_materials_slim import BuildingBillMaterialsSlimRecordBase
 from openbdf.model.enums.buildings import (
     AboveBelowGround,
@@ -133,6 +134,9 @@ ModelT2 = TypeVar("ModelT2", bound=SQLModel)
 # Row 9 of the horizontal sheets and column L of General Information hold the reference
 # or the reference alignment of the field, depending on the sheet.
 REFERENCE_LABELS = {"reference": "Reference", "reference_alignment": "Reference Alignment"}
+
+# The sheet builder reads this value as "no project_id given", so an imported project_id wins.
+DEFAULT_PROJECT_ID = "XXXXXXX"
 
 # Canonical TypeDefinitions column order for the template export.
 TEMPLATE_TYPE_DEFINITIONS: tuple[type, ...] = (
@@ -294,6 +298,8 @@ def save_openbdf_to_xlsx(
     project_material_database_sheet_name: str = COMMON_CATEGORY_PROPERTIES["material_database"]["name"],
     results_wide_sheet_name: str = COMMON_CATEGORY_PROPERTIES["results_wide"]["name"],
     results_tall_sheet_name: str = COMMON_CATEGORY_PROPERTIES["results_tall"]["name"],
+    project_id: str = DEFAULT_PROJECT_ID,
+    findings: list[OpenBDFValidationError] | None = None,
 ):
     """Save a list of BuildingBillMaterialsSlimRecord to an Excel file."""
 
@@ -304,7 +310,7 @@ def save_openbdf_to_xlsx(
         enum_registry.register(*TEMPLATE_TYPE_DEFINITIONS)
 
         about_to_xlsx(writer)
-        info_to_xlsx(writer, project, info_sheet_name, enum_registry)
+        info_to_xlsx(writer, project, info_sheet_name, enum_registry, project_id=project_id, findings=findings)
         wide_to_xlsx(
             writer,
             project.bill_of_materials if project else None,
@@ -362,7 +368,39 @@ def style_first_rows(writer: pd.ExcelWriter, header_style: str | None = None) ->
                 cell.style = header_style
 
 
-def info_to_xlsx(writer: pd.ExcelWriter, project: ProjectRecord | None, sheet_name: str, enum_registry: EnumRegistry):
+def _info_value(
+    project: ProjectRecord | None,
+    field_code: str,
+    project_id: str,
+    findings: list[OpenBDFValidationError] | None,
+    sheet_name: str,
+) -> Any:
+    """Return the Value cell of a General Information field and report a replaced project_id."""
+    if field_code != "project_id":
+        return getattr(project, field_code) if project else ""
+
+    imported = getattr(project, "project_id", None) if project else None
+    if project_id == DEFAULT_PROJECT_ID:
+        return imported or DEFAULT_PROJECT_ID
+
+    if findings is not None and imported is not None and imported != project_id:
+        findings.append(
+            AutomaticFieldSupplied(
+                "Field project_id was in the original data; the given project_id replaced it",
+                source=sheet_name,
+            )
+        )
+    return project_id
+
+
+def info_to_xlsx(
+    writer: pd.ExcelWriter,
+    project: ProjectRecord | None,
+    sheet_name: str,
+    enum_registry: EnumRegistry,
+    project_id: str = DEFAULT_PROJECT_ID,
+    findings: list[OpenBDFValidationError] | None = None,
+):
     info_sheet = writer.book.create_sheet(sheet_name)
     info_sheet.protection.sheet = True  # Lock the sheet to prevent accidental edits
 
@@ -416,7 +454,9 @@ def info_to_xlsx(writer: pd.ExcelWriter, project: ProjectRecord | None, sheet_na
         ref = info_sheet.cell(row=cell_row, column=11, value=reference or "")
         ref.style = METADATA_STYLE.name
 
-        v = info_sheet.cell(row=cell_row, column=10, value=getattr(project, field_code) if project else "")
+        v = info_sheet.cell(
+            row=cell_row, column=10, value=_info_value(project, field_code, project_id, findings, sheet_name)
+        )
         v.style = AUTOMATIC_VALUE_STYLE.name if requirements is Requirement.AUTOMATIC else EDITABLE_VALUE_STYLE.name
 
         dv = xlsx_validation_from_type(data_type, is_optional, metadata, enum_registry)  # type: ignore[arg-type]

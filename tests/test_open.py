@@ -8,14 +8,19 @@ from openpyxl import load_workbook
 from typer.testing import CliRunner
 
 import openbdf.main as main_module
-from openbdf.cli.save import save_openbdf_to_xlsx
+from openbdf.cli.save import DEFAULT_PROJECT_ID, save_openbdf_to_xlsx
 from openbdf.lib.types.annotations import unwrap_optional
+from openbdf.lib.validation.errors import AutomaticFieldSupplied, OpenBDFValidationError
 from openbdf.main import app
 from openbdf.model.building_bill_materials_slim import BuildingBillMaterialsSlimRecordBase
+from openbdf.model.enums.buildings import GFAMeasurementMethod
+from openbdf.model.enums.lca import AssessmentType_EN15978, LCADatabaseSystemModel, LifeCycleSystemBoundary
 from openbdf.model.enums.materials import MaterialDataType
+from openbdf.model.enums.project import ProjectUnits, RecordType
 from openbdf.model.general_info import ProjectRecordBase
 from openbdf.model.lca_results_full_wide import LCAResultsWideFullBase
 from openbdf.model.project_material_database import ProjectMaterialDatabaseBase
+from openbdf.model.tables import ProjectRecord
 
 runner = CliRunner()
 
@@ -409,3 +414,70 @@ def test_open_command_collects_every_finding_of_a_workbook_with_bad_cells(tmp_pa
         "The workbook has reject findings, so it was not saved. Use --draft to save it anyway.",
     ]
     assert not output_path.exists()
+
+
+def project_record_for_export(**overrides: Any) -> ProjectRecord:
+    """Build a project that carries the required General Information values."""
+    values: dict[str, Any] = {
+        "record_type": RecordType.REAL_BUILDING,
+        "project_units": ProjectUnits.METRIC,
+        "project_assessment_type": AssessmentType_EN15978.TYPE_1,
+        "project_gfa_method": GFAMeasurementMethod.IPMS,
+        "building_gross_floor_area": Decimal(100),
+        "lca_database_system_model": LCADatabaseSystemModel.CUT_OFF,
+        "lca_cycle_system_boundary": LifeCycleSystemBoundary.CRADLE_TO_GATE,
+    }
+    values.update(overrides)
+    return ProjectRecord(**values)
+
+
+def general_information_value(path: Path, field_code: str) -> Any:
+    sheet = load_workbook(path)["General Information"]
+    row = next(cell.row for cell in sheet["D"] if cell.value == field_code)
+    return sheet.cell(row=row, column=10).value
+
+
+def test_export_keeps_the_imported_project_id_and_defaults_a_missing_one(tmp_path: Path):
+    imported_path = tmp_path / "imported.xlsx"
+    save_openbdf_to_xlsx(imported_path, project_record_for_export(project_id="ABC1234"))
+    assert general_information_value(imported_path, "project_id") == "ABC1234"
+
+    missing_path = tmp_path / "missing.xlsx"
+    save_openbdf_to_xlsx(missing_path, project_record_for_export())
+    assert general_information_value(missing_path, "project_id") == DEFAULT_PROJECT_ID
+
+    template_path = tmp_path / "template.xlsx"
+    save_openbdf_to_xlsx(template_path, None)
+    assert general_information_value(template_path, "project_id") == DEFAULT_PROJECT_ID
+    codes = [cell.value for cell in load_workbook(template_path)["General Information"]["D"]]
+    assert "project_custom_id" in codes
+    assert "project_custom_id " not in codes
+
+
+def test_export_takes_the_given_project_id_and_reports_a_replaced_imported_one(tmp_path: Path):
+    findings: list[OpenBDFValidationError] = []
+    given_path = tmp_path / "given.xlsx"
+    save_openbdf_to_xlsx(
+        given_path,
+        project_record_for_export(project_id="ABC1234"),
+        project_id="GEN0001",
+        findings=findings,
+    )
+
+    assert general_information_value(given_path, "project_id") == "GEN0001"
+    assert [str(finding) for finding in findings] == [
+        "E04: Field project_id was in the original data; the given project_id replaced it"
+    ]
+    assert isinstance(findings[0], AutomaticFieldSupplied)
+    assert findings[0].source == "General Information"
+
+    same_findings: list[OpenBDFValidationError] = []
+    same_path = tmp_path / "same.xlsx"
+    save_openbdf_to_xlsx(
+        same_path,
+        project_record_for_export(project_id="ABC1234"),
+        project_id="ABC1234",
+        findings=same_findings,
+    )
+    assert general_information_value(same_path, "project_id") == "ABC1234"
+    assert same_findings == []
