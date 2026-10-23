@@ -90,12 +90,16 @@ INFO_STYLE = NamedStyle("Info", font=Font(name="Calibri", italic=True))
 FIELD_CODE_STYLE = NamedStyle(
     "FieldCode", font=Font(name="Calibri", color="FFFFFF"), fill=PatternFill("solid", fgColor="010101")
 )
-REQUIRED_STYLE = NamedStyle("Required", font=Font(name="Calibri"), fill=PatternFill("solid", fgColor="189d7e"))
-STRONGLY_RECOMMENDED_STYLE = NamedStyle(
-    "Strongly recommended", font=Font(name="Calibri"), fill=PatternFill("solid", fgColor="31658d")
+REQUIRED_STYLE = NamedStyle(
+    "Required", font=Font(name="Calibri", color="FFFFFF"), fill=PatternFill("solid", fgColor="189d7e")
 )
-RECOMMENDED_STYLE = NamedStyle("Recommended", font=Font(name="Calibri"), fill=PatternFill("solid", fgColor="3592e3"))
-SUGGESTED_STYLE = NamedStyle("Suggested", font=Font(name="Calibri"), fill=PatternFill("solid", fgColor="9dd2f3"))
+STRONGLY_RECOMMENDED_STYLE = NamedStyle(
+    "Strongly recommended", font=Font(name="Calibri", color="FFFFFF"), fill=PatternFill("solid", fgColor="3592e3")
+)
+RECOMMENDED_STYLE = NamedStyle(
+    "Recommended", font=Font(name="Calibri", color="FFFFFF"), fill=PatternFill("solid", fgColor="72b7ed")
+)
+SUGGESTED_STYLE = NamedStyle("Suggested", font=Font(name="Calibri"), fill=PatternFill("solid", fgColor="b8e0f7"))
 OPTIONAL_STYLE = NamedStyle("Optional", font=Font(name="Calibri"), fill=PatternFill("solid", fgColor="e9f7fe"))
 AUTOMATIC_STYLE = NamedStyle("Automatic", font=Font(name="Calibri"), fill=PatternFill("solid", fgColor="d5e6e2"))
 METADATA_STYLE = NamedStyle("Metadata", font=Font(name="Calibri"), fill=PatternFill("solid", fgColor="d5e6e2"))
@@ -108,6 +112,7 @@ REQUIREMENT_STYLES: dict[Requirement, NamedStyle] = {
     Requirement.OPTIONAL: OPTIONAL_STYLE,
     Requirement.AUTOMATIC: AUTOMATIC_STYLE,
 }
+MARKED_REQUIREMENTS = (Requirement.REQUIRED, Requirement.STRONGLY_RECOMMENDED, Requirement.AUTOMATIC)
 EDITABLE_VALUE_STYLE = NamedStyle(
     "EditableValue",
     font=Font(name="Calibri"),
@@ -464,9 +469,9 @@ def info_to_xlsx(
             dv.add(v)
             info_sheet.add_data_validation(dv)
 
-        if requirements is Requirement.REQUIRED:
+        if requirements in MARKED_REQUIREMENTS:
             for c in header_cells:
-                c.style = REQUIRED_STYLE.name
+                c.style = REQUIREMENT_STYLES[requirements].name
 
     a = info_sheet.cell(row=1, column=1, value="Group")
     a.style = ATTRIBUTES_NAME_STYLE.name
@@ -551,8 +556,8 @@ def wide_to_xlsx(
             column=cell_column,
             value=metadata.description if metadata and metadata.description else field_code,
         )
-        if not is_optional:
-            desc.style = REQUIRED_STYLE.name
+        if requirements in MARKED_REQUIREMENTS:
+            desc.style = REQUIREMENT_STYLES[requirements].name
         desc.alignment = Alignment(wrap_text=True, vertical="top")
 
         sheet.cell(row=4, column=cell_column, value=human_readable_type(data_type))
@@ -572,7 +577,9 @@ def wide_to_xlsx(
 
         reference = extra.get(reference_attribute)
         ref = sheet.cell(row=8, column=cell_column, value=reference or "")
-        ref.style = METADATA_STYLE.name
+        ref.style = (
+            REQUIREMENT_STYLES[requirements].name if requirements in MARKED_REQUIREMENTS else METADATA_STYLE.name
+        )
 
         dv = xlsx_validation_from_type(data_type, is_optional, metadata, enum_registry)  # type: ignore[arg-type]
         if dv:
