@@ -2170,13 +2170,13 @@ class ProjectRecordBase(SQLModel):
 
     lca_gwp_total_declared: Optional[bool] = Field(
         default=None,
-        description="Whether this indicator was assessed. The value itself is carried by the result columns gwp_total_a1_a3 to gwp_total_c4, and the whole-life sum by gwp_total_total.",
+        description="Whether this indicator was assessed. The value itself is carried by the result columns gwp_total_a1_a3 to gwp_total_c4, and the whole-life sum by gwp_total.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
             attribute_name="Global Warming Potential - Total",
             field_code="lca_gwp_total_declared",
-            description="Whether this indicator was assessed. The value itself is carried by the result columns gwp_total_a1_a3 to gwp_total_c4, and the whole-life sum by gwp_total_total.",
+            description="Whether this indicator was assessed. The value itself is carried by the result columns gwp_total_a1_a3 to gwp_total_c4, and the whole-life sum by gwp_total.",
             requirements=Requirement.STRONGLY_RECOMMENDED,
             example="Yes",
             reference=Reference.EN15804_A1_A2_EN15978_2026_TRACI,
