@@ -20,10 +20,12 @@ class LCAResultsWideFullBase(SQLModel):
             field_code="material_id",
             description="The unique identifier for the material within the project context, referencing the Bill of Materials.",
             requirements="Required",
+            criticality="MUST",
         ),
     )
 
-    gwp_total_a1_a3: Decimal = Field(
+    gwp_total_a1_a3: Optional[Decimal] = Field(
+        default=None,
         description="Global Warming Potential - Total for module A1-A3.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Global Warming Potential - Total (A1-A3)",
@@ -31,6 +33,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Total for module A1-A3.",
             units="kg CO₂ eq",
             requirements="Required",
+            criticality="SHOULD",
         ),
     )
 
@@ -43,6 +46,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Total for module A1.",
             units="kg CO₂ eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -55,6 +59,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Total for module A2.",
             units="kg CO₂ eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -67,6 +72,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Total for module A3.",
             units="kg CO₂ eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -79,6 +85,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Total for module A4.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -91,6 +98,59 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Total for module A5.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
+        ),
+    )
+
+    gwp_total_a5_1: Optional[Decimal] = Field(
+        default=None,
+        description="Global Warming Potential - Total for module A5.1.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Global Warming Potential - Total (A5.1)",
+            field_code="gwp_total_a5_1",
+            description="Global Warming Potential - Total for module A5.1.",
+            units="kg CO₂ eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    gwp_total_a5_2: Optional[Decimal] = Field(
+        default=None,
+        description="Global Warming Potential - Total for module A5.2.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Global Warming Potential - Total (A5.2)",
+            field_code="gwp_total_a5_2",
+            description="Global Warming Potential - Total for module A5.2.",
+            units="kg CO₂ eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    gwp_total_a5_3: Optional[Decimal] = Field(
+        default=None,
+        description="Global Warming Potential - Total for module A5.3.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Global Warming Potential - Total (A5.3)",
+            field_code="gwp_total_a5_3",
+            description="Global Warming Potential - Total for module A5.3.",
+            units="kg CO₂ eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    gwp_total_a5_4: Optional[Decimal] = Field(
+        default=None,
+        description="Global Warming Potential - Total for module A5.4.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Global Warming Potential - Total (A5.4)",
+            field_code="gwp_total_a5_4",
+            description="Global Warming Potential - Total for module A5.4.",
+            units="kg CO₂ eq",
+            requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -103,6 +163,33 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Total for module B1.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
+        ),
+    )
+
+    gwp_total_b1_1: Optional[Decimal] = Field(
+        default=None,
+        description="Global Warming Potential - Total for module B1.1.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Global Warming Potential - Total (B1.1)",
+            field_code="gwp_total_b1_1",
+            description="Global Warming Potential - Total for module B1.1.",
+            units="kg CO₂ eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    gwp_total_b1_2: Optional[Decimal] = Field(
+        default=None,
+        description="Global Warming Potential - Total for module B1.2.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Global Warming Potential - Total (B1.2)",
+            field_code="gwp_total_b1_2",
+            description="Global Warming Potential - Total for module B1.2.",
+            units="kg CO₂ eq",
+            requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -115,6 +202,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Total for module B2.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -127,6 +215,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Total for module B3.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -139,6 +228,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Total for module B4.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -151,6 +241,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Total for module B5.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -163,6 +254,150 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Total for module B6.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
+        ),
+    )
+
+    gwp_total_b6_1: Optional[Decimal] = Field(
+        default=None,
+        description="Global Warming Potential - Total for module B6.1.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Global Warming Potential - Total (B6.1)",
+            field_code="gwp_total_b6_1",
+            description="Global Warming Potential - Total for module B6.1.",
+            units="kg CO₂ eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    gwp_total_b6_2: Optional[Decimal] = Field(
+        default=None,
+        description="Global Warming Potential - Total for module B6.2.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Global Warming Potential - Total (B6.2)",
+            field_code="gwp_total_b6_2",
+            description="Global Warming Potential - Total for module B6.2.",
+            units="kg CO₂ eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    gwp_total_b6_3: Optional[Decimal] = Field(
+        default=None,
+        description="Global Warming Potential - Total for module B6.3.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Global Warming Potential - Total (B6.3)",
+            field_code="gwp_total_b6_3",
+            description="Global Warming Potential - Total for module B6.3.",
+            units="kg CO₂ eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    gwp_total_b7: Optional[Decimal] = Field(
+        default=None,
+        description="Global Warming Potential - Total for module B7.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Global Warming Potential - Total (B7)",
+            field_code="gwp_total_b7",
+            description="Global Warming Potential - Total for module B7.",
+            units="kg CO₂ eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    gwp_total_b7_1: Optional[Decimal] = Field(
+        default=None,
+        description="Global Warming Potential - Total for module B7.1.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Global Warming Potential - Total (B7.1)",
+            field_code="gwp_total_b7_1",
+            description="Global Warming Potential - Total for module B7.1.",
+            units="kg CO₂ eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    gwp_total_b7_2: Optional[Decimal] = Field(
+        default=None,
+        description="Global Warming Potential - Total for module B7.2.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Global Warming Potential - Total (B7.2)",
+            field_code="gwp_total_b7_2",
+            description="Global Warming Potential - Total for module B7.2.",
+            units="kg CO₂ eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    gwp_total_b7_3: Optional[Decimal] = Field(
+        default=None,
+        description="Global Warming Potential - Total for module B7.3.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Global Warming Potential - Total (B7.3)",
+            field_code="gwp_total_b7_3",
+            description="Global Warming Potential - Total for module B7.3.",
+            units="kg CO₂ eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    gwp_total_b8: Optional[Decimal] = Field(
+        default=None,
+        description="Global Warming Potential - Total for module B8.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Global Warming Potential - Total (B8)",
+            field_code="gwp_total_b8",
+            description="Global Warming Potential - Total for module B8.",
+            units="kg CO₂ eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    gwp_total_b8_1: Optional[Decimal] = Field(
+        default=None,
+        description="Global Warming Potential - Total for module B8.1.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Global Warming Potential - Total (B8.1)",
+            field_code="gwp_total_b8_1",
+            description="Global Warming Potential - Total for module B8.1.",
+            units="kg CO₂ eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    gwp_total_b8_2: Optional[Decimal] = Field(
+        default=None,
+        description="Global Warming Potential - Total for module B8.2.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Global Warming Potential - Total (B8.2)",
+            field_code="gwp_total_b8_2",
+            description="Global Warming Potential - Total for module B8.2.",
+            units="kg CO₂ eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    gwp_total_b8_3: Optional[Decimal] = Field(
+        default=None,
+        description="Global Warming Potential - Total for module B8.3.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Global Warming Potential - Total (B8.3)",
+            field_code="gwp_total_b8_3",
+            description="Global Warming Potential - Total for module B8.3.",
+            units="kg CO₂ eq",
+            requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -175,6 +410,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Total for module C1.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -187,6 +423,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Total for module C2.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -199,6 +436,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Total for module C3.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -211,6 +449,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Total for module C4.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -223,6 +462,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Total for module D.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -235,6 +475,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Total for module D1.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -247,17 +488,20 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Total for module D2.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
-    gwp_total: Decimal = Field(
-        description="Total Global Warming Potential.",
+    gwp_total_total: Optional[Decimal] = Field(
+        default=None,
+        description="Total Global Warming Potential - Total.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Total Global Warming Potential",
-            field_code="gwp_total",
-            description="Total Global Warming Potential.",
+            attribute_name="Total Global Warming Potential - Total",
+            field_code="gwp_total_total",
+            description="Total Global Warming Potential - Total.",
             units="kg CO₂ eq",
-            requirements="Required",
+            requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -270,6 +514,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Fossil for module A1-A3.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -282,6 +527,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Fossil for module A1.",
             units="kg CO₂ eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -294,6 +540,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Fossil for module A2.",
             units="kg CO₂ eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -306,6 +553,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Fossil for module A3.",
             units="kg CO₂ eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -318,6 +566,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Fossil for module A4.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -330,6 +579,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Fossil for module A5.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -342,6 +592,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Fossil for module B1.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -354,6 +605,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Fossil for module B2.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -366,6 +618,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Fossil for module B3.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -378,6 +631,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Fossil for module B4.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -390,6 +644,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Fossil for module B5.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -402,6 +657,33 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Fossil for module B6.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
+        ),
+    )
+
+    gwp_f_b7: Optional[Decimal] = Field(
+        default=None,
+        description="Global Warming Potential - Fossil for module B7.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Global Warming Potential - Fossil (B7)",
+            field_code="gwp_f_b7",
+            description="Global Warming Potential - Fossil for module B7.",
+            units="kg CO₂ eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    gwp_f_b8: Optional[Decimal] = Field(
+        default=None,
+        description="Global Warming Potential - Fossil for module B8.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Global Warming Potential - Fossil (B8)",
+            field_code="gwp_f_b8",
+            description="Global Warming Potential - Fossil for module B8.",
+            units="kg CO₂ eq",
+            requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -414,6 +696,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Fossil for module C1.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -426,6 +709,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Fossil for module C2.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -438,6 +722,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Fossil for module C3.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -450,6 +735,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Fossil for module C4.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -462,6 +748,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Fossil for module D.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -474,6 +761,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Fossil for module D1.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -486,6 +774,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Fossil for module D2.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -498,6 +787,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Total Global Warming Potential - Fossil.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -510,6 +800,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Biogenic for module A1-A3.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -522,6 +813,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Biogenic for module A1.",
             units="kg CO₂ eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -534,6 +826,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Biogenic for module A2.",
             units="kg CO₂ eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -546,6 +839,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Biogenic for module A3.",
             units="kg CO₂ eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -558,6 +852,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Biogenic for module A4.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -570,6 +865,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Biogenic for module A5.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -582,6 +878,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Biogenic for module B1.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -594,6 +891,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Biogenic for module B2.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -606,6 +904,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Biogenic for module B3.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -618,6 +917,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Biogenic for module B4.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -630,6 +930,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Biogenic for module B5.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -642,6 +943,33 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Biogenic for module B6.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
+        ),
+    )
+
+    gwp_b_b7: Optional[Decimal] = Field(
+        default=None,
+        description="Global Warming Potential - Biogenic for module B7.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Global Warming Potential - Biogenic (B7)",
+            field_code="gwp_b_b7",
+            description="Global Warming Potential - Biogenic for module B7.",
+            units="kg CO₂ eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    gwp_b_b8: Optional[Decimal] = Field(
+        default=None,
+        description="Global Warming Potential - Biogenic for module B8.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Global Warming Potential - Biogenic (B8)",
+            field_code="gwp_b_b8",
+            description="Global Warming Potential - Biogenic for module B8.",
+            units="kg CO₂ eq",
+            requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -654,6 +982,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Biogenic for module C1.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -666,6 +995,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Biogenic for module C2.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -678,6 +1008,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Biogenic for module C3.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -690,6 +1021,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Biogenic for module C4.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -702,6 +1034,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Biogenic for module D.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -714,6 +1047,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Biogenic for module D1.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -726,6 +1060,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Biogenic for module D2.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -738,6 +1073,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Total Global Warming Potential - Biogenic.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -750,6 +1086,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Land Use and Land Use Change for module A1-A3.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -762,6 +1099,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Land Use and Land Use Change for module A1.",
             units="kg CO₂ eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -774,6 +1112,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Land Use and Land Use Change for module A2.",
             units="kg CO₂ eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -786,6 +1125,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Land Use and Land Use Change for module A3.",
             units="kg CO₂ eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -798,6 +1138,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Land Use and Land Use Change for module A4.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -810,6 +1151,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Land Use and Land Use Change for module A5.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -822,6 +1164,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Land Use and Land Use Change for module B1.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -834,6 +1177,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Land Use and Land Use Change for module B2.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -846,6 +1190,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Land Use and Land Use Change for module B3.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -858,6 +1203,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Land Use and Land Use Change for module B4.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -870,6 +1216,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Land Use and Land Use Change for module B5.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -882,6 +1229,33 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Land Use and Land Use Change for module B6.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
+        ),
+    )
+
+    gwp_luc_b7: Optional[Decimal] = Field(
+        default=None,
+        description="Global Warming Potential - Land Use and Land Use Change for module B7.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Global Warming Potential - Land Use and Land Use Change (B7)",
+            field_code="gwp_luc_b7",
+            description="Global Warming Potential - Land Use and Land Use Change for module B7.",
+            units="kg CO₂ eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    gwp_luc_b8: Optional[Decimal] = Field(
+        default=None,
+        description="Global Warming Potential - Land Use and Land Use Change for module B8.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Global Warming Potential - Land Use and Land Use Change (B8)",
+            field_code="gwp_luc_b8",
+            description="Global Warming Potential - Land Use and Land Use Change for module B8.",
+            units="kg CO₂ eq",
+            requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -894,6 +1268,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Land Use and Land Use Change for module C1.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -906,6 +1281,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Land Use and Land Use Change for module C2.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -918,6 +1294,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Land Use and Land Use Change for module C3.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -930,6 +1307,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Land Use and Land Use Change for module C4.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -942,6 +1320,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Land Use and Land Use Change for module D.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -954,6 +1333,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Land Use and Land Use Change for module D1.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -966,6 +1346,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Global Warming Potential - Land Use and Land Use Change for module D2.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -978,6 +1359,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Total Global Warming Potential - Land Use and Land Use Change.",
             units="kg CO₂ eq",
             requirements="Recommended",
+            criticality="MAY",
         ),
     )
 
@@ -988,8 +1370,9 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Ozone Depletion Potential (A1-A3)",
             field_code="odp_a1_a3",
             description="Ozone Depletion Potential for module A1-A3.",
-            units="kg R11 eq / kg CFC-11 eq.",
+            units="kg CFC-11 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1000,8 +1383,9 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Ozone Depletion Potential (A1)",
             field_code="odp_a1",
             description="Ozone Depletion Potential for module A1.",
-            units="kg R11 eq / kg CFC-11 eq.",
+            units="kg CFC-11 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1012,8 +1396,9 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Ozone Depletion Potential (A2)",
             field_code="odp_a2",
             description="Ozone Depletion Potential for module A2.",
-            units="kg R11 eq / kg CFC-11 eq.",
+            units="kg CFC-11 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1024,8 +1409,9 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Ozone Depletion Potential (A3)",
             field_code="odp_a3",
             description="Ozone Depletion Potential for module A3.",
-            units="kg R11 eq / kg CFC-11 eq.",
+            units="kg CFC-11 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1036,8 +1422,9 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Ozone Depletion Potential (A4)",
             field_code="odp_a4",
             description="Ozone Depletion Potential for module A4.",
-            units="kg R11 eq / kg CFC-11 eq.",
+            units="kg CFC-11 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1048,8 +1435,9 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Ozone Depletion Potential (A5)",
             field_code="odp_a5",
             description="Ozone Depletion Potential for module A5.",
-            units="kg R11 eq / kg CFC-11 eq.",
+            units="kg CFC-11 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1060,8 +1448,9 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Ozone Depletion Potential (B1)",
             field_code="odp_b1",
             description="Ozone Depletion Potential for module B1.",
-            units="kg R11 eq / kg CFC-11 eq.",
+            units="kg CFC-11 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1072,8 +1461,9 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Ozone Depletion Potential (B2)",
             field_code="odp_b2",
             description="Ozone Depletion Potential for module B2.",
-            units="kg R11 eq / kg CFC-11 eq.",
+            units="kg CFC-11 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1084,8 +1474,9 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Ozone Depletion Potential (B3)",
             field_code="odp_b3",
             description="Ozone Depletion Potential for module B3.",
-            units="kg R11 eq / kg CFC-11 eq.",
+            units="kg CFC-11 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1096,8 +1487,9 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Ozone Depletion Potential (B4)",
             field_code="odp_b4",
             description="Ozone Depletion Potential for module B4.",
-            units="kg R11 eq / kg CFC-11 eq.",
+            units="kg CFC-11 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1108,8 +1500,9 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Ozone Depletion Potential (B5)",
             field_code="odp_b5",
             description="Ozone Depletion Potential for module B5.",
-            units="kg R11 eq / kg CFC-11 eq.",
+            units="kg CFC-11 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1120,8 +1513,35 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Ozone Depletion Potential (B6)",
             field_code="odp_b6",
             description="Ozone Depletion Potential for module B6.",
-            units="kg R11 eq / kg CFC-11 eq.",
+            units="kg CFC-11 eq",
             requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    odp_b7: Optional[Decimal] = Field(
+        default=None,
+        description="Ozone Depletion Potential for module B7.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Ozone Depletion Potential (B7)",
+            field_code="odp_b7",
+            description="Ozone Depletion Potential for module B7.",
+            units="kg CFC-11 eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    odp_b8: Optional[Decimal] = Field(
+        default=None,
+        description="Ozone Depletion Potential for module B8.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Ozone Depletion Potential (B8)",
+            field_code="odp_b8",
+            description="Ozone Depletion Potential for module B8.",
+            units="kg CFC-11 eq",
+            requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1132,8 +1552,9 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Ozone Depletion Potential (C1)",
             field_code="odp_c1",
             description="Ozone Depletion Potential for module C1.",
-            units="kg R11 eq / kg CFC-11 eq.",
+            units="kg CFC-11 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1144,8 +1565,9 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Ozone Depletion Potential (C2)",
             field_code="odp_c2",
             description="Ozone Depletion Potential for module C2.",
-            units="kg R11 eq / kg CFC-11 eq.",
+            units="kg CFC-11 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1156,8 +1578,9 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Ozone Depletion Potential (C3)",
             field_code="odp_c3",
             description="Ozone Depletion Potential for module C3.",
-            units="kg R11 eq / kg CFC-11 eq.",
+            units="kg CFC-11 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1168,8 +1591,9 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Ozone Depletion Potential (C4)",
             field_code="odp_c4",
             description="Ozone Depletion Potential for module C4.",
-            units="kg R11 eq / kg CFC-11 eq.",
+            units="kg CFC-11 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1180,8 +1604,9 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Ozone Depletion Potential (D)",
             field_code="odp_d",
             description="Ozone Depletion Potential for module D.",
-            units="kg R11 eq / kg CFC-11 eq.",
+            units="kg CFC-11 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1192,8 +1617,9 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Ozone Depletion Potential (D1)",
             field_code="odp_d1",
             description="Ozone Depletion Potential for module D1.",
-            units="kg R11 eq / kg CFC-11 eq.",
+            units="kg CFC-11 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1204,8 +1630,9 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Ozone Depletion Potential (D2)",
             field_code="odp_d2",
             description="Ozone Depletion Potential for module D2.",
-            units="kg R11 eq / kg CFC-11 eq.",
+            units="kg CFC-11 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1216,8 +1643,9 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Total Ozone Depletion Potential",
             field_code="odp_total",
             description="Total Ozone Depletion Potential.",
-            units="kg R11 eq / kg CFC-11 eq.",
+            units="kg CFC-11 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1230,6 +1658,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Acidification Potential for module A1-A3.",
             units="kg SO₂ eq.",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1242,6 +1671,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Acidification Potential for module A1.",
             units="kg SO₂ eq.",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1254,6 +1684,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Acidification Potential for module A2.",
             units="kg SO₂ eq.",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1266,6 +1697,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Acidification Potential for module A3.",
             units="kg SO₂ eq.",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1278,6 +1710,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Acidification Potential for module A4.",
             units="kg SO₂ eq.",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1290,6 +1723,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Acidification Potential for module A5.",
             units="kg SO₂ eq.",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1302,6 +1736,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Acidification Potential for module B1.",
             units="kg SO₂ eq.",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1314,6 +1749,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Acidification Potential for module B2.",
             units="kg SO₂ eq.",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1326,6 +1762,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Acidification Potential for module B3.",
             units="kg SO₂ eq.",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1338,6 +1775,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Acidification Potential for module B4.",
             units="kg SO₂ eq.",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1350,6 +1788,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Acidification Potential for module B5.",
             units="kg SO₂ eq.",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1362,6 +1801,33 @@ class LCAResultsWideFullBase(SQLModel):
             description="Acidification Potential for module B6.",
             units="kg SO₂ eq.",
             requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    ap_b7: Optional[Decimal] = Field(
+        default=None,
+        description="Acidification Potential for module B7.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Acidification Potential (B7)",
+            field_code="ap_b7",
+            description="Acidification Potential for module B7.",
+            units="kg SO₂ eq.",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    ap_b8: Optional[Decimal] = Field(
+        default=None,
+        description="Acidification Potential for module B8.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Acidification Potential (B8)",
+            field_code="ap_b8",
+            description="Acidification Potential for module B8.",
+            units="kg SO₂ eq.",
+            requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1374,6 +1840,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Acidification Potential for module C1.",
             units="kg SO₂ eq.",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1386,6 +1853,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Acidification Potential for module C2.",
             units="kg SO₂ eq.",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1398,6 +1866,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Acidification Potential for module C3.",
             units="kg SO₂ eq.",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1410,6 +1879,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Acidification Potential for module C4.",
             units="kg SO₂ eq.",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1422,6 +1892,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Acidification Potential for module D.",
             units="kg SO₂ eq.",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1434,6 +1905,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Acidification Potential for module D1.",
             units="kg SO₂ eq.",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1446,6 +1918,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Acidification Potential for module D2.",
             units="kg SO₂ eq.",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1458,6 +1931,293 @@ class LCAResultsWideFullBase(SQLModel):
             description="Total Acidification Potential.",
             units="kg SO₂ eq.",
             requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    ap_ae_a1_a3: Optional[Decimal] = Field(
+        default=None,
+        description="Acidification Potential (accumulated exceedance) for module A1-A3.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Acidification Potential - Accumulated Exceedance (A1-A3)",
+            field_code="ap_ae_a1_a3",
+            description="Acidification Potential (accumulated exceedance) for module A1-A3.",
+            units="mol H+ eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    ap_ae_a1: Optional[Decimal] = Field(
+        default=None,
+        description="Acidification Potential (accumulated exceedance) for module A1.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Acidification Potential - Accumulated Exceedance (A1)",
+            field_code="ap_ae_a1",
+            description="Acidification Potential (accumulated exceedance) for module A1.",
+            units="mol H+ eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    ap_ae_a2: Optional[Decimal] = Field(
+        default=None,
+        description="Acidification Potential (accumulated exceedance) for module A2.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Acidification Potential - Accumulated Exceedance (A2)",
+            field_code="ap_ae_a2",
+            description="Acidification Potential (accumulated exceedance) for module A2.",
+            units="mol H+ eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    ap_ae_a3: Optional[Decimal] = Field(
+        default=None,
+        description="Acidification Potential (accumulated exceedance) for module A3.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Acidification Potential - Accumulated Exceedance (A3)",
+            field_code="ap_ae_a3",
+            description="Acidification Potential (accumulated exceedance) for module A3.",
+            units="mol H+ eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    ap_ae_a4: Optional[Decimal] = Field(
+        default=None,
+        description="Acidification Potential (accumulated exceedance) for module A4.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Acidification Potential - Accumulated Exceedance (A4)",
+            field_code="ap_ae_a4",
+            description="Acidification Potential (accumulated exceedance) for module A4.",
+            units="mol H+ eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    ap_ae_a5: Optional[Decimal] = Field(
+        default=None,
+        description="Acidification Potential (accumulated exceedance) for module A5.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Acidification Potential - Accumulated Exceedance (A5)",
+            field_code="ap_ae_a5",
+            description="Acidification Potential (accumulated exceedance) for module A5.",
+            units="mol H+ eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    ap_ae_b1: Optional[Decimal] = Field(
+        default=None,
+        description="Acidification Potential (accumulated exceedance) for module B1.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Acidification Potential - Accumulated Exceedance (B1)",
+            field_code="ap_ae_b1",
+            description="Acidification Potential (accumulated exceedance) for module B1.",
+            units="mol H+ eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    ap_ae_b2: Optional[Decimal] = Field(
+        default=None,
+        description="Acidification Potential (accumulated exceedance) for module B2.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Acidification Potential - Accumulated Exceedance (B2)",
+            field_code="ap_ae_b2",
+            description="Acidification Potential (accumulated exceedance) for module B2.",
+            units="mol H+ eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    ap_ae_b3: Optional[Decimal] = Field(
+        default=None,
+        description="Acidification Potential (accumulated exceedance) for module B3.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Acidification Potential - Accumulated Exceedance (B3)",
+            field_code="ap_ae_b3",
+            description="Acidification Potential (accumulated exceedance) for module B3.",
+            units="mol H+ eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    ap_ae_b4: Optional[Decimal] = Field(
+        default=None,
+        description="Acidification Potential (accumulated exceedance) for module B4.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Acidification Potential - Accumulated Exceedance (B4)",
+            field_code="ap_ae_b4",
+            description="Acidification Potential (accumulated exceedance) for module B4.",
+            units="mol H+ eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    ap_ae_b5: Optional[Decimal] = Field(
+        default=None,
+        description="Acidification Potential (accumulated exceedance) for module B5.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Acidification Potential - Accumulated Exceedance (B5)",
+            field_code="ap_ae_b5",
+            description="Acidification Potential (accumulated exceedance) for module B5.",
+            units="mol H+ eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    ap_ae_b6: Optional[Decimal] = Field(
+        default=None,
+        description="Acidification Potential (accumulated exceedance) for module B6.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Acidification Potential - Accumulated Exceedance (B6)",
+            field_code="ap_ae_b6",
+            description="Acidification Potential (accumulated exceedance) for module B6.",
+            units="mol H+ eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    ap_ae_b7: Optional[Decimal] = Field(
+        default=None,
+        description="Acidification Potential (accumulated exceedance) for module B7.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Acidification Potential - Accumulated Exceedance (B7)",
+            field_code="ap_ae_b7",
+            description="Acidification Potential (accumulated exceedance) for module B7.",
+            units="mol H+ eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    ap_ae_b8: Optional[Decimal] = Field(
+        default=None,
+        description="Acidification Potential (accumulated exceedance) for module B8.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Acidification Potential - Accumulated Exceedance (B8)",
+            field_code="ap_ae_b8",
+            description="Acidification Potential (accumulated exceedance) for module B8.",
+            units="mol H+ eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    ap_ae_c1: Optional[Decimal] = Field(
+        default=None,
+        description="Acidification Potential (accumulated exceedance) for module C1.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Acidification Potential - Accumulated Exceedance (C1)",
+            field_code="ap_ae_c1",
+            description="Acidification Potential (accumulated exceedance) for module C1.",
+            units="mol H+ eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    ap_ae_c2: Optional[Decimal] = Field(
+        default=None,
+        description="Acidification Potential (accumulated exceedance) for module C2.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Acidification Potential - Accumulated Exceedance (C2)",
+            field_code="ap_ae_c2",
+            description="Acidification Potential (accumulated exceedance) for module C2.",
+            units="mol H+ eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    ap_ae_c3: Optional[Decimal] = Field(
+        default=None,
+        description="Acidification Potential (accumulated exceedance) for module C3.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Acidification Potential - Accumulated Exceedance (C3)",
+            field_code="ap_ae_c3",
+            description="Acidification Potential (accumulated exceedance) for module C3.",
+            units="mol H+ eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    ap_ae_c4: Optional[Decimal] = Field(
+        default=None,
+        description="Acidification Potential (accumulated exceedance) for module C4.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Acidification Potential - Accumulated Exceedance (C4)",
+            field_code="ap_ae_c4",
+            description="Acidification Potential (accumulated exceedance) for module C4.",
+            units="mol H+ eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    ap_ae_d: Optional[Decimal] = Field(
+        default=None,
+        description="Acidification Potential (accumulated exceedance) for module D.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Acidification Potential - Accumulated Exceedance (D)",
+            field_code="ap_ae_d",
+            description="Acidification Potential (accumulated exceedance) for module D.",
+            units="mol H+ eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    ap_ae_d1: Optional[Decimal] = Field(
+        default=None,
+        description="Acidification Potential (accumulated exceedance) for module D1.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Acidification Potential - Accumulated Exceedance (D1)",
+            field_code="ap_ae_d1",
+            description="Acidification Potential (accumulated exceedance) for module D1.",
+            units="mol H+ eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    ap_ae_d2: Optional[Decimal] = Field(
+        default=None,
+        description="Acidification Potential (accumulated exceedance) for module D2.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Acidification Potential - Accumulated Exceedance (D2)",
+            field_code="ap_ae_d2",
+            description="Acidification Potential (accumulated exceedance) for module D2.",
+            units="mol H+ eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    ap_ae_total: Optional[Decimal] = Field(
+        default=None,
+        description="Total Acidification Potential (accumulated exceedance).",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Total Acidification Potential - Accumulated Exceedance",
+            field_code="ap_ae_total",
+            description="Total Acidification Potential (accumulated exceedance).",
+            units="mol H+ eq",
+            requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1470,6 +2230,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential for module A1-A3.",
             units="kg N eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1482,6 +2243,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential for module A1.",
             units="kg N eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1494,6 +2256,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential for module A2.",
             units="kg N eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1506,6 +2269,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential for module A3.",
             units="kg N eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1518,6 +2282,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential for module A4.",
             units="kg N eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1530,6 +2295,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential for module A5.",
             units="kg N eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1542,6 +2308,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential for module B1.",
             units="kg N eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1554,6 +2321,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential for module B2.",
             units="kg N eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1566,6 +2334,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential for module B3.",
             units="kg N eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1578,6 +2347,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential for module B4.",
             units="kg N eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1590,6 +2360,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential for module B5.",
             units="kg N eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1602,6 +2373,33 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential for module B6.",
             units="kg N eq",
             requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    ep_b7: Optional[Decimal] = Field(
+        default=None,
+        description="Eutrophication Potential for module B7.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Eutrophication Potential (B7)",
+            field_code="ep_b7",
+            description="Eutrophication Potential for module B7.",
+            units="kg N eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    ep_b8: Optional[Decimal] = Field(
+        default=None,
+        description="Eutrophication Potential for module B8.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Eutrophication Potential (B8)",
+            field_code="ep_b8",
+            description="Eutrophication Potential for module B8.",
+            units="kg N eq",
+            requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1614,6 +2412,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential for module C1.",
             units="kg N eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1626,6 +2425,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential for module C2.",
             units="kg N eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1638,6 +2438,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential for module C3.",
             units="kg N eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1650,6 +2451,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential for module C4.",
             units="kg N eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1662,6 +2464,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential for module D.",
             units="kg N eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1674,6 +2477,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential for module D1.",
             units="kg N eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1686,6 +2490,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential for module D2.",
             units="kg N eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1698,6 +2503,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Total Eutrophication Potential.",
             units="kg N eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1710,6 +2516,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Freshwater for module A1-A3.",
             units="kg PO4 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1722,6 +2529,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Freshwater for module A1.",
             units="kg PO4 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1734,6 +2542,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Freshwater for module A2.",
             units="kg PO4 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1746,6 +2555,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Freshwater for module A3.",
             units="kg PO4 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1758,6 +2568,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Freshwater for module A4.",
             units="kg PO4 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1770,6 +2581,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Freshwater for module A5.",
             units="kg PO4 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1782,6 +2594,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Freshwater for module B1.",
             units="kg PO4 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1794,6 +2607,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Freshwater for module B2.",
             units="kg PO4 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1806,6 +2620,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Freshwater for module B3.",
             units="kg PO4 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1818,6 +2633,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Freshwater for module B4.",
             units="kg PO4 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1830,6 +2646,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Freshwater for module B5.",
             units="kg PO4 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1842,6 +2659,33 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Freshwater for module B6.",
             units="kg PO4 eq",
             requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    ep_af_b7: Optional[Decimal] = Field(
+        default=None,
+        description="Eutrophication Potential - Aquatic Freshwater for module B7.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Eutrophication Potential - Freshwater (B7)",
+            field_code="ep_af_b7",
+            description="Eutrophication Potential - Aquatic Freshwater for module B7.",
+            units="kg PO4 eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    ep_af_b8: Optional[Decimal] = Field(
+        default=None,
+        description="Eutrophication Potential - Aquatic Freshwater for module B8.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Eutrophication Potential - Freshwater (B8)",
+            field_code="ep_af_b8",
+            description="Eutrophication Potential - Aquatic Freshwater for module B8.",
+            units="kg PO4 eq",
+            requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1854,6 +2698,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Freshwater for module C1.",
             units="kg PO4 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1866,6 +2711,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Freshwater for module C2.",
             units="kg PO4 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1878,6 +2724,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Freshwater for module C3.",
             units="kg PO4 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1890,6 +2737,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Freshwater for module C4.",
             units="kg PO4 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1902,6 +2750,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Freshwater for module D.",
             units="kg PO4 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1914,6 +2763,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Freshwater for module D1.",
             units="kg PO4 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1926,6 +2776,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Freshwater for module D2.",
             units="kg PO4 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1938,6 +2789,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Total Eutrophication Potential - Aquatic Freshwater.",
             units="kg PO4 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1950,6 +2802,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Marine for module A1-A3.",
             units="kg N eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1962,6 +2815,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Marine for module A1.",
             units="kg N eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1974,6 +2828,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Marine for module A2.",
             units="kg N eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1986,6 +2841,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Marine for module A3.",
             units="kg N eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -1998,6 +2854,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Marine for module A4.",
             units="kg N eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2010,6 +2867,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Marine for module A5.",
             units="kg N eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2022,6 +2880,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Marine for module B1.",
             units="kg N eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2034,6 +2893,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Marine for module B2.",
             units="kg N eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2046,6 +2906,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Marine for module B3.",
             units="kg N eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2058,6 +2919,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Marine for module B4.",
             units="kg N eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2070,6 +2932,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Marine for module B5.",
             units="kg N eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2082,6 +2945,33 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Marine for module B6.",
             units="kg N eq",
             requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    ep_am_b7: Optional[Decimal] = Field(
+        default=None,
+        description="Eutrophication Potential - Aquatic Marine for module B7.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Eutrophication Potential - Aquatic Marine (B7)",
+            field_code="ep_am_b7",
+            description="Eutrophication Potential - Aquatic Marine for module B7.",
+            units="kg N eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    ep_am_b8: Optional[Decimal] = Field(
+        default=None,
+        description="Eutrophication Potential - Aquatic Marine for module B8.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Eutrophication Potential - Aquatic Marine (B8)",
+            field_code="ep_am_b8",
+            description="Eutrophication Potential - Aquatic Marine for module B8.",
+            units="kg N eq",
+            requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2094,6 +2984,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Marine for module C1.",
             units="kg N eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2106,6 +2997,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Marine for module C2.",
             units="kg N eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2118,6 +3010,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Marine for module C3.",
             units="kg N eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2130,6 +3023,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Marine for module C4.",
             units="kg N eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2142,6 +3036,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Marine for module D.",
             units="kg N eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2154,6 +3049,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Marine for module D1.",
             units="kg N eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2166,6 +3062,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Eutrophication Potential - Aquatic Marine for module D2.",
             units="kg N eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2178,6 +3075,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Total Eutrophication Potential - Aquatic Marine.",
             units="kg N eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2188,8 +3086,9 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Eutrophication Potential - Terrestrial (A1-A3)",
             field_code="ep_t_a1_a3",
             description="Eutrophication Potential - Terrestrial for module A1-A3.",
-            units="mol Ne eq",
+            units="mol N eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2200,8 +3099,9 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Eutrophication Potential - Terrestrial (A1)",
             field_code="ep_t_a1",
             description="Eutrophication Potential - Terrestrial for module A1.",
-            units="mol Ne eq",
+            units="mol N eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2212,8 +3112,9 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Eutrophication Potential - Terrestrial (A2)",
             field_code="ep_t_a2",
             description="Eutrophication Potential - Terrestrial for module A2.",
-            units="mol Ne eq",
+            units="mol N eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2224,8 +3125,9 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Eutrophication Potential - Terrestrial (A3)",
             field_code="ep_t_a3",
             description="Eutrophication Potential - Terrestrial for module A3.",
-            units="mol Ne eq",
+            units="mol N eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2236,8 +3138,9 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Eutrophication Potential - Terrestrial (A4)",
             field_code="ep_t_a4",
             description="Eutrophication Potential - Terrestrial for module A4.",
-            units="mol Ne eq",
+            units="mol N eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2248,8 +3151,9 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Eutrophication Potential - Terrestrial (A5)",
             field_code="ep_t_a5",
             description="Eutrophication Potential - Terrestrial for module A5.",
-            units="mol Ne eq",
+            units="mol N eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2260,8 +3164,9 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Eutrophication Potential - Terrestrial (B1)",
             field_code="ep_t_b1",
             description="Eutrophication Potential - Terrestrial for module B1.",
-            units="mol Ne eq",
+            units="mol N eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2272,8 +3177,9 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Eutrophication Potential - Terrestrial (B2)",
             field_code="ep_t_b2",
             description="Eutrophication Potential - Terrestrial for module B2.",
-            units="mol Ne eq",
+            units="mol N eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2284,8 +3190,9 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Eutrophication Potential - Terrestrial (B3)",
             field_code="ep_t_b3",
             description="Eutrophication Potential - Terrestrial for module B3.",
-            units="mol Ne eq",
+            units="mol N eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2296,8 +3203,9 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Eutrophication Potential - Terrestrial (B4)",
             field_code="ep_t_b4",
             description="Eutrophication Potential - Terrestrial for module B4.",
-            units="mol Ne eq",
+            units="mol N eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2308,8 +3216,9 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Eutrophication Potential - Terrestrial (B5)",
             field_code="ep_t_b5",
             description="Eutrophication Potential - Terrestrial for module B5.",
-            units="mol Ne eq",
+            units="mol N eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2320,8 +3229,35 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Eutrophication Potential - Terrestrial (B6)",
             field_code="ep_t_b6",
             description="Eutrophication Potential - Terrestrial for module B6.",
-            units="mol Ne eq",
+            units="mol N eq",
             requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    ep_t_b7: Optional[Decimal] = Field(
+        default=None,
+        description="Eutrophication Potential - Terrestrial for module B7.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Eutrophication Potential - Aquatic Marine (B7)",
+            field_code="ep_t_b7",
+            description="Eutrophication Potential - Terrestrial for module B7.",
+            units="mol N eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    ep_t_b8: Optional[Decimal] = Field(
+        default=None,
+        description="Eutrophication Potential - Terrestrial for module B8.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Eutrophication Potential - Aquatic Marine (B8)",
+            field_code="ep_t_b8",
+            description="Eutrophication Potential - Terrestrial for module B8.",
+            units="mol N eq",
+            requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2332,8 +3268,9 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Eutrophication Potential - Terrestrial (C1)",
             field_code="ep_t_c1",
             description="Eutrophication Potential - Terrestrial for module C1.",
-            units="mol Ne eq",
+            units="mol N eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2344,8 +3281,9 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Eutrophication Potential - Terrestrial (C2)",
             field_code="ep_t_c2",
             description="Eutrophication Potential - Terrestrial for module C2.",
-            units="mol Ne eq",
+            units="mol N eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2356,8 +3294,9 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Eutrophication Potential - Terrestrial (C3)",
             field_code="ep_t_c3",
             description="Eutrophication Potential - Terrestrial for module C3.",
-            units="mol Ne eq",
+            units="mol N eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2368,8 +3307,9 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Eutrophication Potential - Terrestrial (C4)",
             field_code="ep_t_c4",
             description="Eutrophication Potential - Terrestrial for module C4.",
-            units="mol Ne eq",
+            units="mol N eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2380,8 +3320,9 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Eutrophication Potential - Terrestrial (D)",
             field_code="ep_t_d",
             description="Eutrophication Potential - Terrestrial for module D.",
-            units="mol Ne eq",
+            units="mol N eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2392,8 +3333,9 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Eutrophication Potential - Terrestrial (D1)",
             field_code="ep_t_d1",
             description="Eutrophication Potential - Terrestrial for module D1.",
-            units="mol Ne eq",
+            units="mol N eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2404,8 +3346,9 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Eutrophication Potential - Terrestrial (D2)",
             field_code="ep_t_d2",
             description="Eutrophication Potential - Terrestrial for module D2.",
-            units="mol Ne eq",
+            units="mol N eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2416,8 +3359,9 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Total Eutrophication Potential - Terrestrial",
             field_code="ep_t_total",
             description="Total Eutrophication Potential - Terrestrial.",
-            units="mol Ne eq",
+            units="mol N eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2430,6 +3374,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Creation Potential for module A1-A3.",
             units="kg C2H4 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2442,6 +3387,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Creation Potential for module A1.",
             units="kg C2H4 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2454,6 +3400,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Creation Potential for module A2.",
             units="kg C2H4 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2466,6 +3413,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Creation Potential for module A3.",
             units="kg C2H4 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2478,6 +3426,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Creation Potential for module A4.",
             units="kg C2H4 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2490,6 +3439,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Creation Potential for module A5.",
             units="kg C2H4 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2502,6 +3452,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Creation Potential for module B1.",
             units="kg C2H4 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2514,6 +3465,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Creation Potential for module B2.",
             units="kg C2H4 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2526,6 +3478,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Creation Potential for module B3.",
             units="kg C2H4 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2538,6 +3491,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Creation Potential for module B4.",
             units="kg C2H4 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2550,6 +3504,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Creation Potential for module B5.",
             units="kg C2H4 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2562,6 +3517,33 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Creation Potential for module B6.",
             units="kg C2H4 eq",
             requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    pocp_b7: Optional[Decimal] = Field(
+        default=None,
+        description="Photochemical Ozone Creation Potential for module B7.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Eutrophication Potential - Aquatic Marine (B7)",
+            field_code="pocp_b7",
+            description="Photochemical Ozone Creation Potential for module B7.",
+            units="kg C2H4 eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    pocp_b8: Optional[Decimal] = Field(
+        default=None,
+        description="Photochemical Ozone Creation Potential for module B8.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Eutrophication Potential - Aquatic Marine (B8)",
+            field_code="pocp_b8",
+            description="Photochemical Ozone Creation Potential for module B8.",
+            units="kg C2H4 eq",
+            requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2574,6 +3556,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Creation Potential for module C1.",
             units="kg C2H4 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2586,6 +3569,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Creation Potential for module C2.",
             units="kg C2H4 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2598,6 +3582,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Creation Potential for module C3.",
             units="kg C2H4 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2610,6 +3595,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Creation Potential for module C4.",
             units="kg C2H4 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2622,6 +3608,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Creation Potential for module D.",
             units="kg C2H4 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2634,6 +3621,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Creation Potential for module D1.",
             units="kg C2H4 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2646,6 +3634,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Creation Potential for module D2.",
             units="kg C2H4 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2658,6 +3647,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Total Photochemical Ozone Creation Potential.",
             units="kg C2H4 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2670,6 +3660,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Smog Forming Potential for module A1-A3.",
             units="kg O3 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2682,6 +3673,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Smog Forming Potential for module A1.",
             units="kg O3 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2694,6 +3686,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Smog Forming Potential for module A2.",
             units="kg O3 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2706,6 +3699,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Smog Forming Potential for module A3.",
             units="kg O3 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2718,6 +3712,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Smog Forming Potential for module A4.",
             units="kg O3 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2730,6 +3725,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Smog Forming Potential for module A5.",
             units="kg O3 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2742,6 +3738,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Smog Forming Potential for module B1.",
             units="kg O3 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2754,6 +3751,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Smog Forming Potential for module B2.",
             units="kg O3 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2766,6 +3764,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Smog Forming Potential for module B3.",
             units="kg O3 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2778,6 +3777,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Smog Forming Potential for module B4.",
             units="kg O3 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2790,6 +3790,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Smog Forming Potential for module B5.",
             units="kg O3 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2802,6 +3803,33 @@ class LCAResultsWideFullBase(SQLModel):
             description="Smog Forming Potential for module B6.",
             units="kg O3 eq",
             requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    sfp_b7: Optional[Decimal] = Field(
+        default=None,
+        description="Smog Forming Potential for module B7.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Photochemical Ozone Creation Potential (B7)",
+            field_code="sfp_b7",
+            description="Smog Forming Potential for module B7.",
+            units="kg O3 eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    sfp_b8: Optional[Decimal] = Field(
+        default=None,
+        description="Smog Forming Potential for module B8.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Photochemical Ozone Creation Potential (B8)",
+            field_code="sfp_b8",
+            description="Smog Forming Potential for module B8.",
+            units="kg O3 eq",
+            requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2814,6 +3842,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Smog Forming Potential for module C1.",
             units="kg O3 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2826,6 +3855,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Smog Forming Potential for module C2.",
             units="kg O3 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2838,6 +3868,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Smog Forming Potential for module C3.",
             units="kg O3 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2850,6 +3881,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Smog Forming Potential for module C4.",
             units="kg O3 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2862,6 +3894,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Smog Forming Potential for module D.",
             units="kg O3 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2874,6 +3907,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Smog Forming Potential for module D1.",
             units="kg O3 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2886,6 +3920,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Smog Forming Potential for module D2.",
             units="kg O3 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2898,6 +3933,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Total Smog Forming Potential.",
             units="kg O3 eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2910,6 +3946,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Formation Potential for module A1-A3.",
             units="kg NMVOC eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2922,6 +3959,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Formation Potential for module A1.",
             units="kg NMVOC eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2934,6 +3972,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Formation Potential for module A2.",
             units="kg NMVOC eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2946,6 +3985,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Formation Potential for module A3.",
             units="kg NMVOC eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2958,6 +3998,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Formation Potential for module A4.",
             units="kg NMVOC eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2970,6 +4011,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Formation Potential for module A5.",
             units="kg NMVOC eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2982,6 +4024,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Formation Potential for module B1.",
             units="kg NMVOC eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -2994,6 +4037,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Formation Potential for module B2.",
             units="kg NMVOC eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3006,6 +4050,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Formation Potential for module B3.",
             units="kg NMVOC eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3018,6 +4063,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Formation Potential for module B4.",
             units="kg NMVOC eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3030,6 +4076,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Formation Potential for module B5.",
             units="kg NMVOC eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3042,6 +4089,33 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Formation Potential for module B6.",
             units="kg NMVOC eq",
             requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    pofp_b7: Optional[Decimal] = Field(
+        default=None,
+        description="Photochemical Ozone Formation Potential for module B7.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Smog Forming Potential (B7)",
+            field_code="pofp_b7",
+            description="Photochemical Ozone Formation Potential for module B7.",
+            units="kg NMVOC eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    pofp_b8: Optional[Decimal] = Field(
+        default=None,
+        description="Photochemical Ozone Formation Potential for module B8.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Smog Forming Potential (B8)",
+            field_code="pofp_b8",
+            description="Photochemical Ozone Formation Potential for module B8.",
+            units="kg NMVOC eq",
+            requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3054,6 +4128,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Formation Potential for module C1.",
             units="kg NMVOC eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3066,6 +4141,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Formation Potential for module C2.",
             units="kg NMVOC eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3078,6 +4154,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Formation Potential for module C3.",
             units="kg NMVOC eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3090,6 +4167,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Formation Potential for module C4.",
             units="kg NMVOC eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3102,6 +4180,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Formation Potential for module D.",
             units="kg NMVOC eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3114,6 +4193,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Formation Potential for module D1.",
             units="kg NMVOC eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3126,6 +4206,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Photochemical Ozone Formation Potential for module D2.",
             units="kg NMVOC eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3138,6 +4219,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Total Photochemical Ozone Formation Potential.",
             units="kg NMVOC eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3145,11 +4227,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Abiotic Depletion Potential (Minerals and Metals) for module A1-A3.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Abiotic Depletion Potential (Minerals and Metals) (A1-A3)",
+            attribute_name="Abiotic Depletion Potential - Minerals and Metals (A1-A3)",
             field_code="adpmm_a1_a3",
             description="Abiotic Depletion Potential (Minerals and Metals) for module A1-A3.",
             units="kg Sb eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3157,11 +4240,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Abiotic Depletion Potential (Minerals and Metals) for module A1.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Abiotic Depletion Potential (Minerals and Metals) (A1)",
+            attribute_name="Abiotic Depletion Potential - Minerals and Metals (A1)",
             field_code="adpmm_a1",
             description="Abiotic Depletion Potential (Minerals and Metals) for module A1.",
             units="kg Sb eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3169,11 +4253,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Abiotic Depletion Potential (Minerals and Metals) for module A2.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Abiotic Depletion Potential (Minerals and Metals) (A2)",
+            attribute_name="Abiotic Depletion Potential - Minerals and Metals (A2)",
             field_code="adpmm_a2",
             description="Abiotic Depletion Potential (Minerals and Metals) for module A2.",
             units="kg Sb eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3181,11 +4266,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Abiotic Depletion Potential (Minerals and Metals) for module A3.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Abiotic Depletion Potential (Minerals and Metals) (A3)",
+            attribute_name="Abiotic Depletion Potential - Minerals and Metals (A3)",
             field_code="adpmm_a3",
             description="Abiotic Depletion Potential (Minerals and Metals) for module A3.",
             units="kg Sb eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3193,11 +4279,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Abiotic Depletion Potential (Minerals and Metals) for module A4.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Abiotic Depletion Potential (Minerals and Metals) (A4)",
+            attribute_name="Abiotic Depletion Potential - Minerals and Metals (A4)",
             field_code="adpmm_a4",
             description="Abiotic Depletion Potential (Minerals and Metals) for module A4.",
             units="kg Sb eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3205,11 +4292,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Abiotic Depletion Potential (Minerals and Metals) for module A5.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Abiotic Depletion Potential (Minerals and Metals) (A5)",
+            attribute_name="Abiotic Depletion Potential - Minerals and Metals (A5)",
             field_code="adpmm_a5",
             description="Abiotic Depletion Potential (Minerals and Metals) for module A5.",
             units="kg Sb eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3217,11 +4305,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Abiotic Depletion Potential (Minerals and Metals) for module B1.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Abiotic Depletion Potential (Minerals and Metals) (B1)",
+            attribute_name="Abiotic Depletion Potential - Minerals and Metals (B1)",
             field_code="adpmm_b1",
             description="Abiotic Depletion Potential (Minerals and Metals) for module B1.",
             units="kg Sb eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3229,11 +4318,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Abiotic Depletion Potential (Minerals and Metals) for module B2.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Abiotic Depletion Potential (Minerals and Metals) (B2)",
+            attribute_name="Abiotic Depletion Potential - Minerals and Metals (B2)",
             field_code="adpmm_b2",
             description="Abiotic Depletion Potential (Minerals and Metals) for module B2.",
             units="kg Sb eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3241,11 +4331,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Abiotic Depletion Potential (Minerals and Metals) for module B3.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Abiotic Depletion Potential (Minerals and Metals) (B3)",
+            attribute_name="Abiotic Depletion Potential - Minerals and Metals (B3)",
             field_code="adpmm_b3",
             description="Abiotic Depletion Potential (Minerals and Metals) for module B3.",
             units="kg Sb eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3253,11 +4344,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Abiotic Depletion Potential (Minerals and Metals) for module B4.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Abiotic Depletion Potential (Minerals and Metals) (B4)",
+            attribute_name="Abiotic Depletion Potential - Minerals and Metals (B4)",
             field_code="adpmm_b4",
             description="Abiotic Depletion Potential (Minerals and Metals) for module B4.",
             units="kg Sb eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3265,11 +4357,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Abiotic Depletion Potential (Minerals and Metals) for module B5.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Abiotic Depletion Potential (Minerals and Metals) (B5)",
+            attribute_name="Abiotic Depletion Potential - Minerals and Metals (B5)",
             field_code="adpmm_b5",
             description="Abiotic Depletion Potential (Minerals and Metals) for module B5.",
             units="kg Sb eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3277,11 +4370,38 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Abiotic Depletion Potential (Minerals and Metals) for module B6.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Abiotic Depletion Potential (Minerals and Metals) (B6)",
+            attribute_name="Abiotic Depletion Potential - Minerals and Metals (B6)",
             field_code="adpmm_b6",
             description="Abiotic Depletion Potential (Minerals and Metals) for module B6.",
             units="kg Sb eq",
             requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    adpmm_b7: Optional[Decimal] = Field(
+        default=None,
+        description="Abiotic Depletion Potential (Minerals and Metals) for module B7.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Photochemical Ozone Formation Potential (B7)",
+            field_code="adpmm_b7",
+            description="Abiotic Depletion Potential (Minerals and Metals) for module B7.",
+            units="kg Sb eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    adpmm_b8: Optional[Decimal] = Field(
+        default=None,
+        description="Abiotic Depletion Potential (Minerals and Metals) for module B8.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Photochemical Ozone Formation Potential (B8)",
+            field_code="adpmm_b8",
+            description="Abiotic Depletion Potential (Minerals and Metals) for module B8.",
+            units="kg Sb eq",
+            requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3289,11 +4409,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Abiotic Depletion Potential (Minerals and Metals) for module C1.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Abiotic Depletion Potential (Minerals and Metals) (C1)",
+            attribute_name="Abiotic Depletion Potential - Minerals and Metals (C1)",
             field_code="adpmm_c1",
             description="Abiotic Depletion Potential (Minerals and Metals) for module C1.",
             units="kg Sb eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3301,11 +4422,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Abiotic Depletion Potential (Minerals and Metals) for module C2.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Abiotic Depletion Potential (Minerals and Metals) (C2)",
+            attribute_name="Abiotic Depletion Potential - Minerals and Metals (C2)",
             field_code="adpmm_c2",
             description="Abiotic Depletion Potential (Minerals and Metals) for module C2.",
             units="kg Sb eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3313,11 +4435,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Abiotic Depletion Potential (Minerals and Metals) for module C3.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Abiotic Depletion Potential (Minerals and Metals) (C3)",
+            attribute_name="Abiotic Depletion Potential - Minerals and Metals (C3)",
             field_code="adpmm_c3",
             description="Abiotic Depletion Potential (Minerals and Metals) for module C3.",
             units="kg Sb eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3325,11 +4448,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Abiotic Depletion Potential (Minerals and Metals) for module C4.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Abiotic Depletion Potential (Minerals and Metals) (C4)",
+            attribute_name="Abiotic Depletion Potential - Minerals and Metals (C4)",
             field_code="adpmm_c4",
             description="Abiotic Depletion Potential (Minerals and Metals) for module C4.",
             units="kg Sb eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3337,11 +4461,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Abiotic Depletion Potential (Minerals and Metals) for module D.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Abiotic Depletion Potential (Minerals and Metals) (D)",
+            attribute_name="Abiotic Depletion Potential - Minerals and Metals (D)",
             field_code="adpmm_d",
             description="Abiotic Depletion Potential (Minerals and Metals) for module D.",
             units="kg Sb eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3349,11 +4474,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Abiotic Depletion Potential (Minerals and Metals) for module D1.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Abiotic Depletion Potential (Minerals and Metals) (D1)",
+            attribute_name="Abiotic Depletion Potential - Minerals and Metals (D1)",
             field_code="adpmm_d1",
             description="Abiotic Depletion Potential (Minerals and Metals) for module D1.",
             units="kg Sb eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3361,11 +4487,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Abiotic Depletion Potential (Minerals and Metals) for module D2.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Abiotic Depletion Potential (Minerals and Metals) (D2)",
+            attribute_name="Abiotic Depletion Potential - Minerals and Metals (D2)",
             field_code="adpmm_d2",
             description="Abiotic Depletion Potential (Minerals and Metals) for module D2.",
             units="kg Sb eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3373,11 +4500,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Total Abiotic Depletion Potential (Minerals and Metals).",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Total Abiotic Depletion Potential (Minerals and Metals)",
+            attribute_name="Total Abiotic Depletion Potential - Minerals and Metals",
             field_code="adpmm_total",
             description="Total Abiotic Depletion Potential (Minerals and Metals).",
             units="kg Sb eq",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3385,11 +4513,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Abiotic Depletion Potential (Fossil Fuels) for module A1-A3.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Abiotic Depletion Potential (Fossil Fuels) (A1-A3)",
+            attribute_name="Abiotic Depletion Potential - Fossil Fuels (A1-A3)",
             field_code="adpf_a1_a3",
             description="Abiotic Depletion Potential (Fossil Fuels) for module A1-A3.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3397,11 +4526,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Abiotic Depletion Potential (Fossil Fuels) for module A1.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Abiotic Depletion Potential (Fossil Fuels) (A1)",
+            attribute_name="Abiotic Depletion Potential - Fossil Fuels (A1)",
             field_code="adpf_a1",
             description="Abiotic Depletion Potential (Fossil Fuels) for module A1.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3409,11 +4539,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Abiotic Depletion Potential (Fossil Fuels) for module A2.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Abiotic Depletion Potential (Fossil Fuels) (A2)",
+            attribute_name="Abiotic Depletion Potential - Fossil Fuels (A2)",
             field_code="adpf_a2",
             description="Abiotic Depletion Potential (Fossil Fuels) for module A2.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3421,11 +4552,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Abiotic Depletion Potential (Fossil Fuels) for module A3.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Abiotic Depletion Potential (Fossil Fuels) (A3)",
+            attribute_name="Abiotic Depletion Potential - Fossil Fuels (A3)",
             field_code="adpf_a3",
             description="Abiotic Depletion Potential (Fossil Fuels) for module A3.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3433,11 +4565,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Abiotic Depletion Potential (Fossil Fuels) for module A4.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Abiotic Depletion Potential (Fossil Fuels) (A4)",
+            attribute_name="Abiotic Depletion Potential - Fossil Fuels (A4)",
             field_code="adpf_a4",
             description="Abiotic Depletion Potential (Fossil Fuels) for module A4.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3445,11 +4578,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Abiotic Depletion Potential (Fossil Fuels) for module A5.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Abiotic Depletion Potential (Fossil Fuels) (A5)",
+            attribute_name="Abiotic Depletion Potential - Fossil Fuels (A5)",
             field_code="adpf_a5",
             description="Abiotic Depletion Potential (Fossil Fuels) for module A5.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3457,11 +4591,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Abiotic Depletion Potential (Fossil Fuels) for module B1.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Abiotic Depletion Potential (Fossil Fuels) (B1)",
+            attribute_name="Abiotic Depletion Potential - Fossil Fuels (B1)",
             field_code="adpf_b1",
             description="Abiotic Depletion Potential (Fossil Fuels) for module B1.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3469,11 +4604,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Abiotic Depletion Potential (Fossil Fuels) for module B2.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Abiotic Depletion Potential (Fossil Fuels) (B2)",
+            attribute_name="Abiotic Depletion Potential - Fossil Fuels (B2)",
             field_code="adpf_b2",
             description="Abiotic Depletion Potential (Fossil Fuels) for module B2.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3481,11 +4617,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Abiotic Depletion Potential (Fossil Fuels) for module B3.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Abiotic Depletion Potential (Fossil Fuels) (B3)",
+            attribute_name="Abiotic Depletion Potential - Fossil Fuels (B3)",
             field_code="adpf_b3",
             description="Abiotic Depletion Potential (Fossil Fuels) for module B3.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3493,11 +4630,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Abiotic Depletion Potential (Fossil Fuels) for module B4.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Abiotic Depletion Potential (Fossil Fuels) (B4)",
+            attribute_name="Abiotic Depletion Potential - Fossil Fuels (B4)",
             field_code="adpf_b4",
             description="Abiotic Depletion Potential (Fossil Fuels) for module B4.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3505,11 +4643,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Abiotic Depletion Potential (Fossil Fuels) for module B5.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Abiotic Depletion Potential (Fossil Fuels) (B5)",
+            attribute_name="Abiotic Depletion Potential - Fossil Fuels (B5)",
             field_code="adpf_b5",
             description="Abiotic Depletion Potential (Fossil Fuels) for module B5.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3517,11 +4656,38 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Abiotic Depletion Potential (Fossil Fuels) for module B6.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Abiotic Depletion Potential (Fossil Fuels) (B6)",
+            attribute_name="Abiotic Depletion Potential - Fossil Fuels (B6)",
             field_code="adpf_b6",
             description="Abiotic Depletion Potential (Fossil Fuels) for module B6.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    adpf_b7: Optional[Decimal] = Field(
+        default=None,
+        description="Abiotic Depletion Potential (Fossil Fuels) for module B7.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Abiotic Depletion Potential - Fossil Fuels (B7)",
+            field_code="adpf_b7",
+            description="Abiotic Depletion Potential (Fossil Fuels) for module B7.",
+            units="MJ",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    adpf_b8: Optional[Decimal] = Field(
+        default=None,
+        description="Abiotic Depletion Potential (Fossil Fuels) for module B8.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Abiotic Depletion Potential - Fossil Fuels (B8)",
+            field_code="adpf_b8",
+            description="Abiotic Depletion Potential (Fossil Fuels) for module B8.",
+            units="MJ",
+            requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3529,11 +4695,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Abiotic Depletion Potential (Fossil Fuels) for module C1.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Abiotic Depletion Potential (Fossil Fuels) (C1)",
+            attribute_name="Abiotic Depletion Potential - Fossil Fuels (C1)",
             field_code="adpf_c1",
             description="Abiotic Depletion Potential (Fossil Fuels) for module C1.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3541,11 +4708,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Abiotic Depletion Potential (Fossil Fuels) for module C2.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Abiotic Depletion Potential (Fossil Fuels) (C2)",
+            attribute_name="Abiotic Depletion Potential - Fossil Fuels (C2)",
             field_code="adpf_c2",
             description="Abiotic Depletion Potential (Fossil Fuels) for module C2.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3553,11 +4721,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Abiotic Depletion Potential (Fossil Fuels) for module C3.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Abiotic Depletion Potential (Fossil Fuels) (C3)",
+            attribute_name="Abiotic Depletion Potential - Fossil Fuels (C3)",
             field_code="adpf_c3",
             description="Abiotic Depletion Potential (Fossil Fuels) for module C3.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3565,11 +4734,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Abiotic Depletion Potential (Fossil Fuels) for module C4.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Abiotic Depletion Potential (Fossil Fuels) (C4)",
+            attribute_name="Abiotic Depletion Potential - Fossil Fuels (C4)",
             field_code="adpf_c4",
             description="Abiotic Depletion Potential (Fossil Fuels) for module C4.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3577,11 +4747,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Abiotic Depletion Potential (Fossil Fuels) for module D.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Abiotic Depletion Potential (Fossil Fuels) (D)",
+            attribute_name="Abiotic Depletion Potential - Fossil Fuels (D)",
             field_code="adpf_d",
             description="Abiotic Depletion Potential (Fossil Fuels) for module D.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3589,11 +4760,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Abiotic Depletion Potential (Fossil Fuels) for module D1.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Abiotic Depletion Potential (Fossil Fuels) (D1)",
+            attribute_name="Abiotic Depletion Potential - Fossil Fuels (D1)",
             field_code="adpf_d1",
             description="Abiotic Depletion Potential (Fossil Fuels) for module D1.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3601,11 +4773,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Abiotic Depletion Potential (Fossil Fuels) for module D2.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Abiotic Depletion Potential (Fossil Fuels) (D2)",
+            attribute_name="Abiotic Depletion Potential - Fossil Fuels (D2)",
             field_code="adpf_d2",
             description="Abiotic Depletion Potential (Fossil Fuels) for module D2.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3618,6 +4791,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Total Abiotic Depletion Potential (Fossil Fuels).",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3628,8 +4802,9 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Water Depletion Potential (A1-A3)",
             field_code="wdp_a1_a3",
             description="Water Depletion Potential for module A1-A3.",
-            units="m3 world eq",
+            units="m3 world eq deprived",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3640,8 +4815,9 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Water Depletion Potential (A1)",
             field_code="wdp_a1",
             description="Water Depletion Potential for module A1.",
-            units="m3 world eq",
+            units="m3 world eq deprived",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3652,8 +4828,9 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Water Depletion Potential (A2)",
             field_code="wdp_a2",
             description="Water Depletion Potential for module A2.",
-            units="m3 world eq",
+            units="m3 world eq deprived",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3664,8 +4841,9 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Water Depletion Potential (A3)",
             field_code="wdp_a3",
             description="Water Depletion Potential for module A3.",
-            units="m3 world eq",
+            units="m3 world eq deprived",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3676,8 +4854,9 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Water Depletion Potential (A4)",
             field_code="wdp_a4",
             description="Water Depletion Potential for module A4.",
-            units="m3 world eq",
+            units="m3 world eq deprived",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3688,8 +4867,9 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Water Depletion Potential (A5)",
             field_code="wdp_a5",
             description="Water Depletion Potential for module A5.",
-            units="m3 world eq",
+            units="m3 world eq deprived",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3700,8 +4880,9 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Water Depletion Potential (B1)",
             field_code="wdp_b1",
             description="Water Depletion Potential for module B1.",
-            units="m3 world eq",
+            units="m3 world eq deprived",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3712,8 +4893,9 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Water Depletion Potential (B2)",
             field_code="wdp_b2",
             description="Water Depletion Potential for module B2.",
-            units="m3 world eq",
+            units="m3 world eq deprived",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3724,8 +4906,9 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Water Depletion Potential (B3)",
             field_code="wdp_b3",
             description="Water Depletion Potential for module B3.",
-            units="m3 world eq",
+            units="m3 world eq deprived",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3736,8 +4919,9 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Water Depletion Potential (B4)",
             field_code="wdp_b4",
             description="Water Depletion Potential for module B4.",
-            units="m3 world eq",
+            units="m3 world eq deprived",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3748,8 +4932,9 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Water Depletion Potential (B5)",
             field_code="wdp_b5",
             description="Water Depletion Potential for module B5.",
-            units="m3 world eq",
+            units="m3 world eq deprived",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3760,8 +4945,35 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Water Depletion Potential (B6)",
             field_code="wdp_b6",
             description="Water Depletion Potential for module B6.",
-            units="m3 world eq",
+            units="m3 world eq deprived",
             requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    wdp_b7: Optional[Decimal] = Field(
+        default=None,
+        description="Water Depletion Potential for module B7.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Abiotic Depletion Potential (Fossil Fuels) (B7)",
+            field_code="wdp_b7",
+            description="Water Depletion Potential for module B7.",
+            units="m3 world eq deprived",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    wdp_b8: Optional[Decimal] = Field(
+        default=None,
+        description="Water Depletion Potential for module B8.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Abiotic Depletion Potential (Fossil Fuels) (B8)",
+            field_code="wdp_b8",
+            description="Water Depletion Potential for module B8.",
+            units="m3 world eq deprived",
+            requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3772,8 +4984,9 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Water Depletion Potential (C1)",
             field_code="wdp_c1",
             description="Water Depletion Potential for module C1.",
-            units="m3 world eq",
+            units="m3 world eq deprived",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3784,8 +4997,9 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Water Depletion Potential (C2)",
             field_code="wdp_c2",
             description="Water Depletion Potential for module C2.",
-            units="m3 world eq",
+            units="m3 world eq deprived",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3796,8 +5010,9 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Water Depletion Potential (C3)",
             field_code="wdp_c3",
             description="Water Depletion Potential for module C3.",
-            units="m3 world eq",
+            units="m3 world eq deprived",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3808,8 +5023,9 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Water Depletion Potential (C4)",
             field_code="wdp_c4",
             description="Water Depletion Potential for module C4.",
-            units="m3 world eq",
+            units="m3 world eq deprived",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3820,8 +5036,9 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Water Depletion Potential (D)",
             field_code="wdp_d",
             description="Water Depletion Potential for module D.",
-            units="m3 world eq",
+            units="m3 world eq deprived",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3832,8 +5049,9 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Water Depletion Potential (D1)",
             field_code="wdp_d1",
             description="Water Depletion Potential for module D1.",
-            units="m3 world eq",
+            units="m3 world eq deprived",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3844,8 +5062,9 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Water Depletion Potential (D2)",
             field_code="wdp_d2",
             description="Water Depletion Potential for module D2.",
-            units="m3 world eq",
+            units="m3 world eq deprived",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3856,8 +5075,9 @@ class LCAResultsWideFullBase(SQLModel):
             attribute_name="Total Water Depletion Potential",
             field_code="wdp_total",
             description="Total Water Depletion Potential.",
-            units="m3 world eq",
+            units="m3 world eq deprived",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3865,11 +5085,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Primary Energy Renewable (Energy resources) for module A1-A3.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Primary Energy Renewable (Energy resources) (A1-A3)",
+            attribute_name="Primary Energy Renewable - Energy Resources (A1-A3)",
             field_code="pere_a1_a3",
             description="Primary Energy Renewable (Energy resources) for module A1-A3.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3877,11 +5098,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Primary Energy Renewable (Energy resources) for module A1.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Primary Energy Renewable (Energy resources) (A1)",
+            attribute_name="Primary Energy Renewable - Energy Resources (A1)",
             field_code="pere_a1",
             description="Primary Energy Renewable (Energy resources) for module A1.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3889,11 +5111,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Primary Energy Renewable (Energy resources) for module A2.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Primary Energy Renewable (Energy resources) (A2)",
+            attribute_name="Primary Energy Renewable - Energy Resources (A2)",
             field_code="pere_a2",
             description="Primary Energy Renewable (Energy resources) for module A2.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3901,11 +5124,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Primary Energy Renewable (Energy resources) for module A3.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Primary Energy Renewable (Energy resources) (A3)",
+            attribute_name="Primary Energy Renewable - Energy Resources (A3)",
             field_code="pere_a3",
             description="Primary Energy Renewable (Energy resources) for module A3.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3913,11 +5137,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Primary Energy Renewable (Energy resources) for module A4.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Primary Energy Renewable (Energy resources) (A4)",
+            attribute_name="Primary Energy Renewable - Energy Resources (A4)",
             field_code="pere_a4",
             description="Primary Energy Renewable (Energy resources) for module A4.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3925,11 +5150,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Primary Energy Renewable (Energy resources) for module A5.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Primary Energy Renewable (Energy resources) (A5)",
+            attribute_name="Primary Energy Renewable - Energy Resources (A5)",
             field_code="pere_a5",
             description="Primary Energy Renewable (Energy resources) for module A5.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3937,11 +5163,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Primary Energy Renewable (Energy resources) for module B1.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Primary Energy Renewable (Energy resources) (B1)",
+            attribute_name="Primary Energy Renewable - Energy Resources (B1)",
             field_code="pere_b1",
             description="Primary Energy Renewable (Energy resources) for module B1.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3949,11 +5176,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Primary Energy Renewable (Energy resources) for module B2.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Primary Energy Renewable (Energy resources) (B2)",
+            attribute_name="Primary Energy Renewable - Energy Resources (B2)",
             field_code="pere_b2",
             description="Primary Energy Renewable (Energy resources) for module B2.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3961,11 +5189,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Primary Energy Renewable (Energy resources) for module B3.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Primary Energy Renewable (Energy resources) (B3)",
+            attribute_name="Primary Energy Renewable - Energy Resources (B3)",
             field_code="pere_b3",
             description="Primary Energy Renewable (Energy resources) for module B3.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3973,11 +5202,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Primary Energy Renewable (Energy resources) for module B4.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Primary Energy Renewable (Energy resources) (B4)",
+            attribute_name="Primary Energy Renewable - Energy Resources (B4)",
             field_code="pere_b4",
             description="Primary Energy Renewable (Energy resources) for module B4.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3985,11 +5215,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Primary Energy Renewable (Energy resources) for module B5.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Primary Energy Renewable (Energy resources) (B5)",
+            attribute_name="Primary Energy Renewable - Energy Resources (B5)",
             field_code="pere_b5",
             description="Primary Energy Renewable (Energy resources) for module B5.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -3997,11 +5228,38 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Primary Energy Renewable (Energy resources) for module B6.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Primary Energy Renewable (Energy resources) (B6)",
+            attribute_name="Primary Energy Renewable - Energy Resources (B6)",
             field_code="pere_b6",
             description="Primary Energy Renewable (Energy resources) for module B6.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    pere_b7: Optional[Decimal] = Field(
+        default=None,
+        description="Primary Energy Renewable (Energy resources) for module B7.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Primary Energy Renewable - Energy Resources (B7)",
+            field_code="pere_b7",
+            description="Primary Energy Renewable (Energy resources) for module B7.",
+            units="MJ",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    pere_b8: Optional[Decimal] = Field(
+        default=None,
+        description="Primary Energy Renewable (Energy resources) for module B8.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Primary Energy Renewable - Energy Resources (B8)",
+            field_code="pere_b8",
+            description="Primary Energy Renewable (Energy resources) for module B8.",
+            units="MJ",
+            requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4009,11 +5267,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Primary Energy Renewable (Energy resources) for module C1.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Primary Energy Renewable (Energy resources) (C1)",
+            attribute_name="Primary Energy Renewable - Energy Resources (C1)",
             field_code="pere_c1",
             description="Primary Energy Renewable (Energy resources) for module C1.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4021,11 +5280,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Primary Energy Renewable (Energy resources) for module C2.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Primary Energy Renewable (Energy resources) (C2)",
+            attribute_name="Primary Energy Renewable - Energy Resources (C2)",
             field_code="pere_c2",
             description="Primary Energy Renewable (Energy resources) for module C2.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4033,11 +5293,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Primary Energy Renewable (Energy resources) for module C3.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Primary Energy Renewable (Energy resources) (C3)",
+            attribute_name="Primary Energy Renewable - Energy Resources (C3)",
             field_code="pere_c3",
             description="Primary Energy Renewable (Energy resources) for module C3.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4045,11 +5306,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Primary Energy Renewable (Energy resources) for module C4.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Primary Energy Renewable (Energy resources) (C4)",
+            attribute_name="Primary Energy Renewable - Energy Resources (C4)",
             field_code="pere_c4",
             description="Primary Energy Renewable (Energy resources) for module C4.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4057,11 +5319,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Primary Energy Renewable (Energy resources) for module D.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Primary Energy Renewable (Energy resources) (D)",
+            attribute_name="Primary Energy Renewable - Energy Resources (D)",
             field_code="pere_d",
             description="Primary Energy Renewable (Energy resources) for module D.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4069,11 +5332,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Primary Energy Renewable (Energy resources) for module D1.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Primary Energy Renewable (Energy resources) (D1)",
+            attribute_name="Primary Energy Renewable - Energy Resources (D1)",
             field_code="pere_d1",
             description="Primary Energy Renewable (Energy resources) for module D1.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4081,11 +5345,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Primary Energy Renewable (Energy resources) for module D2.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Primary Energy Renewable (Energy resources) (D2)",
+            attribute_name="Primary Energy Renewable - Energy Resources (D2)",
             field_code="pere_d2",
             description="Primary Energy Renewable (Energy resources) for module D2.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4093,11 +5358,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Total Primary Energy Renewable (Energy resources).",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Total Primary Energy Renewable (Energy resources)",
+            attribute_name="Total Primary Energy Renewable - Energy Resources",
             field_code="pere_total",
             description="Total Primary Energy Renewable (Energy resources).",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4105,11 +5371,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Primary Energy Non-Renewable (Energy resources) for module A1-A3.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Primary Energy Non-Renewable (Energy resources) (A1-A3)",
+            attribute_name="Primary Energy Non-Renewable - Energy Resources (A1-A3)",
             field_code="penre_a1_a3",
             description="Primary Energy Non-Renewable (Energy resources) for module A1-A3.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4117,11 +5384,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Primary Energy Non-Renewable (Energy resources) for module A1.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Primary Energy Non-Renewable (Energy resources) (A1)",
+            attribute_name="Primary Energy Non-Renewable - Energy Resources (A1)",
             field_code="penre_a1",
             description="Primary Energy Non-Renewable (Energy resources) for module A1.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4129,11 +5397,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Primary Energy Non-Renewable (Energy resources) for module A2.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Primary Energy Non-Renewable (Energy resources) (A2)",
+            attribute_name="Primary Energy Non-Renewable - Energy Resources (A2)",
             field_code="penre_a2",
             description="Primary Energy Non-Renewable (Energy resources) for module A2.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4141,11 +5410,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Primary Energy Non-Renewable (Energy resources) for module A3.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Primary Energy Non-Renewable (Energy resources) (A3)",
+            attribute_name="Primary Energy Non-Renewable - Energy Resources (A3)",
             field_code="penre_a3",
             description="Primary Energy Non-Renewable (Energy resources) for module A3.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4153,11 +5423,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Primary Energy Non-Renewable (Energy resources) for module A4.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Primary Energy Non-Renewable (Energy resources) (A4)",
+            attribute_name="Primary Energy Non-Renewable - Energy Resources (A4)",
             field_code="penre_a4",
             description="Primary Energy Non-Renewable (Energy resources) for module A4.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4165,11 +5436,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Primary Energy Non-Renewable (Energy resources) for module A5.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Primary Energy Non-Renewable (Energy resources) (A5)",
+            attribute_name="Primary Energy Non-Renewable - Energy Resources (A5)",
             field_code="penre_a5",
             description="Primary Energy Non-Renewable (Energy resources) for module A5.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4177,11 +5449,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Primary Energy Non-Renewable (Energy resources) for module B1.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Primary Energy Non-Renewable (Energy resources) (B1)",
+            attribute_name="Primary Energy Non-Renewable - Energy Resources (B1)",
             field_code="penre_b1",
             description="Primary Energy Non-Renewable (Energy resources) for module B1.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4189,11 +5462,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Primary Energy Non-Renewable (Energy resources) for module B2.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Primary Energy Non-Renewable (Energy resources) (B2)",
+            attribute_name="Primary Energy Non-Renewable - Energy Resources (B2)",
             field_code="penre_b2",
             description="Primary Energy Non-Renewable (Energy resources) for module B2.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4201,11 +5475,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Primary Energy Non-Renewable (Energy resources) for module B3.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Primary Energy Non-Renewable (Energy resources) (B3)",
+            attribute_name="Primary Energy Non-Renewable - Energy Resources (B3)",
             field_code="penre_b3",
             description="Primary Energy Non-Renewable (Energy resources) for module B3.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4213,11 +5488,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Primary Energy Non-Renewable (Energy resources) for module B4.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Primary Energy Non-Renewable (Energy resources) (B4)",
+            attribute_name="Primary Energy Non-Renewable - Energy Resources (B4)",
             field_code="penre_b4",
             description="Primary Energy Non-Renewable (Energy resources) for module B4.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4225,11 +5501,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Primary Energy Non-Renewable (Energy resources) for module B5.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Primary Energy Non-Renewable (Energy resources) (B5)",
+            attribute_name="Primary Energy Non-Renewable - Energy Resources (B5)",
             field_code="penre_b5",
             description="Primary Energy Non-Renewable (Energy resources) for module B5.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4237,11 +5514,38 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Primary Energy Non-Renewable (Energy resources) for module B6.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Primary Energy Non-Renewable (Energy resources) (B6)",
+            attribute_name="Primary Energy Non-Renewable - Energy Resources (B6)",
             field_code="penre_b6",
             description="Primary Energy Non-Renewable (Energy resources) for module B6.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    penre_b7: Optional[Decimal] = Field(
+        default=None,
+        description="Primary Energy Non-Renewable (Energy resources) for module B7.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Primary Energy Non-Renewable - Energy Resources (B7)",
+            field_code="penre_b7",
+            description="Primary Energy Non-Renewable (Energy resources) for module B7.",
+            units="MJ",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    penre_b8: Optional[Decimal] = Field(
+        default=None,
+        description="Primary Energy Non-Renewable (Energy resources) for module B8.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Primary Energy Non-Renewable - Energy Resources (B8)",
+            field_code="penre_b8",
+            description="Primary Energy Non-Renewable (Energy resources) for module B8.",
+            units="MJ",
+            requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4249,11 +5553,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Primary Energy Non-Renewable (Energy resources) for module C1.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Primary Energy Non-Renewable (Energy resources) (C1)",
+            attribute_name="Primary Energy Non-Renewable - Energy Resources (C1)",
             field_code="penre_c1",
             description="Primary Energy Non-Renewable (Energy resources) for module C1.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4261,11 +5566,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Primary Energy Non-Renewable (Energy resources) for module C2.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Primary Energy Non-Renewable (Energy resources) (C2)",
+            attribute_name="Primary Energy Non-Renewable - Energy Resources (C2)",
             field_code="penre_c2",
             description="Primary Energy Non-Renewable (Energy resources) for module C2.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4273,11 +5579,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Primary Energy Non-Renewable (Energy resources) for module C3.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Primary Energy Non-Renewable (Energy resources) (C3)",
+            attribute_name="Primary Energy Non-Renewable - Energy Resources (C3)",
             field_code="penre_c3",
             description="Primary Energy Non-Renewable (Energy resources) for module C3.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4285,11 +5592,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Primary Energy Non-Renewable (Energy resources) for module C4.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Primary Energy Non-Renewable (Energy resources) (C4)",
+            attribute_name="Primary Energy Non-Renewable - Energy Resources (C4)",
             field_code="penre_c4",
             description="Primary Energy Non-Renewable (Energy resources) for module C4.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4297,11 +5605,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Primary Energy Non-Renewable (Energy resources) for module D.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Primary Energy Non-Renewable (Energy resources) (D)",
+            attribute_name="Primary Energy Non-Renewable - Energy Resources (D)",
             field_code="penre_d",
             description="Primary Energy Non-Renewable (Energy resources) for module D.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4309,11 +5618,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Primary Energy Non-Renewable (Energy resources) for module D1.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Primary Energy Non-Renewable (Energy resources) (D1)",
+            attribute_name="Primary Energy Non-Renewable - Energy Resources (D1)",
             field_code="penre_d1",
             description="Primary Energy Non-Renewable (Energy resources) for module D1.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4321,11 +5631,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Primary Energy Non-Renewable (Energy resources) for module D2.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Primary Energy Non-Renewable (Energy resources) (D2)",
+            attribute_name="Primary Energy Non-Renewable - Energy Resources (D2)",
             field_code="penre_d2",
             description="Primary Energy Non-Renewable (Energy resources) for module D2.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4333,11 +5644,12 @@ class LCAResultsWideFullBase(SQLModel):
         default=None,
         description="Total Primary Energy Non-Renewable (Energy resources).",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Total Primary Energy Non-Renewable (Energy resources)",
+            attribute_name="Total Primary Energy Non-Renewable - Energy Resources",
             field_code="penre_total",
             description="Total Primary Energy Non-Renewable (Energy resources).",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4350,6 +5662,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Renewable Total for module A1-A3.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4362,6 +5675,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Renewable Total for module A1.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4374,6 +5688,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Renewable Total for module A2.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4386,6 +5701,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Renewable Total for module A3.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4398,6 +5714,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Renewable Total for module A4.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4410,6 +5727,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Renewable Total for module A5.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4422,6 +5740,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Renewable Total for module B1.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4434,6 +5753,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Renewable Total for module B2.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4446,6 +5766,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Renewable Total for module B3.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4458,6 +5779,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Renewable Total for module B4.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4470,6 +5792,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Renewable Total for module B5.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4482,6 +5805,33 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Renewable Total for module B6.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    pert_b7: Optional[Decimal] = Field(
+        default=None,
+        description="Primary Energy Renewable Total for module B7.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Primary Energy Renewable (Energy resources) (B7)",
+            field_code="pert_b7",
+            description="Primary Energy Renewable Total for module B7.",
+            units="MJ",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    pert_b8: Optional[Decimal] = Field(
+        default=None,
+        description="Primary Energy Renewable Total for module B8.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Primary Energy Renewable (Energy resources) (B8)",
+            field_code="pert_b8",
+            description="Primary Energy Renewable Total for module B8.",
+            units="MJ",
+            requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4494,6 +5844,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Renewable Total for module C1.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4506,6 +5857,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Renewable Total for module C2.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4518,6 +5870,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Renewable Total for module C3.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4530,6 +5883,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Renewable Total for module C4.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4542,6 +5896,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Renewable Total for module D.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4554,6 +5909,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Renewable Total for module D1.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4566,6 +5922,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Renewable Total for module D2.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4578,6 +5935,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Total Primary Energy Renewable Total.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4590,6 +5948,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Non-Renewable Total for module A1-A3.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4602,6 +5961,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Non-Renewable Total for module A1.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4614,6 +5974,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Non-Renewable Total for module A2.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4626,6 +5987,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Non-Renewable Total for module A3.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4638,6 +6000,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Non-Renewable Total for module A4.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4650,6 +6013,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Non-Renewable Total for module A5.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4662,6 +6026,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Non-Renewable Total for module B1.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4674,6 +6039,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Non-Renewable Total for module B2.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4686,6 +6052,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Non-Renewable Total for module B3.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4698,6 +6065,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Non-Renewable Total for module B4.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4710,6 +6078,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Non-Renewable Total for module B5.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4722,6 +6091,33 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Non-Renewable Total for module B6.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    penrt_b7: Optional[Decimal] = Field(
+        default=None,
+        description="Primary Energy Non-Renewable Total for module B7.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Primary Energy Non-Renewable (Energy resources) (B7)",
+            field_code="penrt_b7",
+            description="Primary Energy Non-Renewable Total for module B7.",
+            units="MJ",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    penrt_b8: Optional[Decimal] = Field(
+        default=None,
+        description="Primary Energy Non-Renewable Total for module B8.",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Primary Energy Non-Renewable (Energy resources) (B8)",
+            field_code="penrt_b8",
+            description="Primary Energy Non-Renewable Total for module B8.",
+            units="MJ",
+            requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4734,6 +6130,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Non-Renewable Total for module C1.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4746,6 +6143,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Non-Renewable Total for module C2.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4758,6 +6156,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Non-Renewable Total for module C3.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4770,6 +6169,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Non-Renewable Total for module C4.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4782,6 +6182,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Non-Renewable Total for module D.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4794,6 +6195,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Non-Renewable Total for module D1.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4806,6 +6208,7 @@ class LCAResultsWideFullBase(SQLModel):
             description="Primary Energy Non-Renewable Total for module D2.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
         ),
     )
 
@@ -4818,5 +6221,1722 @@ class LCAResultsWideFullBase(SQLModel):
             description="Total Primary Energy Non-Renewable Total.",
             units="MJ",
             requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    pm_a1_a3: Optional[Decimal] = Field(
+        default=None,
+        description="Particulate Matter Emissions",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Particulate Matter Emissions (A1-A3)",
+            field_code="pm_a1_a3",
+            description="Particulate Matter Emissions",
+            units="disease incidence",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    pm_a1: Optional[Decimal] = Field(
+        default=None,
+        description="Particulate Matter Emissions",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Particulate Matter Emissions (A1)",
+            field_code="pm_a1",
+            description="Particulate Matter Emissions",
+            units="disease incidence",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    pm_a2: Optional[Decimal] = Field(
+        default=None,
+        description="Particulate Matter Emissions",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Particulate Matter Emissions (A2)",
+            field_code="pm_a2",
+            description="Particulate Matter Emissions",
+            units="disease incidence",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    pm_a3: Optional[Decimal] = Field(
+        default=None,
+        description="Particulate Matter Emissions",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Particulate Matter Emissions (A3)",
+            field_code="pm_a3",
+            description="Particulate Matter Emissions",
+            units="disease incidence",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    pm_a4: Optional[Decimal] = Field(
+        default=None,
+        description="Particulate Matter Emissions",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Particulate Matter Emissions (A4)",
+            field_code="pm_a4",
+            description="Particulate Matter Emissions",
+            units="disease incidence",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    pm_a5: Optional[Decimal] = Field(
+        default=None,
+        description="Particulate Matter Emissions",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Particulate Matter Emissions (A5)",
+            field_code="pm_a5",
+            description="Particulate Matter Emissions",
+            units="disease incidence",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    pm_b1: Optional[Decimal] = Field(
+        default=None,
+        description="Particulate Matter Emissions",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Particulate Matter Emissions (B1)",
+            field_code="pm_b1",
+            description="Particulate Matter Emissions",
+            units="disease incidence",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    pm_b2: Optional[Decimal] = Field(
+        default=None,
+        description="Particulate Matter Emissions",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Particulate Matter Emissions (B2)",
+            field_code="pm_b2",
+            description="Particulate Matter Emissions",
+            units="disease incidence",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    pm_b3: Optional[Decimal] = Field(
+        default=None,
+        description="Particulate Matter Emissions",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Particulate Matter Emissions (B3)",
+            field_code="pm_b3",
+            description="Particulate Matter Emissions",
+            units="disease incidence",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    pm_b4: Optional[Decimal] = Field(
+        default=None,
+        description="Particulate Matter Emissions",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Particulate Matter Emissions (B4)",
+            field_code="pm_b4",
+            description="Particulate Matter Emissions",
+            units="disease incidence",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    pm_b5: Optional[Decimal] = Field(
+        default=None,
+        description="Particulate Matter Emissions",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Particulate Matter Emissions (B5)",
+            field_code="pm_b5",
+            description="Particulate Matter Emissions",
+            units="disease incidence",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    pm_b6: Optional[Decimal] = Field(
+        default=None,
+        description="Particulate Matter Emissions",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Particulate Matter Emissions (B6)",
+            field_code="pm_b6",
+            description="Particulate Matter Emissions",
+            units="disease incidence",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    pm_b7: Optional[Decimal] = Field(
+        default=None,
+        description="Particulate Matter Emissions",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Particulate Matter Emissions (B7)",
+            field_code="pm_b7",
+            description="Particulate Matter Emissions",
+            units="disease incidence",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    pm_b8: Optional[Decimal] = Field(
+        default=None,
+        description="Particulate Matter Emissions",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Particulate Matter Emissions (B8)",
+            field_code="pm_b8",
+            description="Particulate Matter Emissions",
+            units="disease incidence",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    pm_c1: Optional[Decimal] = Field(
+        default=None,
+        description="Particulate Matter Emissions",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Particulate Matter Emissions (C1)",
+            field_code="pm_c1",
+            description="Particulate Matter Emissions",
+            units="disease incidence",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    pm_c2: Optional[Decimal] = Field(
+        default=None,
+        description="Particulate Matter Emissions",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Particulate Matter Emissions (C2)",
+            field_code="pm_c2",
+            description="Particulate Matter Emissions",
+            units="disease incidence",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    pm_c3: Optional[Decimal] = Field(
+        default=None,
+        description="Particulate Matter Emissions",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Particulate Matter Emissions (C3)",
+            field_code="pm_c3",
+            description="Particulate Matter Emissions",
+            units="disease incidence",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    pm_c4: Optional[Decimal] = Field(
+        default=None,
+        description="Particulate Matter Emissions",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Particulate Matter Emissions (C4)",
+            field_code="pm_c4",
+            description="Particulate Matter Emissions",
+            units="disease incidence",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    pm_d: Optional[Decimal] = Field(
+        default=None,
+        description="Particulate Matter Emissions",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Particulate Matter Emissions (D)",
+            field_code="pm_d",
+            description="Particulate Matter Emissions",
+            units="disease incidence",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    pm_d1: Optional[Decimal] = Field(
+        default=None,
+        description="Particulate Matter Emissions",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Particulate Matter Emissions (D1)",
+            field_code="pm_d1",
+            description="Particulate Matter Emissions",
+            units="disease incidence",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    pm_d2: Optional[Decimal] = Field(
+        default=None,
+        description="Particulate Matter Emissions",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Particulate Matter Emissions (D2)",
+            field_code="pm_d2",
+            description="Particulate Matter Emissions",
+            units="disease incidence",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    pm_total: Optional[Decimal] = Field(
+        default=None,
+        description="Particulate Matter Emissions",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Particulate Matter Emissions (total)",
+            field_code="pm_total",
+            description="Particulate Matter Emissions",
+            units="disease incidence",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    irp_a1_a3: Optional[Decimal] = Field(
+        default=None,
+        description="Ionising radiation, human health",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Ionising Radiation - Human Health (A1-A3)",
+            field_code="irp_a1_a3",
+            description="Ionising radiation, human health",
+            units="kBq U235 eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    irp_a1: Optional[Decimal] = Field(
+        default=None,
+        description="Ionising radiation, human health",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Ionising Radiation - Human Health (A1)",
+            field_code="irp_a1",
+            description="Ionising radiation, human health",
+            units="kBq U235 eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    irp_a2: Optional[Decimal] = Field(
+        default=None,
+        description="Ionising radiation, human health",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Ionising Radiation - Human Health (A2)",
+            field_code="irp_a2",
+            description="Ionising radiation, human health",
+            units="kBq U235 eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    irp_a3: Optional[Decimal] = Field(
+        default=None,
+        description="Ionising radiation, human health",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Ionising Radiation - Human Health (A3)",
+            field_code="irp_a3",
+            description="Ionising radiation, human health",
+            units="kBq U235 eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    irp_a4: Optional[Decimal] = Field(
+        default=None,
+        description="Ionising radiation, human health",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Ionising Radiation - Human Health (A4)",
+            field_code="irp_a4",
+            description="Ionising radiation, human health",
+            units="kBq U235 eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    irp_a5: Optional[Decimal] = Field(
+        default=None,
+        description="Ionising radiation, human health",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Ionising Radiation - Human Health (A5)",
+            field_code="irp_a5",
+            description="Ionising radiation, human health",
+            units="kBq U235 eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    irp_b1: Optional[Decimal] = Field(
+        default=None,
+        description="Ionising radiation, human health",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Ionising Radiation - Human Health (B1)",
+            field_code="irp_b1",
+            description="Ionising radiation, human health",
+            units="kBq U235 eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    irp_b2: Optional[Decimal] = Field(
+        default=None,
+        description="Ionising radiation, human health",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Ionising Radiation - Human Health (B2)",
+            field_code="irp_b2",
+            description="Ionising radiation, human health",
+            units="kBq U235 eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    irp_b3: Optional[Decimal] = Field(
+        default=None,
+        description="Ionising radiation, human health",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Ionising Radiation - Human Health (B3)",
+            field_code="irp_b3",
+            description="Ionising radiation, human health",
+            units="kBq U235 eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    irp_b4: Optional[Decimal] = Field(
+        default=None,
+        description="Ionising radiation, human health",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Ionising Radiation - Human Health (B4)",
+            field_code="irp_b4",
+            description="Ionising radiation, human health",
+            units="kBq U235 eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    irp_b5: Optional[Decimal] = Field(
+        default=None,
+        description="Ionising radiation, human health",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Ionising Radiation - Human Health (B5)",
+            field_code="irp_b5",
+            description="Ionising radiation, human health",
+            units="kBq U235 eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    irp_b6: Optional[Decimal] = Field(
+        default=None,
+        description="Ionising radiation, human health",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Ionising Radiation - Human Health (B6)",
+            field_code="irp_b6",
+            description="Ionising radiation, human health",
+            units="kBq U235 eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    irp_b7: Optional[Decimal] = Field(
+        default=None,
+        description="Ionising radiation, human health",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Ionising Radiation - Human Health (B7)",
+            field_code="irp_b7",
+            description="Ionising radiation, human health",
+            units="kBq U235 eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    irp_b8: Optional[Decimal] = Field(
+        default=None,
+        description="Ionising radiation, human health",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Ionising Radiation - Human Health (B8)",
+            field_code="irp_b8",
+            description="Ionising radiation, human health",
+            units="kBq U235 eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    irp_c1: Optional[Decimal] = Field(
+        default=None,
+        description="Ionising radiation, human health",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Ionising Radiation - Human Health (C1)",
+            field_code="irp_c1",
+            description="Ionising radiation, human health",
+            units="kBq U235 eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    irp_c2: Optional[Decimal] = Field(
+        default=None,
+        description="Ionising radiation, human health",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Ionising Radiation - Human Health (C2)",
+            field_code="irp_c2",
+            description="Ionising radiation, human health",
+            units="kBq U235 eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    irp_c3: Optional[Decimal] = Field(
+        default=None,
+        description="Ionising radiation, human health",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Ionising Radiation - Human Health (C3)",
+            field_code="irp_c3",
+            description="Ionising radiation, human health",
+            units="kBq U235 eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    irp_c4: Optional[Decimal] = Field(
+        default=None,
+        description="Ionising radiation, human health",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Ionising Radiation - Human Health (C4)",
+            field_code="irp_c4",
+            description="Ionising radiation, human health",
+            units="kBq U235 eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    irp_d: Optional[Decimal] = Field(
+        default=None,
+        description="Ionising radiation, human health",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Ionising Radiation - Human Health (D)",
+            field_code="irp_d",
+            description="Ionising radiation, human health",
+            units="kBq U235 eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    irp_d1: Optional[Decimal] = Field(
+        default=None,
+        description="Ionising radiation, human health",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Ionising Radiation - Human Health (D1)",
+            field_code="irp_d1",
+            description="Ionising radiation, human health",
+            units="kBq U235 eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    irp_d2: Optional[Decimal] = Field(
+        default=None,
+        description="Ionising radiation, human health",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Ionising Radiation - Human Health (D2)",
+            field_code="irp_d2",
+            description="Ionising radiation, human health",
+            units="kBq U235 eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    irp_total: Optional[Decimal] = Field(
+        default=None,
+        description="Ionising radiation, human health",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Ionising Radiation - Human Health (total)",
+            field_code="irp_total",
+            description="Ionising radiation, human health",
+            units="kBq U235 eq",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    etp_fw_a1_a3: Optional[Decimal] = Field(
+        default=None,
+        description="Ecotoxicity - Freshwater",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Ecotoxicity - Freshwater (A1-A3)",
+            field_code="etp_fw_a1_a3",
+            description="Ecotoxicity - Freshwater",
+            units="CTUe",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    etp_fw_a1: Optional[Decimal] = Field(
+        default=None,
+        description="Ecotoxicity - Freshwater",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Ecotoxicity - Freshwater (A1)",
+            field_code="etp_fw_a1",
+            description="Ecotoxicity - Freshwater",
+            units="CTUe",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    etp_fw_a2: Optional[Decimal] = Field(
+        default=None,
+        description="Ecotoxicity - Freshwater",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Ecotoxicity - Freshwater (A2)",
+            field_code="etp_fw_a2",
+            description="Ecotoxicity - Freshwater",
+            units="CTUe",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    etp_fw_a3: Optional[Decimal] = Field(
+        default=None,
+        description="Ecotoxicity - Freshwater",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Ecotoxicity - Freshwater (A3)",
+            field_code="etp_fw_a3",
+            description="Ecotoxicity - Freshwater",
+            units="CTUe",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    etp_fw_a4: Optional[Decimal] = Field(
+        default=None,
+        description="Ecotoxicity - Freshwater",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Ecotoxicity - Freshwater (A4)",
+            field_code="etp_fw_a4",
+            description="Ecotoxicity - Freshwater",
+            units="CTUe",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    etp_fw_a5: Optional[Decimal] = Field(
+        default=None,
+        description="Ecotoxicity - Freshwater",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Ecotoxicity - Freshwater (A5)",
+            field_code="etp_fw_a5",
+            description="Ecotoxicity - Freshwater",
+            units="CTUe",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    etp_fw_b1: Optional[Decimal] = Field(
+        default=None,
+        description="Ecotoxicity - Freshwater",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Ecotoxicity - Freshwater (B1)",
+            field_code="etp_fw_b1",
+            description="Ecotoxicity - Freshwater",
+            units="CTUe",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    etp_fw_b2: Optional[Decimal] = Field(
+        default=None,
+        description="Ecotoxicity - Freshwater",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Ecotoxicity - Freshwater (B2)",
+            field_code="etp_fw_b2",
+            description="Ecotoxicity - Freshwater",
+            units="CTUe",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    etp_fw_b3: Optional[Decimal] = Field(
+        default=None,
+        description="Ecotoxicity - Freshwater",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Ecotoxicity - Freshwater (B3)",
+            field_code="etp_fw_b3",
+            description="Ecotoxicity - Freshwater",
+            units="CTUe",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    etp_fw_b4: Optional[Decimal] = Field(
+        default=None,
+        description="Ecotoxicity - Freshwater",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Ecotoxicity - Freshwater (B4)",
+            field_code="etp_fw_b4",
+            description="Ecotoxicity - Freshwater",
+            units="CTUe",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    etp_fw_b5: Optional[Decimal] = Field(
+        default=None,
+        description="Ecotoxicity - Freshwater",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Ecotoxicity - Freshwater (B5)",
+            field_code="etp_fw_b5",
+            description="Ecotoxicity - Freshwater",
+            units="CTUe",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    etp_fw_b6: Optional[Decimal] = Field(
+        default=None,
+        description="Ecotoxicity - Freshwater",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Ecotoxicity - Freshwater (B6)",
+            field_code="etp_fw_b6",
+            description="Ecotoxicity - Freshwater",
+            units="CTUe",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    etp_fw_b7: Optional[Decimal] = Field(
+        default=None,
+        description="Ecotoxicity - Freshwater",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Ecotoxicity - Freshwater (B7)",
+            field_code="etp_fw_b7",
+            description="Ecotoxicity - Freshwater",
+            units="CTUe",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    etp_fw_b8: Optional[Decimal] = Field(
+        default=None,
+        description="Ecotoxicity - Freshwater",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Ecotoxicity - Freshwater (B8)",
+            field_code="etp_fw_b8",
+            description="Ecotoxicity - Freshwater",
+            units="CTUe",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    etp_fw_c1: Optional[Decimal] = Field(
+        default=None,
+        description="Ecotoxicity - Freshwater",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Ecotoxicity - Freshwater (C1)",
+            field_code="etp_fw_c1",
+            description="Ecotoxicity - Freshwater",
+            units="CTUe",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    etp_fw_c2: Optional[Decimal] = Field(
+        default=None,
+        description="Ecotoxicity - Freshwater",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Ecotoxicity - Freshwater (C2)",
+            field_code="etp_fw_c2",
+            description="Ecotoxicity - Freshwater",
+            units="CTUe",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    etp_fw_c3: Optional[Decimal] = Field(
+        default=None,
+        description="Ecotoxicity - Freshwater",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Ecotoxicity - Freshwater (C3)",
+            field_code="etp_fw_c3",
+            description="Ecotoxicity - Freshwater",
+            units="CTUe",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    etp_fw_c4: Optional[Decimal] = Field(
+        default=None,
+        description="Ecotoxicity - Freshwater",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Ecotoxicity - Freshwater (C4)",
+            field_code="etp_fw_c4",
+            description="Ecotoxicity - Freshwater",
+            units="CTUe",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    etp_fw_d: Optional[Decimal] = Field(
+        default=None,
+        description="Ecotoxicity - Freshwater",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Ecotoxicity - Freshwater (D)",
+            field_code="etp_fw_d",
+            description="Ecotoxicity - Freshwater",
+            units="CTUe",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    etp_fw_d1: Optional[Decimal] = Field(
+        default=None,
+        description="Ecotoxicity - Freshwater",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Ecotoxicity - Freshwater (D1)",
+            field_code="etp_fw_d1",
+            description="Ecotoxicity - Freshwater",
+            units="CTUe",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    etp_fw_d2: Optional[Decimal] = Field(
+        default=None,
+        description="Ecotoxicity - Freshwater",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Ecotoxicity - Freshwater (D2)",
+            field_code="etp_fw_d2",
+            description="Ecotoxicity - Freshwater",
+            units="CTUe",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    etp_fw_total: Optional[Decimal] = Field(
+        default=None,
+        description="Ecotoxicity - Freshwater",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Ecotoxicity - Freshwater (total)",
+            field_code="etp_fw_total",
+            description="Ecotoxicity - Freshwater",
+            units="CTUe",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    htp_c_a1_a3: Optional[Decimal] = Field(
+        default=None,
+        description="Human Toxicity - Cancer Effects",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Human Toxicity - Cancer Effects (A1-A3)",
+            field_code="htp_c_a1_a3",
+            description="Human Toxicity - Cancer Effects",
+            units="CTUh",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    htp_c_a1: Optional[Decimal] = Field(
+        default=None,
+        description="Human Toxicity - Cancer Effects",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Human Toxicity - Cancer Effects (A1)",
+            field_code="htp_c_a1",
+            description="Human Toxicity - Cancer Effects",
+            units="CTUh",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    htp_c_a2: Optional[Decimal] = Field(
+        default=None,
+        description="Human Toxicity - Cancer Effects",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Human Toxicity - Cancer Effects (A2)",
+            field_code="htp_c_a2",
+            description="Human Toxicity - Cancer Effects",
+            units="CTUh",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    htp_c_a3: Optional[Decimal] = Field(
+        default=None,
+        description="Human Toxicity - Cancer Effects",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Human Toxicity - Cancer Effects (A3)",
+            field_code="htp_c_a3",
+            description="Human Toxicity - Cancer Effects",
+            units="CTUh",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    htp_c_a4: Optional[Decimal] = Field(
+        default=None,
+        description="Human Toxicity - Cancer Effects",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Human Toxicity - Cancer Effects (A4)",
+            field_code="htp_c_a4",
+            description="Human Toxicity - Cancer Effects",
+            units="CTUh",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    htp_c_a5: Optional[Decimal] = Field(
+        default=None,
+        description="Human Toxicity - Cancer Effects",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Human Toxicity - Cancer Effects (A5)",
+            field_code="htp_c_a5",
+            description="Human Toxicity - Cancer Effects",
+            units="CTUh",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    htp_c_b1: Optional[Decimal] = Field(
+        default=None,
+        description="Human Toxicity - Cancer Effects",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Human Toxicity - Cancer Effects (B1)",
+            field_code="htp_c_b1",
+            description="Human Toxicity - Cancer Effects",
+            units="CTUh",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    htp_c_b2: Optional[Decimal] = Field(
+        default=None,
+        description="Human Toxicity - Cancer Effects",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Human Toxicity - Cancer Effects (B2)",
+            field_code="htp_c_b2",
+            description="Human Toxicity - Cancer Effects",
+            units="CTUh",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    htp_c_b3: Optional[Decimal] = Field(
+        default=None,
+        description="Human Toxicity - Cancer Effects",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Human Toxicity - Cancer Effects (B3)",
+            field_code="htp_c_b3",
+            description="Human Toxicity - Cancer Effects",
+            units="CTUh",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    htp_c_b4: Optional[Decimal] = Field(
+        default=None,
+        description="Human Toxicity - Cancer Effects",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Human Toxicity - Cancer Effects (B4)",
+            field_code="htp_c_b4",
+            description="Human Toxicity - Cancer Effects",
+            units="CTUh",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    htp_c_b5: Optional[Decimal] = Field(
+        default=None,
+        description="Human Toxicity - Cancer Effects",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Human Toxicity - Cancer Effects (B5)",
+            field_code="htp_c_b5",
+            description="Human Toxicity - Cancer Effects",
+            units="CTUh",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    htp_c_b6: Optional[Decimal] = Field(
+        default=None,
+        description="Human Toxicity - Cancer Effects",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Human Toxicity - Cancer Effects (B6)",
+            field_code="htp_c_b6",
+            description="Human Toxicity - Cancer Effects",
+            units="CTUh",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    htp_c_b7: Optional[Decimal] = Field(
+        default=None,
+        description="Human Toxicity - Cancer Effects",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Human Toxicity - Cancer Effects (B7)",
+            field_code="htp_c_b7",
+            description="Human Toxicity - Cancer Effects",
+            units="CTUh",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    htp_c_b8: Optional[Decimal] = Field(
+        default=None,
+        description="Human Toxicity - Cancer Effects",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Human Toxicity - Cancer Effects (B8)",
+            field_code="htp_c_b8",
+            description="Human Toxicity - Cancer Effects",
+            units="CTUh",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    htp_c_c1: Optional[Decimal] = Field(
+        default=None,
+        description="Human Toxicity - Cancer Effects",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Human Toxicity - Cancer Effects (C1)",
+            field_code="htp_c_c1",
+            description="Human Toxicity - Cancer Effects",
+            units="CTUh",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    htp_c_c2: Optional[Decimal] = Field(
+        default=None,
+        description="Human Toxicity - Cancer Effects",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Human Toxicity - Cancer Effects (C2)",
+            field_code="htp_c_c2",
+            description="Human Toxicity - Cancer Effects",
+            units="CTUh",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    htp_c_c3: Optional[Decimal] = Field(
+        default=None,
+        description="Human Toxicity - Cancer Effects",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Human Toxicity - Cancer Effects (C3)",
+            field_code="htp_c_c3",
+            description="Human Toxicity - Cancer Effects",
+            units="CTUh",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    htp_c_c4: Optional[Decimal] = Field(
+        default=None,
+        description="Human Toxicity - Cancer Effects",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Human Toxicity - Cancer Effects (C4)",
+            field_code="htp_c_c4",
+            description="Human Toxicity - Cancer Effects",
+            units="CTUh",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    htp_c_d: Optional[Decimal] = Field(
+        default=None,
+        description="Human Toxicity - Cancer Effects",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Human Toxicity - Cancer Effects (D)",
+            field_code="htp_c_d",
+            description="Human Toxicity - Cancer Effects",
+            units="CTUh",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    htp_c_d1: Optional[Decimal] = Field(
+        default=None,
+        description="Human Toxicity - Cancer Effects",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Human Toxicity - Cancer Effects (D1)",
+            field_code="htp_c_d1",
+            description="Human Toxicity - Cancer Effects",
+            units="CTUh",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    htp_c_d2: Optional[Decimal] = Field(
+        default=None,
+        description="Human Toxicity - Cancer Effects",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Human Toxicity - Cancer Effects (D2)",
+            field_code="htp_c_d2",
+            description="Human Toxicity - Cancer Effects",
+            units="CTUh",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    htp_c_total: Optional[Decimal] = Field(
+        default=None,
+        description="Human Toxicity - Cancer Effects",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Human Toxicity - Cancer Effects (total)",
+            field_code="htp_c_total",
+            description="Human Toxicity - Cancer Effects",
+            units="CTUh",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    htp_nc_a1_a3: Optional[Decimal] = Field(
+        default=None,
+        description="Human Toxicity - Non-cancer Effects",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Human Toxicity - Non-cancer Effects (A1-A3)",
+            field_code="htp_nc_a1_a3",
+            description="Human Toxicity - Non-cancer Effects",
+            units="CTUh",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    htp_nc_a1: Optional[Decimal] = Field(
+        default=None,
+        description="Human Toxicity - Non-cancer Effects",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Human Toxicity - Non-cancer Effects (A1)",
+            field_code="htp_nc_a1",
+            description="Human Toxicity - Non-cancer Effects",
+            units="CTUh",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    htp_nc_a2: Optional[Decimal] = Field(
+        default=None,
+        description="Human Toxicity - Non-cancer Effects",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Human Toxicity - Non-cancer Effects (A2)",
+            field_code="htp_nc_a2",
+            description="Human Toxicity - Non-cancer Effects",
+            units="CTUh",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    htp_nc_a3: Optional[Decimal] = Field(
+        default=None,
+        description="Human Toxicity - Non-cancer Effects",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Human Toxicity - Non-cancer Effects (A3)",
+            field_code="htp_nc_a3",
+            description="Human Toxicity - Non-cancer Effects",
+            units="CTUh",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    htp_nc_a4: Optional[Decimal] = Field(
+        default=None,
+        description="Human Toxicity - Non-cancer Effects",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Human Toxicity - Non-cancer Effects (A4)",
+            field_code="htp_nc_a4",
+            description="Human Toxicity - Non-cancer Effects",
+            units="CTUh",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    htp_nc_a5: Optional[Decimal] = Field(
+        default=None,
+        description="Human Toxicity - Non-cancer Effects",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Human Toxicity - Non-cancer Effects (A5)",
+            field_code="htp_nc_a5",
+            description="Human Toxicity - Non-cancer Effects",
+            units="CTUh",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    htp_nc_b1: Optional[Decimal] = Field(
+        default=None,
+        description="Human Toxicity - Non-cancer Effects",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Human Toxicity - Non-cancer Effects (B1)",
+            field_code="htp_nc_b1",
+            description="Human Toxicity - Non-cancer Effects",
+            units="CTUh",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    htp_nc_b2: Optional[Decimal] = Field(
+        default=None,
+        description="Human Toxicity - Non-cancer Effects",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Human Toxicity - Non-cancer Effects (B2)",
+            field_code="htp_nc_b2",
+            description="Human Toxicity - Non-cancer Effects",
+            units="CTUh",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    htp_nc_b3: Optional[Decimal] = Field(
+        default=None,
+        description="Human Toxicity - Non-cancer Effects",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Human Toxicity - Non-cancer Effects (B3)",
+            field_code="htp_nc_b3",
+            description="Human Toxicity - Non-cancer Effects",
+            units="CTUh",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    htp_nc_b4: Optional[Decimal] = Field(
+        default=None,
+        description="Human Toxicity - Non-cancer Effects",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Human Toxicity - Non-cancer Effects (B4)",
+            field_code="htp_nc_b4",
+            description="Human Toxicity - Non-cancer Effects",
+            units="CTUh",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    htp_nc_b5: Optional[Decimal] = Field(
+        default=None,
+        description="Human Toxicity - Non-cancer Effects",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Human Toxicity - Non-cancer Effects (B5)",
+            field_code="htp_nc_b5",
+            description="Human Toxicity - Non-cancer Effects",
+            units="CTUh",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    htp_nc_b6: Optional[Decimal] = Field(
+        default=None,
+        description="Human Toxicity - Non-cancer Effects",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Human Toxicity - Non-cancer Effects (B6)",
+            field_code="htp_nc_b6",
+            description="Human Toxicity - Non-cancer Effects",
+            units="CTUh",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    htp_nc_b7: Optional[Decimal] = Field(
+        default=None,
+        description="Human Toxicity - Non-cancer Effects",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Human Toxicity - Non-cancer Effects (B7)",
+            field_code="htp_nc_b7",
+            description="Human Toxicity - Non-cancer Effects",
+            units="CTUh",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    htp_nc_b8: Optional[Decimal] = Field(
+        default=None,
+        description="Human Toxicity - Non-cancer Effects",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Human Toxicity - Non-cancer Effects (B8)",
+            field_code="htp_nc_b8",
+            description="Human Toxicity - Non-cancer Effects",
+            units="CTUh",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    htp_nc_c1: Optional[Decimal] = Field(
+        default=None,
+        description="Human Toxicity - Non-cancer Effects",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Human Toxicity - Non-cancer Effects (C1)",
+            field_code="htp_nc_c1",
+            description="Human Toxicity - Non-cancer Effects",
+            units="CTUh",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    htp_nc_c2: Optional[Decimal] = Field(
+        default=None,
+        description="Human Toxicity - Non-cancer Effects",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Human Toxicity - Non-cancer Effects (C2)",
+            field_code="htp_nc_c2",
+            description="Human Toxicity - Non-cancer Effects",
+            units="CTUh",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    htp_nc_c3: Optional[Decimal] = Field(
+        default=None,
+        description="Human Toxicity - Non-cancer Effects",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Human Toxicity - Non-cancer Effects (C3)",
+            field_code="htp_nc_c3",
+            description="Human Toxicity - Non-cancer Effects",
+            units="CTUh",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    htp_nc_c4: Optional[Decimal] = Field(
+        default=None,
+        description="Human Toxicity - Non-cancer Effects",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Human Toxicity - Non-cancer Effects (C4)",
+            field_code="htp_nc_c4",
+            description="Human Toxicity - Non-cancer Effects",
+            units="CTUh",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    htp_nc_d: Optional[Decimal] = Field(
+        default=None,
+        description="Human Toxicity - Non-cancer Effects",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Human Toxicity - Non-cancer Effects (D)",
+            field_code="htp_nc_d",
+            description="Human Toxicity - Non-cancer Effects",
+            units="CTUh",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    htp_nc_d1: Optional[Decimal] = Field(
+        default=None,
+        description="Human Toxicity - Non-cancer Effects",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Human Toxicity - Non-cancer Effects (D1)",
+            field_code="htp_nc_d1",
+            description="Human Toxicity - Non-cancer Effects",
+            units="CTUh",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    htp_nc_d2: Optional[Decimal] = Field(
+        default=None,
+        description="Human Toxicity - Non-cancer Effects",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Human Toxicity - Non-cancer Effects (D2)",
+            field_code="htp_nc_d2",
+            description="Human Toxicity - Non-cancer Effects",
+            units="CTUh",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    htp_nc_total: Optional[Decimal] = Field(
+        default=None,
+        description="Human Toxicity - Non-cancer Effects",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Human Toxicity - Non-cancer Effects (total)",
+            field_code="htp_nc_total",
+            description="Human Toxicity - Non-cancer Effects",
+            units="CTUh",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    sqp_a1_a3: Optional[Decimal] = Field(
+        default=None,
+        description="Soil Quality Index",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Soil Quality Index (A1-A3)",
+            field_code="sqp_a1_a3",
+            description="Soil Quality Index",
+            units="-",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    sqp_a1: Optional[Decimal] = Field(
+        default=None,
+        description="Soil Quality Index",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Soil Quality Index (A1)",
+            field_code="sqp_a1",
+            description="Soil Quality Index",
+            units="-",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    sqp_a2: Optional[Decimal] = Field(
+        default=None,
+        description="Soil Quality Index",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Soil Quality Index (A2)",
+            field_code="sqp_a2",
+            description="Soil Quality Index",
+            units="-",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    sqp_a3: Optional[Decimal] = Field(
+        default=None,
+        description="Soil Quality Index",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Soil Quality Index (A3)",
+            field_code="sqp_a3",
+            description="Soil Quality Index",
+            units="-",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    sqp_a4: Optional[Decimal] = Field(
+        default=None,
+        description="Soil Quality Index",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Soil Quality Index (A4)",
+            field_code="sqp_a4",
+            description="Soil Quality Index",
+            units="-",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    sqp_a5: Optional[Decimal] = Field(
+        default=None,
+        description="Soil Quality Index",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Soil Quality Index (A5)",
+            field_code="sqp_a5",
+            description="Soil Quality Index",
+            units="-",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    sqp_b1: Optional[Decimal] = Field(
+        default=None,
+        description="Soil Quality Index",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Soil Quality Index (B1)",
+            field_code="sqp_b1",
+            description="Soil Quality Index",
+            units="-",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    sqp_b2: Optional[Decimal] = Field(
+        default=None,
+        description="Soil Quality Index",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Soil Quality Index (B2)",
+            field_code="sqp_b2",
+            description="Soil Quality Index",
+            units="-",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    sqp_b3: Optional[Decimal] = Field(
+        default=None,
+        description="Soil Quality Index",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Soil Quality Index (B3)",
+            field_code="sqp_b3",
+            description="Soil Quality Index",
+            units="-",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    sqp_b4: Optional[Decimal] = Field(
+        default=None,
+        description="Soil Quality Index",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Soil Quality Index (B4)",
+            field_code="sqp_b4",
+            description="Soil Quality Index",
+            units="-",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    sqp_b5: Optional[Decimal] = Field(
+        default=None,
+        description="Soil Quality Index",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Soil Quality Index (B5)",
+            field_code="sqp_b5",
+            description="Soil Quality Index",
+            units="-",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    sqp_b6: Optional[Decimal] = Field(
+        default=None,
+        description="Soil Quality Index",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Soil Quality Index (B6)",
+            field_code="sqp_b6",
+            description="Soil Quality Index",
+            units="-",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    sqp_b7: Optional[Decimal] = Field(
+        default=None,
+        description="Soil Quality Index",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Soil Quality Index (B7)",
+            field_code="sqp_b7",
+            description="Soil Quality Index",
+            units="-",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    sqp_b8: Optional[Decimal] = Field(
+        default=None,
+        description="Soil Quality Index",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Soil Quality Index (B8)",
+            field_code="sqp_b8",
+            description="Soil Quality Index",
+            units="-",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    sqp_c1: Optional[Decimal] = Field(
+        default=None,
+        description="Soil Quality Index",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Soil Quality Index (C1)",
+            field_code="sqp_c1",
+            description="Soil Quality Index",
+            units="-",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    sqp_c2: Optional[Decimal] = Field(
+        default=None,
+        description="Soil Quality Index",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Soil Quality Index (C2)",
+            field_code="sqp_c2",
+            description="Soil Quality Index",
+            units="-",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    sqp_c3: Optional[Decimal] = Field(
+        default=None,
+        description="Soil Quality Index",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Soil Quality Index (C3)",
+            field_code="sqp_c3",
+            description="Soil Quality Index",
+            units="-",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    sqp_c4: Optional[Decimal] = Field(
+        default=None,
+        description="Soil Quality Index",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Soil Quality Index (C4)",
+            field_code="sqp_c4",
+            description="Soil Quality Index",
+            units="-",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    sqp_d: Optional[Decimal] = Field(
+        default=None,
+        description="Soil Quality Index",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Soil Quality Index (D)",
+            field_code="sqp_d",
+            description="Soil Quality Index",
+            units="-",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    sqp_d1: Optional[Decimal] = Field(
+        default=None,
+        description="Soil Quality Index",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Soil Quality Index (D1)",
+            field_code="sqp_d1",
+            description="Soil Quality Index",
+            units="-",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    sqp_d2: Optional[Decimal] = Field(
+        default=None,
+        description="Soil Quality Index",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Soil Quality Index (D2)",
+            field_code="sqp_d2",
+            description="Soil Quality Index",
+            units="-",
+            requirements="Optional",
+            criticality="MAY",
+        ),
+    )
+
+    sqp_total: Optional[Decimal] = Field(
+        default=None,
+        description="Soil Quality Index",
+        schema_extra=openbdf_field_metadata(
+            attribute_name="Soil Quality Index (total)",
+            field_code="sqp_total",
+            description="Soil Quality Index",
+            units="-",
+            requirements="Optional",
+            criticality="MAY",
         ),
     )

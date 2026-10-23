@@ -74,6 +74,59 @@ class BuildingEnergyClassificationSystem(OpenBDFEnum):
     )
 
 
+class BuildingEnergyCodeSystem(OpenBDFEnum):
+    EPBD_EU = ("EPBD (EU)", "EPBD (EU)")
+    EN_ISO_52000_1 = ("EN ISO 52000-1", "EN ISO 52000-1")
+    IECC_US = ("IECC (US)", "IECC (US)")
+    ASHRAE_90_1_US = ("ASHRAE 90.1 (US)", "ASHRAE 90.1 (US)")
+    ASHRAE_189_1_US = ("ASHRAE 189.1 (US)", "ASHRAE 189.1 (US)")
+    OIB_RICHTLINIE_6_AT = ("OIB-Richtlinie 6 (AT)", "OIB-Richtlinie 6 (AT)")
+    GEG_DE = ("GEG (DE)", "GEG (DE)")
+    SIA_380_1_CH = ("SIA 380/1 (CH)", "SIA 380/1 (CH)")
+    RE2020_FR = ("RE2020 (FR)", "RE2020 (FR)")
+    CTE_DB_HE_ES = ("CTE DB-HE (ES)", "CTE DB-HE (ES)")
+    BOUWBESLUIT_BENG_NL = ("Bouwbesluit / BENG (NL)", "Bouwbesluit / BENG (NL)")
+    PART_L_UK = ("Part L (UK)", "Part L (UK)")
+    OTHER_NATIONAL = ("Other national", "Other national")
+    UNKNOWN = ("Unknown", "Unknown")
+
+
+class OnSiteRenewableAllocationApproach(OpenBDFEnum):
+    APPROACH_A = (
+        "approach_a",
+        "approach_a (full allocation to the building of energy storage components and of all other system parts)",
+        "full allocation to the building of energy storage components and of all other system parts",
+    )
+    APPROACH_B1 = (
+        "approach_b1",
+        "approach_b1 (full allocation of energy storage components; other system parts allocated in proportion to the share of captured or generated energy used for self-consumption)",
+        "full allocation of energy storage components; other system parts allocated in proportion to the share of captured or generated energy used for self-consumption",
+    )
+    APPROACH_B2 = (
+        "approach_b2",
+        "approach_b2 (full allocation of energy storage components; components integrated into the building envelope and forming its surface allocated in full, with the remaining embodied emissions allocated in proportion to the share used for self-consumption)",
+        "full allocation of energy storage components; components integrated into the building envelope and forming its surface allocated in full, with the remaining embodied emissions allocated in proportion to the share used for self-consumption",
+    )
+
+
+class EmissionFactorScenario(OpenBDFEnum):
+    NOT_APPLICABLE = (
+        "not_applicable",
+        "Not applicable (no operational energy calculated)",
+        "no operational energy calculated",
+    )
+    NONE = (
+        "none",
+        "None (no forward-looking factors; the factors of the base Year apply over the whole period)",
+        "no forward-looking factors; the factors of the base year apply over the whole period",
+    )
+    FORWARD_LOOKING = (
+        "forward_looking",
+        "forward_looking (forward-looking emission factors, justified, consistent and clearly defined for the whole reference study period)",
+        "forward-looking emission factors, justified, consistent and clearly defined for the whole reference study period",
+    )
+
+
 class PrimaryEnergySource(OpenBDFEnum):
     NATURAL_GAS = ("natural_gas", "Natural Gas")
     COAL = ("coal", "Coal")

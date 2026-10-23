@@ -6,8 +6,7 @@ from enum import Enum
 from typing import Any
 
 import pandas as pd
-import pytest
-from pydantic import BaseModel, ValidationError
+from pydantic import BaseModel
 
 from openbdf.lib.converters.dataframe import bom_draft_from_dataframe, bom_from_dataframe, project_package_from_tables
 from openbdf.lib.openbdf_tables import OpenBDFTables
@@ -66,7 +65,7 @@ def bom_df(*material_ids: str) -> pd.DataFrame:
         required_horizontal_row(
             BuildingBillMaterialsSlimRecordBase,
             material_id=material_id,
-            material_name_custom=f"Material {material_id}",
+            custom_material_name=f"Material {material_id}",
         )
         for material_id in material_ids
     ]
@@ -79,7 +78,7 @@ def wide_df(*material_ids: str) -> pd.DataFrame:
             LCAResultsWideFullBase,
             material_id=material_id,
             gwp_total_a1_a3=str(index),
-            gwp_total=str(index * 10),
+            gwp_total_total=str(index * 10),
         )
         for index, material_id in enumerate(material_ids, start=1)
     ]
@@ -112,34 +111,25 @@ def tables(
     )
 
 
-def test_bom_from_dataframe_requires_lca_service_life():
-    dataframe = bom_df("mat-1").drop(columns=["lca_service_life"])
+def test_bom_from_dataframe_keeps_missing_material_reference_service_life():
+    result = bom_from_dataframe(bom_df("mat-1"))
 
-    with pytest.raises(ValidationError, match="lca_service_life"):
-        bom_from_dataframe(dataframe)
+    assert len(result) == 1
+    assert result[0].material_reference_service_life is None
 
 
-def test_bom_from_dataframe_drop_invalid_drops_missing_required(capsys):
-    valid = bom_df("mat-1")
-    invalid = bom_df("mat-2").drop(columns=["lca_service_life"])
-    dataframe = pd.concat([valid, invalid], ignore_index=True)
+def test_bom_from_dataframe_drop_invalid_keeps_rows_missing_material_reference_service_life():
+    dataframe = bom_df("mat-1", "mat-2")
 
     result = bom_from_dataframe(dataframe, drop_invalid=True)
 
-    assert [item.material_id for item in result] == ["mat-1"]
-    captured = capsys.readouterr().out
-    assert "lca_service_life" in captured
-    assert "mat-2" in captured
+    assert [item.material_id for item in result] == ["mat-1", "mat-2"]
 
 
-def test_bom_draft_from_dataframe_drop_invalid_drops_missing_required():
-    valid = bom_df("mat-1")
-    invalid = bom_df("mat-2").drop(columns=["lca_service_life"])
-    dataframe = pd.concat([valid, invalid], ignore_index=True)
+def test_bom_draft_from_dataframe_drop_invalid_keeps_rows_missing_material_reference_service_life():
+    result = bom_draft_from_dataframe(bom_df("mat-1", "mat-2"), drop_invalid=True)
 
-    result = bom_draft_from_dataframe(dataframe, drop_invalid=True)
-
-    assert [item.material_id for item in result] == ["mat-1"]
+    assert [item.material_id for item in result] == ["mat-1", "mat-2"]
 
 
 def test_bom_from_dataframe_drop_invalid_no_drop_when_all_valid():
@@ -160,7 +150,7 @@ def test_bom_drop_invalid_blank_rows_not_counted():
 
 def test_project_package_from_tables_drop_invalid_drops_missing_required():
     valid = bom_df("mat-1")
-    invalid = bom_df("mat-2").drop(columns=["lca_service_life"])
+    invalid = bom_df("mat-2").drop(columns=["custom_material_name"])
     dataframe = pd.concat([valid, invalid], ignore_index=True)
 
     project = project_package_from_tables(tables(dataframe), drop_invalid=True)
@@ -168,13 +158,11 @@ def test_project_package_from_tables_drop_invalid_drops_missing_required():
     assert [b.material_id for b in project.bill_of_materials] == ["mat-1"]
 
 
-def test_bom_draft_from_dataframe_allows_missing_lca_service_life():
-    dataframe = bom_df("mat-1").drop(columns=["lca_service_life"])
-
-    records = bom_draft_from_dataframe(dataframe)
+def test_bom_draft_from_dataframe_allows_missing_material_reference_service_life():
+    records = bom_draft_from_dataframe(bom_df("mat-1"))
 
     assert len(records) == 1
-    assert records[0].lca_service_life is None
+    assert records[0].material_reference_service_life is None
 
 
 def test_project_package_from_tables_links_wide_results_to_bom_by_material_id():

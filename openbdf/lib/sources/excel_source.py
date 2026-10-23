@@ -43,7 +43,7 @@ class ExcelSheetSource(SheetSource):
 
         stack = ExitStack()
         try:
-            workbooks = [(path, stack.enter_context(pd.ExcelFile(path))) for path in self._paths]
+            workbooks = [(path, stack.enter_context(pd.ExcelFile(path, engine="calamine"))) for path in self._paths]
 
             sources_by_sheet: dict[str, list[tuple[Path, pd.ExcelFile]]] = defaultdict(list)
             for path, workbook in workbooks:
