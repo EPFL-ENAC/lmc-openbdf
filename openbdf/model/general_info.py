@@ -89,7 +89,7 @@ class ProjectRecordBase(SQLModel):
             group="Project",
             sub_group="Administrative data",
             attribute_name="Project ID custom",
-            field_code="project_custom_id ",
+            field_code="project_custom_id",
             description="Unique custom ID assigned to this specific project.",
             requirements=Requirement.OPTIONAL,
             reference=Reference.GBDI_SLICE,
