@@ -382,7 +382,8 @@ def _info_value(
 ) -> Any:
     """Return the Value cell of a General Information field and report a replaced project_id."""
     if field_code != "project_id":
-        return getattr(project, field_code) if project else ""
+        value = getattr(project, field_code) if project else ""
+        return value.display_name if isinstance(value, OpenBDFEnum) else value
 
     imported = getattr(project, "project_id", None) if project else None
     if project_id == DEFAULT_PROJECT_ID:
@@ -527,6 +528,7 @@ def wide_to_xlsx(
     automatic_array = style_arrays[AUTOMATIC_VALUE_STYLE.name]
     disabled_array = style_arrays[DISABLED_STYLE.name]
     automatic_columns: set[int] = set()
+    enum_columns: dict[int, type[OpenBDFEnum]] = {}
 
     sheet = writer.book.create_sheet(sheet_name)
     # sheet.protection.sheet = True  # Lock the sheet to prevent accidental edits
@@ -574,6 +576,8 @@ def wide_to_xlsx(
         r.style = REQUIREMENT_STYLES[requirements].name
         if requirements is Requirement.AUTOMATIC:
             automatic_columns.add(cell_column)
+        if isinstance(data_type, type) and issubclass(data_type, OpenBDFEnum):
+            enum_columns[cell_column] = data_type
 
         reference = extra.get(reference_attribute)
         ref = sheet.cell(row=8, column=cell_column, value=reference or "")
@@ -615,6 +619,10 @@ def wide_to_xlsx(
                     value = value.item()
                 if value is None or value != value:  # None and NaN are written as empty strings
                     value = ""
+                if col_idx in enum_columns:
+                    member = enum_columns[col_idx].find_value(value)
+                    if member is not None:
+                        value = member.display_name
                 cell.value = value
 
     sheet.row_dimensions[2].height = 15
