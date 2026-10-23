@@ -59,6 +59,15 @@ def test_wide_module_has_expected_field_count():
     assert field_count == expected
 
 
+def test_wide_submodule_descriptions_say_submodule():
+    """Dotted stage codes are submodules, so their descriptions say submodule."""
+    wide = _formatted("lca_results_full_wide.py")
+    assert wide.count("for submodule") == 2 * len(lca_results.SUB_MODULE_ALIGNMENTS)
+    assert "for submodule A5.1." in wide
+    assert "for module A5." in wide
+    assert "for module D1." in wide
+
+
 def test_generated_files_warn_against_manual_edits():
     for filename, _ in lca_results.GENERATED_MODULES:
         content = (_MODEL_DIR / filename).read_text(encoding="utf-8")
