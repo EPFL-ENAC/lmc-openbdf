@@ -303,6 +303,7 @@ class GFAMeasurementMethod(OpenBDFEnum):
     IPMS_2 = ("ipms_2", "IPMS 2 (building excluding external walls)")
     IPMS_3_1 = ("ipms_3_1", "IPMS 3.1 (occupier level, external)")
     IPMS_3_2 = ("ipms_3_2", "IPMS 3.2 (occupier level, internal)")
+    UNKNOWN = ("unknown", "Unknown")
     reference = enum_attribute(Reference.ISO_9836_2017_IPMS_ALL_BUILDINGS_EU2026_52_ANNEX_III)
 
 
