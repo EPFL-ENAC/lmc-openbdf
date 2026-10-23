@@ -52,6 +52,7 @@ class LifeCycleSystemBoundary(OpenBDFEnum):
         "Gate to Gate",
         "Focuses specifically on the production stage processes.",
     )
+    UNKNOWN = ("unknown", "Unknown")
     reference = enum_attribute(Reference.EN15978_2026_EU2026_52_ANNEX_III)
 
 
@@ -311,6 +312,7 @@ class LCADatabaseSystemModel(OpenBDFEnum):
         "Consequential (marginal, market-driven modelling)",
         "marginal, market-driven modelling",
     )
+    UNKNOWN = ("unknown", "Unknown")
     reference = enum_attribute(Reference.EN15804_A2_ECOINVENT_SYSTEM_MODELS)
 
 
@@ -368,6 +370,7 @@ class AssessmentType_EN15978(OpenBDFEnum):
         "Type 4 - fully detailed as designed or as built model",
         "Type 4 - fully detailed as designed or as built model",
     )
+    UNKNOWN = ("unknown", "Unknown")
     reference = enum_attribute(Reference.EN15978_2026)
 
 
