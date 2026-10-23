@@ -100,13 +100,13 @@ def test_a_value_of_the_wrong_type_is_a_type_mismatch_finding():
     assert [str(finding) for finding in findings] == ["E03: Field material_reference_service_life expects Decimal"]
 
 
-def test_a_share_above_one_is_a_share_out_of_range_finding():
-    dataframe = project_frame(lca_data_generic_share="2")
+def test_a_share_above_one_hundred_is_a_share_out_of_range_finding():
+    dataframe = project_frame(lca_data_generic_share="200")
     findings: list[Any] = []
 
     project_from_dataframe(dataframe, findings=findings)
 
-    assert [str(finding) for finding in findings] == ["E13: Field lca_data_generic_share must lie between 0 and 1"]
+    assert [str(finding) for finding in findings] == ["E13: Field lca_data_generic_share must lie between 0 and 100"]
     # The overridden value is the last row of the sheet, so the finding names that row.
     assert findings[0].row == len(dataframe)
 
