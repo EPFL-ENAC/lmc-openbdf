@@ -16,6 +16,7 @@ FIELD_SHEET_HEADERS = [
     "Default value",
     "Preprocess rule",
 ]
+MARKED_REQUIREMENTS = {"Required", "Strongly recommended", "Automatic"}
 ENUM_SHEET_HEADERS = [
     "Value in your format",
     "OpenBDF enum value",
@@ -104,6 +105,11 @@ def test_openbdf_template_requirements_and_reference_layout(tmp_path):
     assert {info.cell(row=row, column=column).style for row in range(2, info.max_row + 1) for column in (7, 8, 11)} == {
         "Metadata"
     }
+    # The marked levels paint the five metadata columns of a General Information row.
+    for row in range(2, info.max_row + 1):
+        requirement = info.cell(row=row, column=9).value
+        expected = requirement if requirement in MARKED_REQUIREMENTS else "Normal"
+        assert {info.cell(row=row, column=column).style for column in range(1, 6)} == {expected}
 
     first_field_requirements = {
         "Bill of Materials": "Automatic",
@@ -140,7 +146,14 @@ def test_openbdf_template_requirements_and_reference_layout(tmp_path):
             }
         # The first column labels every header row with white bold text on green.
         assert {sheet.cell(row=row, column=1).style for row in range(1, 9)} == {"AttributeName"}
-        assert {sheet.cell(row=8, column=cell.column).style for cell in sheet[8] if cell.column > 1} == {"Metadata"}
+        # Description and reference cells carry the colour of the marked levels.
+        for cell in sheet[7]:
+            if cell.column == 1 or not cell.value:
+                continue
+            expected = cell.value if cell.value in MARKED_REQUIREMENTS else "Normal"
+            assert sheet.cell(row=3, column=cell.column).style == expected
+            expected = cell.value if cell.value in MARKED_REQUIREMENTS else "Metadata"
+            assert sheet.cell(row=8, column=cell.column).style == expected
         assert sheet.cell(row=2, column=2).value == (
             "material_ref_id" if sheet_name == "Project Material Database" else "material_id"
         )
