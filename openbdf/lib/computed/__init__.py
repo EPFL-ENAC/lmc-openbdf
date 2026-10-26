@@ -19,7 +19,7 @@ def fill_computed(
     document_translator: DocumentTranslator | None = None,
     *,
     findings: list[OpenBDFValidationError] | None = None,
-    draft: bool = False,
+    generate_missing_lines: bool = False,
 ) -> list[OpenBDFValidationError]:
     """
     Fill every automatic field of a built project and return the findings, existing ones included.
@@ -31,7 +31,7 @@ def fill_computed(
     if findings is None:
         findings = []
 
-    fill_materials(project, document_translator, findings, draft=draft)
+    fill_materials(project, document_translator, findings, generate_missing_lines=generate_missing_lines)
     fill_bill_of_materials_elements(project, document_translator, findings)
     fill_tall_results(project, findings)
     fill_project_quantities(project, findings)
