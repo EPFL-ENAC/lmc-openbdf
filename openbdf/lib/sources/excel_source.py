@@ -43,7 +43,7 @@ class ExcelSheetSource(SheetSource):
 
     def __init__(self, workbooks: WorkbookInput | bytes | Sequence[WorkbookInput | bytes]):
         if isinstance(workbooks, (str, Path, bytes, bytearray)) or hasattr(workbooks, "read"):
-            workbooks = [workbooks]
+            workbooks = [workbooks]  # type: ignore[list-item]  # hasattr() does not narrow the Sequence away
         self._workbooks = [
             BytesIO(workbook) if isinstance(workbook, (bytes, bytearray)) else workbook for workbook in workbooks
         ]
