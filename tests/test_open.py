@@ -91,7 +91,7 @@ def test_open_command_processes_sheets_split_across_files(tmp_path: Path, monkey
     assert result.exit_code == 0
     assert len(captured_tables) == 1
     tables, drop_invalid = captured_tables[0]
-    assert drop_invalid is False
+    assert drop_invalid is True
     assert tables.project.to_dict(orient="records") == [{"field_code": "project_name", "value": "Example project"}]
     assert tables.bill_of_materials.to_dict(orient="records") == [{"material_id": "MAT-1"}]
     # start_row=8 skips the metadata rows, so the first record is the first data row.
@@ -150,7 +150,7 @@ def test_open_command_drop_invalid_materials_passes_flag(tmp_path: Path, monkeyp
     assert captured == [True]
 
 
-def test_open_command_drop_invalid_materials_default_is_false(tmp_path: Path, monkeypatch):
+def test_open_command_drop_invalid_materials_default_is_true(tmp_path: Path, monkeypatch):
     workbook = tmp_path / "complete.xlsx"
     write_workbook(workbook, default_openbdf_sheets())
     captured: list[Any] = []
@@ -164,6 +164,25 @@ def test_open_command_drop_invalid_materials_default_is_false(tmp_path: Path, mo
     mock_validation(monkeypatch)
 
     result = runner.invoke(app, ["open", str(workbook)])
+
+    assert result.exit_code == 0
+    assert captured == [True]
+
+
+def test_open_command_no_drop_invalid_materials_passes_false(tmp_path: Path, monkeypatch):
+    workbook = tmp_path / "complete.xlsx"
+    write_workbook(workbook, default_openbdf_sheets())
+    captured: list[Any] = []
+
+    def convert_strict(tables, document_translator, *, findings=None, draft=False, drop_invalid=False):
+        captured.append(drop_invalid)
+        return object()
+
+    monkeypatch.setattr(main_module, "project_package_from_tables", convert_strict)
+    monkeypatch.setattr(main_module, "save_openbdf_to_xlsx", lambda **kwargs: None)
+    mock_validation(monkeypatch)
+
+    result = runner.invoke(app, ["open", str(workbook), "--no-drop-invalid-materials"])
 
     assert result.exit_code == 0
     assert captured == [False]
@@ -351,6 +370,41 @@ def test_open_command_opens_filled_generated_template_as_single_file(tmp_path: P
     result = runner.invoke(app, ["open", str(output_path), "-o", str(roundtrip_path)])
     assert result.exit_code == 0
     assert general_information_value(roundtrip_path, "record_type") == RecordType.REAL_BUILDING.display_name
+
+
+def test_open_command_generates_a_missing_project_material_database_sheet_with_a_warning(tmp_path: Path):
+    template_path = tmp_path / "template.xlsx"
+    save_openbdf_to_xlsx(template_path, None)
+
+    workbook = load_workbook(template_path)
+    fill_required_vertical(workbook["General Information"], ProjectRecordBase)
+
+    bom = workbook["Bill of Materials"]
+    fill_required_horizontal(bom, BuildingBillMaterialsSlimRecordBase)
+    bom_codes = {cell.value: cell.column for cell in bom[2] if cell.value}
+    bom.cell(row=9, column=bom_codes["material_id"], value="MAT-1")
+    bom.cell(row=9, column=bom_codes["custom_material_name"], value="Concrete C30/37")
+    bom.cell(row=9, column=bom_codes["material_weight_kg"], value=100)
+
+    wide = workbook["LCA Result (Wide)"]
+    fill_required_horizontal(wide, LCAResultsWideFullBase)
+    wide_codes = {cell.value: cell.column for cell in wide[2] if cell.value}
+    wide.cell(row=9, column=wide_codes["material_id"], value="MAT-1")
+
+    workbook.remove(workbook["Project Material Database"])
+    workbook.save(template_path)
+
+    output_path = tmp_path / "out.xlsx"
+    result = runner.invoke(app, ["open", str(template_path), "-o", str(output_path)])
+
+    assert result.exit_code == 0
+    assert "  E34: Sheet is missing or empty, its lines were generated from the bill of materials" in (
+        result.output.splitlines()
+    )
+    sheet = load_workbook(output_path)["Project Material Database"]
+    codes = {cell.value: cell.column for cell in sheet[2] if cell.value}
+    assert sheet.cell(row=9, column=codes["material_ref_id"]).value == "M0001"
+    assert sheet.cell(row=9, column=codes["custom_material_name"]).value == "Concrete C30/37"
 
 
 def test_document_translator_add_last_wins_on_category_conflict():
