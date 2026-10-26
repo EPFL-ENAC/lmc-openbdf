@@ -621,7 +621,6 @@ def project_package_from_tables(
     material_id_to_bom = {bom.material_id: bom for bom in bill_of_materials}
 
     results_wide: list[LCAResultsWideFullRecord] = []
-    results_tall: list[LCAResultsTallFullRecord] = []
 
     if tables.results_wide is not None:
         results_wide = [
@@ -634,33 +633,30 @@ def project_package_from_tables(
                 matching_bom.lca_results_full_record = result_wide
 
     if tables.results_tall is not None:
-        results_tall = [
+        tall_records = [
             LCAResultsTallFullRecord(**record.model_dump())
             for record in results_tall_from_dataframe(tables.results_tall, document_translator, findings=findings)
         ]
-        for result_tall in results_tall:
+        for result_tall in tall_records:
             matching_bom = material_id_to_bom.get(result_tall.material_id, None)
             if matching_bom is not None:
                 matching_bom.lca_results_tall_full_records.append(result_tall)
     elif results_wide:
-        results_tall = []
         for result_wide in results_wide:
             matching_bom = material_id_to_bom.get(result_wide.material_id, None)
             if matching_bom is not None:
-                tall_results = lca_results_wide_to_tall(
-                    result_wide,
-                    matching_bom,
-                    LCAResultsTallFullRecord,
+                matching_bom.lca_results_tall_full_records.extend(
+                    lca_results_wide_to_tall(
+                        result_wide,
+                        matching_bom,
+                        LCAResultsTallFullRecord,
+                    )
                 )
-                matching_bom.lca_results_tall_full_records.extend(tall_results)
-                results_tall.extend(tall_results)
 
     project = ProjectRecord(
         **project_base.model_dump(),
         bill_of_materials=bill_of_materials,
         project_material_database=project_material_database,
-        results_wide=results_wide,
-        results_tall=results_tall,
     )
     fill_computed(project, document_translator, findings=findings, draft=draft)
 

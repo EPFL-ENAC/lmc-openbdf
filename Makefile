@@ -13,7 +13,7 @@ build: ## Run python -m build
 	uv run python -m build
 
 test: ## Run pytest
-	uv run --extra dev pytest
+	uv run --extra dev --extra cli pytest
 
 generate-lca-results-classes: ## Generate LCA classes modules
 	uv run --extra dev python scripts/generate_lca_results_classes.py
