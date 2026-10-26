@@ -524,12 +524,15 @@ def _render_field(
     units: str | None,
     reference_alignment: ReferenceAlignment | None = None,
     max_length: int | None = None,
+    enum_type: str | None = None,
 ) -> str:
     lines: list[str] = [f"    {name}: {type_} = Field("]
     if max_length is not None:
         lines.append(f"        max_length={max_length},")
     if default is not None:
         lines.append(f"        default={default},")
+    if enum_type is not None:
+        lines.append(f"        sa_type=sa_enum({enum_type}),")
     lines.append(f"        description={_q(description)},")
     lines.append("        schema_extra=openbdf_field_metadata(")
     lines.append(f"            attribute_name={_q(attribute_name)},")
@@ -568,6 +571,7 @@ def _lca_stage_module_submodule_field() -> str:
         name="lca_stage_module_submodule",
         type_="LCAStageOrModuleOrSubModule",
         default=None,
+        enum_type="LCAStageOrModuleOrSubModule",
         requirements=Requirement.REQUIRED,
         attribute_name="Life cycle stage or module or submodule",
         field_code="lca_stage_module_submodule",
@@ -582,6 +586,7 @@ def _lca_stage_field() -> str:
         name="lca_stage",
         type_="Optional[LCAStageOrModuleOrSubModule]",
         default="None",
+        enum_type="LCAStageOrModuleOrSubModule",
         requirements=Requirement.AUTOMATIC,
         attribute_name="Life cycle stage",
         field_code="lca_stage",
@@ -596,6 +601,7 @@ def _lca_module_field() -> str:
         name="lca_module",
         type_="Optional[LCAStageOrModuleOrSubModule]",
         default="None",
+        enum_type="LCAStageOrModuleOrSubModule",
         requirements=Requirement.AUTOMATIC,
         attribute_name="Life cycle module",
         field_code="lca_module",
@@ -610,6 +616,7 @@ def _lca_submodule_field() -> str:
         name="lca_submodule",
         type_="Optional[LCAStageOrModuleOrSubModule]",
         default="None",
+        enum_type="LCAStageOrModuleOrSubModule",
         requirements=Requirement.AUTOMATIC,
         attribute_name="Life cycle sub-module",
         field_code="lca_submodule",
@@ -638,6 +645,7 @@ def _material_flow_type_field() -> str:
         name="material_flow_type",
         type_="Optional[MaterialFlowType]",
         default="None",
+        enum_type="MaterialFlowType",
         requirements=Requirement.SUGGESTED,
         attribute_name="Material flow type",
         field_code="material_flow_type",
@@ -755,7 +763,8 @@ _TALL_IMPORTS = (
     "from openbdf.model.enums.materials import MaterialFlowType\n"
     "from openbdf.model.enums.references import ReferenceAlignment\n"
     "from openbdf.model.enums.requirement import Requirement\n\n"
-    "from .field_metadata import openbdf_field_metadata\n\n\n"
+    "from .field_metadata import openbdf_field_metadata\n"
+    "from .sa_enum import sa_enum\n\n\n"
 )
 
 _WIDE_IMPORTS = (

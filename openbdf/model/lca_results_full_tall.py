@@ -14,6 +14,7 @@ from openbdf.model.enums.references import ReferenceAlignment
 from openbdf.model.enums.requirement import Requirement
 
 from .field_metadata import openbdf_field_metadata
+from .sa_enum import sa_enum
 
 
 class LCAResultsTallBase(SQLModel):
@@ -30,6 +31,7 @@ class LCAResultsTallBase(SQLModel):
     )
 
     lca_stage_module_submodule: LCAStageOrModuleOrSubModule = Field(
+        sa_type=sa_enum(LCAStageOrModuleOrSubModule),
         description="Life-cycle stage or module or submodule of this result row, such as A1-A3 or A5 or A5.1 ",
         schema_extra=openbdf_field_metadata(
             attribute_name="Life cycle stage or module or submodule",
@@ -42,6 +44,7 @@ class LCAResultsTallBase(SQLModel):
 
     lca_stage: Optional[LCAStageOrModuleOrSubModule] = Field(
         default=None,
+        sa_type=sa_enum(LCAStageOrModuleOrSubModule),
         description="Life-cycle stage of the module, derived by the parser from Life cycle module.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Life cycle stage",
@@ -54,6 +57,7 @@ class LCAResultsTallBase(SQLModel):
 
     lca_module: Optional[LCAStageOrModuleOrSubModule] = Field(
         default=None,
+        sa_type=sa_enum(LCAStageOrModuleOrSubModule),
         description="Life-cycle of the module, derived by the parser from Life cycle module.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Life cycle module",
@@ -66,6 +70,7 @@ class LCAResultsTallBase(SQLModel):
 
     lca_submodule: Optional[LCAStageOrModuleOrSubModule] = Field(
         default=None,
+        sa_type=sa_enum(LCAStageOrModuleOrSubModule),
         description="Sub-module where the standard defines one.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Life cycle sub-module",
@@ -91,6 +96,7 @@ class LCAResultsTallBase(SQLModel):
 
     material_flow_type: Optional[MaterialFlowType] = Field(
         default=None,
+        sa_type=sa_enum(MaterialFlowType),
         description="Type of flow at this row.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Material flow type",

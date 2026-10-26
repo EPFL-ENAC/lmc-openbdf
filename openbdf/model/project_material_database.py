@@ -3,7 +3,6 @@ from __future__ import annotations
 from decimal import Decimal
 from typing import Optional
 
-from sqlmodel import Enum as SAEnum
 from sqlmodel import Field, SQLModel
 
 from openbdf.model.ingest import make_ingest_model
@@ -12,6 +11,7 @@ from .enums.materials import DeclaredUnit, MaterialDataType, MaterialEPDMatch
 from .enums.references import Reference
 from .enums.requirement import Requirement
 from .field_metadata import openbdf_field_metadata
+from .sa_enum import sa_enum
 
 
 class ProjectMaterialDatabaseBase(SQLModel):
@@ -66,7 +66,7 @@ class ProjectMaterialDatabaseBase(SQLModel):
 
     declared_unit: Optional[DeclaredUnit] = Field(  # type: ignore[call-overload]
         default=None,
-        sa_type=SAEnum(DeclaredUnit),
+        sa_type=sa_enum(DeclaredUnit),
         description="Unit to which the declared impacts refer. Example: m3 for ready-mixed concrete, kg for reinforcing steel, m2 for a membrane.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Declared unit",
@@ -122,7 +122,7 @@ class ProjectMaterialDatabaseBase(SQLModel):
 
     material_data_type: Optional[MaterialDataType] = Field(  # type: ignore[call-overload]
         default=None,
-        sa_type=SAEnum(MaterialDataType),
+        sa_type=sa_enum(MaterialDataType),
         description="Type of construction product data behind the dataset. Example: project_specific for an EPD commissioned for this project; generic for an OKOBAUDAT average.",
         schema_extra=openbdf_field_metadata(
             attribute_name="EPD data type",
@@ -135,7 +135,7 @@ class ProjectMaterialDatabaseBase(SQLModel):
 
     material_epd_match: Optional[MaterialEPDMatch] = Field(  # type: ignore[call-overload]
         default=None,
-        sa_type=SAEnum(MaterialEPDMatch),
+        sa_type=sa_enum(MaterialEPDMatch),
         description="Representativeness of the EPD against the material built. Example: same_product_group when a sectoral average covers the product.",
         schema_extra=openbdf_field_metadata(
             attribute_name="EPD representativeness",
