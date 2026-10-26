@@ -49,8 +49,6 @@ def parse_value(annotation: Any, raw_value: Any, translator: DocumentTranslator 
 
     if isinstance(raw_value, str):
         raw_value = raw_value.strip()
-        if raw_value in VALUE_ALIASES:
-            return VALUE_ALIASES[raw_value]
 
     if raw_value is None:
         return None
@@ -58,22 +56,27 @@ def parse_value(annotation: Any, raw_value: Any, translator: DocumentTranslator 
     if pd.isna(raw_value):
         return None
 
-    if isinstance(raw_value, str) and raw_value.strip() == "":
+    if isinstance(raw_value, str) and raw_value == "":
         return None
 
     (annotation, _) = unwrap_optional(annotation)
+    is_enum = isinstance(annotation, type) and issubclass(annotation, Enum)
 
-    if isinstance(annotation, type) and issubclass(annotation, Enum):
-        return parse_enum(annotation, raw_value, translator)
+    if is_enum:
+        try:
+            return parse_enum(annotation, raw_value, translator)
+        except ValueError:
+            if not isinstance(raw_value, str) or raw_value not in VALUE_ALIASES:
+                raise
+
+    if isinstance(raw_value, str) and raw_value in VALUE_ALIASES:
+        return VALUE_ALIASES[raw_value]
 
     if annotation is Decimal:
         return Decimal(str(raw_value))
 
     if annotation is int:
-        try:
-            return int(raw_value)
-        except ValueError:
-            return None
+        return int(raw_value)
 
     if annotation is float:
         return float(raw_value)

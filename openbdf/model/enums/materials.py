@@ -1,4 +1,5 @@
-from .openbdf_enum import OpenBDFEnum
+from .openbdf_enum import OpenBDFEnum, enum_attribute
+from .references import Reference
 
 
 class MainStructureType(OpenBDFEnum):
@@ -47,6 +48,7 @@ class OpenBDFMaterialClassification(OpenBDFEnum):
 
     # Undefined
     UNDEFINED = ("0.0", "0.0 Undefined materials", "Undefined materials")
+    reference = enum_attribute(Reference.INDICATE_MATERIALS_TAXONOMY)
 
 
 class Material(OpenBDFEnum):
@@ -95,6 +97,7 @@ class MaterialQuantitiesSource(OpenBDFEnum):
     )
     AS_BUILT = ("as_built", "As-Built")
     OTHER = ("other", "Other Data Source")
+    reference = enum_attribute(Reference.EN15978_2026)
 
 
 class MaterialQuantitiesUnits(OpenBDFEnum):
@@ -122,6 +125,7 @@ class ReplacementCountMethod(OpenBDFEnum):
         "Unknown (rule not declared)",
         "rule not declared",
     )
+    reference = enum_attribute(Reference.EU2026_52_ANNEX_III)
 
 
 class MaterialDataType(OpenBDFEnum):
@@ -160,6 +164,7 @@ class MaterialDataType(OpenBDFEnum):
         "Default value (conservative national default)",
         "conservative national default",
     )
+    reference = enum_attribute(Reference.EU2026_52_ANNEX_III)
 
 
 class MaterialEPDMatch(OpenBDFEnum):
@@ -198,6 +203,7 @@ class MaterialEPDMatch(OpenBDFEnum):
         "Unknown (the relationship cannot be established)",
         "the relationship cannot be established",
     )
+    reference = enum_attribute(Reference.EN_15941_2024)
 
 
 class DeclaredUnit(OpenBDFEnum):
@@ -208,6 +214,7 @@ class DeclaredUnit(OpenBDFEnum):
     M = ("m", "m")
     PIECE = ("piece", "piece")
     L = ("L", "L")
+    reference = enum_attribute(Reference.EN15804_A2)
 
 
 class MaterialFlowType(OpenBDFEnum):
@@ -251,3 +258,4 @@ class MaterialFlowType(OpenBDFEnum):
         "Energy in (energy consumed by the process)",
         "energy consumed by the process",
     )
+    reference = enum_attribute(Reference.EN15804_A2_ISO_14044_2006)

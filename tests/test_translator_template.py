@@ -16,6 +16,7 @@ FIELD_SHEET_HEADERS = [
     "Default value",
     "Preprocess rule",
 ]
+MARKED_REQUIREMENTS = {"Required", "Strongly recommended", "Automatic"}
 ENUM_SHEET_HEADERS = [
     "Value in your format",
     "OpenBDF enum value",
@@ -34,8 +35,7 @@ def test_translator_template_adds_default_and_preprocess_columns(tmp_path):
         sheet = workbook[sheet_name]
 
         assert [sheet.cell(row=1, column=column).value for column in range(1, 8)] == FIELD_SHEET_HEADERS
-        assert sheet["F1"].style == "AttributeName"
-        assert sheet["G1"].style == "AttributeName"
+        assert {sheet.cell(row=1, column=column).style for column in range(1, 8)} == {"AttributeName"}
         assert sheet.column_dimensions["F"].width == 30
         assert sheet.column_dimensions["G"].width == 30
 
@@ -46,6 +46,24 @@ def test_translator_template_adds_default_and_preprocess_columns(tmp_path):
             assert sheet.cell(row=row, column=7).style == "EditableValue"
             assert sheet.cell(row=row, column=6).protection.locked is False
             assert sheet.cell(row=row, column=7).protection.locked is False
+            assert sheet.cell(row=row, column=1).style == "EditableValue"
+
+    library = workbook["Translations Library"]
+    assert library["B2"].style == "Normal"
+    assert {
+        library.cell(row=row, column=column).style
+        for row in range(2, library.max_row + 1)
+        for column in (1, 3, 4, 5, 10)
+    } == {"EditableValue"}
+
+    enum_sheet = workbook["ProjectUnits"]
+    enum_rows = range(2, enum_sheet.max_row + 1)
+    assert {enum_sheet.cell(row=row, column=1).style for row in enum_rows} == {"EditableValue"}
+
+    for sheet in workbook.worksheets:
+        if sheet.title == "About":
+            continue
+        assert {cell.style for cell in sheet[1] if cell.value is not None} == {"AttributeName"}
 
     bill_of_materials = workbook[COMMON_CATEGORY_PROPERTIES["bom"]["name"]]
     service_life_row = next(
@@ -56,22 +74,55 @@ def test_translator_template_adds_default_and_preprocess_columns(tmp_path):
         "material_reference_service_life",
         "Reference Service Life (RSL)",
         "Decimal",
-        "Required",
+        "Strongly recommended",
     ]
 
 
-def test_openbdf_template_includes_criticality_metadata(tmp_path):
+def test_openbdf_template_requirements_and_reference_layout(tmp_path):
     output_path = tmp_path / "openbdf_template.xlsx"
     save_openbdf_to_xlsx(output_path, None)
 
     workbook = load_workbook(output_path)
+    for sheet in workbook.worksheets:
+        assert sheet.row_dimensions[1].height == 38
+        for cell in sheet[1]:
+            assert (cell.alignment.horizontal, cell.alignment.vertical) == ("left", "bottom")
     info = workbook["General Information"]
     assert [info.cell(row=1, column=column).value for column in range(9, 12)] == [
         "Requirements",
-        "Criticality",
         "Value",
+        "Reference",
     ]
-    assert info.cell(row=2, column=10).value == "SHOULD"
+    assert info.cell(row=2, column=9).value == "Automatic"
+    assert info.cell(row=2, column=11).value == "ECHO; GBDB"
+
+    # An automatic value is grey, so a contributor sees which values the tool computes.
+    automatic_rows = [cell.row for cell in info["I"] if cell.value == "Automatic"]
+    editable_rows = [cell.row for cell in info["I"] if cell.row > 1 and cell.value not in ("Automatic", None)]
+    assert automatic_rows and editable_rows
+    assert {info.cell(row=row, column=10).style for row in automatic_rows} == {"AutomaticValue"}
+    assert {info.cell(row=row, column=10).style for row in editable_rows} == {"EditableValue"}
+    assert {info.cell(row=row, column=column).style for row in range(2, info.max_row + 1) for column in (7, 8, 11)} == {
+        "Metadata"
+    }
+    # The marked levels paint the five metadata columns of a General Information row.
+    for row in range(2, info.max_row + 1):
+        requirement = info.cell(row=row, column=9).value
+        expected = requirement if requirement in MARKED_REQUIREMENTS else "Normal"
+        assert {info.cell(row=row, column=column).style for column in range(1, 6)} == {expected}
+
+    first_field_requirements = {
+        "Bill of Materials": "Automatic",
+        "Project Material Database": "Automatic",
+        "LCA Result (Wide)": "Required",
+        "LCA Result (Tall)": "Required",
+    }
+    reference_labels = {
+        "Bill of Materials": "Reference",
+        "Project Material Database": "Reference",
+        "LCA Result (Wide)": "Reference Alignment",
+        "LCA Result (Tall)": "Reference Alignment",
+    }
 
     for sheet_name in FIELD_SHEET_NAMES[1:]:
         sheet = workbook[sheet_name]
@@ -81,16 +132,44 @@ def test_openbdf_template_includes_criticality_metadata(tmp_path):
         assert sheet["A5"].value == "Constraint"
         assert sheet["A6"].value == "Units"
         assert sheet["A7"].value == "Requirements"
-        assert sheet["A8"].value == "Criticality"
-        # Reference alignment position (v2.0.0): row 9 stays present but empty.
+        assert sheet["A8"].value == reference_labels[sheet_name]
+        # The reference row keeps the first data row at row 9 on every field sheet.
         assert sheet["A9"].value is None
-        assert sheet.cell(row=2, column=2).value == "material_id"
-        # material_id is MUST in format v2.0.0 on every field sheet.
-        assert sheet.cell(row=8, column=2).value == "MUST"
+        for cell in sheet[7]:
+            if cell.column > 1 and cell.value:
+                expected = "AutomaticValue" if cell.value == "Automatic" else "EditableValue"
+                assert sheet.cell(row=9, column=cell.column).style == expected
+        # Units and constraints are grey, whether they carry a value or not.
+        for row in (5, 6):
+            assert {sheet.cell(row=row, column=cell.column).style for cell in sheet[row] if cell.column > 1} == {
+                "Metadata"
+            }
+        # The first column labels every header row with white bold text on green.
+        assert {sheet.cell(row=row, column=1).style for row in range(1, 9)} == {"AttributeName"}
+        # Description and reference cells carry the colour of the marked levels.
+        for cell in sheet[7]:
+            if cell.column == 1 or not cell.value:
+                continue
+            expected = cell.value if cell.value in MARKED_REQUIREMENTS else "Normal"
+            assert sheet.cell(row=3, column=cell.column).style == expected
+            expected = cell.value if cell.value in MARKED_REQUIREMENTS else "Metadata"
+            assert sheet.cell(row=8, column=cell.column).style == expected
+        assert sheet.cell(row=2, column=2).value == (
+            "material_ref_id" if sheet_name == "Project Material Database" else "material_id"
+        )
+        assert sheet.cell(row=7, column=2).value == first_field_requirements[sheet_name]
 
     type_definitions = workbook["TypeDefinitions"]
     assert type_definitions["A1"].style == "AttributeName"
     assert type_definitions["B1"].style == "AttributeName"
+    assert type_definitions["A2"].value == "Reference"
+    assert type_definitions["B2"].value == "GBDI; SLiCe"
+    assert {cell.style for cell in type_definitions[2] if cell.column > 1} == {"Metadata"}
+    # Enum values start at row 3, because row 2 holds the datatype reference, and are read-only metadata.
+    body = [cell for row in type_definitions.iter_rows(min_row=3) for cell in row if cell.value is not None]
+    assert body
+    assert {cell.style for cell in body} == {"Metadata"}
+    assert type_definitions["B3"].value is not None
 
     theme = workbook.loaded_theme
     assert b'<a:latin typeface="Calibri"/>' in theme

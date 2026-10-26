@@ -1,5 +1,8 @@
 from typing import Any
 
+from openbdf.model.enums.references import Reference, ReferenceAlignment
+from openbdf.model.enums.requirement import Requirement
+
 
 def openbdf_field_metadata(
     *,
@@ -10,9 +13,9 @@ def openbdf_field_metadata(
     description: str,
     constraint: str | None = None,
     units: str | None = None,
-    requirements: str | None = None,
-    criticality: str = "SHOULD",
-    reference_formats: dict[str, Any] | None = None,
+    requirements: Requirement,
+    reference: Reference | None = None,
+    reference_alignment: ReferenceAlignment | None = None,
     example: str | None = None,
 ) -> dict[str, Any]:
     return {
@@ -25,8 +28,8 @@ def openbdf_field_metadata(
             "constraint": constraint,
             "units": units,
             "requirements": requirements,
-            "criticality": criticality,
-            "reference_formats": reference_formats or {},
+            "reference": reference.display_name if reference else None,
+            "reference_alignment": reference_alignment.display_name if reference_alignment else None,
             "example": example,
         }
     }

@@ -18,7 +18,7 @@ class BillMaterialLike(Protocol):
 TallRecordT = TypeVar("TallRecordT", bound=LCAResultsTallBase)
 
 
-def _derive_lca_stage_chain(
+def derive_lca_stage_chain(
     stage_or_module: LCAStageOrModuleOrSubModule,
 ) -> tuple[
     LCAStageOrModuleOrSubModule | None,
@@ -57,7 +57,7 @@ def lca_results_wide_to_tall(
     tall_results: list[TallRecordT] = []
 
     def append_tall_record(stage: LCAStageOrModuleOrSubModule, impact_values: dict[str, Any]) -> None:
-        lca_stage, lca_module, lca_submodule = _derive_lca_stage_chain(stage)
+        lca_stage, lca_module, lca_submodule = derive_lca_stage_chain(stage)
         record_values: dict[str, Any] = {
             "material_id": wide_result.material_id,
             "lca_stage_module_submodule": stage,

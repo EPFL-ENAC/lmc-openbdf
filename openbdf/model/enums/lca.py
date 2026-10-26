@@ -1,4 +1,5 @@
-from .openbdf_enum import OpenBDFEnum
+from .openbdf_enum import OpenBDFEnum, enum_attribute
+from .references import Reference
 
 
 class LCIModelingApproach(OpenBDFEnum):
@@ -22,6 +23,7 @@ class LCIModelingApproach(OpenBDFEnum):
         "Other",
         "Alternative LCA modeling methodology.",
     )
+    reference = enum_attribute(Reference.ISO_14040_2006_ISO_14044_2006)
 
 
 class LifeCycleSystemBoundary(OpenBDFEnum):
@@ -50,6 +52,8 @@ class LifeCycleSystemBoundary(OpenBDFEnum):
         "Gate to Gate",
         "Focuses specifically on the production stage processes.",
     )
+    UNKNOWN = ("unknown", "Unknown")
+    reference = enum_attribute(Reference.EN15978_2026_EU2026_52_ANNEX_III)
 
 
 class LifeCycleStage_ISO14040_44(OpenBDFEnum):
@@ -179,45 +183,58 @@ class LifeCycleModule_ISO14040_44(OpenBDFEnum):
 class LCAStageOrModuleOrSubModule(OpenBDFEnum):
     # Members follow the TypeDefinitions sheet order, which interleaves modules and their stage ranges,
     # so parent categories are linked after the class body.
-    A1 = ("A1", "A1 Raw material supply")
-    A1_A3 = ("A1-A3", "A1-A3 Product stage")
-    A2 = ("A2", "A2 Transport")
+    reference = enum_attribute(Reference.EN15978_2026_EN15804_A2_5_2_EU2026_52_ANNEX_III)
+    A1 = ("A1", "A1 Extraction and upstream production")
+    A1_A3 = ("A1-A3", "A1-A3 Product Stage")
+    A2 = ("A2", "A2 Transport to factory")
     A3 = ("A3", "A3 Manufacturing")
-    A4 = ("A4", "A4 Transport to site")
-    A4_A5 = ("A4-A5", "A4-A5 Construction process stage")
-    A5 = ("A5", "A5 Construction and installation process")
-    A5_1 = ("A5.1", "A5.1")
-    A5_2 = ("A5.2", "A5.2")
-    A5_3 = ("A5.3", "A5.3")
-    A5_4 = ("A5.4", "A5.4")
-    B1 = ("B1", "B1 Use")
-    B1_1 = ("B1.1", "B1.1")
-    B1_2 = ("B1.2", "B1.2")
+    A4 = ("A4", "A4 Transport to and from site")
+    A4_A5 = ("A4-A5", "A4-A5 Construction Process Stage")
+    A5 = ("A5", "A5 Construction installation process")
+    A5_1 = ("A5.1", "A5.1 Pre-construction demolition")
+    A5_2 = ("A5.2", "A5.2 Construction activities")
+    A5_3 = ("A5.3", "A5.3 Waste and waste management")
+    A5_4 = ("A5.4", "A5.4 Worker transport")
+    B1 = ("B1", "B1 Installed products in use")
+    B1_1 = ("B1.1", "B1.1 Emissions from materials and carbonation")
+    B1_2 = ("B1.2", "B1.2 Fugitive emissions of refrigerants")
     B1_B7 = ("B1-B7", "B1-B7 Use stage")
     B2 = ("B2", "B2 Maintenance")
     B3 = ("B3", "B3 Repair")
     B4 = ("B4", "B4 Replacement")
     B5 = ("B5", "B5 Refurbishment")
     B6 = ("B6", "B6 Operational energy use")
-    B6_1 = ("B6.1", "B6.1")
-    B6_2 = ("B6.2", "B6.2")
-    B6_3 = ("B6.3", "B6.3")
+    B6_1 = ("B6.1", "B6.1 Regulated building-integrated systems (services)")
+    B6_2 = ("B6.2", "B6.2 Non-regulated building-integrated systems (services)")
+    B6_3 = ("B6.3", "B6.3 Other energy use related to building user activities")
     B7 = ("B7", "B7 Operational water use")
-    B7_1 = ("B7.1", "B7.1")
-    B7_2 = ("B7.2", "B7.2")
-    B7_3 = ("B7.3", "B7.3")
+    B7_1 = (
+        "B7.1",
+        "B7.1 Essential building-integrated systems (toilets, showers, bathrooms, heating, cooling, ventilation, humidification, and irrigation)",
+    )
+    B7_2 = ("B7.2", "B7.2 Other building-integrated systems (swimming pools, saunas etc.)")
+    B7_3 = ("B7.3", "B7.3 Non-building-integrated systems (for example, dishwashers, washing machines, etc.)")
     B7_4 = ("B7.4", "B7.4")
-    B8 = ("B8", "B8")
-    B8_1 = ("B8.1", "B8.1")
-    B8_2 = ("B8.2", "B8.2")
-    B8_3 = ("B8.3", "B8.3")
-    C1 = ("C1", "C1 Deconstruction and demolition")
-    C1_C4 = ("C1-C4", "C1-C4 End-of-life stage")
-    C2 = ("C2", "C2 Transport")
-    C3 = ("C3", "C3 Waste processing")
-    C4 = ("C4", "C4 Disposal")
-    D1 = ("D1", "D1 Reuse, recovery, and recycling potential")
-    D2 = ("D2", "D2 Net benefits beyond the system boundary")
+    B8 = ("B8", "B8 Building-integrated users' activities, not covered by B1-B7")
+    B8_1 = ("B8.1", "B8.1 Transport of persons to and from the building")
+    B8_2 = ("B8.2", "B8.2 Charging of electric vehicles within the building site")
+    B8_3 = (
+        "B8.3",
+        "B8.3 Others, such as use of “consumables” like paper for offices, or furniture and equipment not fixed to the building",
+    )
+    C1 = ("C1", "C1 Deconstruction")
+    C1_C4 = ("C1-C4", "C1-C4 End-of-life Stage")
+    C2 = ("C2", "C2 Transport to waste processing or disposal")
+    C3 = ("C3", "C3 Waste processing for reuse, recovery or recycling")
+    C4 = ("C4", "C4 Disposal of waste")
+    D1 = (
+        "D1",
+        "D1 Reuse, recycling and energy recovery resulting from the net flows of materials exiting the system boundary",
+    )
+    D2 = (
+        "D2",
+        "D2 Potential benefits and loads from exported utilities (for example, electrical energy, thermal energy, potable water)",
+    )
     D = ("D", "D Benefits and loads beyond the system boundary")
     D_D2 = ("D-D2", "D-D2 Beyond the system boundary")
 
@@ -271,6 +288,7 @@ class LCADatabase(OpenBDFEnum):
     EC3 = ("EC3", "EC3")
     ECOINVENT = ("ecoinvent", "Ecoinvent")
     OTHER = ("Other", "Other")
+    reference = enum_attribute(Reference.EN_15941_2024)
 
 
 class LCADatabaseSystemModel(OpenBDFEnum):
@@ -294,6 +312,8 @@ class LCADatabaseSystemModel(OpenBDFEnum):
         "Consequential (marginal, market-driven modelling)",
         "marginal, market-driven modelling",
     )
+    UNKNOWN = ("unknown", "Unknown")
+    reference = enum_attribute(Reference.EN15804_A2_ECOINVENT_SYSTEM_MODELS)
 
 
 class DataWeightingBasis(OpenBDFEnum):
@@ -312,6 +332,7 @@ class DataWeightingBasis(OpenBDFEnum):
         "Not computed (shares not weighted)",
         "shares not weighted",
     )
+    reference = enum_attribute(Reference.GBDI)
 
 
 class BiogenicCarbonAccounting(OpenBDFEnum):
@@ -327,6 +348,7 @@ class BiogenicCarbonAccounting(OpenBDFEnum):
         "Ton-Year Accounting or Discounting Method",
     )
     OTHER = ("other", "Other")
+    reference = enum_attribute(Reference.EN15804_A2_EN15978_2026)
 
 
 class LCATemporalApproach(OpenBDFEnum):
@@ -334,6 +356,7 @@ class LCATemporalApproach(OpenBDFEnum):
     DYNAMIC = ("dynamic", "Dynamic (impacts distributed over time)")
     PROBABILISTIC = ("probabilistic", "Probabilistic")
     PROSPECTIVE = ("prospective", "Prospective")
+    reference = enum_attribute(Reference.EN15978_2026)
 
 
 class AssessmentType_EN15978(OpenBDFEnum):
@@ -347,6 +370,8 @@ class AssessmentType_EN15978(OpenBDFEnum):
         "Type 4 - fully detailed as designed or as built model",
         "Type 4 - fully detailed as designed or as built model",
     )
+    UNKNOWN = ("unknown", "Unknown")
+    reference = enum_attribute(Reference.EN15978_2026)
 
 
 class LimitValueScopeReduction(OpenBDFEnum):
@@ -370,6 +395,7 @@ class LimitValueScopeReduction(OpenBDFEnum):
         "Both (parts of life-cycle stages and parts of the scope of building components left out)",
         "parts of life-cycle stages and parts of the scope of building components left out",
     )
+    reference = enum_attribute(Reference.EU2026_52_ANNEX_III)
 
 
 class LCIAMethodology(OpenBDFEnum):
@@ -378,3 +404,4 @@ class LCIAMethodology(OpenBDFEnum):
     EN_15978_2026 = ("EN 15978:2026", "EN 15978:2026")
     US_EPA_TRACI_2_1 = ("US EPA TRACI 2.1", "US EPA TRACI 2.1")
     OTHER = ("Other", "Other")
+    reference = enum_attribute(Reference.EN15804_A2_TRACI_RECIPE_2016_IPCC_AR6)
