@@ -15,7 +15,7 @@ from openbdf.lib.validation.errors import (
     MaterialIdMisalignment,
     MaterialRefIdMismatch,
     MissingMass,
-    MissingRequiredField,
+    MissingSheet,
     OpenBDFValidationError,
     ProjectMaterialDatabaseWithoutBillOfMaterialsLine,
     RowCountMismatch,
@@ -227,16 +227,15 @@ def validate_project(
     tables: OpenBDFTables | None = None,
     *,
     document_translator: DocumentTranslator | None = None,
-    draft: bool = False,
     dropped_rows: frozenset[int] = frozenset(),
 ) -> list[OpenBDFValidationError]:
     """
     Collect every finding about a project instead of stopping at the first one.
 
     The sheet-level checks E05, E06 and E16 need the source tables, so a project restored
-    from a database is validated without them. A missing sheet rejects a strict open but
-    is tolerated in draft mode, where the missing lines are generated. dropped_rows holds
-    the Excel rows the ingest dropped, which the row checks leave out.
+    from a database is validated without them. A missing project material database sheet is
+    an E34 warning, because its lines are generated from the bill of materials. dropped_rows
+    holds the Excel rows the ingest dropped, which the row checks leave out.
     """
     findings = check_duplicate_material_ids(project)
     findings.extend(check_declared_results(project))
@@ -249,13 +248,11 @@ def validate_project(
     bill_of_materials = field_code_frame(tables.bill_of_materials, BOM_SHEET, document_translator)
 
     if tables.project_material_database is None:
-        if not draft:
-            findings.append(
-                MissingRequiredField(
-                    "Sheet is missing or empty",
-                    source=PMD_SHEET,
-                )
+        findings.append(
+            MissingSheet(
+                "Sheet is missing or empty, its lines were generated from the bill of materials", source=PMD_SHEET
             )
+        )
     else:
         findings.extend(check_project_material_database(project))
 

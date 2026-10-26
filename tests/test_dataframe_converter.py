@@ -163,20 +163,44 @@ def collected_findings(loaded: OpenBDFTables, *, draft: bool = False) -> list[Op
     """Run the ingest and the validation that the open command runs on the tables."""
     findings: list[OpenBDFValidationError] = []
     project = project_package_from_tables(loaded, findings=findings, draft=draft)
-    findings.extend(validate_project(project, loaded, draft=draft))
+    findings.extend(validate_project(project, loaded))
     return sort_findings(findings)
 
 
-def test_project_package_from_tables_reports_a_missing_project_material_database():
+def test_project_package_from_tables_warns_about_a_missing_project_material_database():
     bom = pd.DataFrame([bom_row("MAT-1", custom_material_name="Concrete")])
 
     findings = collected_findings(tables_without_project_material_database(bom))
 
     assert [str(finding) for finding in findings] == [
         "E19: 'Concrete' has no mapping; the field was left empty and not guessed",
-        "E01: Sheet is missing or empty",
+        "E34: Sheet is missing or empty, its lines were generated from the bill of materials",
     ]
     assert findings[1].source == "Project Material Database"
+    assert findings[1].severity is Severity.WARNING
+
+
+def test_project_package_from_tables_generates_lines_when_the_sheet_is_missing():
+    bom = pd.DataFrame([
+        bom_row("MAT-1", custom_material_name="Concrete", material_weight_kg="100"),
+        bom_row("MAT-2", custom_material_name="Wood", material_weight_kg="50"),
+    ])
+
+    loaded = tables_without_project_material_database(bom)
+    findings: list[OpenBDFValidationError] = []
+    project = project_package_from_tables(loaded, findings=findings)
+
+    assert [
+        (record.custom_material_name, record.material_ref_id, record.bom_row_count)
+        for record in project.project_material_database
+    ] == [
+        ("Concrete", "M0001", 1),
+        ("Wood", "M0002", 1),
+    ]
+    assert {record.material_id: record.material_ref_id for record in project.bill_of_materials} == {
+        "MAT-1": "M0001",
+        "MAT-2": "M0002",
+    }
 
 
 def test_project_package_from_tables_in_draft_mode_generates_lines_when_the_sheet_is_missing():
@@ -188,11 +212,12 @@ def test_project_package_from_tables_in_draft_mode_generates_lines_when_the_shee
     loaded = tables_without_project_material_database(bom)
     findings: list[OpenBDFValidationError] = []
     project = project_package_from_tables(loaded, findings=findings, draft=True)
-    findings.extend(validate_project(project, loaded, draft=True))
+    findings.extend(validate_project(project, loaded))
 
     assert [str(finding) for finding in findings] == [
         "E19: 'Concrete' has no mapping; the field was left empty and not guessed",
         "E19: 'Wood' has no mapping; the field was left empty and not guessed",
+        "E34: Sheet is missing or empty, its lines were generated from the bill of materials",
     ]
 
     assert [
