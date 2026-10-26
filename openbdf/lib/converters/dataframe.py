@@ -582,9 +582,10 @@ def project_package_from_tables(
     Reconstruct a ProjectRecord and attach its bill of materials from logical tables.
 
     In draft mode a missing project material database line is generated from the bill
-    of materials. Every record is validated and its findings are added to the findings
-    list, so the caller can report all of them and decide whether to export the file.
-    The automatic fields are filled last, so the validation reads the derived values.
+    of materials, and so is every line when the sheet is missing. Every record is validated
+    and its findings are added to the findings list, so the caller can report all of them
+    and decide whether to export the file. The automatic fields are filled last, so the
+    validation reads the derived values.
 
     If drop_invalid is True, bill of materials lines that miss a required
     field are dropped and a message is printed for each dropped line.
@@ -658,6 +659,11 @@ def project_package_from_tables(
         bill_of_materials=bill_of_materials,
         project_material_database=project_material_database,
     )
-    fill_computed(project, document_translator, findings=findings, draft=draft)
+    fill_computed(
+        project,
+        document_translator,
+        findings=findings,
+        generate_missing_lines=draft or tables.project_material_database is None,
+    )
 
     return project

@@ -31,13 +31,16 @@ To convert project files into an openbdf file (`output.xslx`), run (COLA example
 uv run openbdf open \
   path/to/cola_file.xlsx \
   path/to/cola_general_info.xlsx \
-  -t translators/translator_at_v2.0.0.xlsx
-  -t translators/translator_bec_at_v2.0.0.xlsx
-  -t translators/translator_bmc_at_v2.0.0.xlsx
-  --drop-invalid-materials
+  -t translators/translator_at_v2.0.0.xlsx \
+  -t translators/translator_bec_at_v2.0.0.xlsx \
+  -t translators/translator_bmc_at_v2.0.0.xlsx \
   -o output.xslx
 ```
 It will list potential validation errors, that prevent the export. To export anyway in case of errors, append the option `--draft`.
+
+Bill of materials lines that miss required fields are dropped and reported as warnings by default. To keep these lines and validate them instead, append the option `--no-drop-invalid-materials`.
+
+A missing `Project Material Database` sheet does not stop the export. Its lines are generated from the bill of materials, and the sheet is reported as an `E34` warning.
 
 > [!NOTE] Multiple translator files can be merged with a single command, as shown above. When two files translate the same category, the last file wins.
 

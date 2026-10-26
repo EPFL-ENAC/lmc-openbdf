@@ -23,12 +23,12 @@ def fill_materials(
     document_translator: DocumentTranslator | None,
     findings: list[OpenBDFValidationError],
     *,
-    draft: bool,
+    generate_missing_lines: bool,
 ) -> None:
     """
     Give every material pair a reference id and roll its bill of materials rows up into a
-    project material database line. In draft mode a pair without a line gets one, so the
-    workbook can be saved before the contributor fills the sheet.
+    project material database line. When generate_missing_lines is set, a pair without a line
+    gets one, so the workbook can be saved before the contributor fills the sheet.
     """
     lines = list(getattr(project, "project_material_database", None) or [])
     rows = getattr(project, "bill_of_materials", None) or []
@@ -42,7 +42,7 @@ def fill_materials(
 
     highest_id = max((_ref_id_number(record.material_ref_id) for record in (*lines, *rows)), default=0)
 
-    if draft:
+    if generate_missing_lines:
         for pair, pair_rows in rows_by_pair.items():
             if pair in line_by_pair:
                 continue

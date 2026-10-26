@@ -102,9 +102,9 @@ def open(
         help="Whether to create a draft version of the project. If set, the command will accept missing fields while still validating existing values",
     ),
     drop_invalid_materials: bool = typer.Option(
-        False,
-        "--drop-invalid-materials",
-        help="Drop bill of materials lines that miss required fields and report them as warnings.",
+        True,
+        "--drop-invalid-materials/--no-drop-invalid-materials",
+        help="Drop bill of materials lines that miss required fields and report them as warnings. Enabled by default, use --no-drop-invalid-materials to keep these lines.",
     ),
     output_path: Path = typer.Option(
         Path("./output.xlsx"),
@@ -157,7 +157,6 @@ def open(
             project,
             tables,
             document_translator=document_translator,
-            draft=draft,
             dropped_rows=frozenset(
                 finding.row for finding in findings if isinstance(finding, DroppedLine) and finding.row is not None
             ),
