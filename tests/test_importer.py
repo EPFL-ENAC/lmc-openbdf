@@ -1,3 +1,4 @@
+import io
 from pathlib import Path
 
 import pandas as pd
@@ -187,6 +188,22 @@ def test_excel_sheet_source_accepts_a_single_path(tmp_path: Path):
     with ExcelSheetSource(workbook) as source:
         assert list(source.sheet_names) == ["Only"]
         assert source.read_sheet("Only").iloc[0, 0] == 42
+
+
+def test_excel_sheet_source_accepts_in_memory_workbooks(tmp_path: Path):
+    workbook = tmp_path / "single.xlsx"
+    write_workbook(workbook, {"Only": pd.DataFrame([[42]])})
+    payload = workbook.read_bytes()
+
+    for source_input in (payload, io.BytesIO(payload), [payload]):
+        with ExcelSheetSource(source_input) as source:
+            assert list(source.sheet_names) == ["Only"]
+            assert source.read_sheet("Only").iloc[0, 0] == 42
+
+    buffer = io.BytesIO(payload)
+    with ExcelSheetSource(buffer):
+        pass
+    assert not buffer.closed
 
 
 def test_excel_sheet_source_rejects_every_duplicate_sheet(tmp_path: Path):

@@ -5,7 +5,6 @@ from decimal import Decimal
 from typing import Optional
 
 from sqlalchemy import Date
-from sqlalchemy import Enum as SAEnum
 from sqlmodel import Field, SQLModel
 
 from openbdf.model.ingest import make_ingest_model
@@ -62,6 +61,7 @@ from .enums.project import (
 from .enums.references import Reference
 from .enums.requirement import Requirement
 from .field_metadata import openbdf_field_metadata
+from .sa_enum import sa_enum
 
 
 class ProjectRecordBase(SQLModel):
@@ -97,7 +97,7 @@ class ProjectRecordBase(SQLModel):
     )
 
     record_type: RecordType = Field(  # type: ignore[call-overload]
-        sa_type=SAEnum(RecordType),
+        sa_type=sa_enum(RecordType),
         description="Kind of object the submission describes",
         schema_extra=openbdf_field_metadata(
             group="Project",
@@ -111,7 +111,7 @@ class ProjectRecordBase(SQLModel):
     )
 
     project_units: ProjectUnits = Field(  # type: ignore[call-overload]
-        sa_type=SAEnum(ProjectUnits),
+        sa_type=sa_enum(ProjectUnits),
         description="Unit system used in the assessment.",
         schema_extra=openbdf_field_metadata(
             group="Project",
@@ -161,7 +161,7 @@ class ProjectRecordBase(SQLModel):
 
     project_construction_type: Optional[ConstructionType] = Field(  # type: ignore[call-overload]
         default=None,
-        sa_type=SAEnum(ConstructionType),
+        sa_type=sa_enum(ConstructionType),
         description="Construction type of the project.",
         schema_extra=openbdf_field_metadata(
             group="Project",
@@ -177,7 +177,7 @@ class ProjectRecordBase(SQLModel):
 
     project_country: Country = Field(  # type: ignore[call-overload]
         default=None,
-        sa_type=SAEnum(Country),
+        sa_type=sa_enum(Country),
         description="Country where the project is located.",
         schema_extra=openbdf_field_metadata(
             group="Project",
@@ -371,7 +371,7 @@ class ProjectRecordBase(SQLModel):
 
     project_phase: Optional[ProjectPhase] = Field(  # type: ignore[call-overload]
         default=None,
-        sa_type=SAEnum(ProjectPhase),
+        sa_type=sa_enum(ProjectPhase),
         description="Stage of the project when LCA is conducted.",
         schema_extra=openbdf_field_metadata(
             group="Project",
@@ -387,7 +387,7 @@ class ProjectRecordBase(SQLModel):
 
     project_phase_common: Optional[ProjectPhaseCommon] = Field(  # type: ignore[call-overload]
         default=None,
-        sa_type=SAEnum(ProjectPhaseCommon),
+        sa_type=sa_enum(ProjectPhaseCommon),
         description="Project phase mapped to the common definition of design steps and project phases.",
         schema_extra=openbdf_field_metadata(
             group="Project",
@@ -401,7 +401,7 @@ class ProjectRecordBase(SQLModel):
     )
 
     project_assessment_type: AssessmentType_EN15978 = Field(  # type: ignore[call-overload]
-        sa_type=SAEnum(AssessmentType_EN15978),
+        sa_type=sa_enum(AssessmentType_EN15978),
         description="Granularity of the building model behind the assessment",
         schema_extra=openbdf_field_metadata(
             group="Project",
@@ -598,7 +598,7 @@ class ProjectRecordBase(SQLModel):
     )
 
     project_gfa_method: GFAMeasurementMethod = Field(  # type: ignore[call-overload]
-        sa_type=SAEnum(GFAMeasurementMethod),
+        sa_type=sa_enum(GFAMeasurementMethod),
         description="Gross Floor Area measurement method.",
         schema_extra=openbdf_field_metadata(
             group="Project",
@@ -648,7 +648,7 @@ class ProjectRecordBase(SQLModel):
 
     building_geographic_climate_zone: Optional[ClimateZone] = Field(  # type: ignore[call-overload]
         default=None,
-        sa_type=SAEnum(ClimateZone),
+        sa_type=sa_enum(ClimateZone),
         description="Climate zone of the building site, with its classification system: ASHRAE 169, IECC or Koppen-Geiger.",
         schema_extra=openbdf_field_metadata(
             group="Building",
@@ -682,7 +682,7 @@ class ProjectRecordBase(SQLModel):
 
     building_seismic_zone: Optional[FEMASeismicActivity] = Field(  # type: ignore[call-overload]
         default=None,
-        sa_type=SAEnum(FEMASeismicActivity),
+        sa_type=sa_enum(FEMASeismicActivity),
         description="Classification of seismic activity level.",
         schema_extra=openbdf_field_metadata(
             group="Building",
@@ -698,7 +698,7 @@ class ProjectRecordBase(SQLModel):
 
     building_use_type: Optional[BuildingTypology] = Field(  # type: ignore[call-overload]
         default=None,
-        sa_type=SAEnum(BuildingTypology),
+        sa_type=sa_enum(BuildingTypology),
         description="Main use of the building.",
         schema_extra=openbdf_field_metadata(
             group="Building",
@@ -880,7 +880,7 @@ class ProjectRecordBase(SQLModel):
 
     building_element_classification_code_name: Optional[BuildingClassificationCode] = Field(  # type: ignore[call-overload]
         default=None,
-        sa_type=SAEnum(BuildingClassificationCode),
+        sa_type=sa_enum(BuildingClassificationCode),
         description="Name of the custom or national building element classification code utilized.",
         schema_extra=openbdf_field_metadata(
             group="Building",
@@ -925,7 +925,7 @@ class ProjectRecordBase(SQLModel):
 
     building_element_classification_tier: Optional[BuildingElementClassificationTier] = Field(  # type: ignore[call-overload]
         default=None,
-        sa_type=SAEnum(BuildingElementClassificationTier),
+        sa_type=sa_enum(BuildingElementClassificationTier),
         description="Tiers of the custom or national building element classification covered",
         schema_extra=openbdf_field_metadata(
             group="Building",
@@ -940,7 +940,7 @@ class ProjectRecordBase(SQLModel):
 
     building_structure_type: Optional[BuildingStructureType] = Field(  # type: ignore[call-overload]
         default=None,
-        sa_type=SAEnum(BuildingStructureType),
+        sa_type=sa_enum(BuildingStructureType),
         description="Main structural material and structural system of the building, or a mixed combination.",
         schema_extra=openbdf_field_metadata(
             group="Building",
@@ -971,7 +971,7 @@ class ProjectRecordBase(SQLModel):
 
     building_soil_data: Optional[SoilType] = Field(  # type: ignore[call-overload]
         default=None,
-        sa_type=SAEnum(SoilType),
+        sa_type=sa_enum(SoilType),
         description="Information about the category of soil.",
         schema_extra=openbdf_field_metadata(
             group="Building",
@@ -987,7 +987,7 @@ class ProjectRecordBase(SQLModel):
 
     building_foundation_type: Optional[FoundationType] = Field(  # type: ignore[call-overload]
         default=None,
-        sa_type=SAEnum(FoundationType),
+        sa_type=sa_enum(FoundationType),
         description="Construction method used to support a building below ground.",
         schema_extra=openbdf_field_metadata(
             group="Building",
@@ -1020,7 +1020,7 @@ class ProjectRecordBase(SQLModel):
 
     building_energy_classification_system: Optional[BuildingEnergyClassificationSystem] = Field(  # type: ignore[call-overload]
         default=None,
-        sa_type=SAEnum(BuildingEnergyClassificationSystem),
+        sa_type=sa_enum(BuildingEnergyClassificationSystem),
         description="Energy classification of the building.",
         schema_extra=openbdf_field_metadata(
             group="Building",
@@ -1036,7 +1036,7 @@ class ProjectRecordBase(SQLModel):
 
     building_energy_code_system: Optional[BuildingEnergyCodeSystem] = Field(  # type: ignore[call-overload]
         default=None,
-        sa_type=SAEnum(BuildingEnergyCodeSystem),
+        sa_type=sa_enum(BuildingEnergyCodeSystem),
         description="Which energy code or standard the energy figures are calculated against",
         schema_extra=openbdf_field_metadata(
             group="Building",
@@ -1123,7 +1123,7 @@ class ProjectRecordBase(SQLModel):
 
     building_primary_energy_source: Optional[PrimaryEnergySource] = Field(  # type: ignore[call-overload]
         default=None,
-        sa_type=SAEnum(PrimaryEnergySource),
+        sa_type=sa_enum(PrimaryEnergySource),
         description="Primary energy source for heating/cooling/DHW.",
         schema_extra=openbdf_field_metadata(
             group="Building",
@@ -1155,7 +1155,7 @@ class ProjectRecordBase(SQLModel):
 
     building_orientation: Optional[BuildingFacingDirection] = Field(  # type: ignore[call-overload]
         default=None,
-        sa_type=SAEnum(BuildingFacingDirection),
+        sa_type=sa_enum(BuildingFacingDirection),
         description="Orientation of the main façade.",
         schema_extra=openbdf_field_metadata(
             group="Building",
@@ -1262,7 +1262,7 @@ class ProjectRecordBase(SQLModel):
 
     building_gross_floor_area_standard: Optional[GrossFloorAreaStandard] = Field(  # type: ignore[call-overload]
         default=None,
-        sa_type=SAEnum(GrossFloorAreaStandard),
+        sa_type=sa_enum(GrossFloorAreaStandard),
         description="Definition of GFA according to national standards.",
         schema_extra=openbdf_field_metadata(
             group="Building",
@@ -1278,7 +1278,7 @@ class ProjectRecordBase(SQLModel):
 
     building_floor_area_inclusions: Optional[FloorAreaInclusions] = Field(  # type: ignore[call-overload]
         default=None,
-        sa_type=SAEnum(FloorAreaInclusions),
+        sa_type=sa_enum(FloorAreaInclusions),
         description="What the reported floor area contains",
         schema_extra=openbdf_field_metadata(
             group="Building",
@@ -1617,7 +1617,7 @@ class ProjectRecordBase(SQLModel):
 
     lca_replacement_count_method: Optional[ReplacementCountMethod] = Field(  # type: ignore[call-overload]
         default=None,
-        sa_type=SAEnum(ReplacementCountMethod),
+        sa_type=sa_enum(ReplacementCountMethod),
         description="Rule used to count component replacements in module B4",
         schema_extra=openbdf_field_metadata(
             group="LCA",
@@ -1699,7 +1699,7 @@ class ProjectRecordBase(SQLModel):
 
     lca_database_name: Optional[LCADatabase] = Field(  # type: ignore[call-overload]
         default=None,
-        sa_type=SAEnum(LCADatabase),
+        sa_type=sa_enum(LCADatabase),
         description="Background database and its release, in one value, for example OKOBAUDAT_20.23.050.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
@@ -1714,7 +1714,7 @@ class ProjectRecordBase(SQLModel):
     )
 
     lca_database_system_model: LCADatabaseSystemModel = Field(  # type: ignore[call-overload]
-        sa_type=SAEnum(LCADatabaseSystemModel),
+        sa_type=sa_enum(LCADatabaseSystemModel),
         description="System model of the background database",
         schema_extra=openbdf_field_metadata(
             group="LCA",
@@ -1905,7 +1905,7 @@ class ProjectRecordBase(SQLModel):
 
     lca_data_weighting_basis: Optional[DataWeightingBasis] = Field(  # type: ignore[call-overload]
         default=None,
-        sa_type=SAEnum(DataWeightingBasis),
+        sa_type=sa_enum(DataWeightingBasis),
         description="Quantity used to weight the data quality shares.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
@@ -1956,7 +1956,7 @@ class ProjectRecordBase(SQLModel):
 
     lca_temporal_approach: Optional[LCATemporalApproach] = Field(  # type: ignore[call-overload]
         default=None,
-        sa_type=SAEnum(LCATemporalApproach),
+        sa_type=sa_enum(LCATemporalApproach),
         description="Type of LCA (e.g., probabilistic, dynamic, probabilistic, prospective)",
         schema_extra=openbdf_field_metadata(
             group="LCA",
@@ -1972,7 +1972,7 @@ class ProjectRecordBase(SQLModel):
 
     lca_onsite_renewable_allocation: Optional[OnSiteRenewableAllocationApproach] = Field(  # type: ignore[call-overload]
         default=None,
-        sa_type=SAEnum(OnSiteRenewableAllocationApproach),
+        sa_type=sa_enum(OnSiteRenewableAllocationApproach),
         description="Approach chosen for allocating to the building the embodied emissions of on-site renewable energy production. Energy storage components are allocated to the building in full under every approach.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
@@ -1987,7 +1987,7 @@ class ProjectRecordBase(SQLModel):
 
     lca_shared_component_allocation_rule: Optional[SharedComponentAllocationRule] = Field(  # type: ignore[call-overload]
         default=None,
-        sa_type=SAEnum(SharedComponentAllocationRule),
+        sa_type=sa_enum(SharedComponentAllocationRule),
         description="Rule applied to allocate the emissions of building components shared by multiple buildings. Stated only when the submission covers more than one building.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
@@ -2016,7 +2016,7 @@ class ProjectRecordBase(SQLModel):
 
     lca_extended_default_data_basis: Optional[ExtendedDefaultDataBasis] = Field(  # type: ignore[call-overload]
         default=None,
-        sa_type=SAEnum(ExtendedDefaultDataBasis),
+        sa_type=sa_enum(ExtendedDefaultDataBasis),
         description="The provision or circumstance under which the extended use of default data was applied.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
@@ -2045,7 +2045,7 @@ class ProjectRecordBase(SQLModel):
 
     lca_limit_value_scope_reduction: Optional[LimitValueScopeReduction] = Field(  # type: ignore[call-overload]
         default=None,
-        sa_type=SAEnum(LimitValueScopeReduction),
+        sa_type=sa_enum(LimitValueScopeReduction),
         description="The parts of life-cycle stages and of the scope of building components left out for the verification of compliance with a limit value.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
@@ -2060,7 +2060,7 @@ class ProjectRecordBase(SQLModel):
 
     lca_emission_factor_scenario: Optional[EmissionFactorScenario] = Field(  # type: ignore[call-overload]
         default=None,
-        sa_type=SAEnum(EmissionFactorScenario),
+        sa_type=sa_enum(EmissionFactorScenario),
         description="The forward-looking emission factor scenario applied over the study period",
         schema_extra=openbdf_field_metadata(
             group="LCA",
@@ -2076,7 +2076,7 @@ class ProjectRecordBase(SQLModel):
 
     lca_lci_modeling_approach: Optional[LCIModelingApproach] = Field(  # type: ignore[call-overload]
         default=None,
-        sa_type=SAEnum(LCIModelingApproach),
+        sa_type=sa_enum(LCIModelingApproach),
         description="Type of Life Cycle Inventory (LCI) Modeling Approach",
         schema_extra=openbdf_field_metadata(
             group="LCA",
@@ -2091,7 +2091,7 @@ class ProjectRecordBase(SQLModel):
     )
 
     lca_cycle_system_boundary: LifeCycleSystemBoundary = Field(  # type: ignore[call-overload]
-        sa_type=SAEnum(LifeCycleSystemBoundary),
+        sa_type=sa_enum(LifeCycleSystemBoundary),
         description="Life-cycle modules included in the assessment.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
@@ -2107,7 +2107,7 @@ class ProjectRecordBase(SQLModel):
 
     lcia_methodology: Optional[LCIAMethodology] = Field(  # type: ignore[call-overload]
         default=None,
-        sa_type=SAEnum(LCIAMethodology),
+        sa_type=sa_enum(LCIAMethodology),
         description="Impact assessment method (for GHG emissions, GWP indicator).",
         schema_extra=openbdf_field_metadata(
             group="LCA",
@@ -2123,7 +2123,7 @@ class ProjectRecordBase(SQLModel):
 
     lca_biogenic_method: Optional[BiogenicCarbonAccounting] = Field(  # type: ignore[call-overload]
         default=None,
-        sa_type=SAEnum(BiogenicCarbonAccounting),
+        sa_type=sa_enum(BiogenicCarbonAccounting),
         description="Method used for biogenic carbon accounting.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
@@ -2154,7 +2154,7 @@ class ProjectRecordBase(SQLModel):
 
     lca_material_source: Optional[MaterialQuantitiesSource] = Field(  # type: ignore[call-overload]
         default=None,
-        sa_type=SAEnum(MaterialQuantitiesSource),
+        sa_type=sa_enum(MaterialQuantitiesSource),
         description="Main source of material quantities.",
         schema_extra=openbdf_field_metadata(
             group="LCA",

@@ -17,6 +17,8 @@ _Schema and parser for the Open Building Data Format (OpenBDF) developed by GBDI
 make install
 ```
 
+`make install` installs every extra, including `cli` (typer and rich). Library users need only the base dependencies: `uv sync`.
+
 
 ## Usage
 
@@ -38,6 +40,54 @@ uv run openbdf open \
 It will list potential validation errors, that prevent the export. To export anyway in case of errors, append the option `--draft`.
 
 > [!NOTE] Multiple translator files can be merged with a single command, as shown above. When two files translate the same category, the last file wins.
+
+
+## Backend integration
+
+The parser is a plain library. Install it without the CLI extra (`typer` and `rich`) until a release is on PyPI:
+
+```bash
+uv add git+https://github.com/EPFL-ENAC/lmc-openbdf
+```
+
+Pass uploaded workbooks as bytes. `ExcelSheetSource` also accepts paths and open file objects.
+
+```python
+from openbdf.lib.converters.dataframe import project_package_from_tables
+from openbdf.lib.converters.translators import DocumentTranslator
+from openbdf.lib.openbdf_tables import OpenBDFTables
+from openbdf.lib.sources import ExcelSheetSource
+from openbdf.lib.validation import DroppedLine, OpenBDFValidationError, sort_findings, validate_project
+from openbdf.model.tables import ProjectRecord
+
+
+def ingest(workbooks: list[bytes]) -> tuple[ProjectRecord, list[OpenBDFValidationError]]:
+    """Convert uploaded workbooks into a ProjectRecord graph and its validation findings."""
+    translator = DocumentTranslator.default_openbdf_translator()
+    findings: list[OpenBDFValidationError] = []
+
+    with ExcelSheetSource(workbooks) as source:
+        tables = OpenBDFTables.from_source(source, translator)
+    if tables is None:
+        raise ValueError("No project sheet or bill of materials sheet found.")
+
+    project = project_package_from_tables(tables, translator, findings=findings)
+    findings += validate_project(
+        project,
+        tables,
+        document_translator=translator,
+        dropped_rows=frozenset(f.row for f in findings if isinstance(f, DroppedLine) and f.row is not None),
+    )
+    return project, sort_findings(findings)
+```
+
+`project` is a `ProjectRecord` graph of SQLModel classes, listed in `openbdf/model/tables.py`. Create the tables with `SQLModel.metadata.create_all(engine)` or with an Alembic migration, then add the graph to a session.
+
+Each finding carries `code`, `severity`, `message`, `source` (sheet name) and `row`. Return them as JSON with:
+
+```python
+[{"code": f.code, "severity": f.severity.value, "sheet": f.source, "row": f.row, "message": f.message} for f in findings]
+```
 
 ## LCA results model classes
 
