@@ -26,7 +26,8 @@ class FieldAnalysis(BaseModel):
     group_info: str | None = None
     description: str | None = None
     requirements: str | None = None
-    criticality: str | None = None
+    reference: str | None = None
+    reference_alignment: str | None = None
     constraint: str | None = None
     units: str | None = None
     enum_values: list[EnumValue] = Field(default_factory=list)
@@ -45,13 +46,16 @@ def analyze_model(model_name: str, field_names: list[str] | None = None) -> Mode
     from openbdf.model.building_bill_materials_slim import BuildingBillMaterialsSlimRecordBase
     from openbdf.model.enums.openbdf_enum import OpenBDFEnum
     from openbdf.model.general_info import ProjectRecordBase  # Import inside to avoid circular deps
-    from openbdf.model.tables import BuildingBillMaterialsSlimRecord, ProjectRecord
+    from openbdf.model.project_material_database import ProjectMaterialDatabaseBase
+    from openbdf.model.tables import BuildingBillMaterialsSlimRecord, ProjectMaterialDatabaseRecord, ProjectRecord
 
     registry = {
         "ProjectRecordBase": ProjectRecordBase,
         "ProjectRecord": ProjectRecord,
         "BuildingBillMaterialsSlimRecordBase": BuildingBillMaterialsSlimRecordBase,
         "BuildingBillMaterialsSlimRecord": BuildingBillMaterialsSlimRecord,
+        "ProjectMaterialDatabaseBase": ProjectMaterialDatabaseBase,
+        "ProjectMaterialDatabaseRecord": ProjectMaterialDatabaseRecord,
         "LCAResultsFullBase": LCAResultsWideFullBase,
         "LCAResultsFullRecord": LCAResultsWideFullRecord,
     }
@@ -100,8 +104,9 @@ def analyze_model(model_name: str, field_names: list[str] | None = None) -> Mode
             attribute_name=metadata.get("attribute_name"),
             group_info=f"{metadata.get('group')} > {metadata.get('sub_group')}" if metadata.get("group") else None,
             description=metadata.get("description") or field_info.description,
-            requirements=metadata.get("requirements"),
-            criticality=metadata.get("criticality"),
+            requirements=metadata["requirements"].display_name if metadata.get("requirements") else None,
+            reference=metadata.get("reference"),
+            reference_alignment=metadata.get("reference_alignment"),
             constraint=metadata.get("constraint"),
             units=metadata.get("units"),
             enum_values=enums,
@@ -127,7 +132,8 @@ def print_to_console(analysis: ModelAnalysis):
             "Group": field.group_info,
             "Description": field.description,
             "Requirements": field.requirements,
-            "Criticality": field.criticality,
+            "Reference": field.reference,
+            "Reference Alignment": field.reference_alignment,
             "Constraint": field.constraint,
             "Units": field.units,
             "Data Type": field.data_type,
@@ -171,8 +177,10 @@ def generate_markdown(analysis: ModelAnalysis) -> str:
             lines.append(f"| Group | {field.group_info} |")
         if field.requirements:
             lines.append(f"| Requirements | {field.requirements} |")
-        if field.criticality:
-            lines.append(f"| Criticality | {field.criticality} |")
+        if field.reference:
+            lines.append(f"| Reference | {field.reference} |")
+        if field.reference_alignment:
+            lines.append(f"| Reference Alignment | {field.reference_alignment} |")
         if field.constraint:
             lines.append(f"| Constraint | {field.constraint} |")
         if field.units:

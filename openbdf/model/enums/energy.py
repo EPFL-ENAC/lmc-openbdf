@@ -1,4 +1,5 @@
-from .openbdf_enum import OpenBDFEnum
+from .openbdf_enum import OpenBDFEnum, enum_attribute
+from .references import Reference
 
 
 class BuildingEnergyClassificationSystem(OpenBDFEnum):
@@ -72,6 +73,7 @@ class BuildingEnergyClassificationSystem(OpenBDFEnum):
         "None",
         "No energy classification or certification for this building",
     )
+    reference = enum_attribute(Reference.EN_ISO_52000_1_2017)
 
 
 class BuildingEnergyCodeSystem(OpenBDFEnum):
@@ -89,6 +91,7 @@ class BuildingEnergyCodeSystem(OpenBDFEnum):
     PART_L_UK = ("Part L (UK)", "Part L (UK)")
     OTHER_NATIONAL = ("Other national", "Other national")
     UNKNOWN = ("Unknown", "Unknown")
+    reference = enum_attribute(Reference.EN_ISO_52000_1_2017)
 
 
 class OnSiteRenewableAllocationApproach(OpenBDFEnum):
@@ -107,6 +110,7 @@ class OnSiteRenewableAllocationApproach(OpenBDFEnum):
         "approach_b2 (full allocation of energy storage components; components integrated into the building envelope and forming its surface allocated in full, with the remaining embodied emissions allocated in proportion to the share used for self-consumption)",
         "full allocation of energy storage components; components integrated into the building envelope and forming its surface allocated in full, with the remaining embodied emissions allocated in proportion to the share used for self-consumption",
     )
+    reference = enum_attribute(Reference.EU2026_52_ANNEX_III)
 
 
 class EmissionFactorScenario(OpenBDFEnum):
@@ -125,6 +129,7 @@ class EmissionFactorScenario(OpenBDFEnum):
         "forward_looking (forward-looking emission factors, justified, consistent and clearly defined for the whole reference study period)",
         "forward-looking emission factors, justified, consistent and clearly defined for the whole reference study period",
     )
+    reference = enum_attribute(Reference.EU2026_52_ANNEX_III)
 
 
 class PrimaryEnergySource(OpenBDFEnum):
@@ -139,3 +144,4 @@ class PrimaryEnergySource(OpenBDFEnum):
     AEROTHERMAL = ("aerothermal", "Aerothermal Energy")
     BIOMASS = ("biomass", "Biomass (Wood, Pellets)")
     WASTE_HEAT = ("waste_heat", "Waste Heat")
+    reference = enum_attribute(Reference.EN_ISO_52000_1_2017)

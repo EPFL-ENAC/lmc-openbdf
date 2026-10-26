@@ -82,3 +82,18 @@ class OpenBDFEnum(str, Enum):
                 return item
 
         return None
+
+
+class enum_attribute:
+    """
+    Class-level value on an enum, without turning it into an enum member.
+
+    A regular assignment inside an enum class body would create a new member.
+    This class can be used to wrap values that describe an entire datatype.
+    """
+
+    def __init__(self, value: object):
+        self.value = value
+
+    def __get__(self, instance: object, owner: type) -> object:
+        return self.value

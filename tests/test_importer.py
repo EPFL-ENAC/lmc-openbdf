@@ -1,3 +1,4 @@
+import io
 from pathlib import Path
 
 import pandas as pd
@@ -47,6 +48,14 @@ def table_translator() -> DocumentTranslator:
                 start_col=0,
             ),
             SheetTranslation(
+                original_name="Materials Database Input",
+                translated_name="Project Material Database",
+                orientation="horizontal",
+                header_row=0,
+                start_row=1,
+                start_col=0,
+            ),
+            SheetTranslation(
                 original_name="Wide Input",
                 translated_name="LCA Result (Wide)",
                 orientation="horizontal",
@@ -70,6 +79,7 @@ def test_openbdf_tables_from_source_uses_only_the_sheet_source_interface():
     source = MemorySheetSource({
         "Project Input": pd.DataFrame([["project_name", "Example project"]]),
         "Materials Input": pd.DataFrame([["material_id"], ["MAT-1"]]),
+        "Materials Database Input": pd.DataFrame([["material_ref_id"], ["M0001"]]),
         "Wide Input": pd.DataFrame([["material_id"], ["MAT-1"]]),
         "Tall Input": pd.DataFrame([["material_id"], ["MAT-1"]]),
     })
@@ -79,17 +89,25 @@ def test_openbdf_tables_from_source_uses_only_the_sheet_source_interface():
     assert tables is not None
     assert tables.project.to_dict(orient="records") == [{"field_code": "project_name", "value": "Example project"}]
     assert tables.bill_of_materials.to_dict(orient="records") == [{"material_id": "MAT-1"}]
+    assert tables.project_material_database.to_dict(orient="records") == [{"material_ref_id": "M0001"}]
     assert tables.results_wide is not None
     assert tables.results_wide.to_dict(orient="records") == [{"material_id": "MAT-1"}]
     assert tables.results_tall is not None
     assert tables.results_tall.to_dict(orient="records") == [{"material_id": "MAT-1"}]
-    assert source.read_sheets == ["Project Input", "Materials Input", "Wide Input", "Tall Input"]
+    assert source.read_sheets == [
+        "Project Input",
+        "Materials Input",
+        "Materials Database Input",
+        "Wide Input",
+        "Tall Input",
+    ]
 
 
 def test_openbdf_tables_from_source_allows_missing_optional_sheets():
     source = MemorySheetSource({
         "Project Input": pd.DataFrame([["project_name", "Example project"]]),
         "Materials Input": pd.DataFrame([["material_id"], ["MAT-1"]]),
+        "Materials Database Input": pd.DataFrame([["material_ref_id"], ["M0001"]]),
     })
 
     tables = OpenBDFTables.from_source(source, table_translator())
@@ -106,6 +124,19 @@ def test_openbdf_tables_from_source_returns_none_when_a_required_sheet_is_missin
 
     assert OpenBDFTables.from_source(source, table_translator()) is None
     assert source.read_sheets == ["Project Input"]
+
+
+def test_openbdf_tables_from_source_leaves_the_project_material_database_empty_when_the_sheet_is_missing():
+    source = MemorySheetSource({
+        "Project Input": pd.DataFrame([["project_name", "Example project"]]),
+        "Materials Input": pd.DataFrame([["material_id"], ["MAT-1"]]),
+    })
+
+    tables = OpenBDFTables.from_source(source, table_translator())
+
+    assert tables is not None
+    assert tables.bill_of_materials.to_dict(orient="records") == [{"material_id": "MAT-1"}]
+    assert tables.project_material_database is None
 
 
 @pytest.mark.parametrize("reverse_order", [False, True])
@@ -159,6 +190,22 @@ def test_excel_sheet_source_accepts_a_single_path(tmp_path: Path):
         assert source.read_sheet("Only").iloc[0, 0] == 42
 
 
+def test_excel_sheet_source_accepts_in_memory_workbooks(tmp_path: Path):
+    workbook = tmp_path / "single.xlsx"
+    write_workbook(workbook, {"Only": pd.DataFrame([[42]])})
+    payload = workbook.read_bytes()
+
+    for source_input in (payload, io.BytesIO(payload), [payload]):
+        with ExcelSheetSource(source_input) as source:
+            assert list(source.sheet_names) == ["Only"]
+            assert source.read_sheet("Only").iloc[0, 0] == 42
+
+    buffer = io.BytesIO(payload)
+    with ExcelSheetSource(buffer):
+        pass
+    assert not buffer.closed
+
+
 def test_excel_sheet_source_rejects_every_duplicate_sheet(tmp_path: Path):
     first = tmp_path / "first.xlsx"
     second = tmp_path / "second.xlsx"
@@ -194,13 +241,13 @@ def translator_path(filename: str) -> Path:
     return Path(__file__).parents[1] / "translators" / filename
 
 
-def test_cola_translator_maps_lca_service_life():
+def test_cola_translator_maps_material_reference_service_life():
     translator = DocumentTranslator.from_xlsx(
         translator_path("translator_at_v2.0.0.xlsx"),
         **cola_translator_args(),
     )
 
-    assert translator.translate("Bill of Materials", "Lebensdauer (Jahre)") == ["lca_service_life"]
+    assert translator.translate("Bill of Materials", "Lebensdauer (Jahre)") == ["material_reference_service_life"]
 
 
 def test_bec_translator_maps_building_element_classification():
@@ -237,6 +284,6 @@ def test_cola_translator_set_maps_attributes_and_classification():
             **cola_translator_args(),
         )
 
-    assert translator.translate("Bill of Materials", "Lebensdauer (Jahre)") == ["lca_service_life"]
+    assert translator.translate("Bill of Materials", "Lebensdauer (Jahre)") == ["material_reference_service_life"]
     assert translator.translate("OpenBDFBuildingElementClassific", "2 Bauwerk-Rohbau") == ["2"]
     assert translator.translate("OpenBDFMaterialClassification", "i9") == ["1.1"]

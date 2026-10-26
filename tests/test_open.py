@@ -8,12 +8,19 @@ from openpyxl import load_workbook
 from typer.testing import CliRunner
 
 import openbdf.main as main_module
-from openbdf.cli.save import save_openbdf_to_xlsx
+from openbdf.cli.save import DEFAULT_PROJECT_ID, save_openbdf_to_xlsx
 from openbdf.lib.types.annotations import unwrap_optional
+from openbdf.lib.validation.errors import AutomaticFieldSupplied, OpenBDFValidationError
 from openbdf.main import app
 from openbdf.model.building_bill_materials_slim import BuildingBillMaterialsSlimRecordBase
+from openbdf.model.enums.buildings import GFAMeasurementMethod
+from openbdf.model.enums.lca import AssessmentType_EN15978, LCADatabaseSystemModel, LifeCycleSystemBoundary
+from openbdf.model.enums.materials import MaterialDataType
+from openbdf.model.enums.project import ProjectUnits, RecordType
 from openbdf.model.general_info import ProjectRecordBase
 from openbdf.model.lca_results_full_wide import LCAResultsWideFullBase
+from openbdf.model.project_material_database import ProjectMaterialDatabaseBase
+from openbdf.model.tables import ProjectRecord
 
 runner = CliRunner()
 
@@ -27,45 +34,59 @@ def write_workbook(path: Path, sheets: dict[str, pd.DataFrame]) -> None:
 def default_openbdf_sheets() -> dict[str, pd.DataFrame]:
     project = pd.DataFrame([[None] * 11])
     project.iloc[0, 3] = "project_name"
-    project.iloc[0, 10] = "Example project"
+    project.iloc[0, 9] = "Example project"
 
-    # Generated template layout: field codes in row 2, data from row 10.
-    bill_of_materials = pd.DataFrame([[None] * 2 for _ in range(10)])
+    # Generated template layout: field codes in row 2, data from row 9.
+    bill_of_materials = pd.DataFrame([[None] * 2 for _ in range(9)])
     bill_of_materials.iloc[1, 1] = "material_id"
-    bill_of_materials.iloc[9, 1] = "MAT-1"
+    bill_of_materials.iloc[8, 1] = "MAT-1"
 
-    results_wide = pd.DataFrame([[None] * 2 for _ in range(10)])
+    results_wide = pd.DataFrame([[None] * 2 for _ in range(9)])
     results_wide.iloc[1, 1] = "material_id"
-    results_wide.iloc[9, 1] = "MAT-1"
+    results_wide.iloc[8, 1] = "MAT-1"
+
+    # Project Material Database in the repo wide layout: field codes in row 2, Reference row 8, data from row 9.
+    project_material_database = pd.DataFrame([[None] * 2 for _ in range(9)])
+    project_material_database.iloc[1, 1] = "material_ref_id"
+    project_material_database.iloc[8, 1] = "M0001"
 
     return {
         "General Information": project,
         "Bill of Materials": bill_of_materials,
+        "Project Material Database": project_material_database,
         "LCA Result (Wide)": results_wide,
     }
 
 
+def mock_validation(monkeypatch) -> None:
+    """This module tests the command wiring, so the fake converters skip the checks."""
+    monkeypatch.setattr(main_module, "validate_project", lambda *args, **kwargs: [])
+
+
 def mock_conversion_and_save(monkeypatch, captured_tables: list[Any]) -> None:
-    def convert(tables, document_translator, drop_invalid=False):
+    def convert(tables, document_translator, *, findings=None, draft=False, drop_invalid=False):
         captured_tables.append((tables, drop_invalid))
         return object()
 
     monkeypatch.setattr(main_module, "project_package_from_tables", convert)
     monkeypatch.setattr(main_module, "save_openbdf_to_xlsx", lambda **kwargs: None)
+    mock_validation(monkeypatch)
 
 
 def test_open_command_processes_sheets_split_across_files(tmp_path: Path, monkeypatch):
     sheets = default_openbdf_sheets()
     project = tmp_path / "project.xlsx"
     materials = tmp_path / "materials.xlsx"
+    materials_database = tmp_path / "materials_database.xlsx"
     results = tmp_path / "results.xlsx"
     write_workbook(project, {"General Information": sheets["General Information"]})
     write_workbook(materials, {"Bill of Materials": sheets["Bill of Materials"]})
+    write_workbook(materials_database, {"Project Material Database": sheets["Project Material Database"]})
     write_workbook(results, {"LCA Result (Wide)": sheets["LCA Result (Wide)"]})
     captured_tables: list[Any] = []
     mock_conversion_and_save(monkeypatch, captured_tables)
 
-    result = runner.invoke(app, ["open", str(results), str(project), str(materials)])
+    result = runner.invoke(app, ["open", str(results), str(project), str(materials), str(materials_database)])
 
     assert result.exit_code == 0
     assert len(captured_tables) == 1
@@ -73,6 +94,9 @@ def test_open_command_processes_sheets_split_across_files(tmp_path: Path, monkey
     assert drop_invalid is False
     assert tables.project.to_dict(orient="records") == [{"field_code": "project_name", "value": "Example project"}]
     assert tables.bill_of_materials.to_dict(orient="records") == [{"material_id": "MAT-1"}]
+    # start_row=8 skips the metadata rows, so the first record is the first data row.
+    raw_project_material_database = tables.project_material_database.to_dict(orient="records")
+    assert raw_project_material_database == [{"material_ref_id": "M0001"}]
     assert tables.results_wide.to_dict(orient="records") == [{"material_id": "MAT-1"}]
 
 
@@ -91,23 +115,20 @@ def test_open_command_accepts_one_file(tmp_path: Path, monkeypatch):
 def test_open_command_uses_draft_conversion(tmp_path: Path, monkeypatch):
     workbook = tmp_path / "complete.xlsx"
     write_workbook(workbook, default_openbdf_sheets())
-    captured_tables: list[Any] = []
+    captured: list[Any] = []
 
-    def convert_draft(tables, document_translator, drop_invalid=False):
-        captured_tables.append((tables, drop_invalid))
+    def convert(tables, document_translator, *, findings=None, draft=False, drop_invalid=False):
+        captured.append(draft)
         return object()
 
-    def convert_strict(*args, **kwargs):
-        raise AssertionError("strict conversion should not run")
-
-    monkeypatch.setattr(main_module, "project_draft_package_from_tables", convert_draft)
-    monkeypatch.setattr(main_module, "project_package_from_tables", convert_strict)
+    monkeypatch.setattr(main_module, "project_package_from_tables", convert)
     monkeypatch.setattr(main_module, "save_openbdf_to_xlsx", lambda **kwargs: None)
+    mock_validation(monkeypatch)
 
     result = runner.invoke(app, ["open", str(workbook), "--draft"])
 
     assert result.exit_code == 0
-    assert len(captured_tables) == 1
+    assert captured == [True]
 
 
 def test_open_command_drop_invalid_materials_passes_flag(tmp_path: Path, monkeypatch):
@@ -115,12 +136,13 @@ def test_open_command_drop_invalid_materials_passes_flag(tmp_path: Path, monkeyp
     write_workbook(workbook, default_openbdf_sheets())
     captured: list[Any] = []
 
-    def convert_strict(tables, document_translator, drop_invalid=False):
+    def convert_strict(tables, document_translator, *, findings=None, draft=False, drop_invalid=False):
         captured.append(drop_invalid)
         return object()
 
     monkeypatch.setattr(main_module, "project_package_from_tables", convert_strict)
     monkeypatch.setattr(main_module, "save_openbdf_to_xlsx", lambda **kwargs: None)
+    mock_validation(monkeypatch)
 
     result = runner.invoke(app, ["open", str(workbook), "--drop-invalid-materials"])
 
@@ -133,12 +155,13 @@ def test_open_command_drop_invalid_materials_default_is_false(tmp_path: Path, mo
     write_workbook(workbook, default_openbdf_sheets())
     captured: list[Any] = []
 
-    def convert_strict(tables, document_translator, drop_invalid=False):
+    def convert_strict(tables, document_translator, *, findings=None, draft=False, drop_invalid=False):
         captured.append(drop_invalid)
         return object()
 
     monkeypatch.setattr(main_module, "project_package_from_tables", convert_strict)
     monkeypatch.setattr(main_module, "save_openbdf_to_xlsx", lambda **kwargs: None)
+    mock_validation(monkeypatch)
 
     result = runner.invoke(app, ["open", str(workbook)])
 
@@ -213,12 +236,13 @@ def test_open_command_merges_multiple_translators(tmp_path: Path, monkeypatch):
     monkeypatch.setattr(main_module.DocumentTranslator, "from_xlsx", load_translator)
     captured_translators: list[Any] = []
 
-    def convert(tables, document_translator, drop_invalid=False):
+    def convert(tables, document_translator, *, findings=None, draft=False, drop_invalid=False):
         captured_translators.append(document_translator)
         return object()
 
     monkeypatch.setattr(main_module, "project_package_from_tables", convert)
     monkeypatch.setattr(main_module, "save_openbdf_to_xlsx", lambda **kwargs: None)
+    mock_validation(monkeypatch)
 
     result = runner.invoke(
         app,
@@ -248,7 +272,7 @@ def fill_required_vertical(sheet, model_cls) -> None:
     field_code_rows = {sheet.cell(row=row, column=4).value: row for row in range(2, sheet.max_row + 1)}
     for name, info in model_cls.model_fields.items():
         if info.is_required() and name in field_code_rows:
-            sheet.cell(row=field_code_rows[name], column=11, value=valid_template_value(info))
+            sheet.cell(row=field_code_rows[name], column=10, value=valid_template_value(info))
 
 
 def fill_required_horizontal(sheet, model_cls) -> None:
@@ -256,7 +280,7 @@ def fill_required_horizontal(sheet, model_cls) -> None:
     field_code_cols = {cell.value: cell.column for cell in sheet[2] if cell.value}
     for name, info in model_cls.model_fields.items():
         if info.is_required() and name in field_code_cols:
-            sheet.cell(row=10, column=field_code_cols[name], value=valid_template_value(info))
+            sheet.cell(row=9, column=field_code_cols[name], value=valid_template_value(info))
 
 
 def test_open_command_opens_filled_generated_template_as_single_file(tmp_path: Path):
@@ -269,15 +293,30 @@ def test_open_command_opens_filled_generated_template_as_single_file(tmp_path: P
     bom = workbook["Bill of Materials"]
     fill_required_horizontal(bom, BuildingBillMaterialsSlimRecordBase)
     bom_codes = {cell.value: cell.column for cell in bom[2] if cell.value}
-    bom.cell(row=10, column=bom_codes["material_id"], value="MAT-1")
-    bom.cell(row=10, column=bom_codes["custom_material_name"], value="Concrete C30/37")
-    bom.cell(row=10, column=bom_codes["material_reference_service_life"], value=50)
+    bom.cell(row=9, column=bom_codes["material_id"], value="MAT-1")
+    bom.cell(row=9, column=bom_codes["custom_material_name"], value="Concrete C30/37")
+    bom.cell(row=9, column=bom_codes["material_reference_service_life"], value=50)
+
+    project_material_database = workbook["Project Material Database"]
+    fill_required_horizontal(project_material_database, ProjectMaterialDatabaseBase)
+    pmd_codes = {cell.value: cell.column for cell in project_material_database[2] if cell.value}
+    project_material_database.cell(row=9, column=pmd_codes["material_ref_id"], value="M0001")
+    project_material_database.cell(row=9, column=pmd_codes["custom_material_name"], value="Concrete C30/37")
+    project_material_database.cell(
+        row=9, column=pmd_codes["material_data_type"], value=next(iter(MaterialDataType)).value
+    )
+    # A material is the pair of its name and its EPD dataset name, so both sheets must agree on it.
+    bom.cell(
+        row=9,
+        column=bom_codes["lca_dataset_material_name"],
+        value=project_material_database.cell(row=9, column=pmd_codes["lca_dataset_material_name"]).value,
+    )
 
     wide = workbook["LCA Result (Wide)"]
     fill_required_horizontal(wide, LCAResultsWideFullBase)
     wide_codes = {cell.value: cell.column for cell in wide[2] if cell.value}
-    wide.cell(row=10, column=wide_codes["material_id"], value="MAT-1")
-    wide.cell(row=10, column=wide_codes["gwp_total_a1_a3"], value=123.45)
+    wide.cell(row=9, column=wide_codes["material_id"], value="MAT-1")
+    wide.cell(row=9, column=wide_codes["gwp_total_a1_a3"], value=123.45)
     workbook.save(template_path)
 
     output_path = tmp_path / "out.xlsx"
@@ -287,13 +326,31 @@ def test_open_command_opens_filled_generated_template_as_single_file(tmp_path: P
     out = load_workbook(output_path)
     out_bom_codes = {cell.value: cell.column for cell in out["Bill of Materials"][2] if cell.value}
     out_bom = out["Bill of Materials"]
-    assert out_bom.cell(row=10, column=out_bom_codes["material_id"]).value == "MAT-1"
-    assert out_bom.cell(row=10, column=out_bom_codes["custom_material_name"]).value == "Concrete C30/37"
-    assert out_bom.cell(row=10, column=out_bom_codes["material_reference_service_life"]).value == "50"
+    assert out_bom.cell(row=9, column=out_bom_codes["material_id"]).value == "MAT-1"
+    assert out_bom.cell(row=9, column=out_bom_codes["custom_material_name"]).value == "Concrete C30/37"
+    assert out_bom.cell(row=9, column=out_bom_codes["material_reference_service_life"]).value == "50"
     out_wide_codes = {cell.value: cell.column for cell in out["LCA Result (Wide)"][2] if cell.value}
     out_wide = out["LCA Result (Wide)"]
-    assert out_wide.cell(row=10, column=out_wide_codes["material_id"]).value == "MAT-1"
-    assert out_wide.cell(row=10, column=out_wide_codes["gwp_total_a1_a3"]).value == "123.45"
+    assert out_wide.cell(row=9, column=out_wide_codes["material_id"]).value == "MAT-1"
+    assert out_wide.cell(row=9, column=out_wide_codes["gwp_total_a1_a3"]).value == "123.45"
+    out_pmd_codes = {cell.value: cell.column for cell in out["Project Material Database"][2] if cell.value}
+    out_pmd = out["Project Material Database"]
+    assert out_pmd.cell(row=9, column=out_pmd_codes["material_ref_id"]).value == "M0001"
+    assert out_pmd.cell(row=9, column=out_pmd_codes["custom_material_name"]).value == "Concrete C30/37"
+    # Enum cells show the display name instead of the field code.
+    assert general_information_value(output_path, "record_type") == RecordType.REAL_BUILDING.display_name
+    expected_data_type = next(iter(MaterialDataType)).display_name
+    assert out_pmd.cell(row=9, column=out_pmd_codes["material_data_type"]).value == expected_data_type
+    assert out_bom.cell(row=9, column=out_bom_codes["material_data_type"]).value == expected_data_type
+    # The exported file keeps the grey of the automatic fields.
+    assert out_bom.cell(row=9, column=out_bom_codes["common_floor_level"]).style == "AutomaticValue"
+    assert out_bom.cell(row=9, column=out_bom_codes["custom_floor_level"]).style == "EditableValue"
+    assert out_pmd.cell(row=9, column=out_pmd_codes["material_ref_id"]).style == "AutomaticValue"
+
+    roundtrip_path = tmp_path / "roundtrip.xlsx"
+    result = runner.invoke(app, ["open", str(output_path), "-o", str(roundtrip_path)])
+    assert result.exit_code == 0
+    assert general_information_value(roundtrip_path, "record_type") == RecordType.REAL_BUILDING.display_name
 
 
 def test_document_translator_add_last_wins_on_category_conflict():
@@ -314,3 +371,126 @@ def test_document_translator_add_last_wins_on_category_conflict():
 
     merged = first + second
     assert merged._translators["cat"].translate("src") == ["second"]
+
+
+def test_open_command_collects_every_finding_of_a_workbook_with_bad_cells(tmp_path: Path):
+    template_path = tmp_path / "template.xlsx"
+    save_openbdf_to_xlsx(template_path, None)
+
+    workbook = load_workbook(template_path)
+    project_sheet = workbook["General Information"]
+    fill_required_vertical(project_sheet, ProjectRecordBase)
+    project_code_rows = {cell.value: cell.row for cell in project_sheet["D"] if cell.value}
+    project_sheet.cell(row=project_code_rows["building_gross_floor_area"], column=10, value=0)
+
+    project_material_database = workbook["Project Material Database"]
+    fill_required_horizontal(project_material_database, ProjectMaterialDatabaseBase)
+    database_codes = {cell.value: cell.column for cell in project_material_database[2] if cell.value}
+    project_material_database.cell(row=9, column=database_codes["material_ref_id"], value="M0001")
+    project_material_database.cell(row=9, column=database_codes["custom_material_name"], value="Concrete C30/37")
+    dataset_name = project_material_database.cell(row=9, column=database_codes["lca_dataset_material_name"]).value
+
+    bom = workbook["Bill of Materials"]
+    fill_required_horizontal(bom, BuildingBillMaterialsSlimRecordBase)
+    bom_codes = {cell.value: cell.column for cell in bom[2] if cell.value}
+    bom.cell(row=9, column=bom_codes["material_id"], value="MAT-1")
+    bom.cell(row=9, column=bom_codes["custom_material_name"], value="Concrete C30/37")
+    bom.cell(row=9, column=bom_codes["lca_dataset_material_name"], value=dataset_name)
+    bom.cell(row=9, column=bom_codes["material_data_type"], value="bogus")
+    for column in range(1, bom.max_column + 1):
+        bom.cell(row=10, column=column, value=bom.cell(row=9, column=column).value)
+    bom.cell(row=10, column=bom_codes["material_weight_kg"], value=100)
+    bom.cell(row=10, column=bom_codes["material_data_type"], value=MaterialDataType.CPR_DOPC.value)
+
+    wide = workbook["LCA Result (Wide)"]
+    fill_required_horizontal(wide, LCAResultsWideFullBase)
+    wide_codes = {cell.value: cell.column for cell in wide[2] if cell.value}
+    wide.cell(row=9, column=wide_codes["material_id"], value="MAT-2")
+    workbook.save(template_path)
+
+    output_path = tmp_path / "out.xlsx"
+    result = runner.invoke(app, ["open", str(template_path), "-o", str(output_path)])
+
+    assert result.exit_code == 1
+    floor_area_row = project_code_rows["building_gross_floor_area"]
+    assert result.output.splitlines() == [
+        "General Information:",
+        f"  Row {floor_area_row}: E17: Floor area must be greater than zero",
+        "Bill of Materials:",
+        "  E19: 'Concrete C30/37' has no mapping; the field was left empty and not guessed",
+        "  E32: material_id 'MAT-1' is used by 2 bill of materials rows",
+        "  Row 9: E02: Value 'bogus' is not a valid MaterialDataType",
+        "  E16: Row 9 has no mass, material efficiency analysis is not possible",
+        "LCA Result (Wide):",
+        "  E05: Bill of Materials has 2 rows, LCA Result (Wide) has 1",
+        "  E06: Row 9: material_id MAT-1 in the inventory, MAT-2 in the results",
+        "The workbook has reject findings, so it was not saved. Use --draft to save it anyway.",
+    ]
+    assert not output_path.exists()
+
+
+def project_record_for_export(**overrides: Any) -> ProjectRecord:
+    """Build a project that carries the required General Information values."""
+    values: dict[str, Any] = {
+        "record_type": RecordType.REAL_BUILDING,
+        "project_units": ProjectUnits.METRIC,
+        "project_assessment_type": AssessmentType_EN15978.TYPE_1,
+        "project_gfa_method": GFAMeasurementMethod.IPMS,
+        "building_gross_floor_area": Decimal(100),
+        "lca_database_system_model": LCADatabaseSystemModel.CUT_OFF,
+        "lca_cycle_system_boundary": LifeCycleSystemBoundary.CRADLE_TO_GATE,
+    }
+    values.update(overrides)
+    return ProjectRecord(**values)
+
+
+def general_information_value(path: Path, field_code: str) -> Any:
+    sheet = load_workbook(path)["General Information"]
+    row = next(cell.row for cell in sheet["D"] if cell.value == field_code)
+    return sheet.cell(row=row, column=10).value
+
+
+def test_export_keeps_the_imported_project_id_and_defaults_a_missing_one(tmp_path: Path):
+    imported_path = tmp_path / "imported.xlsx"
+    save_openbdf_to_xlsx(imported_path, project_record_for_export(project_id="ABC1234"))
+    assert general_information_value(imported_path, "project_id") == "ABC1234"
+
+    missing_path = tmp_path / "missing.xlsx"
+    save_openbdf_to_xlsx(missing_path, project_record_for_export())
+    assert general_information_value(missing_path, "project_id") == DEFAULT_PROJECT_ID
+
+    template_path = tmp_path / "template.xlsx"
+    save_openbdf_to_xlsx(template_path, None)
+    assert general_information_value(template_path, "project_id") == DEFAULT_PROJECT_ID
+    codes = [cell.value for cell in load_workbook(template_path)["General Information"]["D"]]
+    assert "project_custom_id" in codes
+    assert "project_custom_id " not in codes
+
+
+def test_export_takes_the_given_project_id_and_reports_a_replaced_imported_one(tmp_path: Path):
+    findings: list[OpenBDFValidationError] = []
+    given_path = tmp_path / "given.xlsx"
+    save_openbdf_to_xlsx(
+        given_path,
+        project_record_for_export(project_id="ABC1234"),
+        project_id="GEN0001",
+        findings=findings,
+    )
+
+    assert general_information_value(given_path, "project_id") == "GEN0001"
+    assert [str(finding) for finding in findings] == [
+        "E04: Field project_id was in the original data; the given project_id replaced it"
+    ]
+    assert isinstance(findings[0], AutomaticFieldSupplied)
+    assert findings[0].source == "General Information"
+
+    same_findings: list[OpenBDFValidationError] = []
+    same_path = tmp_path / "same.xlsx"
+    save_openbdf_to_xlsx(
+        same_path,
+        project_record_for_export(project_id="ABC1234"),
+        project_id="ABC1234",
+        findings=same_findings,
+    )
+    assert general_information_value(same_path, "project_id") == "ABC1234"
+    assert same_findings == []
