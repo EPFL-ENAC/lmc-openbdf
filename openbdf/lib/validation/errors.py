@@ -167,6 +167,13 @@ class DroppedLine(OpenBDFValidationError):
     severity = Severity.WARNING
 
 
+class MissingSheet(OpenBDFValidationError):
+    """E34: a sheet the specification requires is missing or empty, so its content was generated."""
+
+    code = "E34"
+    severity = Severity.WARNING
+
+
 # Order of the sheets in the workbook, used to sort the findings the way the file is read.
 SHEET_ORDER = (
     "General Information",
