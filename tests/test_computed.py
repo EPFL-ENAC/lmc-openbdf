@@ -7,6 +7,7 @@ import pandas as pd
 
 from openbdf.lib.computed import fill_computed
 from openbdf.lib.computed.elements import fill_bill_of_materials_elements
+from openbdf.lib.computed.project import PHASE_COMMON
 from openbdf.lib.converters.translators import FLOOR_LEVEL_CATEGORY, DocumentTranslator
 from openbdf.lib.validation.errors import AutomaticFieldSupplied, OpenBDFValidationError, UnmappedNationalValue
 from openbdf.model.enums.buildings import AboveBelowGround, GFAMeasurementMethod
@@ -346,6 +347,8 @@ def test_lca_stage_module_and_submodule_are_derived_from_the_full_life_cycle_mod
 
 
 def test_project_phase_common_maps_the_national_phase_and_stays_empty_without_one():
+    assert set(ProjectPhase) == set(PHASE_COMMON)
+
     mapped = project_record(project_phase=ProjectPhase.RIBA_UK_3)
 
     fill_computed(mapped)
