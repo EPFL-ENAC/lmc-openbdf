@@ -10,8 +10,11 @@ from sqlmodel import Field, SQLModel
 
 from openbdf.model.enums.lca import LCAStageOrModuleOrSubModule
 from openbdf.model.enums.materials import MaterialFlowType
+from openbdf.model.enums.references import ReferenceAlignment
+from openbdf.model.enums.requirement import Requirement
 
 from .field_metadata import openbdf_field_metadata
+from .sa_enum import sa_enum
 
 
 class LCAResultsTallBase(SQLModel):
@@ -22,55 +25,59 @@ class LCAResultsTallBase(SQLModel):
             attribute_name="Material ID",
             field_code="material_id",
             description="The unique identifier for the material within the project context, referencing the Bill of Materials.",
-            requirements="Required",
-            criticality="MUST",
+            requirements=Requirement.REQUIRED,
+            reference_alignment=ReferenceAlignment.GBDI,
         ),
     )
 
     lca_stage_module_submodule: LCAStageOrModuleOrSubModule = Field(
+        sa_type=sa_enum(LCAStageOrModuleOrSubModule),
         description="Life-cycle stage or module or submodule of this result row, such as A1-A3 or A5 or A5.1 ",
         schema_extra=openbdf_field_metadata(
             attribute_name="Life cycle stage or module or submodule",
             field_code="lca_stage_module_submodule",
             description="Life-cycle stage or module or submodule of this result row, such as A1-A3 or A5 or A5.1 ",
-            requirements="Required",
-            criticality="MUST",
+            requirements=Requirement.REQUIRED,
+            reference_alignment=ReferenceAlignment.EN15978_EN15978_2026,
         ),
     )
 
     lca_stage: Optional[LCAStageOrModuleOrSubModule] = Field(
         default=None,
+        sa_type=sa_enum(LCAStageOrModuleOrSubModule),
         description="Life-cycle stage of the module, derived by the parser from Life cycle module.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Life cycle stage",
             field_code="lca_stage",
             description="Life-cycle stage of the module, derived by the parser from Life cycle module.",
-            requirements="Automatic",
-            criticality="MAY",
+            requirements=Requirement.AUTOMATIC,
+            reference_alignment=ReferenceAlignment.EN15978_EN15978_2027,
         ),
     )
 
     lca_module: Optional[LCAStageOrModuleOrSubModule] = Field(
         default=None,
+        sa_type=sa_enum(LCAStageOrModuleOrSubModule),
         description="Life-cycle of the module, derived by the parser from Life cycle module.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Life cycle module",
             field_code="lca_module",
             description="Life-cycle of the module, derived by the parser from Life cycle module.",
-            requirements="Automatic",
-            criticality="MAY",
+            requirements=Requirement.AUTOMATIC,
+            reference_alignment=ReferenceAlignment.EN15978_EN15978_2028,
         ),
     )
 
     lca_submodule: Optional[LCAStageOrModuleOrSubModule] = Field(
         default=None,
+        sa_type=sa_enum(LCAStageOrModuleOrSubModule),
         description="Sub-module where the standard defines one.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Life cycle sub-module",
             field_code="lca_submodule",
             description="Sub-module where the standard defines one.",
-            requirements="Automatic",
-            criticality="MAY",
+            requirements=Requirement.AUTOMATIC,
+            reference_alignment=ReferenceAlignment.EN15978_EN15978_2029,
         ),
     )
 
@@ -82,21 +89,22 @@ class LCAResultsTallBase(SQLModel):
             field_code="process_year",
             description="Year in which the activity occurs.",
             units="year",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
+            reference_alignment=ReferenceAlignment.EN15804_EN15978_ISO_21930,
         ),
     )
 
     material_flow_type: Optional[MaterialFlowType] = Field(
         default=None,
+        sa_type=sa_enum(MaterialFlowType),
         description="Type of flow at this row.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Material flow type",
             field_code="material_flow_type",
             description="Type of flow at this row.",
             units="None",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
+            reference_alignment=ReferenceAlignment.EN15978_ISO14040_14044,
         ),
     )
 
@@ -108,8 +116,8 @@ class LCAResultsTallBase(SQLModel):
             field_code="material_flow_mass_kg",
             description="Mass carried by the flow at this row.",
             units="kg",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
+            reference_alignment=ReferenceAlignment.EN15978_ISO14040_14044,
         ),
     )
 
@@ -121,8 +129,8 @@ class LCAResultsTallBase(SQLModel):
             field_code="scenario_label",
             description="Scenario the result belongs to.",
             units="None",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
+            reference_alignment=ReferenceAlignment.EN15978,
         ),
     )
 
@@ -134,8 +142,8 @@ class LCAResultsTallBase(SQLModel):
             field_code="gwp_total",
             description="Global Warming Potential - Total.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_AND_TRACI,
         ),
     )
 
@@ -147,8 +155,8 @@ class LCAResultsTallBase(SQLModel):
             field_code="gwp_f",
             description="Global Warming Potential - Fossil.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
+            reference_alignment=ReferenceAlignment.EN15804_A2,
         ),
     )
 
@@ -160,8 +168,8 @@ class LCAResultsTallBase(SQLModel):
             field_code="gwp_b",
             description="Global Warming Potential - Biogenic.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
+            reference_alignment=ReferenceAlignment.EN15804_A2,
         ),
     )
 
@@ -173,8 +181,8 @@ class LCAResultsTallBase(SQLModel):
             field_code="gwp_luc",
             description="Global Warming Potential - Land Use and Land Use Change.",
             units="kg CO₂ eq",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
+            reference_alignment=ReferenceAlignment.EN15804_A2,
         ),
     )
 
@@ -186,8 +194,8 @@ class LCAResultsTallBase(SQLModel):
             field_code="odp",
             description="Ozone Depletion Potential",
             units="kg CFC-11 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
+            reference_alignment=ReferenceAlignment.EN15804_A1_A2_AND_TRACI,
         ),
     )
 
@@ -199,8 +207,8 @@ class LCAResultsTallBase(SQLModel):
             field_code="ap",
             description="Acidification Potential.",
             units="kg SO₂ eq.",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
+            reference_alignment=ReferenceAlignment.EN15804_A1_AND_TRACI,
         ),
     )
 
@@ -212,8 +220,8 @@ class LCAResultsTallBase(SQLModel):
             field_code="ap_ae",
             description="Acidification Potential.",
             units="mol H+ eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
+            reference_alignment=ReferenceAlignment.EN15804_A2,
         ),
     )
 
@@ -225,8 +233,8 @@ class LCAResultsTallBase(SQLModel):
             field_code="ep",
             description="Eutrophication Potential.",
             units="kg N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
+            reference_alignment=ReferenceAlignment.TRACI,
         ),
     )
 
@@ -238,8 +246,8 @@ class LCAResultsTallBase(SQLModel):
             field_code="ep_af",
             description="Eutrophication Potential - Aquatic Freshwater.",
             units="kg PO4 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
+            reference_alignment=ReferenceAlignment.EN15804_A2,
         ),
     )
 
@@ -251,8 +259,8 @@ class LCAResultsTallBase(SQLModel):
             field_code="ep_am",
             description="Eutrophication Potential - Aquatic Marine.",
             units="kg N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
+            reference_alignment=ReferenceAlignment.EN15804_A2,
         ),
     )
 
@@ -264,8 +272,8 @@ class LCAResultsTallBase(SQLModel):
             field_code="ep_t",
             description="Eutrophication Potential - Terrestrial.",
             units="mol N eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
+            reference_alignment=ReferenceAlignment.EN15804_A2,
         ),
     )
 
@@ -277,8 +285,8 @@ class LCAResultsTallBase(SQLModel):
             field_code="pocp",
             description="Photochemical Ozone Creation Potential.",
             units="kg C2H4 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
+            reference_alignment=ReferenceAlignment.EN15804_A1,
         ),
     )
 
@@ -290,8 +298,8 @@ class LCAResultsTallBase(SQLModel):
             field_code="sfp",
             description="Smog Forming Potential.",
             units="kg O3 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
+            reference_alignment=ReferenceAlignment.TRACI,
         ),
     )
 
@@ -303,8 +311,8 @@ class LCAResultsTallBase(SQLModel):
             field_code="pofp",
             description="Photochemical Ozone Formation Potential.",
             units="kg NMVOC eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
+            reference_alignment=ReferenceAlignment.EN15804_A2,
         ),
     )
 
@@ -316,8 +324,8 @@ class LCAResultsTallBase(SQLModel):
             field_code="adpmm",
             description="Abiotic Depletion Potential (Minerals and Metals).",
             units="kg Sb eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
+            reference_alignment=ReferenceAlignment.EN15804_A1_AND_EN15804_A2,
         ),
     )
 
@@ -329,8 +337,8 @@ class LCAResultsTallBase(SQLModel):
             field_code="adpf",
             description="Abiotic Depletion Potential (Fossil Fuels).",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
+            reference_alignment=ReferenceAlignment.EN15804_A1_AND_EN15804_A2,
         ),
     )
 
@@ -342,8 +350,8 @@ class LCAResultsTallBase(SQLModel):
             field_code="wdp",
             description="Water Depletion Potential.",
             units="m3 world eq deprived",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
+            reference_alignment=ReferenceAlignment.EN15804_A2_M3_WORLD_EQ_DEPRIVED,
         ),
     )
 
@@ -355,8 +363,8 @@ class LCAResultsTallBase(SQLModel):
             field_code="pere",
             description="Primary Energy Renewable (Energy resources).",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
+            reference_alignment=ReferenceAlignment.EN15804_A1_AND_EN15804_A2,
         ),
     )
 
@@ -368,8 +376,8 @@ class LCAResultsTallBase(SQLModel):
             field_code="penre",
             description="Primary Energy Non-Renewable (Energy resources).",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
+            reference_alignment=ReferenceAlignment.EN15804_A1_AND_EN15804_A2,
         ),
     )
 
@@ -381,8 +389,8 @@ class LCAResultsTallBase(SQLModel):
             field_code="pert",
             description="Primary Energy Renewable Total.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
+            reference_alignment=ReferenceAlignment.EN15804_A1_AND_EN15804_A2,
         ),
     )
 
@@ -394,8 +402,8 @@ class LCAResultsTallBase(SQLModel):
             field_code="penrt",
             description="Primary Energy Non-Renewable Total.",
             units="MJ",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
+            reference_alignment=ReferenceAlignment.EN15804_A1_AND_EN15804_A2,
         ),
     )
 
@@ -407,8 +415,8 @@ class LCAResultsTallBase(SQLModel):
             field_code="pm",
             description="Particulate matter emissions",
             units="disease incidence",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
+            reference_alignment=ReferenceAlignment.EN15804_A2,
         ),
     )
 
@@ -420,8 +428,8 @@ class LCAResultsTallBase(SQLModel):
             field_code="irp",
             description="Ionising radiation, human health",
             units="kBq U235 eq",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
+            reference_alignment=ReferenceAlignment.EN15804_A2,
         ),
     )
 
@@ -433,8 +441,8 @@ class LCAResultsTallBase(SQLModel):
             field_code="etp_fw",
             description="Ecotoxicity, freshwater",
             units="CTUe",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
+            reference_alignment=ReferenceAlignment.EN15804_A2,
         ),
     )
 
@@ -446,8 +454,8 @@ class LCAResultsTallBase(SQLModel):
             field_code="htp_c",
             description="Human toxicity, cancer effects",
             units="CTUh",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
+            reference_alignment=ReferenceAlignment.EN15804_A2,
         ),
     )
 
@@ -459,8 +467,8 @@ class LCAResultsTallBase(SQLModel):
             field_code="htp_nc",
             description="Human toxicity, non-cancer effects",
             units="CTUh",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
+            reference_alignment=ReferenceAlignment.EN15804_A2,
         ),
     )
 
@@ -472,7 +480,7 @@ class LCAResultsTallBase(SQLModel):
             field_code="sqp",
             description="Soil quality index",
             units="-",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
+            reference_alignment=ReferenceAlignment.EN15804_A2,
         ),
     )

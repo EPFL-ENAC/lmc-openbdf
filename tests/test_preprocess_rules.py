@@ -3,7 +3,7 @@ from math import nan
 import pandas as pd
 import pytest
 
-from openbdf.lib.converters.dataframe import bom_draft_from_dataframe
+from openbdf.lib.converters.dataframe import bom_from_dataframe
 from openbdf.lib.converters.translators import DocumentTranslator, PreprocessRule
 from openbdf.model.enums.buildings import AboveBelowGround
 
@@ -113,7 +113,7 @@ def test_parse_floor(value: str, expected_floor_level: str | None, expected_abov
         preprocess_rule_col=2,
     )
 
-    records = bom_draft_from_dataframe(
+    records = bom_from_dataframe(
         pd.DataFrame({"floor": [value]}),
         document_translator=translator,
     )

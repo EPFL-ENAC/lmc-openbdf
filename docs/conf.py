@@ -26,6 +26,7 @@ extensions = [
     "sphinx.ext.viewcode",
     "sphinx_copybutton",
     "myst_parser",
+    "sphinxcontrib.mermaid",
 ]
 
 
@@ -52,6 +53,7 @@ html_js_files = ["custom.js"]
 # -- Options for MyST
 
 myst_heading_anchors = 3
+myst_fence_as_directive = ["mermaid"]
 
 # -- Options for EPUB output
 epub_show_urls = "footnote"
