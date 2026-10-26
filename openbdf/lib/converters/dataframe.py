@@ -1,30 +1,39 @@
 from __future__ import annotations
 
+from enum import Enum
 from typing import Any, Optional, TypeVar
 
 import pandas as pd
+from pydantic import ValidationError
 from sqlmodel import SQLModel
 
+from openbdf.lib.computed import fill_computed
 from openbdf.lib.converters.lca_results import lca_results_wide_to_tall
 from openbdf.lib.converters.translators import COMMON_CATEGORY_PROPERTIES, DocumentTranslator, PreprocessRule
 from openbdf.lib.openbdf_tables import OpenBDFTables
+from openbdf.lib.types.annotations import unwrap_optional
 from openbdf.lib.types.fields import get_field_code
 from openbdf.lib.types.values import parse_value, serialize_value
-from openbdf.model.building_bill_materials_slim import (
-    BuildingBillMaterialsSlimRecordBase,
-    BuildingBillMaterialsSlimRecordBaseDraft,
+from openbdf.lib.validation.errors import (
+    DroppedLine,
+    DuplicateFieldCode,
+    OpenBDFValidationError,
+    TypeMismatch,
+    UnknownEnumValue,
+    findings_from_validation_error,
 )
-from openbdf.model.general_info import ProjectRecordBase, ProjectRecordBaseDraft
+from openbdf.model.building_bill_materials_slim import BuildingBillMaterialsSlimRecordBase
+from openbdf.model.general_info import ProjectRecordBase
+from openbdf.model.ingest import make_ingest_model
+from openbdf.model.lca_results_full_tall import LCAResultsTallBase
 from openbdf.model.lca_results_full_wide import LCAResultsWideFullBase
+from openbdf.model.project_material_database import ProjectMaterialDatabaseBase
 from openbdf.model.tables import (
     BuildingBillMaterialsSlimRecord,
-    BuildingBillMaterialsSlimRecordDraft,
     LCAResultsTallFullRecord,
-    LCAResultsTallFullRecordDraft,
     LCAResultsWideFullRecord,
-    LCAResultsWideFullRecordDraft,
+    ProjectMaterialDatabaseRecord,
     ProjectRecord,
-    ProjectRecordDraft,
 )
 
 PROJECT_EXCLUDED_FIELDS = {"id", "bill_of_materials"}
@@ -132,6 +141,22 @@ def horizontal_to_dataframe(
     return pd.DataFrame(rows, columns=[field_code for _, _, field_code in included_fields])
 
 
+def parse_finding(
+    annotation: Any,
+    raw_value: Any,
+    field_code: str,
+    source: str,
+    row: int | None,
+) -> OpenBDFValidationError:
+    """Describe a cell that parse_value could not read as a field finding."""
+    annotation, _ = unwrap_optional(annotation)
+    if isinstance(annotation, type) and issubclass(annotation, Enum):
+        return UnknownEnumValue(f"Value {raw_value!r} is not a valid {annotation.__name__}", source=source, row=row)
+    return TypeMismatch(
+        f"Field {field_code} expects {getattr(annotation, '__name__', annotation)}", source=source, row=row
+    )
+
+
 def horizontal_from_dataframe(
     df: pd.DataFrame,
     model_cls: type[ModelT],
@@ -139,8 +164,8 @@ def horizontal_from_dataframe(
     *,
     excluded_fields: set[str] | None = None,
     document_translator: DocumentTranslator | None = None,
+    findings: list[OpenBDFValidationError] | None = None,
     drop_invalid: bool = False,
-    required_model_cls: type[SQLModel] | None = None,
 ) -> list[ModelT]:
     """
     Build a list of model instances from a horizontal dataframe.
@@ -148,35 +173,44 @@ def horizontal_from_dataframe(
     Dataframe columns are interpreted as field_code values.
     Unknown columns are ignored.
 
-    If drop_invalid is True and required_model_cls is given, the required
-    fields of required_model_cls are derived with is_required(). Rows that
-    miss a required field are not kept and a message is printed to the
-    terminal for each dropped row.
+    Every row is read into an all-optional ingest model and then validated with
+    model_cls. A row that fails validation is kept as read and its findings are
+    added to the findings list, so one bad cell does not stop the pipeline.
+
+    If drop_invalid is True, the rows that miss a required field are not kept and
+    each of them is reported as an E33 warning.
     """
     if document_translator is None:
         document_translator = DocumentTranslator.default_openbdf_translator()
+    if findings is None:
+        findings = []
 
     fields = model_cls.model_fields
     code_to_name = build_field_code_to_name_map(
         model_cls,
         excluded_fields=excluded_fields,
     )
-
-    required_names: set[str] = set()
-    if drop_invalid and required_model_cls is not None:
-        for req_field, field_info in required_model_cls.model_fields.items():
-            if field_info.is_required():
-                required_names.add(req_field)
+    name_to_code = {name: code for code, name in code_to_name.items()}
+    ingest_cls = make_ingest_model(model_cls)
 
     # The column set is fixed for all rows, so translation, field resolution
     # and default parsing run once instead of once per row.
     column_plans: list[list[tuple[str, Any, PreprocessRule | None]]] = []
+    seen_field_names: set[str] = set()
     for column in df.columns:
         column_plan: list[tuple[str, Any, PreprocessRule | None]] = []
         for translated_code in document_translator.translate(translator_category, str(column)):
             field_name = code_to_name.get(translated_code)
             if field_name is None:
                 continue
+            if field_name in seen_field_names:
+                findings.append(
+                    DuplicateFieldCode(
+                        f"Field code {translated_code} is declared twice",
+                        source=translator_category,
+                    )
+                )
+            seen_field_names.add(field_name)
             column_plan.append((
                 field_name,
                 fields[field_name].annotation,
@@ -197,8 +231,11 @@ def horizontal_from_dataframe(
 
     items: list[ModelT] = []
 
-    for row_number, row_values in enumerate(df.itertuples(index=False, name=None), start=1):
+    for row_index, row_values in zip(df.index, df.itertuples(index=False, name=None)):
+        row = int(row_index) + 1
         kwargs: dict[str, Any] = {}
+        row_findings: list[OpenBDFValidationError] = []
+        failed_fields: set[str] = set()
 
         for column_plan, raw_cell in zip(column_plans, row_values):
             for field_name, annotation, preprocess_rule in column_plan:
@@ -210,11 +247,24 @@ def horizontal_from_dataframe(
                     else:
                         raw_value = None
 
-                kwargs[field_name] = parse_value(
-                    annotation,
-                    raw_value,
-                    document_translator,
-                )
+                try:
+                    kwargs[field_name] = parse_value(
+                        annotation,
+                        raw_value,
+                        document_translator,
+                    )
+                except (ValueError, ArithmeticError):
+                    kwargs[field_name] = None
+                    failed_fields.add(field_name)
+                    row_findings.append(
+                        parse_finding(
+                            annotation,
+                            raw_value,
+                            name_to_code.get(field_name, field_name),
+                            translator_category,
+                            row,
+                        )
+                    )
 
         for field_name, default_parsed in default_plans:
             if kwargs.get(field_name) is not None:
@@ -224,21 +274,33 @@ def horizontal_from_dataframe(
         if not any(value is not None for value in kwargs.values()):
             continue
 
-        if drop_invalid and required_names:
-            missing = [name for name in required_names if kwargs.get(name) is None]
-            if missing:
-                material_id = kwargs.get("material_id")
-                if material_id is not None:
-                    identifier = f"material_id={material_id!r}"
-                else:
-                    identifier = f"row {row_number}"
-                print(
-                    f"Dropped bill of materials line ({identifier}): "
-                    f"missing required field(s): {', '.join(sorted(missing))}."
+        record = ingest_cls(**kwargs)
+        try:
+            # A None value means the sheet carries no value, so pydantic reports it
+            # as a missing required field instead of a type mismatch.
+            record = model_cls.model_validate(record.model_dump(exclude_none=True))
+        except ValidationError as exc:
+            row_findings.extend(
+                findings_from_validation_error(
+                    exc,
+                    model_cls,
+                    source=translator_category,
+                    row=row,
+                    skip_fields=frozenset(failed_fields),
+                )
+            )
+            if drop_invalid and any(finding.code == "E01" for finding in row_findings):
+                findings.append(
+                    DroppedLine(
+                        _dropped_line_message(row, kwargs.get("material_id"), row_findings),
+                        source=translator_category,
+                        row=row,
+                    )
                 )
                 continue
 
-        items.append(model_cls(**kwargs))
+        findings.extend(row_findings)
+        items.append(record)
 
     return items
 
@@ -250,6 +312,7 @@ def model_from_vertical_dataframe(
     translator_category: str = COMMON_CATEGORY_PROPERTIES["project"]["name"],
     *,
     document_translator: DocumentTranslator | None = None,
+    findings: list[OpenBDFValidationError] | None = None,
 ) -> ModelT:
     """
     Build a project model from a dataframe produced by project_to_dataframe().
@@ -259,6 +322,10 @@ def model_from_vertical_dataframe(
     - value
 
     Extra columns are ignored.
+
+    Every value is read into an all-optional ingest model and then validated with
+    model_cls. A value that fails validation is kept as read and its findings are
+    added to the findings list, so one bad cell does not stop the pipeline.
     """
     required_columns = {"field_code", "value"}
     missing = required_columns - set(project_df.columns)
@@ -267,17 +334,25 @@ def model_from_vertical_dataframe(
 
     if document_translator is None:
         document_translator = DocumentTranslator.default_openbdf_translator()
+    if findings is None:
+        findings = []
 
     fields = model_cls.model_fields
     code_to_name = build_field_code_to_name_map(
         model_cls,
         excluded_fields=excluded_fields,
     )
+    name_to_code = {name: code for code, name in code_to_name.items()}
+    ingest_cls = make_ingest_model(model_cls)
 
     kwargs: dict[str, Any] = {}
+    seen_field_names: set[str] = set()
+    failed_fields: set[str] = set()
+    field_rows: dict[str, int] = {}
 
-    for _, row in project_df.iterrows():
+    for row_index, row in project_df.iterrows():
         field_code = row["field_code"]
+        row_number = int(row_index) + 1
 
         if pd.isna(field_code):
             continue
@@ -291,13 +366,36 @@ def model_from_vertical_dataframe(
             if field_name is None:
                 continue
 
-            field_info = fields[field_name]
-            annotation = field_info.annotation
-            kwargs[field_name] = parse_value(
-                annotation,
-                row["value"],
-                document_translator,
-            )
+            if field_name in seen_field_names:
+                findings.append(
+                    DuplicateFieldCode(
+                        f"Field code {field_code} is declared twice",
+                        source=translator_category,
+                        row=row_number,
+                    )
+                )
+            seen_field_names.add(field_name)
+            field_rows[field_name] = row_number
+
+            annotation = fields[field_name].annotation
+            try:
+                kwargs[field_name] = parse_value(
+                    annotation,
+                    row["value"],
+                    document_translator,
+                )
+            except (ValueError, ArithmeticError):
+                kwargs[field_name] = None
+                failed_fields.add(field_name)
+                findings.append(
+                    parse_finding(
+                        annotation,
+                        row["value"],
+                        name_to_code.get(field_name, field_name),
+                        translator_category,
+                        row_number,
+                    )
+                )
 
     for field_code, field_name in code_to_name.items():
         if kwargs.get(field_name) is not None:
@@ -311,11 +409,27 @@ def model_from_vertical_dataframe(
                 document_translator,
             )
 
-    return model_cls(**kwargs)
+    record = ingest_cls(**kwargs)
+    try:
+        return model_cls.model_validate(record.model_dump(exclude_none=True))
+    except ValidationError as exc:
+        findings.extend(
+            findings_from_validation_error(
+                exc,
+                model_cls,
+                source=translator_category,
+                row_by_field=field_rows,
+                skip_fields=frozenset(failed_fields),
+            )
+        )
+        return record
 
 
 def project_from_dataframe(
-    project_df: pd.DataFrame, document_translator: DocumentTranslator | None = None
+    project_df: pd.DataFrame,
+    document_translator: DocumentTranslator | None = None,
+    *,
+    findings: list[OpenBDFValidationError] | None = None,
 ) -> ProjectRecordBase:
     """
     Build a ProjectRecord from a dataframe produced by project_to_dataframe().
@@ -332,27 +446,7 @@ def project_from_dataframe(
         excluded_fields=PROJECT_EXCLUDED_FIELDS,
         translator_category=COMMON_CATEGORY_PROPERTIES["project"]["name"],
         document_translator=document_translator or DocumentTranslator(),
-    )
-
-
-def project_draft_from_dataframe(
-    project_df: pd.DataFrame, document_translator: DocumentTranslator | None = None
-) -> ProjectRecordBaseDraft:
-    """
-    Build a ProjectRecordDraft from a dataframe produced by project_to_dataframe().
-
-    Expected columns:
-    - field_code
-    - value
-
-    Extra columns are ignored.
-    """
-    return model_from_vertical_dataframe(
-        project_df,
-        ProjectRecordBaseDraft,
-        excluded_fields=PROJECT_EXCLUDED_FIELDS,
-        translator_category=COMMON_CATEGORY_PROPERTIES["project"]["name"],
-        document_translator=document_translator or DocumentTranslator(),
+        findings=findings,
     )
 
 
@@ -371,10 +465,17 @@ def add_material_id_column_if_missing(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
+def _dropped_line_message(row: int, material_id: Any, reasons: list[OpenBDFValidationError]) -> str:
+    """Describe a dropped line and the reasons that made it invalid."""
+    identifier = f" (material_id {material_id!r})" if material_id else ""
+    return f"Row {row}: line dropped{identifier}: {'; '.join(reason.message for reason in reasons)}"
+
+
 def bom_from_dataframe(
     bom_df: pd.DataFrame,
     document_translator: DocumentTranslator | None = None,
     *,
+    findings: list[OpenBDFValidationError] | None = None,
     drop_invalid: bool = False,
 ) -> list[BuildingBillMaterialsSlimRecordBase]:
     """
@@ -382,7 +483,7 @@ def bom_from_dataframe(
     produced by bom_to_dataframe().
 
     If drop_invalid is True, lines that miss a required field are dropped
-    and a message is printed for each dropped line.
+    and reported as E33 warnings.
     """
     bom_df = add_material_id_column_if_missing(bom_df)
     return horizontal_from_dataframe(
@@ -391,103 +492,68 @@ def bom_from_dataframe(
         COMMON_CATEGORY_PROPERTIES["bom"]["name"],
         excluded_fields=BOM_EXCLUDED_FIELDS,
         document_translator=document_translator,
+        findings=findings,
         drop_invalid=drop_invalid,
-        required_model_cls=BuildingBillMaterialsSlimRecordBase,
     )
 
 
-def bom_draft_from_dataframe(
-    bom_df: pd.DataFrame,
+def project_material_database_from_dataframe(
+    project_material_database_df: pd.DataFrame,
     document_translator: DocumentTranslator | None = None,
     *,
-    drop_invalid: bool = False,
-) -> list[BuildingBillMaterialsSlimRecordBaseDraft]:
+    findings: list[OpenBDFValidationError] | None = None,
+) -> list[ProjectMaterialDatabaseBase]:
     """
-    Build a list of BuildingBillMaterialsSlimRecordBaseDraft from a dataframe
-    produced by bom_to_dataframe().
-
-    If drop_invalid is True, lines that miss a required field are dropped
-    and a message is printed for each dropped line.
+    Build a list of ProjectMaterialDatabaseBase from a dataframe
+    produced by the Project Material Database sheet.
     """
-    bom_df = add_material_id_column_if_missing(bom_df)
     return horizontal_from_dataframe(
-        bom_df,
-        BuildingBillMaterialsSlimRecordBaseDraft,
-        COMMON_CATEGORY_PROPERTIES["bom"]["name"],
-        excluded_fields=BOM_EXCLUDED_FIELDS,
+        project_material_database_df,
+        ProjectMaterialDatabaseBase,
+        COMMON_CATEGORY_PROPERTIES["material_database"]["name"],
         document_translator=document_translator,
-        drop_invalid=drop_invalid,
-        required_model_cls=BuildingBillMaterialsSlimRecordBase,
+        findings=findings,
     )
 
 
 def results_wide_from_dataframe(
     results_wide_df: pd.DataFrame,
     document_translator: DocumentTranslator | None = None,
-) -> list[LCAResultsWideFullRecord]:
+    *,
+    findings: list[OpenBDFValidationError] | None = None,
+) -> list[LCAResultsWideFullBase]:
     """
-    Build a list of LCAResultsWideFullRecord from a dataframe produced
+    Build a list of LCAResultsWideFullBase from a dataframe produced
     by results_wide_to_dataframe().
     """
     results_wide_df = add_material_id_column_if_missing(results_wide_df)
     return horizontal_from_dataframe(
         results_wide_df,
-        LCAResultsWideFullRecord,
+        LCAResultsWideFullBase,
         COMMON_CATEGORY_PROPERTIES["results_wide"]["name"],
         excluded_fields=RESULTS_EXCLUDED_FIELDS,
         document_translator=document_translator,
-    )
-
-
-def results_wide_draft_from_dataframe(
-    results_wide_draft_df: pd.DataFrame,
-    document_translator: DocumentTranslator | None = None,
-) -> list[LCAResultsWideFullRecordDraft]:
-    """
-    Build a list of LCAResultsWideFullRecordDraft from a dataframe produced
-    by results_wide_to_dataframe().
-    """
-    results_wide_draft_df = add_material_id_column_if_missing(results_wide_draft_df)
-    return horizontal_from_dataframe(
-        results_wide_draft_df,
-        LCAResultsWideFullRecordDraft,
-        COMMON_CATEGORY_PROPERTIES["results_wide"]["name"],
-        excluded_fields=RESULTS_EXCLUDED_FIELDS,
-        document_translator=document_translator,
+        findings=findings,
     )
 
 
 def results_tall_from_dataframe(
     results_tall_df: pd.DataFrame,
     document_translator: DocumentTranslator | None = None,
-) -> list[LCAResultsTallFullRecord]:
+    *,
+    findings: list[OpenBDFValidationError] | None = None,
+) -> list[LCAResultsTallBase]:
     """
-    Build a list of LCAResultsTallFullRecord from a dataframe produced
+    Build a list of LCAResultsTallBase from a dataframe produced
     by results_tall_to_dataframe().
     """
     return horizontal_from_dataframe(
         results_tall_df,
-        LCAResultsTallFullRecord,
+        LCAResultsTallBase,
         COMMON_CATEGORY_PROPERTIES["results_tall"]["name"],
         excluded_fields=RESULTS_EXCLUDED_FIELDS,
         document_translator=document_translator,
-    )
-
-
-def results_tall_draft_from_dataframe(
-    results_tall_draft_df: pd.DataFrame,
-    document_translator: DocumentTranslator | None = None,
-) -> list[LCAResultsTallFullRecordDraft]:
-    """
-    Build a list of LCAResultsTallFullRecordDraft from a dataframe produced
-    by results_tall_to_dataframe().
-    """
-    return horizontal_from_dataframe(
-        results_tall_draft_df,
-        LCAResultsTallFullRecordDraft,
-        COMMON_CATEGORY_PROPERTIES["results_tall"]["name"],
-        excluded_fields=RESULTS_EXCLUDED_FIELDS,
-        document_translator=document_translator,
+        findings=findings,
     )
 
 
@@ -508,128 +574,90 @@ def project_package_from_tables(
     tables: OpenBDFTables,
     document_translator: DocumentTranslator | None = None,
     *,
+    findings: list[OpenBDFValidationError] | None = None,
+    draft: bool = False,
     drop_invalid: bool = False,
 ) -> ProjectRecord:
     """
     Reconstruct a ProjectRecord and attach its bill of materials from logical tables.
 
+    In draft mode a missing project material database line is generated from the bill
+    of materials. Every record is validated and its findings are added to the findings
+    list, so the caller can report all of them and decide whether to export the file.
+    The automatic fields are filled last, so the validation reads the derived values.
+
     If drop_invalid is True, bill of materials lines that miss a required
     field are dropped and a message is printed for each dropped line.
     """
 
     if document_translator is None:
         document_translator = DocumentTranslator.default_openbdf_translator()
+    if findings is None:
+        findings = []
 
-    project_base = project_from_dataframe(tables.project, document_translator)
+    project_base = project_from_dataframe(tables.project, document_translator, findings=findings)
     bill_of_materials_base = bom_from_dataframe(
         tables.bill_of_materials,
         document_translator,
+        findings=findings,
         drop_invalid=drop_invalid,
     )
 
+    project_material_database_base = (
+        project_material_database_from_dataframe(
+            tables.project_material_database,
+            document_translator,
+            findings=findings,
+        )
+        if tables.project_material_database is not None
+        else []
+    )
+
+    project_material_database = [
+        ProjectMaterialDatabaseRecord(**record.model_dump()) for record in project_material_database_base
+    ]
     bill_of_materials = [BuildingBillMaterialsSlimRecord(**bom.model_dump()) for bom in bill_of_materials_base]
 
     material_id_to_bom = {bom.material_id: bom for bom in bill_of_materials}
 
     results_wide: list[LCAResultsWideFullRecord] = []
-    results_tall: list[LCAResultsTallFullRecord] = []
 
     if tables.results_wide is not None:
-        results_wide = results_wide_from_dataframe(tables.results_wide, document_translator)
+        results_wide = [
+            LCAResultsWideFullRecord(**record.model_dump())
+            for record in results_wide_from_dataframe(tables.results_wide, document_translator, findings=findings)
+        ]
         for result_wide in results_wide:
             matching_bom = material_id_to_bom.get(result_wide.material_id, None)
             if matching_bom is not None:
                 matching_bom.lca_results_full_record = result_wide
 
     if tables.results_tall is not None:
-        results_tall = results_tall_from_dataframe(tables.results_tall, document_translator)
-        for result_tall in results_tall:
+        tall_records = [
+            LCAResultsTallFullRecord(**record.model_dump())
+            for record in results_tall_from_dataframe(tables.results_tall, document_translator, findings=findings)
+        ]
+        for result_tall in tall_records:
             matching_bom = material_id_to_bom.get(result_tall.material_id, None)
             if matching_bom is not None:
                 matching_bom.lca_results_tall_full_records.append(result_tall)
     elif results_wide:
-        results_tall = []
         for result_wide in results_wide:
             matching_bom = material_id_to_bom.get(result_wide.material_id, None)
             if matching_bom is not None:
-                tall_results = lca_results_wide_to_tall(
-                    result_wide,
-                    matching_bom,
-                    LCAResultsTallFullRecord,
+                matching_bom.lca_results_tall_full_records.extend(
+                    lca_results_wide_to_tall(
+                        result_wide,
+                        matching_bom,
+                        LCAResultsTallFullRecord,
+                    )
                 )
-                matching_bom.lca_results_tall_full_records.extend(tall_results)
-                results_tall.extend(tall_results)
 
     project = ProjectRecord(
         **project_base.model_dump(),
         bill_of_materials=bill_of_materials,
-        results_wide=results_wide,
-        results_tall=results_tall,
+        project_material_database=project_material_database,
     )
+    fill_computed(project, document_translator, findings=findings, draft=draft)
 
     return project
-
-
-def project_draft_package_from_tables(
-    tables: OpenBDFTables,
-    document_translator: DocumentTranslator | None = None,
-    *,
-    drop_invalid: bool = False,
-) -> ProjectRecordDraft:
-    """
-    Reconstruct a ProjectRecordDraft and attach its bill of materials from logical tables.
-
-    If drop_invalid is True, bill of materials lines that miss a required
-    field are dropped and a message is printed for each dropped line.
-    """
-
-    if document_translator is None:
-        document_translator = DocumentTranslator.default_openbdf_translator()
-
-    project_base = project_draft_from_dataframe(tables.project, document_translator)
-    bill_of_materials_base = bom_draft_from_dataframe(
-        tables.bill_of_materials,
-        document_translator,
-        drop_invalid=drop_invalid,
-    )
-    bill_of_materials = [BuildingBillMaterialsSlimRecordDraft(**bom.model_dump()) for bom in bill_of_materials_base]
-
-    material_id_to_bom = {bom.material_id: bom for bom in bill_of_materials}
-
-    results_wide: list[LCAResultsWideFullRecordDraft] = []
-    results_tall: list[LCAResultsTallFullRecordDraft] = []
-
-    if tables.results_wide is not None:
-        results_wide = results_wide_draft_from_dataframe(tables.results_wide, document_translator)
-        for result_wide in results_wide:
-            matching_bom = material_id_to_bom.get(result_wide.material_id, None)
-            if matching_bom is not None:
-                matching_bom.lca_results_full_record = result_wide
-
-    if tables.results_tall is not None:
-        results_tall = results_tall_draft_from_dataframe(tables.results_tall, document_translator)
-        for result_tall in results_tall:
-            matching_bom = material_id_to_bom.get(result_tall.material_id, None)
-            if matching_bom is not None:
-                matching_bom.lca_results_tall_full_records.append(result_tall)
-    elif results_wide:
-        results_tall = []
-        for result_wide in results_wide:
-            matching_bom = material_id_to_bom.get(result_wide.material_id, None)
-            if matching_bom is not None:
-                tall_results = lca_results_wide_to_tall(
-                    result_wide,
-                    matching_bom,
-                    LCAResultsTallFullRecordDraft,
-                )
-                matching_bom.lca_results_tall_full_records.extend(tall_results)
-                results_tall.extend(tall_results)
-
-    project_draft = ProjectRecordDraft(
-        **project_base.model_dump(),
-        bill_of_materials=bill_of_materials,
-        results_wide=results_wide,
-        results_tall=results_tall,
-    )
-
-    return project_draft

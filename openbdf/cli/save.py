@@ -3,7 +3,7 @@ import itertools
 import re
 from copy import copy
 from pathlib import Path
-from typing import TypeVar
+from typing import Any, TypeVar
 
 import numpy as np
 import pandas as pd
@@ -19,11 +19,13 @@ from openbdf.lib.converters.enums_registry import Boolean, EnumRegistry
 from openbdf.lib.converters.translators import (
     ABOUT_SHEET_NAME,
     COMMON_CATEGORY_PROPERTIES,
+    FLOOR_LEVEL_CATEGORY,
     SHEETS_PROPERTIES_HEADERS,
 )
 from openbdf.lib.types.annotations import unwrap_optional
 from openbdf.lib.types.human_readable import human_readable_constraints, human_readable_type
 from openbdf.lib.types.xlsx import xlsx_validation_from_type
+from openbdf.lib.validation.errors import AutomaticFieldSupplied, OpenBDFValidationError
 from openbdf.model.building_bill_materials_slim import BuildingBillMaterialsSlimRecordBase
 from openbdf.model.enums.buildings import (
     AboveBelowGround,
@@ -32,7 +34,6 @@ from openbdf.model.enums.buildings import (
     BuildingFacingDirection,
     BuildingStructureType,
     BuildingTypology,
-    FloorAreaInclusions,
     FoundationType,
     GFAMeasurementMethod,
     GrossFloorAreaStandard,
@@ -72,9 +73,11 @@ from openbdf.model.enums.materials import (
 )
 from openbdf.model.enums.openbdf_enum import OpenBDFEnum
 from openbdf.model.enums.project import ConstructionType, ProjectPhase, ProjectPhaseCommon, ProjectUnits, RecordType
+from openbdf.model.enums.requirement import Requirement, requirement_of
 from openbdf.model.general_info import ProjectRecordBase
 from openbdf.model.lca_results_full_tall import LCAResultsTallBase
 from openbdf.model.lca_results_full_wide import LCAResultsWideFullBase
+from openbdf.model.project_material_database import ProjectMaterialDatabaseBase
 from openbdf.model.tables import ProjectRecord
 
 thin_side = Side(border_style="thin", color="AAAAAA")
@@ -86,14 +89,40 @@ INFO_STYLE = NamedStyle("Info", font=Font(name="Calibri", italic=True))
 FIELD_CODE_STYLE = NamedStyle(
     "FieldCode", font=Font(name="Calibri", color="FFFFFF"), fill=PatternFill("solid", fgColor="010101")
 )
-REQUIRED_STYLE = NamedStyle("Required", font=Font(name="Calibri"), fill=PatternFill("solid", fgColor="a3d3bd"))
-RECOMMENDED_STYLE = NamedStyle("Recommended", font=Font(name="Calibri"), fill=PatternFill("solid", fgColor="a9d2f6"))
-OPTIONAL_STYLE = NamedStyle("Optional", font=Font(name="Calibri"), fill=PatternFill("solid", fgColor="d8e6e2"))
-ROW_HEADER_STYLE = NamedStyle("RowHeader", font=Font(name="Calibri", bold=True), alignment=Alignment(vertical="top"))
+REQUIRED_STYLE = NamedStyle(
+    "Required", font=Font(name="Calibri", color="FFFFFF"), fill=PatternFill("solid", fgColor="189d7e")
+)
+STRONGLY_RECOMMENDED_STYLE = NamedStyle(
+    "Strongly recommended", font=Font(name="Calibri", color="FFFFFF"), fill=PatternFill("solid", fgColor="3592e3")
+)
+RECOMMENDED_STYLE = NamedStyle(
+    "Recommended", font=Font(name="Calibri", color="FFFFFF"), fill=PatternFill("solid", fgColor="72b7ed")
+)
+SUGGESTED_STYLE = NamedStyle("Suggested", font=Font(name="Calibri"), fill=PatternFill("solid", fgColor="b8e0f7"))
+OPTIONAL_STYLE = NamedStyle("Optional", font=Font(name="Calibri"), fill=PatternFill("solid", fgColor="e9f7fe"))
+AUTOMATIC_STYLE = NamedStyle("Automatic", font=Font(name="Calibri"), fill=PatternFill("solid", fgColor="d5e6e2"))
+METADATA_STYLE = NamedStyle("Metadata", font=Font(name="Calibri"), fill=PatternFill("solid", fgColor="d5e6e2"))
+FIRST_ROW_HEIGHT = 38
+REQUIREMENT_STYLES: dict[Requirement, NamedStyle] = {
+    Requirement.REQUIRED: REQUIRED_STYLE,
+    Requirement.STRONGLY_RECOMMENDED: STRONGLY_RECOMMENDED_STYLE,
+    Requirement.RECOMMENDED: RECOMMENDED_STYLE,
+    Requirement.SUGGESTED: SUGGESTED_STYLE,
+    Requirement.OPTIONAL: OPTIONAL_STYLE,
+    Requirement.AUTOMATIC: AUTOMATIC_STYLE,
+}
+MARKED_REQUIREMENTS = (Requirement.REQUIRED, Requirement.STRONGLY_RECOMMENDED, Requirement.AUTOMATIC)
 EDITABLE_VALUE_STYLE = NamedStyle(
     "EditableValue",
     font=Font(name="Calibri"),
     fill=PatternFill("solid", fgColor="feffb3"),
+    border=Border(top=thin_side, left=thin_side, right=thin_side, bottom=thin_side),
+    protection=Protection(locked=False),
+)
+AUTOMATIC_VALUE_STYLE = NamedStyle(
+    "AutomaticValue",
+    font=Font(name="Calibri"),
+    fill=PatternFill("solid", fgColor="d5e6e2"),
     border=Border(top=thin_side, left=thin_side, right=thin_side, bottom=thin_side),
     protection=Protection(locked=False),
 )
@@ -105,6 +134,13 @@ DISABLED_STYLE = NamedStyle(
 
 ModelT = TypeVar("ModelT", bound=SQLModel)
 ModelT2 = TypeVar("ModelT2", bound=SQLModel)
+
+# Row 9 of the horizontal sheets and column L of General Information hold the reference
+# or the reference alignment of the field, depending on the sheet.
+REFERENCE_LABELS = {"reference": "Reference", "reference_alignment": "Reference Alignment"}
+
+# The sheet builder reads this value as "no project_id given", so an imported project_id wins.
+DEFAULT_PROJECT_ID = "XXXXXXX"
 
 # Canonical TypeDefinitions column order for the template export.
 TEMPLATE_TYPE_DEFINITIONS: tuple[type, ...] = (
@@ -128,7 +164,6 @@ TEMPLATE_TYPE_DEFINITIONS: tuple[type, ...] = (
     PrimaryEnergySource,
     BuildingFacingDirection,
     GrossFloorAreaStandard,
-    FloorAreaInclusions,
     ReplacementCountMethod,
     LCADatabase,
     LCADatabaseSystemModel,
@@ -166,8 +201,12 @@ ALL_NAMED_STYLES: list[NamedStyle] = [
     REQUIRED_STYLE,
     RECOMMENDED_STYLE,
     OPTIONAL_STYLE,
-    ROW_HEADER_STYLE,
+    STRONGLY_RECOMMENDED_STYLE,
+    SUGGESTED_STYLE,
+    AUTOMATIC_STYLE,
+    METADATA_STYLE,
     EDITABLE_VALUE_STYLE,
+    AUTOMATIC_VALUE_STYLE,
     DISABLED_STYLE,
 ]
 
@@ -259,8 +298,11 @@ def save_openbdf_to_xlsx(
     project: ProjectRecord | None,
     info_sheet_name: str = COMMON_CATEGORY_PROPERTIES["project"]["name"],
     bom_sheet_name: str = COMMON_CATEGORY_PROPERTIES["bom"]["name"],
+    project_material_database_sheet_name: str = COMMON_CATEGORY_PROPERTIES["material_database"]["name"],
     results_wide_sheet_name: str = COMMON_CATEGORY_PROPERTIES["results_wide"]["name"],
     results_tall_sheet_name: str = COMMON_CATEGORY_PROPERTIES["results_tall"]["name"],
+    project_id: str = DEFAULT_PROJECT_ID,
+    findings: list[OpenBDFValidationError] | None = None,
 ):
     """Save a list of BuildingBillMaterialsSlimRecord to an Excel file."""
 
@@ -271,13 +313,22 @@ def save_openbdf_to_xlsx(
         enum_registry.register(*TEMPLATE_TYPE_DEFINITIONS)
 
         about_to_xlsx(writer)
-        info_to_xlsx(writer, project, info_sheet_name, enum_registry)
+        info_to_xlsx(writer, project, info_sheet_name, enum_registry, project_id=project_id, findings=findings)
         wide_to_xlsx(
             writer,
             project.bill_of_materials if project else None,
             BuildingBillMaterialsSlimRecordBase,
             bom_sheet_name,
             enum_registry,
+            reference_attribute="reference",
+        )
+        wide_to_xlsx(
+            writer,
+            project.project_material_database if project else None,
+            ProjectMaterialDatabaseBase,
+            project_material_database_sheet_name,
+            enum_registry,
+            reference_attribute="reference",
         )
         wide_to_xlsx(
             writer,
@@ -287,6 +338,7 @@ def save_openbdf_to_xlsx(
             LCAResultsWideFullBase,
             results_wide_sheet_name,
             enum_registry,
+            reference_attribute="reference_alignment",
         )
         wide_to_xlsx(
             writer,
@@ -301,12 +353,58 @@ def save_openbdf_to_xlsx(
             LCAResultsTallBase,
             results_tall_sheet_name,
             enum_registry,
+            reference_attribute="reference_alignment",
         )
 
         enum_registry.to_xlsx(writer)
+        style_first_rows(writer)
 
 
-def info_to_xlsx(writer: pd.ExcelWriter, project: ProjectRecord | None, sheet_name: str, enum_registry: EnumRegistry):
+def style_first_rows(writer: pd.ExcelWriter, header_style: str | None = None) -> None:
+    """Make the header row of every sheet taller, align its text bottom left and optionally restyle it."""
+    for sheet in writer.book.worksheets:
+        sheet.row_dimensions[1].height = FIRST_ROW_HEIGHT
+        style_header = header_style is not None and sheet.title != ABOUT_SHEET_NAME
+        for cell in sheet[1]:
+            cell.alignment = Alignment(horizontal="left", vertical="bottom")
+            if style_header:
+                cell.style = header_style
+
+
+def _info_value(
+    project: ProjectRecord | None,
+    field_code: str,
+    project_id: str,
+    findings: list[OpenBDFValidationError] | None,
+    sheet_name: str,
+) -> Any:
+    """Return the Value cell of a General Information field and report a replaced project_id."""
+    if field_code != "project_id":
+        value = getattr(project, field_code) if project else ""
+        return value.display_name if isinstance(value, OpenBDFEnum) else value
+
+    imported = getattr(project, "project_id", None) if project else None
+    if project_id == DEFAULT_PROJECT_ID:
+        return imported or DEFAULT_PROJECT_ID
+
+    if findings is not None and imported is not None and imported != project_id:
+        findings.append(
+            AutomaticFieldSupplied(
+                "Field project_id was in the original data; the given project_id replaced it",
+                source=sheet_name,
+            )
+        )
+    return project_id
+
+
+def info_to_xlsx(
+    writer: pd.ExcelWriter,
+    project: ProjectRecord | None,
+    sheet_name: str,
+    enum_registry: EnumRegistry,
+    project_id: str = DEFAULT_PROJECT_ID,
+    findings: list[OpenBDFValidationError] | None = None,
+):
     info_sheet = writer.book.create_sheet(sheet_name)
     info_sheet.protection.sheet = True  # Lock the sheet to prevent accidental edits
 
@@ -319,7 +417,7 @@ def info_to_xlsx(writer: pd.ExcelWriter, project: ProjectRecord | None, sheet_na
 
         extra = get_field_extra(metadata)
         data_type, is_optional = unwrap_optional(metadata.annotation)
-        requirements = extra.get("requirements", "Optional" if is_optional else "Required")
+        requirements = requirement_of(extra, is_optional)
 
         header_cells = []
 
@@ -347,40 +445,32 @@ def info_to_xlsx(writer: pd.ExcelWriter, project: ProjectRecord | None, sheet_na
 
         constraints = extra.get("constraint")
         c = info_sheet.cell(row=cell_row, column=7, value=constraints)
-        if constraints:
-            c.style = INFO_STYLE.name
-        else:
-            c.style = DISABLED_STYLE.name
+        c.style = METADATA_STYLE.name
 
         units = extra.get("units", "")
         u = info_sheet.cell(row=cell_row, column=8, value=units)
-        if units:
-            u.style = INFO_STYLE.name
-        else:
-            u.style = DISABLED_STYLE.name
+        u.style = METADATA_STYLE.name
 
-        r = info_sheet.cell(row=cell_row, column=9, value=requirements)
-        if requirements == "Required":
-            r.style = REQUIRED_STYLE.name
-        elif requirements == "Recommended":
-            r.style = RECOMMENDED_STYLE.name
-        else:
-            r.style = OPTIONAL_STYLE.name
+        r = info_sheet.cell(row=cell_row, column=9, value=requirements.display_name)
+        r.style = REQUIREMENT_STYLES[requirements].name
 
-        criticality = extra.get("criticality", "SHOULD")
-        info_sheet.cell(row=cell_row, column=10, value=criticality)
+        reference = extra.get("reference")
+        ref = info_sheet.cell(row=cell_row, column=11, value=reference or "")
+        ref.style = METADATA_STYLE.name
 
-        v = info_sheet.cell(row=cell_row, column=11, value=getattr(project, field_code) if project else "")
-        v.style = EDITABLE_VALUE_STYLE.name
+        v = info_sheet.cell(
+            row=cell_row, column=10, value=_info_value(project, field_code, project_id, findings, sheet_name)
+        )
+        v.style = AUTOMATIC_VALUE_STYLE.name if requirements is Requirement.AUTOMATIC else EDITABLE_VALUE_STYLE.name
 
         dv = xlsx_validation_from_type(data_type, is_optional, metadata, enum_registry)  # type: ignore[arg-type]
         if dv:
             dv.add(v)
             info_sheet.add_data_validation(dv)
 
-        if requirements == "Required":
+        if requirements in MARKED_REQUIREMENTS:
             for c in header_cells:
-                c.style = REQUIRED_STYLE.name
+                c.style = REQUIREMENT_STYLES[requirements].name
 
     a = info_sheet.cell(row=1, column=1, value="Group")
     a.style = ATTRIBUTES_NAME_STYLE.name
@@ -400,9 +490,9 @@ def info_to_xlsx(writer: pd.ExcelWriter, project: ProjectRecord | None, sheet_na
     fc.style = ATTRIBUTES_NAME_STYLE.name
     fc = info_sheet.cell(row=1, column=9, value="Requirements")
     fc.style = ATTRIBUTES_NAME_STYLE.name
-    fc = info_sheet.cell(row=1, column=10, value="Criticality")
+    fc = info_sheet.cell(row=1, column=10, value="Value")
     fc.style = ATTRIBUTES_NAME_STYLE.name
-    fc = info_sheet.cell(row=1, column=11, value="Value")
+    fc = info_sheet.cell(row=1, column=11, value="Reference")
     fc.style = ATTRIBUTES_NAME_STYLE.name
 
     info_sheet.column_dimensions["A"].width = 10
@@ -413,11 +503,9 @@ def info_to_xlsx(writer: pd.ExcelWriter, project: ProjectRecord | None, sheet_na
     info_sheet.column_dimensions["F"].width = 30
     info_sheet.column_dimensions["G"].width = 25
     info_sheet.column_dimensions["H"].width = 15
-    info_sheet.column_dimensions["I"].width = 15
-    info_sheet.column_dimensions["J"].width = 15
-    info_sheet.column_dimensions["K"].width = 25
-    # Reference alignment position (v2.0.0): column stays present but empty.
-    info_sheet.column_dimensions["L"].width = 20
+    info_sheet.column_dimensions["I"].width = 25
+    info_sheet.column_dimensions["J"].width = 25
+    info_sheet.column_dimensions["K"].width = 40
 
 
 def wide_to_xlsx(
@@ -426,6 +514,7 @@ def wide_to_xlsx(
     model_cls: type[ModelT2],
     sheet_name: str,
     enum_registry: EnumRegistry,
+    reference_attribute: str,
     min_rows: int = 100,
 ):
     if records is None:
@@ -434,7 +523,10 @@ def wide_to_xlsx(
     df = horizontal_to_dataframe(records, model_cls)  # type: ignore[misc]
     style_arrays = named_style_arrays(writer)
     editable_array = style_arrays[EDITABLE_VALUE_STYLE.name]
+    automatic_array = style_arrays[AUTOMATIC_VALUE_STYLE.name]
     disabled_array = style_arrays[DISABLED_STYLE.name]
+    automatic_columns: set[int] = set()
+    enum_columns: dict[int, type[OpenBDFEnum]] = {}
 
     sheet = writer.book.create_sheet(sheet_name)
     # sheet.protection.sheet = True  # Lock the sheet to prevent accidental edits
@@ -450,7 +542,7 @@ def wide_to_xlsx(
 
         extra = get_field_extra(metadata)
         data_type, is_optional = unwrap_optional(metadata.annotation)
-        requirements = extra.get("requirements", "Optional" if is_optional else "Required")
+        requirements = requirement_of(extra, is_optional)
 
         attribute_name = extra.get("attribute_name", field_code)
         an = sheet.cell(row=1, column=cell_column, value=attribute_name)
@@ -464,43 +556,37 @@ def wide_to_xlsx(
             column=cell_column,
             value=metadata.description if metadata and metadata.description else field_code,
         )
-        if not is_optional:
-            desc.style = REQUIRED_STYLE.name
+        if requirements in MARKED_REQUIREMENTS:
+            desc.style = REQUIREMENT_STYLES[requirements].name
         desc.alignment = Alignment(wrap_text=True, vertical="top")
 
         sheet.cell(row=4, column=cell_column, value=human_readable_type(data_type))
 
         constraints = extra.get("constraint") or human_readable_constraints(metadata)
         c = sheet.cell(row=5, column=cell_column, value=constraints)
-        if constraints:
-            c.style = INFO_STYLE.name
-        else:
-            c.style = DISABLED_STYLE.name
+        c.style = METADATA_STYLE.name
 
         unit = extra.get("units", "")
         u = sheet.cell(row=6, column=cell_column, value=unit)
-        if unit:
-            u.style = INFO_STYLE.name
-        else:
-            u.style = DISABLED_STYLE.name
+        u.style = METADATA_STYLE.name
 
-        r = sheet.cell(row=7, column=cell_column, value=requirements)
-        if requirements == "Required":
-            r.style = REQUIRED_STYLE.name
-        elif requirements == "Recommended":
-            r.style = RECOMMENDED_STYLE.name
-        else:
-            r.style = OPTIONAL_STYLE.name
+        r = sheet.cell(row=7, column=cell_column, value=requirements.display_name)
+        r.style = REQUIREMENT_STYLES[requirements].name
+        if requirements is Requirement.AUTOMATIC:
+            automatic_columns.add(cell_column)
+        if isinstance(data_type, type) and issubclass(data_type, OpenBDFEnum):
+            enum_columns[cell_column] = data_type
 
-        criticality = extra.get("criticality", "SHOULD")
-        sheet.cell(row=8, column=cell_column, value=criticality)
-
-        # Reference alignment position (v2.0.0): row 9 stays present but empty.
+        reference = extra.get(reference_attribute)
+        ref = sheet.cell(row=8, column=cell_column, value=reference or "")
+        ref.style = (
+            REQUIREMENT_STYLES[requirements].name if requirements in MARKED_REQUIREMENTS else METADATA_STYLE.name
+        )
 
         dv = xlsx_validation_from_type(data_type, is_optional, metadata, enum_registry)  # type: ignore[arg-type]
         if dv:
             dv.add(
-                f"{column_letter}10:{column_letter}1048576"
+                f"{column_letter}9:{column_letter}1048576"
             )  # Apply validation to the whole column starting from the first data row
             sheet.add_data_validation(dv)
 
@@ -508,26 +594,14 @@ def wide_to_xlsx(
             15, len(attribute_name) + 5
         )  # Set column width based on header length
 
-    a = sheet.cell(row=1, column=1, value="Attribute")
-    a.style = ROW_HEADER_STYLE.name
-    d = sheet.cell(row=2, column=1, value="Field Code")
-    d.style = ROW_HEADER_STYLE.name
-    dt = sheet.cell(row=3, column=1, value="Description")
-    dt.style = ROW_HEADER_STYLE.name
-    c = sheet.cell(row=4, column=1, value="Data Type")
-    c.style = ROW_HEADER_STYLE.name
-    u = sheet.cell(row=5, column=1, value="Constraint")
-    u.style = ROW_HEADER_STYLE.name
-    r = sheet.cell(row=6, column=1, value="Units")
-    r.style = ROW_HEADER_STYLE.name
-    cr = sheet.cell(row=7, column=1, value="Requirements")
-    cr.style = ROW_HEADER_STYLE.name
-    ct = sheet.cell(row=8, column=1, value="Criticality")
-    ct.style = ROW_HEADER_STYLE.name
-    # Reference alignment position (v2.0.0): row 9 stays present but empty.
+    for row_idx, label in enumerate(
+        ["Attribute", "Field Code", "Description", "Data Type", "Constraint", "Units", "Requirements", ""], start=1
+    ):
+        header = sheet.cell(row=row_idx, column=1, value=label or REFERENCE_LABELS[reference_attribute])
+        header.style = ATTRIBUTES_NAME_STYLE.name
 
     last_col = len(df.columns) + 1
-    start_data_row = 10
+    start_data_row = 9
     end_data_row = start_data_row + max(len(df) - 1, min_rows)
 
     rows = df.itertuples(index=False, name=None)
@@ -536,13 +610,17 @@ def wide_to_xlsx(
         row_values = next(rows, None)
         for col_idx in range(2, last_col + 1):
             cell = sheet.cell(row=row_idx, column=col_idx)
-            cell._style = copy(editable_array)
+            cell._style = copy(automatic_array if col_idx in automatic_columns else editable_array)
             if row_values is not None:
                 value = row_values[col_idx - 2]
                 if isinstance(value, np.generic):
                     value = value.item()
                 if value is None or value != value:  # None and NaN are written as empty strings
                     value = ""
+                if col_idx in enum_columns:
+                    member = enum_columns[col_idx].find_value(value)
+                    if member is not None:
+                        value = member.display_name
                 cell.value = value
 
     sheet.row_dimensions[2].height = 15
@@ -565,6 +643,9 @@ def save_translator(
             writer, COMMON_CATEGORY_PROPERTIES["bom"]["name"], BuildingBillMaterialsSlimRecordBase.model_fields
         )
         make_translator_openbdf_pydantic(
+            writer, COMMON_CATEGORY_PROPERTIES["material_database"]["name"], ProjectMaterialDatabaseBase.model_fields
+        )
+        make_translator_openbdf_pydantic(
             writer, COMMON_CATEGORY_PROPERTIES["results_wide"]["name"], LCAResultsWideFullBase.model_fields
         )
         make_translator_openbdf_pydantic(
@@ -572,6 +653,9 @@ def save_translator(
         )
         export_all_enums_in_model_to_translator(writer, ProjectRecordBase.model_fields)
         export_all_enums_in_model_to_translator(writer, BuildingBillMaterialsSlimRecordBase.model_fields)
+        export_all_enums_in_model_to_translator(writer, ProjectMaterialDatabaseBase.model_fields)
+        make_translator_floor_level(writer, FLOOR_LEVEL_CATEGORY)
+        style_first_rows(writer, ATTRIBUTES_NAME_STYLE.name)
 
 
 def make_translations_library_template_xlsx(writer: pd.ExcelWriter, sheet_name: str):
@@ -593,6 +677,12 @@ def make_translations_library_template_xlsx(writer: pd.ExcelWriter, sheet_name: 
         info_sheet.cell(row=cell_row, column=2, value=model["name"])
         info_sheet.cell(row=cell_row, column=3, value=model["orientation"])
         info_sheet.cell(row=cell_row, column=4, value=0)
+
+    # The contributor fills everything but the OpenBDF side of the mapping.
+    for cell_row in range(2, len(models) + 2):
+        for column in range(1, 11):
+            if column != 2:
+                info_sheet.cell(row=cell_row, column=column).style = EDITABLE_VALUE_STYLE.name
 
     info_sheet.column_dimensions["A"].width = 30
     info_sheet.column_dimensions["B"].width = 30
@@ -625,7 +715,10 @@ def make_translator_openbdf_pydantic(writer: pd.ExcelWriter, sheet_name: str, mo
 
         extra = get_field_extra(metadata)
         data_type, is_optional = unwrap_optional(metadata.annotation)
-        requirements = extra.get("requirements", "Optional" if is_optional else "Required")
+        requirements = requirement_of(extra, is_optional)
+
+        code_cell = info_sheet.cell(row=cell_row, column=1, value="")
+        code_cell.style = EDITABLE_VALUE_STYLE.name
 
         fc = info_sheet.cell(row=cell_row, column=2, value=field_code)
         fc.style = FIELD_CODE_STYLE.name
@@ -636,13 +729,8 @@ def make_translator_openbdf_pydantic(writer: pd.ExcelWriter, sheet_name: str, mo
         r = info_sheet.cell(row=cell_row, column=4, value=human_readable_type(data_type))
         r.style = INFO_STYLE.name
 
-        req = info_sheet.cell(row=cell_row, column=5, value=requirements)
-        if requirements == "Required":
-            req.style = REQUIRED_STYLE.name
-        elif requirements == "Recommended":
-            req.style = RECOMMENDED_STYLE.name
-        else:
-            req.style = OPTIONAL_STYLE.name
+        req = info_sheet.cell(row=cell_row, column=5, value=requirements.display_name)
+        req.style = REQUIREMENT_STYLES[requirements].name
 
         default_cell = info_sheet.cell(row=cell_row, column=6, value="")
         default_cell.style = EDITABLE_VALUE_STYLE.name
@@ -666,7 +754,26 @@ def export_all_enums_in_model_to_translator(writer: pd.ExcelWriter, model: dict[
             make_translator_openbdfenum(writer, data_type.__name__, data_type)
 
 
+def make_translator_floor_level(writer: pd.ExcelWriter, sheet_name: str):
+    """The floor level sheet maps a storey label to an OpenBDF floor number."""
+    if sheet_name in writer.book.sheetnames:
+        return
+
+    info_sheet = writer.book.create_sheet(sheet_name)
+
+    info_sheet.cell(row=1, column=1, value="Value in your format")
+    info_sheet.cell(row=1, column=2, value="OpenBDF floor level")
+    info_sheet.cell(row=1, column=3, value="Leave the floor level empty to take the number carried by the label")
+
+    info_sheet.column_dimensions["A"].width = 30
+    info_sheet.column_dimensions["B"].width = 30
+    info_sheet.column_dimensions["C"].width = 80
+
+
 def make_translator_openbdfenum(writer: pd.ExcelWriter, sheet_name: str, enum: type[OpenBDFEnum]):
+    if sheet_name in writer.book.sheetnames:
+        return
+
     info_sheet = writer.book.create_sheet(sheet_name)
 
     info_sheet.cell(row=1, column=1, value="Value in your format")
@@ -679,6 +786,9 @@ def make_translator_openbdfenum(writer: pd.ExcelWriter, sheet_name: str, enum: t
         display_name = getattr(item, "display_name", None)
         description = getattr(item, "description", None)
         parent_category = getattr(item, "parent_category", None)
+
+        value_cell = info_sheet.cell(row=cell_row, column=1, value="")
+        value_cell.style = EDITABLE_VALUE_STYLE.name
 
         fc = info_sheet.cell(row=cell_row, column=2, value=str(item.value))
         fc.style = FIELD_CODE_STYLE.name

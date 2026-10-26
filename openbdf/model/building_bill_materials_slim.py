@@ -3,15 +3,17 @@ from __future__ import annotations
 from decimal import Decimal
 from typing import Optional
 
-from sqlmodel import Enum as SAEnum
 from sqlmodel import Field, SQLModel
 
-from openbdf.model.draft import make_draft_model
+from openbdf.model.ingest import make_ingest_model
 
 from .enums.buildings import AboveBelowGround
 from .enums.element_classifications import OpenBDFBuildingElementClassification
 from .enums.materials import MaterialDataType, MaterialEPDMatch, OpenBDFMaterialClassification
+from .enums.references import Reference
+from .enums.requirement import Requirement
 from .field_metadata import openbdf_field_metadata
+from .sa_enum import sa_enum
 
 
 class BuildingBillMaterialsSlimRecordBase(SQLModel):
@@ -24,8 +26,8 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
             field_code="material_id",
             description="Identifier of the bill of materials rows. The distinct material is identified by Material reference ID. "
             "Example: MAT-2. One row from the Bill of Materials and the key that the result rows connect on.",
-            requirements="Automatic",
-            criticality="MUST",
+            requirements=Requirement.AUTOMATIC,
+            reference=Reference.GBDI,
         ),
     )
 
@@ -36,8 +38,7 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
             attribute_name="Material reference ID",
             field_code="material_ref_id",
             description="Pairing of the same material. Example: M0001. Same value for every row that pairs the same material.",
-            requirements="Automatic",
-            criticality="MAY",
+            requirements=Requirement.AUTOMATIC,
         ),
     )
 
@@ -48,8 +49,7 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
             attribute_name="Floor level (as given)",
             field_code="custom_floor_level",
             description="Storey of the building element, as labelled in the source model. Example: EG, 1.OG, UG1, as written in the source model.",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
         ),
     )
 
@@ -60,8 +60,7 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
             attribute_name="Floor level (harmonised)",
             field_code="common_floor_level",
             description="Floor level on the OpenBDF convention. Example: 0 for ground, 1 for the first storey above, -1 for the first below.",
-            requirements="Automatic",
-            criticality="MAY",
+            requirements=Requirement.AUTOMATIC,
         ),
     )
 
@@ -74,14 +73,13 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
             field_code="floor_repetition",
             description="Number of identical storeys this row represents. Example: 4, when one row describes a storey that repeats four times. "
             "Quantities and results are for one storey.",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
         ),
     )
 
     common_above_below_ground: Optional[AboveBelowGround] = Field(  # type: ignore[call-overload]
         default=None,
-        sa_type=SAEnum(AboveBelowGround),
+        sa_type=sa_enum(AboveBelowGround),
         description="Position of the finished floor level relative to the natural or finished ground elevation. "
         "Example: Below ground for a foundation slab, Above ground for a facade.",
         schema_extra=openbdf_field_metadata(
@@ -89,8 +87,7 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
             field_code="common_above_below_ground",
             description="Position of the finished floor level relative to the natural or finished ground elevation. "
             "Example: Below ground for a foundation slab, Above ground for a facade.",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.AUTOMATIC,
         ),
     )
 
@@ -102,8 +99,8 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
             attribute_name="Element Class",
             field_code="bec_custom",
             description="Hierarchical category of the custom or national building element classification.",
-            requirements="Required",
-            criticality="SHOULD",
+            requirements=Requirement.STRONGLY_RECOMMENDED,
+            reference=Reference.NATIONAL_ELEMENT_CLASSIFICATION_BEC_TRANSLATOR,
         ),
     )
 
@@ -115,14 +112,13 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
             attribute_name="Custom BEC Description",
             field_code="custom_bec_description",
             description="The Description of the custom or national element class.",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
         ),
     )
 
     bec_openbdf: Optional[OpenBDFBuildingElementClassification] = Field(  # type: ignore[call-overload]
         default=None,
-        sa_type=SAEnum(OpenBDFBuildingElementClassification),
+        sa_type=sa_enum(OpenBDFBuildingElementClassification),
         description="The highest applicable tier of the building element within the standardized openBDF framework. "
         "Example: 1.1 for foundations and piling, 2.1 for the frame.",
         schema_extra=openbdf_field_metadata(
@@ -130,8 +126,8 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
             field_code="bec_openbdf",
             description="The highest applicable tier of the building element within the standardized openBDF framework. "
             "Example: 1.1 for foundations and piling, 2.1 for the frame.",
-            requirements="Recommended",
-            criticality="SHOULD",
+            requirements=Requirement.AUTOMATIC,
+            reference=Reference.REGULATION_EU_2026_52_ANNEX_III_TABLE_4,
         ),
     )
 
@@ -143,8 +139,7 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
             attribute_name="Element Name (or ID)",
             field_code="custom_element_name",
             description="The specific, user-defined identifier for the building element. Example: the name the designer gave the element.",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
         ),
     )
 
@@ -158,8 +153,7 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
             field_code="work_section",
             description="Layer or work section of the building element to which the material belongs. "
             "Example: Screed layer of a floor build-up, insulation layer of a roof.",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
         ),
     )
 
@@ -171,21 +165,20 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
             field_code="layer_thickness",
             description="Thickness of the work section. Example: 6, in cm, for a cement screed.",
             units="cm",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
         ),
     )
 
     common_material_name: Optional[OpenBDFMaterialClassification] = Field(  # type: ignore[call-overload]
         default=None,
-        sa_type=SAEnum(OpenBDFMaterialClassification),
+        sa_type=sa_enum(OpenBDFMaterialClassification),
         description="The corresponding material classification from the standardized openBDF taxonomy. Example: Concrete, ready-mixed.",
         schema_extra=openbdf_field_metadata(
             attribute_name="OpenBDF Material Classification",
             field_code="common_material_name",
             description="The corresponding material classification from the standardized openBDF taxonomy. Example: Concrete, ready-mixed.",
-            requirements="Recommended",
-            criticality="SHOULD",
+            requirements=Requirement.AUTOMATIC,
+            reference=Reference.INDICATE_BUILDING_MATERIAL_CLASSIFICATION,
         ),
     )
 
@@ -196,8 +189,7 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
             attribute_name="Material Name (or ID)",
             field_code="custom_material_name",
             description="Material name as built. as it appears in the model or the bill of quantities.",
-            requirements="Required",
-            criticality="MUST",
+            requirements=Requirement.REQUIRED,
         ),
     )
 
@@ -209,8 +201,7 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
             attribute_name="Material name in EPD dataset",
             field_code="lca_dataset_material_name",
             description="The precise material declared in the Environmental Product Declaration (EPD) database used.",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
         ),
     )
 
@@ -222,8 +213,8 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
             attribute_name="EPD database name",
             field_code="lca_database_name",
             description="Name of the database.",
-            requirements="Recommended",
-            criticality="SHOULD",
+            requirements=Requirement.RECOMMENDED,
+            reference=Reference.EN_15941_2024,
         ),
     )
 
@@ -237,34 +228,33 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
             field_code="lca_dataset_link",
             description="The URL of the specific Environmental Product Declaration (EPD) dataset used. "
             "Example: https://oekobaudat.de/OEKOBAU.DAT/datasetdetail/process.xhtml?uuid=...",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
         ),
     )
 
     material_data_type: Optional[MaterialDataType] = Field(  # type: ignore[call-overload]
         default=None,
-        sa_type=SAEnum(MaterialDataType),
+        sa_type=sa_enum(MaterialDataType),
         description="Type of dataset in the data hierarchy.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Construction product data type",
             field_code="material_data_type",
             description="Type of dataset in the data hierarchy.",
-            requirements="Automatic",
-            criticality="MAY",
+            requirements=Requirement.AUTOMATIC,
+            reference=Reference.EU2026_52_ANNEX_III,
         ),
     )
 
     material_epd_match: Optional[MaterialEPDMatch] = Field(  # type: ignore[call-overload]
         default=None,
-        sa_type=SAEnum(MaterialEPDMatch),
+        sa_type=sa_enum(MaterialEPDMatch),
         description="How the declared product relates to the material built.",
         schema_extra=openbdf_field_metadata(
             attribute_name="EPD representativeness",
             field_code="material_epd_match",
             description="How the declared product relates to the material built.",
-            requirements="Automatic",
-            criticality="MAY",
+            requirements=Requirement.AUTOMATIC,
+            reference=Reference.EN_15941_2024,
         ),
     )
 
@@ -276,8 +266,8 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
             field_code="material_reference_service_life",
             description="Declared reference service life. Example: 50, in years, for a structural element; 25 for a membrane.",
             units="years",
-            requirements="Required",
-            criticality="SHOULD",
+            requirements=Requirement.STRONGLY_RECOMMENDED,
+            reference=Reference.ISO_15686_EN15978_2026,
         ),
     )
 
@@ -289,8 +279,8 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
             field_code="maintenance_interval",
             description="Interval between maintenance activities on the material. Example: 10, in years, for repainting a facade.",
             units="years",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
+            reference=Reference.EN15978_2026,
         ),
     )
 
@@ -303,8 +293,8 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
             description="Interval between repair activities on the material.",
             units="years",
             constraint="None",
-            requirements="Optional",
-            criticality="MAY",
+            requirements=Requirement.OPTIONAL,
+            reference=Reference.EN15978_2026_EU2026_52_ANNEX_III,
         ),
     )
 
@@ -316,8 +306,7 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
             field_code="material_quantity_m3",
             description="The measured scalar amount (volume) of the material.",
             units="m3",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
         ),
     )
 
@@ -329,8 +318,7 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
             field_code="material_quantity_m2",
             description="The measured scalar amount (area) of the material.",
             units="m2",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
         ),
     )
 
@@ -342,8 +330,7 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
             field_code="material_quantity_m",
             description="The measured scalar amount (length) of the material.",
             units="m",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
         ),
     )
 
@@ -355,8 +342,7 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
             field_code="material_quantity_count",
             description="The measured scalar amount (count) of the material.",
             units="#",
-            requirements="Recommended",
-            criticality="MAY",
+            requirements=Requirement.SUGGESTED,
         ),
     )
 
@@ -370,8 +356,7 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
             description="The absolute physical mass of the material. Example: 184862.3. "
             "Mass is the field that makes material efficiency analysis possible, so it is never left blank.",
             units="kg",
-            requirements="Required",
-            criticality="SHOULD",
+            requirements=Requirement.STRONGLY_RECOMMENDED,
         ),
     )
 
@@ -383,14 +368,13 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
             field_code="material_density",
             description="The mass per unit volume of the material. Example: 2400, in kg/m3, for normal weight concrete.",
             units="kg/m3",
-            requirements="Required",
-            criticality="SHOULD",
+            requirements=Requirement.STRONGLY_RECOMMENDED,
         ),
     )
 
 
-_BuildingBillMaterialsSlimRecordBaseDraft = make_draft_model(BuildingBillMaterialsSlimRecordBase)
+_BuildingBillMaterialsSlimRecordBaseIngest = make_ingest_model(BuildingBillMaterialsSlimRecordBase)
 
 
-class BuildingBillMaterialsSlimRecordBaseDraft(_BuildingBillMaterialsSlimRecordBaseDraft):  # type: ignore[valid-type,misc]
+class BuildingBillMaterialsSlimRecordBaseIngest(_BuildingBillMaterialsSlimRecordBaseIngest):  # type: ignore[valid-type,misc]
     pass

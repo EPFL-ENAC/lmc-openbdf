@@ -25,7 +25,7 @@ jobs:
 
       - name: Install package
         run: |
-          pip install -e ".[doc]"
+          pip install -e ".[doc,cli]"
 
       - name: Run Sphinx
         run: |

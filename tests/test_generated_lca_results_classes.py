@@ -40,13 +40,13 @@ def test_tall_module_has_static_fields():
 
 
 def test_wide_module_gwp_total_special_cases():
-    """gwp_total a1-a3 keeps requirements="Required" metadata but is Python-optional; gwp_total_total is optional."""
+    """gwp_total a1-a3 is strongly recommended but Python-optional; gwp_total is optional."""
     wide = _formatted("lca_results_full_wide.py")
-    assert "    gwp_total_total: Optional[Decimal] = Field(" in wide
-    assert "    gwp_total: " not in wide
-    assert 'attribute_name="Total Global Warming Potential - Total"' in wide
+    assert "    gwp_total: Optional[Decimal] = Field(" in wide
+    assert "    gwp_total_total: " not in wide
+    assert 'attribute_name="Total Global Warming Potential"' in wide
     assert "    gwp_total_a1_a3: Optional[Decimal] = Field(\n        default=None," in wide
-    assert 'requirements="Required"' in wide
+    assert "requirements=Requirement.STRONGLY_RECOMMENDED" in wide
 
 
 def test_wide_module_has_expected_field_count():
@@ -57,6 +57,15 @@ def test_wide_module_has_expected_field_count():
         1 + len(lca_results.GWP_TOTAL_STAGES) + 1 + (len(lca_results.INDICATORS) - 1) * (len(lca_results.STAGES) + 1)
     )
     assert field_count == expected
+
+
+def test_wide_submodule_descriptions_say_submodule():
+    """Dotted stage codes are submodules, so their descriptions say submodule."""
+    wide = _formatted("lca_results_full_wide.py")
+    assert wide.count("for submodule") == 2 * len(lca_results.SUB_MODULE_ALIGNMENTS)
+    assert "for submodule A5.1." in wide
+    assert "for module A5." in wide
+    assert "for module D1." in wide
 
 
 def test_generated_files_warn_against_manual_edits():
