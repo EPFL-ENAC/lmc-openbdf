@@ -3,7 +3,6 @@ from __future__ import annotations
 from decimal import Decimal
 from typing import Optional
 
-from sqlmodel import Enum as SAEnum
 from sqlmodel import Field, SQLModel
 
 from openbdf.model.ingest import make_ingest_model
@@ -14,6 +13,7 @@ from .enums.materials import MaterialDataType, MaterialEPDMatch, OpenBDFMaterial
 from .enums.references import Reference
 from .enums.requirement import Requirement
 from .field_metadata import openbdf_field_metadata
+from .sa_enum import sa_enum
 
 
 class BuildingBillMaterialsSlimRecordBase(SQLModel):
@@ -79,7 +79,7 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
 
     common_above_below_ground: Optional[AboveBelowGround] = Field(  # type: ignore[call-overload]
         default=None,
-        sa_type=SAEnum(AboveBelowGround),
+        sa_type=sa_enum(AboveBelowGround),
         description="Position of the finished floor level relative to the natural or finished ground elevation. "
         "Example: Below ground for a foundation slab, Above ground for a facade.",
         schema_extra=openbdf_field_metadata(
@@ -118,7 +118,7 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
 
     bec_openbdf: Optional[OpenBDFBuildingElementClassification] = Field(  # type: ignore[call-overload]
         default=None,
-        sa_type=SAEnum(OpenBDFBuildingElementClassification),
+        sa_type=sa_enum(OpenBDFBuildingElementClassification),
         description="The highest applicable tier of the building element within the standardized openBDF framework. "
         "Example: 1.1 for foundations and piling, 2.1 for the frame.",
         schema_extra=openbdf_field_metadata(
@@ -171,7 +171,7 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
 
     common_material_name: Optional[OpenBDFMaterialClassification] = Field(  # type: ignore[call-overload]
         default=None,
-        sa_type=SAEnum(OpenBDFMaterialClassification),
+        sa_type=sa_enum(OpenBDFMaterialClassification),
         description="The corresponding material classification from the standardized openBDF taxonomy. Example: Concrete, ready-mixed.",
         schema_extra=openbdf_field_metadata(
             attribute_name="OpenBDF Material Classification",
@@ -234,7 +234,7 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
 
     material_data_type: Optional[MaterialDataType] = Field(  # type: ignore[call-overload]
         default=None,
-        sa_type=SAEnum(MaterialDataType),
+        sa_type=sa_enum(MaterialDataType),
         description="Type of dataset in the data hierarchy.",
         schema_extra=openbdf_field_metadata(
             attribute_name="Construction product data type",
@@ -247,7 +247,7 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
 
     material_epd_match: Optional[MaterialEPDMatch] = Field(  # type: ignore[call-overload]
         default=None,
-        sa_type=SAEnum(MaterialEPDMatch),
+        sa_type=sa_enum(MaterialEPDMatch),
         description="How the declared product relates to the material built.",
         schema_extra=openbdf_field_metadata(
             attribute_name="EPD representativeness",

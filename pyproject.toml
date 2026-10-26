@@ -14,12 +14,14 @@ dependencies = [
 	"openpyxl>=3.1.5",
 	"pandas>=2.3.3",
 	"python-calamine>=0.8.2",
-	"rich~=13.9.3",
 	"sqlmodel>=0.0.37",
-	"typer~=0.15.1",
 ]
 
 [project.optional-dependencies]
+cli = [
+	"rich~=13.9.3",
+	"typer~=0.15.1",
+]
 dev = [
 	"myst-parser>=4.0.1",
 	"pre-commit~=4.0.1",
@@ -57,8 +59,8 @@ testpaths = [
     "tests",
 ]
 
-[tool.setuptools]
-packages = ["openbdf"]
+[tool.setuptools.packages.find]
+include = ["openbdf*"]
 
 [tool.setuptools.package-data]
 openbdf = ["about.md"]
