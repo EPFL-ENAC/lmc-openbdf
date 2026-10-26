@@ -118,7 +118,7 @@ erDiagram
     DATE project_permit_date
     VARCHAR project_permit_id
     INTEGER project_no_of_buildings
-    more columns "171 more"
+    more columns "176 more"
   }
   building_bill_materials_slim_record ||--o{ lca_results_full_record : "building_bill_materials_slim_record_id"
   building_bill_materials_slim_record ||--o{ lca_results_tall_full_record : "building_bill_materials_slim_record_id"

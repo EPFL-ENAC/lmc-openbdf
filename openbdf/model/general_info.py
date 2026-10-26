@@ -15,7 +15,6 @@ from .enums.buildings import (
     BuildingFacingDirection,
     BuildingStructureType,
     BuildingTypology,
-    FloorAreaInclusions,
     FoundationType,
     GFAMeasurementMethod,
     GrossFloorAreaStandard,
@@ -176,7 +175,6 @@ class ProjectRecordBase(SQLModel):
     )
 
     project_country: Country = Field(  # type: ignore[call-overload]
-        default=None,
         sa_type=sa_enum(Country),
         description="Country where the project is located.",
         schema_extra=openbdf_field_metadata(
@@ -597,7 +595,8 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    project_gfa_method: GFAMeasurementMethod = Field(  # type: ignore[call-overload]
+    project_gfa_method: Optional[GFAMeasurementMethod] = Field(  # type: ignore[call-overload]
+        default=None,
         sa_type=sa_enum(GFAMeasurementMethod),
         description="Gross Floor Area measurement method.",
         schema_extra=openbdf_field_metadata(
@@ -606,7 +605,7 @@ class ProjectRecordBase(SQLModel):
             attribute_name="GFA measurement method",
             field_code="project_gfa_method",
             description="Gross Floor Area measurement method.",
-            requirements=Requirement.REQUIRED,
+            requirements=Requirement.STRONGLY_RECOMMENDED,
             example="IPMS – International Property Measurement Standards",
             reference=Reference.ISO_9836_IPMS_REGULATION_EU_2026_52_ANNEX_III,
         ),
@@ -1276,18 +1275,92 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    building_floor_area_inclusions: Optional[FloorAreaInclusions] = Field(  # type: ignore[call-overload]
+    floor_area_includes_enclosed_parking: Optional[bool] = Field(
         default=None,
-        sa_type=sa_enum(FloorAreaInclusions),
-        description="What the reported floor area contains",
+        description="Whether the reported floor area includes enclosed parking that shares the structure, inside the envelope.",
         schema_extra=openbdf_field_metadata(
             group="Building",
             sub_group="Building data (geometry)",
-            attribute_name="Floor area spatial inclusions",
-            field_code="building_floor_area_inclusions",
-            description="What the reported floor area contains",
-            constraint="multi-select",
+            attribute_name="Floor area includes enclosed parking",
+            field_code="floor_area_includes_enclosed_parking",
+            description="Whether the reported floor area includes enclosed parking that shares the structure, inside the envelope.",
             requirements=Requirement.STRONGLY_RECOMMENDED,
+            example="TRUE",
+            reference=Reference.REGULATION_EU_2026_52_ANNEX_III_ISO_9836,
+        ),
+    )
+
+    floor_area_includes_detached_parking: Optional[bool] = Field(
+        default=None,
+        description="Whether the reported floor area includes detached parking that is structurally independent.",
+        schema_extra=openbdf_field_metadata(
+            group="Building",
+            sub_group="Building data (geometry)",
+            attribute_name="Floor area includes detached parking",
+            field_code="floor_area_includes_detached_parking",
+            description="Whether the reported floor area includes detached parking that is structurally independent.",
+            requirements=Requirement.STRONGLY_RECOMMENDED,
+            example="FALSE",
+            reference=Reference.REGULATION_EU_2026_52_ANNEX_III_ISO_9836,
+        ),
+    )
+
+    floor_area_includes_unconditioned_space: Optional[bool] = Field(
+        default=None,
+        description="Whether the reported floor area includes unconditioned space.",
+        schema_extra=openbdf_field_metadata(
+            group="Building",
+            sub_group="Building data (geometry)",
+            attribute_name="Floor area includes unconditioned space",
+            field_code="floor_area_includes_unconditioned_space",
+            description="Whether the reported floor area includes unconditioned space.",
+            requirements=Requirement.STRONGLY_RECOMMENDED,
+            example="TRUE",
+            reference=Reference.REGULATION_EU_2026_52_ANNEX_III_ISO_9836,
+        ),
+    )
+
+    floor_area_includes_circulation: Optional[bool] = Field(
+        default=None,
+        description="Whether the reported floor area includes circulation area.",
+        schema_extra=openbdf_field_metadata(
+            group="Building",
+            sub_group="Building data (geometry)",
+            attribute_name="Floor area includes circulation",
+            field_code="floor_area_includes_circulation",
+            description="Whether the reported floor area includes circulation area.",
+            requirements=Requirement.STRONGLY_RECOMMENDED,
+            example="TRUE",
+            reference=Reference.REGULATION_EU_2026_52_ANNEX_III_ISO_9836,
+        ),
+    )
+
+    floor_area_includes_technical_space: Optional[bool] = Field(
+        default=None,
+        description="Whether the reported floor area includes technical space.",
+        schema_extra=openbdf_field_metadata(
+            group="Building",
+            sub_group="Building data (geometry)",
+            attribute_name="Floor area includes technical space",
+            field_code="floor_area_includes_technical_space",
+            description="Whether the reported floor area includes technical space.",
+            requirements=Requirement.STRONGLY_RECOMMENDED,
+            example="TRUE",
+            reference=Reference.REGULATION_EU_2026_52_ANNEX_III_ISO_9836,
+        ),
+    )
+
+    floor_area_includes_ancillary_external_buildings: Optional[bool] = Field(
+        default=None,
+        description="Whether the reported floor area includes ancillary external buildings.",
+        schema_extra=openbdf_field_metadata(
+            group="Building",
+            sub_group="Building data (geometry)",
+            attribute_name="Floor area includes ancillary external buildings",
+            field_code="floor_area_includes_ancillary_external_buildings",
+            description="Whether the reported floor area includes ancillary external buildings.",
+            requirements=Requirement.STRONGLY_RECOMMENDED,
+            example="FALSE",
             reference=Reference.REGULATION_EU_2026_52_ANNEX_III_ISO_9836,
         ),
     )
@@ -1713,7 +1786,8 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
-    lca_database_system_model: LCADatabaseSystemModel = Field(  # type: ignore[call-overload]
+    lca_database_system_model: Optional[LCADatabaseSystemModel] = Field(  # type: ignore[call-overload]
+        default=None,
         sa_type=sa_enum(LCADatabaseSystemModel),
         description="System model of the background database",
         schema_extra=openbdf_field_metadata(
@@ -1722,7 +1796,7 @@ class ProjectRecordBase(SQLModel):
             attribute_name="Database system model",
             field_code="lca_database_system_model",
             description="System model of the background database",
-            requirements=Requirement.REQUIRED,
+            requirements=Requirement.STRONGLY_RECOMMENDED,
             reference=Reference.ECOINVENT_EN15804_A2,
         ),
     )

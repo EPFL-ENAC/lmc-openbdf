@@ -364,25 +364,6 @@ class SharedComponentAllocationRule(OpenBDFEnum):
     reference = enum_attribute(Reference.EU2026_52_ANNEX_III)
 
 
-class FloorAreaInclusions(OpenBDFEnum):
-    ENCLOSED_PARKING = (
-        "enclosed_parking",
-        "Enclosed parking (shares structure, inside envelope)",
-        "shares structure, inside envelope",
-    )
-    DETACHED_PARKING = (
-        "detached_parking",
-        "Detached parking (structurally independent)",
-        "structurally independent",
-    )
-    UNCONDITIONED_SPACE = ("unconditioned_space", "Unconditioned space")
-    CIRCULATION = ("circulation", "Circulation")
-    TECHNICAL_SPACE = ("technical_space", "Technical space")
-    ANCILLARY_EXTERNAL_BUILDINGS = ("ancillary_external_buildings", "Ancillary external buildings")
-    NONE_OF_THE_ABOVE = ("none_of_the_above", "None of the above")
-    reference = enum_attribute(Reference.EU2026_52_ANNEX_III)
-
-
 class GrossFloorAreaStandard(OpenBDFEnum):
     ABNT_NBR_12721 = (
         "abnt_nbr_12721",
