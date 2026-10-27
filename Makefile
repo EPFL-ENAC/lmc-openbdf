@@ -1,4 +1,4 @@
-.PHONY: help
+.PHONY: help set-version
 help: ## Show available targets
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
 
@@ -23,3 +23,9 @@ check-lca-results-classes: ## Check LCA classes modules
 
 erd: ## regenerate docs/src/developer/erd.md's Mermaid ER diagram from the SQLModel tables
 	uv run python scripts/generate_erd.py > docs/src/developer/erd.md
+
+set-version: ## Set the template version in about.md, the release workflow and the README
+	@uv run python scripts/set_template_version.py $(filter-out $@,$(MAKECMDGOALS))
+
+v%:
+	@:
