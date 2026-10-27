@@ -1,0 +1,37 @@
+Field code in your format,OpenBDF field code,OpenBDF attribute name,Datatype,Requirements,Default value,Preprocess rule
+,material_id,Material ID,string,Required
+,lca_stage_module_submodule,Life cycle stage or module or submodule,LCAStageOrModuleOrSubModule,Required
+,lca_stage,Life cycle stage,LCAStageOrModuleOrSubModule,Automatic
+,lca_module,Life cycle module,LCAStageOrModuleOrSubModule,Automatic
+,lca_submodule,Life cycle sub-module,LCAStageOrModuleOrSubModule,Automatic
+,process_year,Process year,integer,Suggested
+,material_flow_type,Material flow type,MaterialFlowType,Suggested
+,material_flow_mass_kg,Material Flow Mass (kg),Decimal,Suggested
+,scenario_label,Scenario label,string,Suggested
+,gwp_total,Global Warming Potential - Total,Decimal,Suggested
+,gwp_f,Global Warming Potential - Fossil,Decimal,Suggested
+,gwp_b,Global Warming Potential - Biogenic,Decimal,Suggested
+,gwp_luc,Global Warming Potential - Land Use and Land Use Change,Decimal,Suggested
+,odp,Ozone Depletion Potential,Decimal,Optional
+,ap,Acidification Potential,Decimal,Optional
+,ap_ae,Acidification Potential - Accumulated Exceedance,Decimal,Optional
+,ep,Eutrophication Potential,Decimal,Optional
+,ep_af,Eutrophication Potential - Aquatic Freshwater,Decimal,Optional
+,ep_am,Eutrophication Potential - Aquatic Marine,Decimal,Optional
+,ep_t,Eutrophication Potential - Terrestrial,Decimal,Optional
+,pocp,Photochemical Ozone Creation Potential,Decimal,Optional
+,sfp,Smog Forming Potential,Decimal,Optional
+,pofp,Formation potential of tropospheric ozone,Decimal,Optional
+,adpmm,Abiotic Depletion Potential - Minerals and Metals,Decimal,Optional
+,adpf,Abiotic Depletion Potential - Fossil Fuels,Decimal,Optional
+,wdp,Water Depletion Potential,Decimal,Optional
+,pere,Primary Energy Renewable - Energy Resources,Decimal,Optional
+,penre,Primary Energy Non-Renewable - Energy Resources,Decimal,Optional
+,pert,Primary Energy Renewable Total,Decimal,Optional
+,penrt,Primary Energy Non-Renewable Total,Decimal,Optional
+,pm,Particulate Matter Emissions,Decimal,Optional
+,irp,Ionising Radiation - Human Health,Decimal,Optional
+,etp_fw,Ecotoxicity - Freshwater,Decimal,Optional
+,htp_c,Human Toxicity - Cancer Effects,Decimal,Optional
+,htp_nc,Human Toxicity - Non-cancer Effects,Decimal,Optional
+,sqp,Soil Quality Index,Decimal,Optional

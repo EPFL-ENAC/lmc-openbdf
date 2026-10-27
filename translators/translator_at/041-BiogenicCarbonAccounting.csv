@@ -1,0 +1,6 @@
+Value in your format,OpenBDF enum value,OpenBDF value display name,OpenBDF value description (if any),OpenBDF value parent category (if applicable)
+,0/0,0/0 (biogenic carbon not counted),Neutral accounting (no sequestration/no emission)
+,-1/+1,-1/+1 (uptake counted as negative and release as positive),Credit at start / burden at end of life
+,dynamic_lca,Dynamic LCA
+,ton_year,Ton-Year Accounting or Discounting Method
+,other,Other

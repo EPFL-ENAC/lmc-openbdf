@@ -1,0 +1,13 @@
+Value in your format,OpenBDF enum value,OpenBDF value display name,OpenBDF value description (if any),OpenBDF value parent category (if applicable)
+@INT>=0,above,Above ground
+@INT<0,below,Below ground
+@REGEX^DG.*,above,Above ground
+@REGEX^EG.*,above,Above ground
+Erdgeschoß,above,Above ground
+@REGEX^Obergeschoß \d+,above,Above ground
+@REGEX^OG.*,above,Above ground
+@REGEX^\d+\. Geschoss,above,Above ground
+RDOK Dach,above,Above ground
+Favoriten,below,Below ground
+@REGEX^UG.*,below,Below ground
+@REGEX^Untergeschoß,below,Below ground

@@ -1,0 +1,8 @@
+Value in your format,OpenBDF enum value,OpenBDF value display name,OpenBDF value description (if any),OpenBDF value parent category (if applicable)
+,cpr_dopc,Cpr dopc (declaration of performance and conformity under the Construction Products Regulation),declaration of performance and conformity under the Construction Products Regulation
+,ecodesign,Ecodesign (data issued under ecodesign or energy labelling legislation),data issued under ecodesign or energy labelling legislation
+,project_specific,"Project specific (assessment of this project, not issued under those rules)","assessment of this project, not issued under those rules"
+,product_specific,"Product specific (assessment of this product, not issued under those rules)","assessment of this product, not issued under those rules"
+,product_group_average,Product group average (sectoral or industry average),sectoral or industry average
+,generic,Generic (background database value),background database value
+,default_value,Default value (conservative national default),conservative national default

@@ -1,0 +1,4 @@
+Value in your format,OpenBDF enum value,OpenBDF value display name,OpenBDF value description (if any),OpenBDF value parent category (if applicable)
+,gwp_fossil_a1_a3,GWP fossil a1 a3 (shares weighted by fossil global warming potential of modules A1 to A3),shares weighted by fossil global warming potential of modules A1 to A3
+,mass,Mass (shares weighted by mass),shares weighted by mass
+,not_computed,Not computed (shares not weighted),shares not weighted

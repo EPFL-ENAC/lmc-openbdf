@@ -1,0 +1,9 @@
+Value in your format,OpenBDF enum value,OpenBDF value display name,OpenBDF value description (if any),OpenBDF value parent category (if applicable)
+,N,North,North-facing
+,S,South,South-facing
+,E,East,East-facing
+,W,West,West-facing
+,NE,Northeast,Northeast-facing
+,NW,Northwest,Northwest-facing
+,SE,Southeast,Southeast-facing
+,SW,Southwest,Southwest-facing

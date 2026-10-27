@@ -1,0 +1,2 @@
+Field code in your format,OpenBDF field code,OpenBDF attribute name,Datatype,Requirements,Default value,Preprocess rule
+,building_element_classification_code_name,Building Element Classification Code Name,BuildingClassificationCode,Suggested,at

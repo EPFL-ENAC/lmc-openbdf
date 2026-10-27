@@ -1,0 +1,5 @@
+Value in your format,OpenBDF enum value,OpenBDF value display name,OpenBDF value description (if any),OpenBDF value parent category (if applicable)
+,none,"None (nothing left out, the result is a complete assessment)","nothing left out, the result is a complete assessment"
+,life_cycle_stages,Life cycle stages,parts of life-cycle stages left out
+,scope_of_building_components,Scope of building components,parts of the scope of building components left out
+,both,Both (parts of life-cycle stages and parts of the scope of building components left out),parts of life-cycle stages and parts of the scope of building components left out

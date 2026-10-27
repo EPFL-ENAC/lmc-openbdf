@@ -1,0 +1,7 @@
+Value in your format,OpenBDF floor level,Note
+@INT
+EG,0,"Erdgeschoss, ground floor"
+Erdgeschoß,0,"Ground floor, Austrian spelling"
+@REGEX^KG.*,-1,"Kellergeschoss, basement storey"
+@REGEX^UG.*,-1,"Untergeschoss, basement storey"
+Favoriten,-1

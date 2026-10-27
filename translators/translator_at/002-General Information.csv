@@ -1,0 +1,196 @@
+Field code in your format,OpenBDF field code,OpenBDF attribute name,Datatype,Requirements,Default value,Preprocess rule
+,project_id,Project ID,string,Automatic
+,project_custom_id,Project ID custom,string,Optional
+,record_type,Record type,RecordType,Required
+,project_units,Project Unit System,ProjectUnits,Required
+,project_name,Project name,string,Suggested
+,project_description,Project description,string,Optional
+,project_construction_type,Project construction type,ConstructionType,Strongly recommended
+,project_country,Country,Country,Required
+,project_city,City,string,Optional
+,project_state,State,string,Suggested
+,project_address,Address,string,Suggested
+,project_owner_name,Owner/client name,string,Optional
+,project_sustainability_certification,Sustainability certification,Boolean,Suggested
+,project_sustainability_certification_name,Sustainability certification Name,string,Suggested
+,project_sustainability_certification_date,Sustainability certification application date,date,Suggested
+,project_sustainability_certification_id,Sustainability certification application ID,string,Optional
+,project_permit_date,Project permit application date,date,Suggested
+,project_permit_id,Project permit ID,string,Suggested
+,project_no_of_buildings,No. of buildings,integer,Strongly recommended,1
+,project_phase,Project phase at time of assessment,ProjectPhase,Strongly recommended,RIBA_UK_6_Handover
+,project_phase_common,"Project phase, common definition",ProjectPhaseCommon,Automatic
+,project_assessment_type,Assessment type,AssessmentType_EN15978,Required
+,project_design_start_date,Project design start date,date,Suggested
+,project_construction_company_name,Construction company name,string,Optional
+,project_construction_company_address,Construction company address,string,Optional
+,project_contractor_name,Contractor name,string,Optional
+,project_architect_engineer_name,Architect/engineer name,string,Optional
+,project_structural_engineer_name,Structural engineer name,string,Optional
+,project_mep_engineer_name,MEP engineer name,string,Optional
+,project_environmental_consultant_company_name,Environmental consultant company name,string,Optional
+,project_environmental_assessor_name,Environmental assessor name,string,Optional
+,building_age_class,Building age class,string,Optional
+,project_plot_area,Project total plot area,Decimal,Suggested
+,project_gfa_method,GFA measurement method,GFAMeasurementMethod,Strongly recommended
+,building_id,Building ID,string,Suggested
+,building_gps_coordinates,Building GPS coordinates,string,Suggested
+,building_geographic_climate_zone,Climate zone,ClimateZone,Recommended,ASHRAE169_5A
+,building_altitude,Altitude,Decimal,Suggested
+,building_seismic_zone,Seismic zone,FEMASeismicActivity,Suggested
+,building_use_type,Building use type,BuildingTypology,Strongly recommended
+,building_residential_units,No. of individual residential units,integer,Suggested
+,building_rooms,No. of rooms in the residential units,Decimal,Optional
+,building_construction_start_date,Construction start date,date,Optional
+project_completion,building_construction_end_date,Construction end date,date,Suggested
+,building_demolished_area,Demolished area,Decimal,Optional
+,building_roof_area,Roof area,Decimal,Suggested
+,building_floors_bg,No. of floors (below ground),Decimal,Recommended
+,building_floors_ag,No. of floors (above ground),Decimal,Recommended
+,building_parking_building,No. of parking spots (in building),Decimal,Suggested
+,building_parking_dislocated,No. of parking spots (dislocated),Decimal,Suggested
+,building_element_classification_code_name,Building Element Classification Code Name,BuildingClassificationCode,Suggested
+,building_element_classification_code_link,Building Element Classification Code Link,string,Suggested
+,building_element_classification_code_version,Building Element Classification Code Version,string,Suggested
+,building_element_classification_tier,Building Element Classification Tier,BuildingElementClassificationTier,Suggested
+,building_structure_type,Building structure type,BuildingStructureType,Recommended,Concrete_Frame
+,building_prefabricated_elements,Prefabricated elements,Boolean,Suggested
+,building_soil_data,Soil data,SoilType,Suggested
+,building_foundation_type,Foundation type,FoundationType,Strongly recommended,en1997_raft_foundations
+,building_required_service_life,Required Service Life (RSL),Decimal,Strongly recommended
+,building_energy_classification_system,Energy classification system,BuildingEnergyClassificationSystem,Suggested
+,building_energy_code_system,Energy code system,BuildingEnergyCodeSystem,Optional
+,building_energy_demand_thermal,Energy demand - thermal,Decimal,Suggested
+,building_energy_demand_electricity,Energy demand - electric,Decimal,Suggested
+,building_energy_supply_thermal,Energy supply - thermal,Decimal,Suggested
+,building_energy_supply_electricity,Energy supply - electric,Decimal,Suggested
+,building_primary_energy_source,Building primary energy source,PrimaryEnergySource,Suggested
+,building_bipv_description,Building BIPV description,string,Optional
+,building_orientation,Building orientation,BuildingFacingDirection,Suggested
+,building_footprint,Building footprint area,Decimal,Suggested
+,building_unconditioned_area,Unconditioned floor area,Decimal,Suggested
+,building_conditioned_area,Conditioned floor area,Decimal,Suggested
+area_ufa_total_calc,building_useful_floor_area,Useful floor area (UFA),Decimal,Strongly recommended
+area_gfa_total_calc,building_gross_floor_area,Gross floor area (GFA),Decimal,Required
+,building_gross_floor_area_standard,Gross floor area (GFA) Standard,GrossFloorAreaStandard,Recommended
+,floor_area_includes_enclosed_parking,Floor area includes enclosed parking,Boolean,Strongly recommended
+,floor_area_includes_detached_parking,Floor area includes detached parking,Boolean,Strongly recommended
+,floor_area_includes_unconditioned_space,Floor area includes unconditioned space,Boolean,Strongly recommended
+,floor_area_includes_circulation,Floor area includes circulation,Boolean,Strongly recommended
+,floor_area_includes_technical_space,Floor area includes technical space,Boolean,Strongly recommended
+,floor_area_includes_ancillary_external_buildings,Floor area includes ancillary external buildings,Boolean,Strongly recommended
+,building_circulation_area,Circulation area,Decimal,Optional
+,building_technical_area,Technical area,Decimal,Optional
+,building_built_floor_area,Built floor area (BFA),Decimal,Suggested
+,building_envelope_area,Thermal envelope area,Decimal,Suggested
+,building_window_area,Window area,Decimal,Suggested
+,building_wall_area_interior,Wall area (interior),Decimal,Suggested
+,building_enclosed_parking_area,Enclosed parking area,Decimal,Suggested
+,building_height,Building height,Decimal,Suggested
+,building_floor_height,Average floor height,Decimal,Suggested
+,building_volume,Building volume,Decimal,Suggested
+users_count,building_occupancy_count,Occupancy count,Decimal,Suggested
+,lca_assessment_date,Project date of assessment,date,Recommended
+,lca_third_party_verified,Third party verified,Boolean,Suggested,no
+,lca_third_party_verifier_name,Third party verifier name,string,Suggested
+,lca_verification_date,Verification date,date,Optional
+,lca_building_regulation_code,Building regulation/code,string,Strongly recommended
+,lca_goal,LCA goal,string,Strongly recommended
+,lca_reference_unit,Reference Unit,string,Strongly recommended
+,lca_reference_study_period,Reference Study Period (RSP),string,Strongly recommended
+,lca_replacement_count_method,Replacement count method,ReplacementCountMethod,Strongly recommended
+,lca_functional_unit,Functional unit,string,Strongly recommended
+,lca_software_name,LCA Software name,string,Recommended
+,lca_software_publisher,LCA software publisher,string,Optional
+,lca_software_version,LCA software version,string,Optional
+,lca_database_name,LCA database name,LCADatabase,Strongly recommended
+,lca_database_system_model,Database system model,LCADatabaseSystemModel,Strongly recommended
+,lca_database_version,LCA database version,string,Optional
+,lca_data_cpr_share,Construction Products Regulation data share,Decimal,Automatic
+,lca_data_ecodesign_share,Ecodesign and energy labelling data share,Decimal,Automatic
+,lca_data_project_specific_share,Project-specific data share,Decimal,Automatic
+,lca_data_product_specific_share,Product-specific data share,Decimal,Automatic
+,lca_data_product_group_average_share,Average data for a product group share,Decimal,Automatic
+,lca_data_generic_share,Generic data share,Decimal,Automatic
+,lca_data_default_share,Default values share,Decimal,Automatic
+,lca_data_undeclared_share,Undeclared share,Decimal,Automatic
+,lca_data_weighting_basis,Data quality weighting basis,DataWeightingBasis,Automatic
+,lca_completeness_score,Submission completeness,Decimal,Automatic
+,lca_undeclared_material_note,Undeclared material justification,string,Recommended
+,lca_temporal_approach,LCA temporal approach,LCATemporalApproach,Optional
+,lca_onsite_renewable_allocation,Allocation of embodied emissions of on-site renewable energy production,OnSiteRenewableAllocationApproach,Recommended
+,lca_shared_component_allocation_rule,Rule for allocating emissions of shared building components,SharedComponentAllocationRule,Optional
+,lca_extended_default_data_use,Extended use of default data,Boolean,Optional
+,lca_extended_default_data_basis,Basis for the extended use of default data,ExtendedDefaultDataBasis,Optional
+,lca_limit_value_compliance,Verification of compliance with a limit value,Boolean,Optional
+,lca_limit_value_scope_reduction,Parts left out for the verification of compliance,LimitValueScopeReduction,Optional
+,lca_emission_factor_scenario,Emission factor scenario,EmissionFactorScenario,Recommended
+,lca_lci_modeling_approach,LCI modeling approach,LCIModelingApproach,Optional
+,lca_cycle_system_boundary,Life cycle system boundary,LifeCycleSystemBoundary,Required
+,lcia_methodology,LCIA Methodology,LCIAMethodology,Strongly recommended
+,lca_biogenic_method,Biogenic Carbon Accounting Method,BiogenicCarbonAccounting,Recommended
+,lca_biogenic_carbon,Biogenic Carbon,Boolean,Recommended
+,lca_material_source,LCA Material Quantities Source,MaterialQuantitiesSource,Strongly recommended
+,lca_gwp_total_declared,Global Warming Potential - Total,Boolean,Strongly recommended
+,lca_gwp_f_declared,Global Warming Potential - Fossil,Boolean,Suggested
+,lca_gwp_b_declared,Global Warming Potential - Biogenic,Boolean,Suggested
+,lca_gwp_luc_declared,Global Warming Potential - Land Use and Land Use Change,Boolean,Suggested
+,lca_odp_declared,Ozone Depletion Potential,Boolean,Suggested
+,lca_ap_declared,Acidification potential,Boolean,Suggested
+,lca_ap_ae_declared,Acidification Potential - Accumulated Exceedance,Boolean,Suggested
+,lca_ep_declared,Eutrophication Potential,Boolean,Suggested
+,lca_ep_af_declared,Eutrophication Potential - Aquatic Freshwater,Boolean,Suggested
+,lca_ep_am_declared,Eutrophication Potential - Aquatic Marine,Boolean,Suggested
+,lca_ep_t_declared,Eutrophication Potential - Terrestrial,Boolean,Suggested
+,lca_pocp_declared,Photochemical Ozone Creation Potential,Boolean,Suggested
+,lca_sfp_declared,Smog Forming Potential,Boolean,Suggested
+,lca_pofp_declared,Photochemical Ozone Formation Potential,Boolean,Suggested
+,lca_adpmm_declared,Abiotic Depletion Potential (Minerals and Metals),Boolean,Suggested
+,lca_adpf_declared,Abiotic Depletion Potential (Fossil Fuels),Boolean,Suggested
+,lca_wdp_declared,Water deprivation potential (deprivation-weighted water consumption),Boolean,Suggested
+,lca_pere_declared,Primary Energy Renewable (Energy resources),Boolean,Suggested
+,lca_penre_declared,Primary Energy Non-Renewable (Energy resources),Boolean,Suggested
+,lca_pert_declared,Primary Energy Renewable Total,Boolean,Suggested
+,lca_penrt_declared,Primary Energy Non-Renewable Total,Boolean,Suggested
+,lca_pm_declared,Particulate Matter Emissions,Boolean,Optional
+,lca_irp_declared,Ionising Radiation - Human Health,Boolean,Optional
+,lca_etp_fw_declared,Ecotoxicity - Freshwater,Boolean,Optional
+,lca_htp_c_declared,Human Toxicity - Cancer Effects,Boolean,Optional
+,lca_htp_nc_declared,Human Toxicity - Non-cancer Effects,Boolean,Optional
+,lca_sqp_declared,Soil Quality Index,Boolean,Optional
+,lca_a1_3,A1-A3: Product Stage,Boolean,Recommended
+,lca_a1,A1 Raw Material Supply,Boolean,Recommended
+,lca_a2,A2 Transport,Boolean,Recommended
+,lca_a3,A3 Manufacturing,Boolean,Recommended
+,lca_a4,A4 Transport,Boolean,Recommended
+,lca_a5,A5 Construction/Installation: Installation of the product into the building,Boolean,Recommended
+,lca_a5_1,A5.1 Pre-construction demolition,Boolean,Optional
+,lca_a5_2,A5.2 Construction activities,Boolean,Optional
+,lca_a5_3,A5.3 Waste and waste management,Boolean,Optional
+,lca_a5_4,A5.4 Worker transport,Boolean,Optional
+,lca_b1,"B1 Use: Environmental impacts arising from the product in use (eg, release of substances)",Boolean,Recommended
+,lca_b1_1,B1.1 Emissions from materials and carbonation,Boolean,Optional
+,lca_b1_2,B1.2 Fugitive emissions of refrigerants,Boolean,Optional
+,lca_b2,"B2 Maintenance: Actions to maintain the product's functional quality (cleaning, painting)",Boolean,Recommended
+,lca_b3,B3 Repair: Corrective actions to return the product to a functional state,Boolean,Recommended
+,lca_b4,B4 Replacement: Replacing the product or parts of it at the end of its service life,Boolean,Recommended
+,lca_b5,B5 Refurbishment: Major changes to restore or improve performance,Boolean,Recommended
+,lca_b6,"B6 Operational Energy Use: Energy consumption related to the building's operation (heating, cooling, lighting)",Boolean,Recommended
+,lca_b6_1,B6.1 Regulated building-integrated systems,Boolean,Optional
+,lca_b6_2,B6.2 Non-regulated building-integrated systems,Boolean,Optional
+,lca_b6_3,B6.3 Other energy use related to user activities,Boolean,Optional
+,lca_b7,B7 Operational Water Use: Water consumption related to the building's operation,Boolean,Recommended
+,lca_b7_1,B7.1 Essential building-integrated systems,Boolean,Optional
+,lca_b7_2,B7.2 Other building-integrated systems,Boolean,Optional
+,lca_b7_3,B7.3 Non-building-integrated systems,Boolean,Optional
+,lca_b8,B8 Building-integrated users activities,Boolean,Optional
+,lca_b8_1,B8.1 Transport of persons,Boolean,Optional
+,lca_b8_2,B8.2 Charging of electric vehicles,Boolean,Optional
+,lca_b8_3,B8.3 Other user activities,Boolean,Optional
+,lca_c1,C1 De-construction/Demolition: Dismantling or demolishing the building/product,Boolean,Recommended
+,lca_c2,C2 Transport: Transporting the waste to processing or disposal sites,Boolean,Recommended
+,lca_c3,"C3 Waste Processing: Processing waste for reuse, recovery, or recycling",Boolean,Recommended
+,lca_c4,"C4 Disposal: Final disposal of waste that cannot be recovered (eg, landfill)",Boolean,Recommended
+,lca_d,D Benefits and Loads Beyond the System Boundary,Boolean,Recommended
+,lca_d1,"D1 Reuse, Recovery, and Recycling Potential: Net benefits or loads resulting from reusing or recycling materials (avoided emissions)",Boolean,Recommended
+,lca_d2,D2 Exported Energy (or Energy Recovery Potential),Boolean,Recommended

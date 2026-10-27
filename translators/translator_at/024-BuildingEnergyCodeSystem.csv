@@ -1,0 +1,15 @@
+Value in your format,OpenBDF enum value,OpenBDF value display name,OpenBDF value description (if any),OpenBDF value parent category (if applicable)
+,EPBD (EU),EPBD (EU)
+,EN ISO 52000-1,EN ISO 52000-1
+,IECC (US),IECC (US)
+,ASHRAE 90.1 (US),ASHRAE 90.1 (US)
+,ASHRAE 189.1 (US),ASHRAE 189.1 (US)
+,OIB-Richtlinie 6 (AT),OIB-Richtlinie 6 (AT)
+,GEG (DE),GEG (DE)
+,SIA 380/1 (CH),SIA 380/1 (CH)
+,RE2020 (FR),RE2020 (FR)
+,CTE DB-HE (ES),CTE DB-HE (ES)
+,Bouwbesluit / BENG (NL),Bouwbesluit / BENG (NL)
+,Part L (UK),Part L (UK)
+,Other national,Other national
+,Unknown,Unknown

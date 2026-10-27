@@ -1,0 +1,8 @@
+Value in your format,OpenBDF enum value,OpenBDF value display name,OpenBDF value description (if any),OpenBDF value parent category (if applicable)
+,extrapolation,Extrapolation from Construction Type Land Use Area
+,manual_approx,Manual Approximation
+,bim_model,BIM Model
+,design_estimates,Design Estimates/ Manual Takeoff from Design Documentation
+,construction_estimate,Construction Estimate/Contractors Bill of Materials
+,as_built,As-Built
+,other,Other Data Source

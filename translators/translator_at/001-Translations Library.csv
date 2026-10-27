@@ -1,0 +1,6 @@
+Sheet name in your format,Translated name to OpenBDF,Orientation (horizontal/vertical),Header row,Header column (for vertical sheets),Values column (for vertical sheets),Start row (for horizontal sheets),Start column (for horizontal sheets),"End row (for horizontal sheets, optional)","End column (for horizontal sheets, optional)"
+General Information,General Information,horizontal,1,3,9,2,0
+Summen,Bill of Materials,horizontal,0,,,1,0
+,Project Material Database,horizontal,1,,,8,1
+Summen,LCA Result (Wide),horizontal,0,,,1,0
+,LCA Result (Tall),horizontal,0
