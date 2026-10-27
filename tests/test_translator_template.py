@@ -102,9 +102,9 @@ def test_openbdf_template_requirements_and_reference_layout(tmp_path):
     assert automatic_rows and editable_rows
     assert {info.cell(row=row, column=10).style for row in automatic_rows} == {"AutomaticValue"}
     assert {info.cell(row=row, column=10).style for row in editable_rows} == {"EditableValue"}
-    assert {info.cell(row=row, column=column).style for row in range(2, info.max_row + 1) for column in (7, 8, 11)} == {
-        "Metadata"
-    }
+    assert {
+        info.cell(row=row, column=column).style for row in range(2, info.max_row + 1) for column in (6, 7, 8, 11)
+    } == {"Metadata"}
     # The marked levels paint the five metadata columns of a General Information row.
     for row in range(2, info.max_row + 1):
         requirement = info.cell(row=row, column=9).value
@@ -139,8 +139,8 @@ def test_openbdf_template_requirements_and_reference_layout(tmp_path):
             if cell.column > 1 and cell.value:
                 expected = "AutomaticValue" if cell.value == "Automatic" else "EditableValue"
                 assert sheet.cell(row=9, column=cell.column).style == expected
-        # Units and constraints are grey, whether they carry a value or not.
-        for row in (5, 6):
+        # Data types, units and constraints are grey, whether they carry a value or not.
+        for row in (4, 5, 6):
             assert {sheet.cell(row=row, column=cell.column).style for cell in sheet[row] if cell.column > 1} == {
                 "Metadata"
             }

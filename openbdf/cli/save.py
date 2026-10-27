@@ -456,7 +456,7 @@ def info_to_xlsx(
         header_cells.append(desc)
 
         dt = info_sheet.cell(row=cell_row, column=6, value=human_readable_type(data_type))
-        dt.style = INFO_STYLE.name
+        dt.style = METADATA_STYLE.name
 
         constraints = extra.get("constraint")
         c = info_sheet.cell(row=cell_row, column=7, value=constraints)
@@ -575,7 +575,8 @@ def wide_to_xlsx(
             desc.style = REQUIREMENT_STYLES[requirements].name
         desc.alignment = Alignment(wrap_text=True, vertical="top")
 
-        sheet.cell(row=4, column=cell_column, value=human_readable_type(data_type))
+        dt = sheet.cell(row=4, column=cell_column, value=human_readable_type(data_type))
+        dt.style = METADATA_STYLE.name
 
         constraints = extra.get("constraint") or human_readable_constraints(metadata)
         c = sheet.cell(row=5, column=cell_column, value=constraints)
@@ -863,7 +864,7 @@ def make_translator_openbdf_pydantic(writer: pd.ExcelWriter, sheet_name: str, mo
         an.style = ATTRIBUTES_NAME_STYLE.name
 
         r = info_sheet.cell(row=cell_row, column=4, value=human_readable_type(data_type))
-        r.style = INFO_STYLE.name
+        r.style = METADATA_STYLE.name
 
         req = info_sheet.cell(row=cell_row, column=5, value=requirements.display_name)
         req.style = REQUIREMENT_STYLES[requirements].name
