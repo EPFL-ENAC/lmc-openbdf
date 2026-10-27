@@ -194,10 +194,6 @@ class Reference(OpenBDFEnum):
         "IEA EBC Annex 72",
         "IEA EBC Annex 72",
     )
-    INDICATE_BUILDING_MATERIAL_CLASSIFICATION = (
-        "INDICATE building material classification",
-        "INDICATE building material classification",
-    )
     INDICATE_MATERIALS_TAXONOMY = (
         "INDICATE materials taxonomy",
         "INDICATE materials taxonomy",

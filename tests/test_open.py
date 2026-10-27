@@ -494,7 +494,6 @@ def test_open_command_collects_every_finding_of_a_workbook_with_bad_cells(tmp_pa
         "General Information:",
         f"  Row {floor_area_row}: E17: Floor area must be greater than zero",
         "Bill of Materials:",
-        "  E19: 'Concrete C30/37' has no mapping; the field was left empty and not guessed",
         "  E32: material_id 'MAT-1' is used by 2 bill of materials rows",
         "  Row 9: E02: Value 'bogus' is not a valid MaterialDataType",
         "  E16: Row 9 has no mass, material efficiency analysis is not possible",

@@ -31,7 +31,7 @@ def fill_computed(
     if findings is None:
         findings = []
 
-    fill_materials(project, document_translator, findings, generate_missing_lines=generate_missing_lines)
+    fill_materials(project, findings, generate_missing_lines=generate_missing_lines)
     fill_bill_of_materials_elements(project, document_translator, findings)
     fill_tall_results(project, findings)
     fill_project_quantities(project, findings)

@@ -11,7 +11,7 @@ Einstufung Ebene 2,bec_openbdf,OpenBDF Building Element Classification,OpenBDFBu
 Element,custom_element_name,Element Name (or ID),string,Suggested
 ,work_section,Work section,string,Optional
 ,layer_thickness,Layer thickness,Decimal,Optional
-,common_material_name,OpenBDF Material Classification,OpenBDFMaterialClassification,Automatic
+,common_material_name,OpenBDF Material Classification,OpenBDFMaterialClassification,Required,0.0
 Material / Produkt,custom_material_name,Material Name (or ID),string,Required
 Verknüpftes Produkt,lca_dataset_material_name,Material name in EPD dataset,string,Suggested
 Quelldatenbank,lca_database_name,EPD database name,string,Recommended

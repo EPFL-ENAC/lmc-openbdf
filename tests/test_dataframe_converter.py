@@ -175,11 +175,10 @@ def test_project_package_from_tables_warns_about_a_missing_project_material_data
     findings = collected_findings(tables_without_project_material_database(bom))
 
     assert [str(finding) for finding in findings] == [
-        "E19: 'Concrete' has no mapping; the field was left empty and not guessed",
         "E34: Sheet is missing or empty, its lines were generated from the bill of materials",
     ]
-    assert findings[1].source == "Project Material Database"
-    assert findings[1].severity is Severity.WARNING
+    assert findings[0].source == "Project Material Database"
+    assert findings[0].severity is Severity.WARNING
 
 
 def test_project_package_from_tables_generates_lines_when_the_sheet_is_missing():
@@ -217,8 +216,6 @@ def test_project_package_from_tables_in_draft_mode_generates_lines_when_the_shee
     findings.extend(validate_project(project, loaded))
 
     assert [str(finding) for finding in findings] == [
-        "E19: 'Concrete' has no mapping; the field was left empty and not guessed",
-        "E19: 'Wood' has no mapping; the field was left empty and not guessed",
         "E34: Sheet is missing or empty, its lines were generated from the bill of materials",
     ]
 
@@ -307,7 +304,7 @@ def test_dropped_line_is_reported_as_a_warning():
 
 
 def test_a_line_dropped_without_a_material_id_names_no_material():
-    invalid = pd.DataFrame([{"material_id": None, "custom_material_name": "Concrete"}])
+    invalid = pd.DataFrame([{"material_id": None, "custom_material_name": "Concrete", "common_material_name": "4.2"}])
     findings: list[OpenBDFValidationError] = []
 
     bom_from_dataframe(invalid, findings=findings, drop_invalid=True)
@@ -322,6 +319,60 @@ def test_bom_from_dataframe_allows_missing_material_reference_service_life():
 
     assert len(records) == 1
     assert records[0].material_reference_service_life is None
+
+
+def classification_translator(mapping: dict[str, str]) -> DocumentTranslator:
+    return DocumentTranslator.from_dataframes(
+        {"OpenBDFMaterialClassification": pd.DataFrame([[key, value] for key, value in mapping.items()])},
+        attribute_name_col=0,
+        translated_name_col=1,
+    )
+
+
+def test_a_missing_column_takes_its_value_from_the_filled_column_name():
+    translator = classification_translator({"e9\nNaturstein\n (kg)": "4.0", "h2\nStahl\n (kg)": "3.2"})
+    dataframe = pd.DataFrame([
+        {
+            "material_id": "m1",
+            "custom_material_name": "Stahlprofil",
+            "e9\nNaturstein\n (kg)": 0.0,
+            "h2\nStahl\n (kg)": 12.5,
+        }
+    ])
+    findings: list[OpenBDFValidationError] = []
+
+    records = bom_from_dataframe(dataframe, translator, findings=findings)
+
+    assert records[0].common_material_name.value == "3.2"
+    assert findings == []
+
+
+def test_a_missing_column_warns_when_no_column_or_several_columns_are_filled():
+    translator = classification_translator({"e9\nNaturstein\n (kg)": "4.0", "h2\nStahl\n (kg)": "3.2"})
+    dataframe = pd.DataFrame([
+        {
+            "material_id": "m1",
+            "custom_material_name": "Leer",
+            "e9\nNaturstein\n (kg)": 0.0,
+            "h2\nStahl\n (kg)": None,
+        },
+        {
+            "material_id": "m2",
+            "custom_material_name": "Beides",
+            "e9\nNaturstein\n (kg)": 1.0,
+            "h2\nStahl\n (kg)": 2.0,
+        },
+    ])
+    findings: list[OpenBDFValidationError] = []
+
+    bom_from_dataframe(dataframe, translator, findings=findings)
+
+    assert [finding.code for finding in findings] == ["E35", "E35"]
+    assert findings[0].severity is Severity.WARNING
+    assert findings[0].row == 1
+    assert "found 0" in findings[0].message
+    assert findings[1].row == 2
+    assert "found 2: e9, h2" in findings[1].message
 
 
 def test_project_package_from_tables_links_wide_results_to_bom_by_material_id():
@@ -401,8 +452,6 @@ def test_project_package_from_tables_reports_missing_project_material_database_l
     findings = collected_findings(tables(bom_df("mat-1", "mat-2"), project_material_database=pmd))
 
     assert [str(finding) for finding in findings] == [
-        "E19: 'Material mat-1' has no mapping; the field was left empty and not guessed",
-        "E19: 'Material mat-2' has no mapping; the field was left empty and not guessed",
         "E28: Bill of materials material 'Material mat-2' with EPD dataset 'value' "
         "has no project material database line",
     ]
@@ -415,7 +464,6 @@ def test_project_package_from_tables_reports_orphan_project_material_database_li
     findings = collected_findings(tables(bom_df("mat-1"), project_material_database=pmd))
 
     assert [str(finding) for finding in findings] == [
-        "E19: 'Material mat-1' has no mapping; the field was left empty and not guessed",
         "E27: Project material database line 'Orphan material' with EPD dataset 'value' "
         "has no bill of materials material",
     ]
@@ -430,7 +478,6 @@ def test_project_package_from_tables_reports_duplicate_project_material_database
     findings = collected_findings(tables(bom_df("mat-1"), project_material_database=pmd))
 
     assert [str(finding) for finding in findings] == [
-        "E19: 'Material mat-1' has no mapping; the field was left empty and not guessed",
         "E29: Bill of materials material 'Material mat-1' with EPD dataset 'value' "
         "has 2 project material database lines",
     ]
@@ -446,7 +493,6 @@ def test_project_package_from_tables_aligns_a_contradicting_material_ref_id_and_
 
     assert [str(finding) for finding in sort_findings(findings)] == [
         "E04: Field material_ref_id is derived; the given value was discarded",
-        "E19: 'Concrete' has no mapping; the field was left empty and not guessed",
     ]
     assert [record.material_ref_id for record in project.bill_of_materials] == ["M0001"]
 
@@ -460,8 +506,6 @@ def test_project_package_from_tables_reports_duplicate_project_material_database
     findings = collected_findings(tables(bom_df("mat-1", "mat-2"), project_material_database=pmd))
 
     assert [str(finding) for finding in findings] == [
-        "E19: 'Material mat-1' has no mapping; the field was left empty and not guessed",
-        "E19: 'Material mat-2' has no mapping; the field was left empty and not guessed",
         "E31: material_ref_id 'M0001' is used by 2 project material database lines",
     ]
 
@@ -798,7 +842,6 @@ def test_project_package_from_tables_reports_a_dataset_mismatch_as_missing_and_o
     findings = collected_findings(tables(bom, project_material_database=pmd))
 
     assert [str(finding) for finding in findings] == [
-        "E19: 'Kies' has no mapping; the field was left empty and not guessed",
         "E28: Bill of materials material 'Kies' with EPD dataset 'Kies (Korngröße 0/16)' "
         "has no project material database line",
         "E27: Project material database line 'Kies' with EPD dataset 'Kies (Korngröße 2/32)' "

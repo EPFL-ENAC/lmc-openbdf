@@ -18,6 +18,10 @@ class Severity(str, Enum):
     REJECT = "Reject"
 
 
+# Severity from the most to the least important, so the reject findings show first.
+SEVERITY_RANK = {Severity.REJECT: 0, Severity.WARNING: 1, Severity.INFO: 2}
+
+
 class OpenBDFValidationError(ValueError):
     """Base class of the validation findings."""
 
@@ -174,6 +178,13 @@ class MissingSheet(OpenBDFValidationError):
     severity = Severity.WARNING
 
 
+class UnresolvedHeaderValue(OpenBDFValidationError):
+    """E35: no column name, or several column names, carry the value of a field."""
+
+    code = "E35"
+    severity = Severity.WARNING
+
+
 # Order of the sheets in the workbook, used to sort the findings the way the file is read.
 SHEET_ORDER = (
     "General Information",
@@ -187,12 +198,17 @@ FLOOR_AREA_FIELDS = frozenset({"building_useful_floor_area", "building_gross_flo
 
 
 def sort_findings(findings: Sequence[OpenBDFValidationError]) -> list[OpenBDFValidationError]:
-    """Order findings by sheet, then by row, then by code."""
+    """Order findings by sheet, then by severity, then by row, then by code."""
     order = {sheet: position for position, sheet in enumerate(SHEET_ORDER)}
     return sorted(
         findings,
-        key=lambda finding: (order.get(finding.source, len(order)), finding.source, finding.row or 0, finding.code),
+        key=lambda finding: (order.get(finding.source, len(order)), finding.source, *_within_sheet_key(finding)),
     )
+
+
+def _within_sheet_key(finding: OpenBDFValidationError) -> tuple[int, int, str]:
+    """Order the findings of one sheet with the most severe first."""
+    return SEVERITY_RANK[finding.severity], finding.row or 0, finding.code
 
 
 def findings_from_validation_error(
@@ -266,6 +282,7 @@ def format_findings(findings: Sequence[OpenBDFValidationError], *, limit: int = 
     for source, source_findings in grouped.items():
         if source:
             lines.append(f"{source}:")
+        source_findings = sorted(source_findings, key=_within_sheet_key)
         lines.extend(f"  {_with_row(finding)}" for finding in source_findings[:limit])
         if len(source_findings) > limit:
             lines.append(f"  ... {len(source_findings) - limit} more findings not shown")

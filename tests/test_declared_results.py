@@ -11,6 +11,7 @@ from typer.testing import CliRunner
 import openbdf.main as main_module
 from openbdf.lib.validation import (
     DeclaredIndicatorWithoutResults,
+    ResultsWithoutIndicatorDeclaration,
     Severity,
     check_declared_results,
     format_findings,
@@ -170,6 +171,19 @@ def test_findings_are_capped_per_sheet_in_the_terminal_output():
     assert lines[1] == "  E25: finding 0"
     assert lines[-1] == "  ... 3 more findings not shown"
     assert len(lines) == 12
+
+
+def test_terminal_output_shows_the_most_severe_findings_of_a_sheet_first():
+    findings = [
+        DeclaredIndicatorWithoutResults("warning finding", source=WIDE_SHEET),
+        ResultsWithoutIndicatorDeclaration("reject finding", source=WIDE_SHEET),
+    ]
+
+    assert format_findings(findings) == [
+        f"{WIDE_SHEET}:",
+        "  E26: reject finding",
+        "  E25: warning finding",
+    ]
 
 
 def write_workbook(path: Path, sheets: dict[str, pd.DataFrame]) -> None:
