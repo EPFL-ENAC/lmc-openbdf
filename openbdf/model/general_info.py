@@ -40,6 +40,7 @@ from .enums.lca import (
     DataWeightingBasis,
     LCADatabase,
     LCADatabaseSystemModel,
+    LCAStageOrModuleOrSubModule,
     LCATemporalApproach,
     LCIAMethodology,
     LCIModelingApproach,
@@ -2643,13 +2644,13 @@ class ProjectRecordBase(SQLModel):
 
     lca_a1_3: Optional[bool] = Field(
         default=None,
-        description="Life cycle module included.",
+        description="Life cycle stage included.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="A1-A3: Product Stage",
+            attribute_name=LCAStageOrModuleOrSubModule.A1_A3.display_name,
             field_code="lca_a1_3",
-            description="Life cycle module included.",
+            description="Life cycle stage included.",
             requirements=Requirement.RECOMMENDED,
             example="Yes",
             reference=Reference.EN15804_A1_A2_EN15978_EN15978_2026,
@@ -2662,7 +2663,7 @@ class ProjectRecordBase(SQLModel):
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="A1 Raw Material Supply",
+            attribute_name=LCAStageOrModuleOrSubModule.A1.display_name,
             field_code="lca_a1",
             description="Life cycle module included.",
             requirements=Requirement.RECOMMENDED,
@@ -2677,7 +2678,7 @@ class ProjectRecordBase(SQLModel):
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="A2 Transport",
+            attribute_name=LCAStageOrModuleOrSubModule.A2.display_name,
             field_code="lca_a2",
             description="Life cycle module included.",
             requirements=Requirement.RECOMMENDED,
@@ -2692,7 +2693,7 @@ class ProjectRecordBase(SQLModel):
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="A3 Manufacturing",
+            attribute_name=LCAStageOrModuleOrSubModule.A3.display_name,
             field_code="lca_a3",
             description="Life cycle module included.",
             requirements=Requirement.RECOMMENDED,
@@ -2707,7 +2708,7 @@ class ProjectRecordBase(SQLModel):
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="A4 Transport",
+            attribute_name=LCAStageOrModuleOrSubModule.A4.display_name,
             field_code="lca_a4",
             description="Life cycle module included.",
             requirements=Requirement.RECOMMENDED,
@@ -2722,7 +2723,7 @@ class ProjectRecordBase(SQLModel):
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="A5 Construction/Installation: Installation of the product into the building",
+            attribute_name=LCAStageOrModuleOrSubModule.A5.display_name,
             field_code="lca_a5",
             description="Life cycle module included.",
             requirements=Requirement.RECOMMENDED,
@@ -2733,13 +2734,13 @@ class ProjectRecordBase(SQLModel):
 
     lca_a5_1: Optional[bool] = Field(
         default=None,
-        description="Life cycle sub-module included. Pre-construction demolition and site clearance.",
+        description="Life cycle submodule included.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="A5.1 Pre-construction demolition",
+            attribute_name=LCAStageOrModuleOrSubModule.A5_1.display_name,
             field_code="lca_a5_1",
-            description="Life cycle sub-module included. Pre-construction demolition and site clearance.",
+            description="Life cycle submodule included.",
             requirements=Requirement.OPTIONAL,
             reference=Reference.EN15978_2026_RICS_WLCA,
         ),
@@ -2747,13 +2748,13 @@ class ProjectRecordBase(SQLModel):
 
     lca_a5_2: Optional[bool] = Field(
         default=None,
-        description="Life cycle sub-module included. On-site construction and installation activities.",
+        description="Life cycle submodule included.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="A5.2 Construction activities",
+            attribute_name=LCAStageOrModuleOrSubModule.A5_2.display_name,
             field_code="lca_a5_2",
-            description="Life cycle sub-module included. On-site construction and installation activities.",
+            description="Life cycle submodule included.",
             requirements=Requirement.OPTIONAL,
             reference=Reference.EN15978_2026_RICS_WLCA,
         ),
@@ -2761,13 +2762,13 @@ class ProjectRecordBase(SQLModel):
 
     lca_a5_3: Optional[bool] = Field(
         default=None,
-        description="Life cycle sub-module included. Construction waste and its management.",
+        description="Life cycle submodule included.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="A5.3 Waste and waste management",
+            attribute_name=LCAStageOrModuleOrSubModule.A5_3.display_name,
             field_code="lca_a5_3",
-            description="Life cycle sub-module included. Construction waste and its management.",
+            description="Life cycle submodule included.",
             requirements=Requirement.OPTIONAL,
             reference=Reference.EN15978_2026_RICS_WLCA,
         ),
@@ -2775,13 +2776,13 @@ class ProjectRecordBase(SQLModel):
 
     lca_a5_4: Optional[bool] = Field(
         default=None,
-        description="Life cycle sub-module included. Transport of workers to and from the site.",
+        description="Life cycle submodule included.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="A5.4 Worker transport",
+            attribute_name=LCAStageOrModuleOrSubModule.A5_4.display_name,
             field_code="lca_a5_4",
-            description="Life cycle sub-module included. Transport of workers to and from the site.",
+            description="Life cycle submodule included.",
             requirements=Requirement.OPTIONAL,
             reference=Reference.EN15978_2026_RICS_WLCA,
         ),
@@ -2793,7 +2794,7 @@ class ProjectRecordBase(SQLModel):
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="B1 Use: Environmental impacts arising from the product in use (eg, release of substances)",
+            attribute_name=LCAStageOrModuleOrSubModule.B1.display_name,
             field_code="lca_b1",
             description="Life cycle module included.",
             requirements=Requirement.RECOMMENDED,
@@ -2804,13 +2805,13 @@ class ProjectRecordBase(SQLModel):
 
     lca_b1_1: Optional[bool] = Field(
         default=None,
-        description="Life cycle module included. Emissions from materials and carbonation within module B1.",
+        description="Life cycle submodule included.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="B1.1 Emissions from materials and carbonation",
+            attribute_name=LCAStageOrModuleOrSubModule.B1_1.display_name,
             field_code="lca_b1_1",
-            description="Life cycle module included. Emissions from materials and carbonation within module B1.",
+            description="Life cycle submodule included.",
             requirements=Requirement.OPTIONAL,
             reference=Reference.EU2026_52_ANNEX_III_EN15978_2026,
         ),
@@ -2818,13 +2819,13 @@ class ProjectRecordBase(SQLModel):
 
     lca_b1_2: Optional[bool] = Field(
         default=None,
-        description="Life cycle module included. Fugitive emissions of refrigerants within module B1.",
+        description="Life cycle submodule included.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="B1.2 Fugitive emissions of refrigerants",
+            attribute_name=LCAStageOrModuleOrSubModule.B1_2.display_name,
             field_code="lca_b1_2",
-            description="Life cycle module included. Fugitive emissions of refrigerants within module B1.",
+            description="Life cycle submodule included.",
             requirements=Requirement.OPTIONAL,
             reference=Reference.EU2026_52_ANNEX_III_EN15978_2026,
         ),
@@ -2836,7 +2837,7 @@ class ProjectRecordBase(SQLModel):
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="B2 Maintenance: Actions to maintain the product's functional quality (cleaning, painting)",
+            attribute_name=LCAStageOrModuleOrSubModule.B2.display_name,
             field_code="lca_b2",
             description="Life cycle module included.",
             requirements=Requirement.RECOMMENDED,
@@ -2851,7 +2852,7 @@ class ProjectRecordBase(SQLModel):
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="B3 Repair: Corrective actions to return the product to a functional state",
+            attribute_name=LCAStageOrModuleOrSubModule.B3.display_name,
             field_code="lca_b3",
             description="Life cycle module included.",
             requirements=Requirement.RECOMMENDED,
@@ -2866,7 +2867,7 @@ class ProjectRecordBase(SQLModel):
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="B4 Replacement: Replacing the product or parts of it at the end of its service life",
+            attribute_name=LCAStageOrModuleOrSubModule.B4.display_name,
             field_code="lca_b4",
             description="Life cycle module included.",
             requirements=Requirement.RECOMMENDED,
@@ -2881,7 +2882,7 @@ class ProjectRecordBase(SQLModel):
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="B5 Refurbishment: Major changes to restore or improve performance",
+            attribute_name=LCAStageOrModuleOrSubModule.B5.display_name,
             field_code="lca_b5",
             description="Life cycle module included.",
             requirements=Requirement.RECOMMENDED,
@@ -2896,7 +2897,7 @@ class ProjectRecordBase(SQLModel):
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="B6 Operational Energy Use: Energy consumption related to the building's operation (heating, cooling, lighting)",
+            attribute_name=LCAStageOrModuleOrSubModule.B6.display_name,
             field_code="lca_b6",
             description="Life cycle module included.",
             requirements=Requirement.RECOMMENDED,
@@ -2907,13 +2908,13 @@ class ProjectRecordBase(SQLModel):
 
     lca_b6_1: Optional[bool] = Field(
         default=None,
-        description="Life cycle module included. Operational energy of regulated building-integrated systems.",
+        description="Life cycle submodule included.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="B6.1 Regulated building-integrated systems",
+            attribute_name=LCAStageOrModuleOrSubModule.B6_1.display_name,
             field_code="lca_b6_1",
-            description="Life cycle module included. Operational energy of regulated building-integrated systems.",
+            description="Life cycle submodule included.",
             requirements=Requirement.OPTIONAL,
             reference=Reference.EN15978_EN15978_2026,
         ),
@@ -2921,13 +2922,13 @@ class ProjectRecordBase(SQLModel):
 
     lca_b6_2: Optional[bool] = Field(
         default=None,
-        description="Life cycle module included. Operational energy of non-regulated building-integrated systems.",
+        description="Life cycle submodule included.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="B6.2 Non-regulated building-integrated systems",
+            attribute_name=LCAStageOrModuleOrSubModule.B6_2.display_name,
             field_code="lca_b6_2",
-            description="Life cycle module included. Operational energy of non-regulated building-integrated systems.",
+            description="Life cycle submodule included.",
             requirements=Requirement.OPTIONAL,
             reference=Reference.EU2026_52_ANNEX_III_EN15978_2026,
         ),
@@ -2935,13 +2936,13 @@ class ProjectRecordBase(SQLModel):
 
     lca_b6_3: Optional[bool] = Field(
         default=None,
-        description="Life cycle module included. Other operational energy related to building user activities.",
+        description="Life cycle submodule included.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="B6.3 Other energy use related to user activities",
+            attribute_name=LCAStageOrModuleOrSubModule.B6_3.display_name,
             field_code="lca_b6_3",
-            description="Life cycle module included. Other operational energy related to building user activities.",
+            description="Life cycle submodule included.",
             requirements=Requirement.OPTIONAL,
             reference=Reference.EU2026_52_ANNEX_III_EN15978_2026,
         ),
@@ -2953,7 +2954,7 @@ class ProjectRecordBase(SQLModel):
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="B7 Operational Water Use: Water consumption related to the building's operation",
+            attribute_name=LCAStageOrModuleOrSubModule.B7.display_name,
             field_code="lca_b7",
             description="Life cycle module included.",
             requirements=Requirement.RECOMMENDED,
@@ -2964,13 +2965,13 @@ class ProjectRecordBase(SQLModel):
 
     lca_b7_1: Optional[bool] = Field(
         default=None,
-        description="Life cycle module included. Operational water of essential building-integrated systems.",
+        description="Life cycle submodule included.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="B7.1 Essential building-integrated systems",
+            attribute_name=LCAStageOrModuleOrSubModule.B7_1.display_name,
             field_code="lca_b7_1",
-            description="Life cycle module included. Operational water of essential building-integrated systems.",
+            description="Life cycle submodule included.",
             requirements=Requirement.OPTIONAL,
             reference=Reference.EU2026_52_ANNEX_III_EN15978_2026,
         ),
@@ -2978,13 +2979,13 @@ class ProjectRecordBase(SQLModel):
 
     lca_b7_2: Optional[bool] = Field(
         default=None,
-        description="Life cycle module included. Operational water of other building-integrated systems.",
+        description="Life cycle submodule included.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="B7.2 Other building-integrated systems",
+            attribute_name=LCAStageOrModuleOrSubModule.B7_2.display_name,
             field_code="lca_b7_2",
-            description="Life cycle module included. Operational water of other building-integrated systems.",
+            description="Life cycle submodule included.",
             requirements=Requirement.OPTIONAL,
             reference=Reference.EU2026_52_ANNEX_III_EN15978_2026,
         ),
@@ -2992,13 +2993,13 @@ class ProjectRecordBase(SQLModel):
 
     lca_b7_3: Optional[bool] = Field(
         default=None,
-        description="Life cycle module included. Operational water of non-building-integrated systems.",
+        description="Life cycle submodule included.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="B7.3 Non-building-integrated systems",
+            attribute_name=LCAStageOrModuleOrSubModule.B7_3.display_name,
             field_code="lca_b7_3",
-            description="Life cycle module included. Operational water of non-building-integrated systems.",
+            description="Life cycle submodule included.",
             requirements=Requirement.OPTIONAL,
             reference=Reference.EU2026_52_ANNEX_III_EN15978_2026,
         ),
@@ -3006,13 +3007,13 @@ class ProjectRecordBase(SQLModel):
 
     lca_b8: Optional[bool] = Field(
         default=None,
-        description="Life cycle module included. Building-integrated users activities not covered by B1 to B7. Optional stage.",
+        description="Life cycle module included.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="B8 Building-integrated users activities",
+            attribute_name=LCAStageOrModuleOrSubModule.B8.display_name,
             field_code="lca_b8",
-            description="Life cycle module included. Building-integrated users activities not covered by B1 to B7. Optional stage.",
+            description="Life cycle module included.",
             requirements=Requirement.OPTIONAL,
             reference=Reference.EU2026_52_ANNEX_III_EN15978_2026,
         ),
@@ -3020,13 +3021,13 @@ class ProjectRecordBase(SQLModel):
 
     lca_b8_1: Optional[bool] = Field(
         default=None,
-        description="Life cycle module included. Transport of persons to and from the building.",
+        description="Life cycle submodule included.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="B8.1 Transport of persons",
+            attribute_name=LCAStageOrModuleOrSubModule.B8_1.display_name,
             field_code="lca_b8_1",
-            description="Life cycle module included. Transport of persons to and from the building.",
+            description="Life cycle submodule included.",
             requirements=Requirement.OPTIONAL,
             reference=Reference.EU2026_52_ANNEX_III_EN15978_2026,
         ),
@@ -3034,13 +3035,13 @@ class ProjectRecordBase(SQLModel):
 
     lca_b8_2: Optional[bool] = Field(
         default=None,
-        description="Life cycle module included. Charging of electric vehicles within the building site.",
+        description="Life cycle submodule included.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="B8.2 Charging of electric vehicles",
+            attribute_name=LCAStageOrModuleOrSubModule.B8_2.display_name,
             field_code="lca_b8_2",
-            description="Life cycle module included. Charging of electric vehicles within the building site.",
+            description="Life cycle submodule included.",
             requirements=Requirement.OPTIONAL,
             reference=Reference.EU2026_52_ANNEX_III_EN15978_2026,
         ),
@@ -3048,13 +3049,13 @@ class ProjectRecordBase(SQLModel):
 
     lca_b8_3: Optional[bool] = Field(
         default=None,
-        description="Life cycle module included. Other user activities, such as consumables and unfixed furniture.",
+        description="Life cycle submodule included.",
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="B8.3 Other user activities",
+            attribute_name=LCAStageOrModuleOrSubModule.B8_3.display_name,
             field_code="lca_b8_3",
-            description="Life cycle module included. Other user activities, such as consumables and unfixed furniture.",
+            description="Life cycle submodule included.",
             requirements=Requirement.OPTIONAL,
             reference=Reference.EU2026_52_ANNEX_III_EN15978_2026,
         ),
@@ -3066,7 +3067,7 @@ class ProjectRecordBase(SQLModel):
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="C1 De-construction/Demolition: Dismantling or demolishing the building/product",
+            attribute_name=LCAStageOrModuleOrSubModule.C1.display_name,
             field_code="lca_c1",
             description="Life cycle module included.",
             requirements=Requirement.RECOMMENDED,
@@ -3081,7 +3082,7 @@ class ProjectRecordBase(SQLModel):
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="C2 Transport: Transporting the waste to processing or disposal sites",
+            attribute_name=LCAStageOrModuleOrSubModule.C2.display_name,
             field_code="lca_c2",
             description="Life cycle module included.",
             requirements=Requirement.RECOMMENDED,
@@ -3096,7 +3097,7 @@ class ProjectRecordBase(SQLModel):
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="C3 Waste Processing: Processing waste for reuse, recovery, or recycling",
+            attribute_name=LCAStageOrModuleOrSubModule.C3.display_name,
             field_code="lca_c3",
             description="Life cycle module included.",
             requirements=Requirement.RECOMMENDED,
@@ -3111,7 +3112,7 @@ class ProjectRecordBase(SQLModel):
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="C4 Disposal: Final disposal of waste that cannot be recovered (eg, landfill)",
+            attribute_name=LCAStageOrModuleOrSubModule.C4.display_name,
             field_code="lca_c4",
             description="Life cycle module included.",
             requirements=Requirement.RECOMMENDED,
@@ -3126,7 +3127,7 @@ class ProjectRecordBase(SQLModel):
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="D Benefits and Loads Beyond the System Boundary",
+            attribute_name=LCAStageOrModuleOrSubModule.D.display_name,
             field_code="lca_d",
             description="Life cycle module included.",
             requirements=Requirement.RECOMMENDED,
@@ -3141,7 +3142,7 @@ class ProjectRecordBase(SQLModel):
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="D1 Reuse, Recovery, and Recycling Potential: Net benefits or loads resulting from reusing or recycling materials (avoided emissions)",
+            attribute_name=LCAStageOrModuleOrSubModule.D1.display_name,
             field_code="lca_d1",
             description="Life cycle module included.",
             requirements=Requirement.RECOMMENDED,
@@ -3156,7 +3157,7 @@ class ProjectRecordBase(SQLModel):
         schema_extra=openbdf_field_metadata(
             group="LCA",
             sub_group="LCA impact assessment",
-            attribute_name="D2 Exported Energy (or Energy Recovery Potential)",
+            attribute_name=LCAStageOrModuleOrSubModule.D2.display_name,
             field_code="lca_d2",
             description="Life cycle module included.",
             requirements=Requirement.RECOMMENDED,
