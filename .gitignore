@@ -15,4 +15,6 @@ docs/auto_source
 
 test_data/
 output.xlsx
+openbdf_template*.xlsx
+translator_template*.xlsx
 .~lock.*
