@@ -1,0 +1,5 @@
+Value in your format,OpenBDF enum value,OpenBDF value display name,OpenBDF value description (if any),OpenBDF value parent category (if applicable)
+,process_based,"Process-based (Typically bottom-up, highly specific data)",Calculates impacts by summing individual process steps.
+,io_based,"Environmentally Extended Input-Output (EEIO) (Top-down, based on economic sector averages)",Input-Output based modeling using economic data.
+,hybrid_based,Hybrid (A mix of process data and IO data),Combines both process-based and I-O based methodologies.
+,other,Other,Alternative LCA modeling methodology.

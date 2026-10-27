@@ -1,0 +1,7 @@
+Value in your format,OpenBDF enum value,OpenBDF value display name,OpenBDF value description (if any),OpenBDF value parent category (if applicable)
+,cradle_to_gate,Cradle to Gate (A1–A3),Covers modules A1–A3.
+,cradle_to_gate_options,Cradle to Gate with Options (A1–A3 + others),Covers modules A1–A3 plus others.
+,cradle_to_grave,Cradle to Grave (A1–C4),Covers modules A1–C4.
+"A1-A3, A4, A5, B1, B2, B3, C1, C2, C3, C4, D, D1",cradle_to_grave_d,Cradle to Grave + Module D,Covers modules A1–C4 and includes module D.
+,gate_to_gate,Gate to Gate,Focuses specifically on the production stage processes.
+,unknown,Unknown

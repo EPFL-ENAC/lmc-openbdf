@@ -1,0 +1,12 @@
+Value in your format,OpenBDF enum value,OpenBDF value display name,OpenBDF value description (if any),OpenBDF value parent category (if applicable)
+,natural_gas,Natural Gas
+,coal,Coal
+,oil_petroleum,Oil/Petroleum
+,nuclear,Nuclear Energy
+,solar,Solar Energy (Photovoltaic and Thermal)
+,wind,Wind Energy
+,hydropower,Hydropower
+,geothermal,Geothermal Energy
+,aerothermal,Aerothermal Energy
+,biomass,"Biomass (Wood, Pellets)"
+,waste_heat,Waste Heat

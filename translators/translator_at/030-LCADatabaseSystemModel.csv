@@ -1,0 +1,6 @@
+Value in your format,OpenBDF enum value,OpenBDF value display name,OpenBDF value description (if any),OpenBDF value parent category (if applicable)
+,cut_off,"Cut off (recycled content approach, ecoinvent cut-off)","recycled content approach, ecoinvent cut-off"
+,cut_off_en15804,Cut off EN15804 (ecoinvent system model aligned with EN 15804),ecoinvent system model aligned with EN 15804
+,apos,APOS (allocation at the point of substitution),allocation at the point of substitution
+,consequential,"Consequential (marginal, market-driven modelling)","marginal, market-driven modelling"
+,unknown,Unknown

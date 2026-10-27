@@ -1,0 +1,11 @@
+Value in your format,OpenBDF enum value,OpenBDF value display name,OpenBDF value description (if any),OpenBDF value parent category (if applicable)
+,0 Strategic definition,0 Strategic definition
+,1 Preliminary studies,1 Preliminary studies
+,2 Concept design,2 Concept design
+,3 Developed design,3 Developed design
+,4 Technical design,4 Technical design
+,5 Manufacturing and construction,5 Manufacturing and construction
+,6 Handover and commissioning,6 Handover and commissioning
+,7 Operation and management,7 Operation and management
+,other,Other
+,"8 End of use, recycling","8 End of use, recycling"

@@ -1,0 +1,4 @@
+Value in your format,OpenBDF enum value,OpenBDF value display name,OpenBDF value description (if any),OpenBDF value parent category (if applicable)
+,not_applicable,Not applicable (no operational energy calculated),no operational energy calculated
+,none,None (no forward-looking factors; the factors of the base Year apply over the whole period),no forward-looking factors; the factors of the base year apply over the whole period
+,forward_looking,"forward_looking (forward-looking emission factors, justified, consistent and clearly defined for the whole reference study period)","forward-looking emission factors, justified, consistent and clearly defined for the whole reference study period"

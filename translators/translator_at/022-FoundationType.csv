@@ -1,0 +1,19 @@
+Value in your format,OpenBDF enum value,OpenBDF value display name,OpenBDF value description (if any),OpenBDF value parent category (if applicable)
+,en1997_pad_footings,EN1997 - Spread foundation - Pad Footings (Isolated),Spread foundation - Pad Footings (Isolated) according to Eurocode 7.
+,en1997_strip_footings,EN1997 - Spread foundation - Strip Footings (Continuous),Spread foundation - Strip Footings (Continuous) according to Eurocode 7.
+,en1997_raft_foundations,EN1997 - Spread foundation - Raft Foundations (Mat),Spread foundation - Raft Foundations (Mat) according to Eurocode 7.
+,en1997_displacement_piles,EN1997 - Piled Foundations - Displacement Piles (Driven),Piled Foundations - Displacement Piles (Driven) according to Eurocode 7.
+,en1997_replacement_piles,EN1997 - Piled Foundations - Replacement Piles (Bored/Drilled),Piled Foundations - Replacement Piles (Bored/Drilled) according to Eurocode 7.
+,en1997_retaining_walls,EN1997 - Other Geotechnical Structures - Retaining Walls,Other Geotechnical Structures - Retaining Walls according to Eurocode 7.
+,en1997_deep_shafts,EN1997 - Other Geotechnical Structures - Deep Shafts (Caissons),Other Geotechnical Structures - Deep Shafts (Caissons) according to Eurocode 7.
+,en1997_ground_anchors,EN1997 - Other Geotechnical Structures - Ground Anchors,Other Geotechnical Structures - Ground Anchors according to Eurocode 7.
+,ibc_isolated_footings,IBC - Shallow Foundations - Isolated (Spread) Footings,Shallow Foundations - Isolated (Spread) Footings according to IBC Chapter 18.
+,ibc_combined_footings,IBC - Shallow Foundations - Combined Footings,Shallow Foundations - Combined Footings according to IBC Chapter 18.
+,ibc_strip_footings,IBC - Shallow Foundations - Strip / Continuous Footings,Shallow Foundations - Strip / Continuous Footings according to IBC Chapter 18.
+,ibc_raft_foundations,IBC - Shallow Foundations - Raft / Mat Foundations,Shallow Foundations - Raft / Mat Foundations according to IBC Chapter 18.
+,ibc_slab_on_grade,IBC - Shallow Foundations - Slab‑on‑Grade Foundations,Shallow Foundations - Slab‑on‑Grade Foundations according to IBC Chapter 18.
+,ibc_driven_piles,IBC - Deep Foundations - Driven Piles,Deep Foundations - Driven Piles according to IBC Chapter 18.
+,ibc_drilled_shafts,IBC - Deep Foundations - Drilled Shafts / Caissons,Deep Foundations - Drilled Shafts / Caissons according to IBC Chapter 18.
+,ibc_piers,IBC - Deep Foundations - Piers,Deep Foundations - Piers according to IBC Chapter 18.
+,ibc_frost_protected,IBC - Specialized Foundations - Frost‑Protected Foundations,Specialized Foundations - Frost‑Protected Foundations according to IBC Chapter 18.
+,ibc_soil_specific,"IBC - Specialized Foundations - Soil‑Specific Foundations (Clay, Sand, Silt, Rock)","Specialized Foundations - Soil‑Specific Foundations (Clay, Sand, Silt, Rock) according to IBC Chapter 18."

@@ -1,0 +1,183 @@
+Value in your format,OpenBDF enum value,OpenBDF value display name,OpenBDF value description (if any),OpenBDF value parent category (if applicable)
+,0,0 Treatment and demolition works & Facilitating works
+,1,1 Sub-structure
+2 Bauwerk-Rohbau,2,2 Super structure
+4 Bauwerk Ausbau,2,2 Super structure
+,3,3 Finishes
+,4,4 FF&E
+,5,5 Building Services/ MEP
+,6,6 Pre-fabricated buildings and units
+,7,7 Works to existing buildings
+,8,8 External works
+,0.1,0.1 Treatment and demolition works & Facilitating works,,0
+"2C Gründungen, Unterbau",1.1,1.1 Foundations and piling,,1
+,1.2,1.2 Basement retaining walls and lowest slab,,1
+2E Vertikale Rohbaukonstruktionen,2.1,2.1 Frame,,2
+2D Horizontale Baukonstruktionen,2.2,2.2 Upper floors,,2
+,2.3,2.3 Roof,,2
+,2.4,"2.4 Stairs, ramps and safety guarding",,2
+4B Dachflächen,2.5,2.5 External envelope including roof finishes,,2
+4C Fassadenhülle,2.5,2.5 External envelope including roof finishes,,2
+,2.6,2.6 Windows and ext doors,,2
+4D Innenausbau,2.7,2.7 Internal walls,,2
+,2.8,2.8 Internal doors,,2
+,3.1,3.1 Wall finishes,,3
+,3.2,3.2 Floor finishes,,3
+,3.3,3.3 Ceiling finishes,,3
+,4.1,4.1 General FF&E,,4
+,4.2,4.2 Kitchen equipment,,4
+,4.3,4.3 Special equipment,,4
+,4.4,4.4 Loose FF&E,,4
+,4.5,4.5 IT,,4
+,4.6,4.6 Audio and visual,,4
+,5.1,5.1 Public Health,,5
+,5.2,"5.2 Heating, Ventilation and Cooling (HVAC)",,5
+,5.3,5.3 Electrical installations,,5
+,5.4,5.4 On site renewable energy generation,,5
+,5.5,"5.5 Systems including Life safety, Fuel, Lift, Waste, and Builders work",,5
+,6.0,6.0 Pre-fabricated buildings and building units,,6
+,7.1,7.1 Alterations,,7
+,7.2,"7.2 Repairs, Cleaning and Renovation",,7
+,7.3,7.3 Damp-proof courses/fungus and beetle eradication,,7
+,8.1,"8.1 Roads, paths, pavings, surfaces, Fencing, railings, walls, External fixtures",,8
+,8.2,"8.2 Soft landscape, planting, irrigation",,8
+,8.3,"8.3 External drainage, External services, Minor building works",,8
+,0.1.1,0.1.1 Toxic/contaminated material treatment & Demolition works,,0.1
+,0.1.2,0.1.2 Facilitating works,,0.1
+,1.1.1,1.1.1 Foundations and piling,,1.1
+,1.2.1,1.2.1 Lowest slab,,1.2
+,1.2.2,1.2.2 Suspended slabs,,1.2
+,1.2.3,1.2.3 Basement retaining walls,,1.2
+,2.1.1,2.1.1 Frame (vertical) - columns/ structural walls & braces,,2.1
+,2.1.2,"2.1.2 Frame (Horizontal) - beams, joists & braces",,2.1
+,2.2.1,2.2.1 Upper floor - structural slabs,,2.2
+,2.2.2,2.2.2 Upper floor - non-structural slabs,,2.2
+,2.3.1,2.3.1 Roof - structural slabs,,2.3
+,2.4.1,2.4.1 Stairs,,2.4
+,2.4.2,2.4.2 Ramps,,2.4
+,2.4.3,"2.4.3 Safety and access ladders, chutes, slides and guarding",,2.4
+,2.5.1,2.5.1 External - opaque envelope,,2.5
+,2.5.2,2.5.2 External - full height glazing systems,,2.5
+,2.5.3,2.5.3 External - roof finishes/coverings,,2.5
+,2.5.4,2.5.4 External - safety systems,,2.5
+,2.6.1,2.6.1 Windows - vertical,,2.6
+,2.6.2,2.6.2 Windows - roof or horizontal,,2.6
+,2.6.3,2.6.3 External doors,,2.6
+,2.7.1,2.7.1 Internal walls - solid,,2.7
+,2.7.2,"2.7.2 Internal walls - non-structural glazed walls, windows and vision panels",,2.7
+,3.2.1,3.2.1 Raised access floor or specialist sprung floors,,3.2
+,3.2.2,3.2.2 Non-structural screed,,3.2
+,3.2.3,3.2.3 Floor finishes,,3.2
+,5.1.1,5.1.1 Sanitaryware,,5.1
+,5.1.2,5.1.2 Cold water systems,,5.1
+,5.1.3,5.1.3 Drainage and rainwater,,5.1
+,5.2.1,5.2.1 Space heating and hot water,,5.2
+,5.2.2,5.2.2 Dedicated cooling installations,,5.2
+,5.2.3,5.2.3 Air movement,,5.2
+,5.2.4,"5.2.4 Ventilation air terminals, ductwork and fire safety",,5.2
+,5.3.1,5.3.1 Lighting,,5.3
+,5.3.2,"5.3.2 Electrical services for power, communications, security, IT and fire detection",,5.3
+,5.4.1,5.4.1 On site renewable energy generation,,5.4
+,5.5.1,5.5.1 Life safety,,5.5
+,5.5.2,5.5.2 Fuel installations,,5.5
+,5.5.3,5.5.3 Lift and conveyor installations,,5.5
+,5.5.4,5.5.4 Specialised and communal waste disposal,,5.5
+,5.5.5,5.5.5 Specialist installations & maintenance,,5.5
+,5.5.6,5.5.6 Builders work in connection with services,,5.5
+,8.1.1,"8.1.1 Roads, paths, pavings, surfaces",,8.1
+,8.1.2,"8.1.2 Fencing, railings, walls",,8.1
+,8.1.3,8.1.3 External fixtures,,8.1
+,8.3.1,8.3.1 External drainage,,8.3
+,8.3.2,8.3.2 External services,,8.3
+,8.3.3,"8.3.3 Minor building works, ancillary",,8.3
+,0.1.1.1,0.1.1.1 Toxic/contaminated material treatment,"Removal and disposal of any hazardous materials (eg asbestos), including any material from existing services installations or tanks or removal of toxic chemicals. Environmental treatment or removal of contaminated ground. Eradication of plant growth.",0.1.1
+,0.1.1.2,0.1.1.2 Demolition works,"Demolition in this context is anything that covers a more extensive scope of works than alterations. Removal/deconstruction/demolition of existing structure, envelope, fabric, fittings and services of an existing building such as required to create clear site conditions for new asset. Removing and disposing of complete building or structure including services, fittings and finishes.",0.1.1
+,0.1.2.1,0.1.2.1 Temporary supports,"Temporary fencing, provision of support to unstable structures but not forming part of the ardpanent works. Does not include supports for facade retention, which is included below. Any removal or disposal also included.",0.1.2
+,0.1.2.2,0.1.2.2 Facade retention,"Works related to facade retention. Includes addition and removal of any dedicated, facade supports required. May include ardpanent additions such as dead, raking, flying or box shores, wall plates, needles, brackets, blockings, wedges, dog-irons or other similar metal work. Foundations to any shores.",0.1.2
+,0.1.2.3,0.1.2.3 Specialist groundworks,"Site de-watering and pumping. Soil stabilisation, site formation and slope treatment including erosion control, specialist site surface clearance not included in 8.1 Site Preparation below (clearing, grubbing, topsoil stripping, tree felling, minor earthwork removals). Gas venting.",0.1.2
+,0.1.2.4,0.1.2.4 Temporary diversion works,"Temporary surface drainage, temporary protection, diversion and relocation of public utilities. Include works required to divert and re-instate for new asset/clear ground condition.",0.1.2
+,0.1.2.5,0.1.2.5 Extraordinary site investigations,"Archaeological investigations, wildlife mitigation measures (relocation to new habitat/protection/barriers).",0.1.2
+,0.1.2.6,0.1.2.6 Site preparation works,"Covers getting the whole site to formation level, including the building footprint. Earthworks required to create new paths and roadways (including any disposal required). Disposal or management of surface/groundwater. General (non-specialist) vegetaion removel, tree felling, tree protection, extraction and disposal of old piles. Breaking out and disposal of existing sub-structures, hard surfacing, drainage systems, utilities networks. Filling of dis-used manholes, shafts and pits. Removal of underground storage tanks.",0.1.2
+2C.03 Flachgründungen,1.1.1.0,1.1.1.0 Foundations and piling,"Strips, rafts, piling, pile caps and underpinning. Foundations up to top of lowest floor slabs (inc insulation and waterproofing). Include breaking out of hard surfaces, excavations required, disposal and earthwork support. (Any vertical supports for basements included below.) Includes drainage and services within the building footprint to the point of the first junction or manhole outside of this area.",1.1.1
+,1.2.1.0,1.2.1.0 Lowest slab,"Entire lowest floor assembly below the underside of screed or lowest floor slab. Can be ground bearing or suspended. To include any structural screed and underslab waterproofing and insulation. Formation of sumps, pits, chambers, tanks, swimming pool base integral to the lowest floor construction. Non-structural items including screed, insulation/DPM above slab,",1.2.1
+,1.2.2.0,1.2.2.0 Suspended slabs,"Slabs within the basement box. Can include a slab that forms the entrance to the building where the ground is sloping. For the purposes of this measurement the ground slab is the highest one you can enter the building from. Entrance slab and those suspended below are included in this category, while those above are included in the upper floor slabs.",1.2.2
+,1.2.3.0,1.2.3.0 Basement retaining walls,"Basement retaining walls (inc. vertical retaining structure, insulation and waterproofing external to the wall). To include lift pit lateral supports and any ardpanent, vertical retaining structures within building envelope.",1.2.3
+2E.02 Innenwandkonstruktionen,2.1.1.0,2.1.1.0 Frame (vertical)  - columns/ structural walls & braces,"Structural vertical framed elements including columns, structural walls or braces that are supporting a floor or roof (inc. connections, formwork, ardpanent structural casing and any fire proofing). Core and shear walls are included here.",2.1.1
+2E.03 Stützenkonstruktionen,2.1.1.0,2.1.1.0 Frame (vertical)  - columns/ structural walls & braces,"Structural vertical framed elements including columns, structural walls or braces that are supporting a floor or roof (inc. connections, formwork, ardpanent structural casing and any fire proofing). Core and shear walls are included here.",2.1.1
+2D.04 Spezielle Konstruktionen,2.1.2.0,"2.1.2.0 Frame (Horizontal) - beams, joists & braces","Horizontal structural framed elements including beams, joists or braces (inc. connections and any fire proofing). Will include any structural framing for roof (e.g. where pitched) and external or internal wall assembly (e.g. secondary framing, lintels or wind posts without which architectural wall elements would fail). Note: monolithic beam structures cast with the structural slab are included in 2.2.1.",2.1.2
+2D.01 Deckenkonstruktionen,2.2.1.0,2.2.1.0 Upper floor - structural slabs,"Horizontal structural slabs above the lowest and suspended slabs. Including monolithic horizontal beams or joists (inc. connections, formwork, ardpanent structural casing and any fire proofing).",2.2.1
+,2.2.2.0,2.2.2.0 Upper floor - non-structural slabs,"Horizontal, non-structural slabs above the lowest and suspended slabs (inc. any slab to slab connections, fire proofing and ardpanent formwork or lining that is integral to the system). Structural support or enclosures for tanks or pools (above lowest slab level). Includes: Mezzanine structures, Structural slabs to corridors or bridges (internal or external), Maintenance routes or interstitial plant floor, Structure to support tiered seating, internal galleries.",2.2.2
+2D.03 Dachkonstruktionen,2.3.1.0,2.3.1.0 Roof - structural slabs,"Includes roof structural slab that forms primary support to roof or thermal enclosure/weather protection to an internal space below. This would include terraces, inset balconies, bolt on balcony structures or podium landscaping (inc. formwork, structural screed, ardpanent structural casing and any fire proofing). Insulation, weather protection, rainwater goods/drainage and final finish to roof included in 2.5 below.",2.3.1
+2D.02 Treppenkonstruktionen,2.4.1.0,2.4.1.0 Stairs,"Stairs flights excluding any final finishes but inc any fire proofing. Include connections, but ensure not to double count horizontal slab or structure. Include the structural element of any balustrade. Architectural balustrade linings included in internal assemblies and finishes. Where stairs are external but connected to it and required for the escape strategy of the asset, include them within the building calculation. If part of the external works, including them in category 8.",2.4.1
+,2.4.2.0,2.4.2.0 Ramps,"Ramps lengths excluding any final finishes but inc any fire proofing. Include connections, but ensure not to double count horizontal slab or structure. Include the structural element of any balustrade. Architectural balustrade linings included in internal assemblies and finishes. Where ramps are external but connected to it and required for the escape strategy of the asset, include them within this category. If part of the external works, including them in category 8.",2.4.2
+,2.4.3.0,"2.4.3.0 Safety and access ladders, chutes, slides and guarding","Internal and external vertical access ladders for fire escape, access or maintenance. Chute or slide linings within structural and boarded enclosures. Including finishes and fixings. Internal/external balcony and/or roof guarding including structure and finishes where this is not part of the thermal line of the building. Includes juliette balcony guarding.",2.4.3
+2E.01 Außenwandkonstruktionen,2.5.1.0,2.5.1.0 External - opaque envelope,"External wall build up outside to inside, including final internal boarding, excluding specialist internal linings and final finishes. Including: all fixings and bracketry to connect back to primary and SFS package; ties, DPMs, cavity trays, closers, fire barriers and reveals; external shading, canopies, shutters, not part of the window/glazing/door system; architectural boarding and finishes to balcony guarding; louvred or grille assemblies; roller shutters; external rainwater goods; insulated underside of returns; parapets and railings; chimneys/green walls.",2.5.1
+4C.03 Sonnen- und Lichtschutz,2.5.1.0,2.5.1.0 External - opaque envelope,"External wall build up outside to inside, including final internal boarding, excluding specialist internal linings and final finishes. Including: all fixings and bracketry to connect back to primary and SFS package; ties, DPMs, cavity trays, closers, fire barriers and reveals; external shading, canopies, shutters, not part of the window/glazing/door system; architectural boarding and finishes to balcony guarding; louvred or grille assemblies; roller shutters; external rainwater goods; insulated underside of returns; parapets and railings; chimneys/green walls.",2.5.1
+4C.04 Feste Einbauteile an der Fassade,2.5.1.0,2.5.1.0 External - opaque envelope,"External wall build up outside to inside, including final internal boarding, excluding specialist internal linings and final finishes. Including: all fixings and bracketry to connect back to primary and SFS package; ties, DPMs, cavity trays, closers, fire barriers and reveals; external shading, canopies, shutters, not part of the window/glazing/door system; architectural boarding and finishes to balcony guarding; louvred or grille assemblies; roller shutters; external rainwater goods; insulated underside of returns; parapets and railings; chimneys/green walls.",2.5.1
+,2.5.2.0,2.5.2.0 External - full height glazing systems,"Floor to ceiling curtain walling or untised/framed construction or structural glazing. Including glazed units, gaskets, framing, bracketry and connections back to structure. Where same system includes solid or insulated spandrel panels include these here. Include films, blinds, insect protection that are integral to glazing system. Include any photovoltaic material integral to the thermal and weather protection of the building. If energy-generation is building mounted but not part of the thermal envelope include in MEP below. Include glazed shop fronts where these are full height. Where external doors are integrated into glazed screens and cannot be separated, please see note in external doors below.",2.5.2
+4B.04 Feste Einbauteile,2.5.3.0,2.5.3.0 External - roof finishes/coverings,"Solid roof finishes above structure including non-structural screeds for falls, waterproofing, insulation and final finish including green rooves. Where eaves hang out over external walls those are included. Finishes to balconies and terraces about structure where these form part of the thermal line are included here. Include external rainwater goods and rainwater drainage equipment/ guttering that might runs horizontally to falls externally over roof assemblies. Access or AOV hatches that form part of the thermal roofline.",2.5.3
+,2.5.4.0,2.5.4.0 External - safety systems,"Including fall protection/safety equipment for cleaning and maintenance operatives (e.g. handrails, latchways, cradle systems). For powered equipment include all parts of the system, but power distribution is included in MEP below.",2.5.4
+4C.02 Fassadenöffnungen,2.6.1.0,2.6.1.0 Windows - vertical,"Windows that are punched into a solid wall construction and are part of the thermal building line. Including vertical dormer windows. Include films, blinds, shutters insect protection that are integral to glazing system and not separately building mounted. Including cills.",2.6.1
+,2.6.2.0,2.6.2.0 Windows - roof or horizontal,"Rooflights and structural glazed rooves that form the thermal and weather protection as part of a roof construction. Including frame, trims, thresholds, ironmongery, closers. Include films, blinds, shutters, insect protection that are integral to system and not separately building mounted. For automatic opening include all parts of the system, but power distribution is included in MEP below.",2.6.2
+,2.6.3.0,2.6.3.0 External doors,"External doors that form part of the thermal building line whether solid, glazed or revolving. Fanlights or sidelights integral to the door system are included. Including frame, trims, thresholds, ironmongery, closers. Include films, blinds, shutters, insect protection that are integral to door system and not separately building mounted. For automatic doors include all parts of the system, but power distribution is included in MEP below.",2.6.3
+4D.05 Nichttragende Innenwände,2.7.1.0,2.7.1.0 Internal walls  -solid,"Non-structural/non-loadbearing internal wall assemblies including studs from floor to ceiling and boarding. Includes: unfinished boarded linings to structural walls, internal boarding to balcony walls and stair/ramp balustrades, insulation, internal cubicle systems, internal planters, internal green walls, deflection heads.",2.7.1
+,2.7.2.0,"2.7.2.0 Internal walls  - non-structural glazed walls, windows and vision panels","Non-structural/non-loadbearing internal glazed wall assemblies. Includes: framing and fixings, integral blinds, films, punched windows in solid walls. Where internal doors are integrated into glazed screens and cannot be separated, please see note in internal doors below.",2.7.2
+,2.8.0.0,2.8.0.0 Internal doors,"Internal doors inc. movable walls, sliding, folding doors, fire shutters and doors in glazed screens. Fanlights or sidelights integral to the door system are included. Including framing, trims, thresholds, fixings, vision panels, ironmongery, hinges, closers, hooks, fire/acoustic seals, integral blinds and films.",2.8
+,3.1.0.0,3.1.0.0 Wall finishes,"Internal wall finishes and specialist architectural linings applied/sprayed/painted over general boarding or structural elements. Include: taping, skim coats and plastering, final wall finish, skirtings, trims, adhesive/framing, fire protection, tiled finishes, vertical acoustic panelling, wall protection.",3.1
+,3.2.1.0,3.2.1.0 Raised access floor or specialist sprung floors,"Raised access/floating floors, specialist sprung floors. Including internal and any external areas under cover and cavity barriers in any floor voids. Include the concrete dust sealer in this category.",3.2.1
+,3.2.2.0,3.2.2.0 Non-structural screed,Non-structural screed or insulation to make up floor to tinal finish. Including internal and any external areas under cover.,3.2.2
+,3.2.3.0,3.2.3.0 Floor finishes,"Internal floor finishes above structure. Including internal and any external areas under cover, internal stairs (risers and treads) and/or ramps within the designated footprint. Final architectural finish including tiles, sheet flooring, painting, sealing, adhesive fixings, boarding, mats and matwells. Tiled linings to swimming pools included here. Line markings in internal car parks/sports halls, etc.",3.2.3
+,3.3.0.0,3.3.0.0 Ceiling finishes,"Internal ceiling finishes and specialist architectural linings applied/sprayed/ mounted/hung/painted from horizontal structural elements (slabs and beams). Include: boarding, insulation, taping, skim coats and plastering, final finish and any trims, adhesive/framing/fixing, access hatches, fire protection and cavity barriers in ceiling voids, acoustic panelling/systems.",3.3
+,4.1.0.0,4.1.0.0 General FF&E,"Fittings that are part of the building fabric and loose items. Built in counters, desks, drawers, cupboards, kitchen units, storage, lockers, seating, mirrors, fireplace/hearth, statutory safety signage. Blinds/curtains, bird/insect/animal control, bins, chairs, tables, desks, rugs, lamps, wayfinding signage, whiteboards, loose fire fighting equipment, decorative art, planting, vending machines. Includes items that do not involve plumbing like shower screens, hand dryers, hooks.",4.1
+,4.2.0.0,4.2.0.0 Kitchen equipment,"Including plug-in and fixed appliances and white goods, cookers, fridge, freezer, dishwasher.",4.2
+,4.3.0.0,4.3.0.0 Special equipment,"Equipment that would be required only related to a specialist use including sports, leisure, entertainment, theatrical, medical, research or laboratory functions. Fixed accessibility equipment like hoists. Specialist gas terminals/taps.",4.3
+,4.4.0.0,4.4.0.0 Loose FF&E,"Loose (usually client supply) fittings, furniture and equipment (that would not fall out of the building if turned upside down). Including specialist theatrical equipment.",4.4
+,4.5.0.0,4.5.0.0 IT,Loose (usually client supply) IT items including computers CRAH units. Telephones and WiFi. Cabling contained below in MEP electrical.,4.5
+,4.6.0.0,4.6.0.0 Audio and visual,"Audio/visual equipment (usually client supply) including screens, mics, speakers, projection systems. Cabling contained below in MEP electrical.",4.6
+,5.1.1.0,5.1.1.0 Sanitaryware,"Sanitaryware - any appliance that is ardpanently plumbed into the washing or toilet areas. Including toilet, cistern, shower tray, bath, taps, controls, shower heads, basin units, sink, instant hot water heater, washing machine, dishwasher, autoclave.",5.1.1
+,5.1.2.1,5.1.2.1 Cold water systems,"Thermostat, thermal meters, cold water meters, pumps/booster set, other meters, pipework, pipe insulation, support/hanger, frost protection and trace heating equipment.",5.1.2
+,5.1.2.2,5.1.2.2 Cold water storage,"Storage tank, CAT 5 system, Treatment and filtration system for wholesome water.",5.1.2
+,5.1.3.1,5.1.3.1 Surface water/rainwater/foul water drainage,"Piping, insulation, support, rainwater storage tank, attenuation, outlets, pumps, downpipes), sewage piping, condensate piping, insulation, support, cistern, traps, pump, drain.",5.1.3
+,5.1.3.2,5.1.3.2 Water reuse systems,"Grey water/rain water harvesting storage tank, pipework and treatment equipment inside the building line.",5.1.3
+,5.2.1.1,5.2.1.1 Heat & Hot water generation equipment,"Gas/electric boiler, air/water/ground heat pumps, chiller, local water heater, wood burning stove, biomass boiler, solar thermal. Communal heating systems where housed within the building footprint until it gets to the meter. Plate heat exchanger and hot water generation equipment (e.g. calorifier).",5.2.1
+,5.2.1.2,"5.2.1.2 Heat & hot water distribution, control, ancillaries, emitters, exchangers/ terminal units","Electric radiator, wet radiator, underfloor heating, etc. heat interface unit, plate heat exchanger, pumps, mechanical switchboard, pressurisation unit, dosing pot, BC box, dehumidifier, vibration mounts, thermostat, thermal meters, hot water meter, pipework, pipe insulation, support/hanger, frost protection and trace heating equipment.",5.2.1
+,5.2.1.3,5.2.1.3 Heat storage equipment,"Hot water store, buffer vessel, expansion vessel.",5.2.1
+,5.2.2.1,5.2.2.1 Cooling generation equipment,"Cooling tower, fan coil units.",5.2.2
+,5.2.2.2,"5.2.2.2 Cooling emitter, exchangers/ terminal units, ancillaries and control, distribution, storage","Cold water store, buffer vessel, expansion vessel for cooling, pumps, mechanical switchboard, pressurisation unit, dosing pot, BC box, dehumidifier, vibration mounts, thermostat, thermal meters, cold water meter, pipework, pipe insulation, support/hanger, frost protection and trace heating equipment.",5.2.2
+,5.2.3.0,5.2.3.0 Air movement,"Fans, MVHR, AHU, ceiling fans, Kitchen ventilation, air curtains.",5.2.3
+,5.2.4.1,5.2.4.1 Air terminals,"Diffusers, grilles, VAV, Louvre, CAV, etc.",5.2.4
+,5.2.4.2,5.2.4.2 Ductwork & ancillaries,"Ductwork, insulation, support, fire rated ductwork, support.",5.2.4
+,5.2.4.3,"5.2.4.3 Control dampers, attenuation and fIre safety related to ventilation equipment","VAV damper, volume control damper, fire damper, fume and smoke extraction. Motorised fire smoke damper, stair case pressurisation, fire rated fans, pressure relief dampers, controls, louvres, gas extract. Also including acoustic attenuation.",5.2.4
+,5.3.1.1,5.3.1.1 Internal lighting,"Internal light fixtures, outlet, junction box, socket, light control, cable, switch.",5.3.1
+,5.3.1.2,5.3.1.2 External lighting (building mounted),"Lamps/ poles/ supports etc that are building mounted. External light fixtures, outlet, junction box, socket, light control, cable, switch.",5.3.1
+,5.3.1.3,5.3.1.3 Emergency lighting,"Emergency lights, controls, cable, switch.",5.3.1
+,5.3.1.4,5.3.1.4 Other lighting,"Task lighting, stage/entertainment lighting, retail display lighting, architectural lighting including associated light fixture, outlet, junction box, socket, light control, cable, switch.",5.3.1
+,5.3.2.1,5.3.2.1 Electrical power,"Includes internal and building mounted installations. Power cable, cable trays containment, panel board/ distribution, back up equipment, busbar, transformer, sockets/ switches, floor boxes, sensors. It includes high voltage, low voltage, small power, containment.",5.3.2
+,5.3.2.2,5.3.2.2 ELV/ Communications/Security,"ELV: Low, medium and high voltage systems; Security: CCTV equipment, security sensors and alarm; Communications and audio visual equipment",5.3.2
+,5.3.2.3,5.3.2.3 IT & Data,"IT equipment: anything related to data, e.g. wifi equipment, server, backbone and structured cabling (cat6, etc.), computers, printers, data cabinets, patch panels, etc.",5.3.2
+,5.3.2.4,5.3.2.4 BMS,"BMS/controllers on fan coils, outstation, main controller system with computer (headend), cabling required, control valves, sensors for temperature statistics, etc.",5.3.2
+,5.3.2.5,5.3.2.5 Electricity back up generation,"UPS back up generation, battery supply, stand by generators within the building line.",5.3.2
+,5.3.2.6,5.3.2.6 Fire detection & alarm,"Fire alarm systems including detection, cabling, fire fighting panel and final call unit.",5.3.2
+,5.4.1.1,5.4.1.1 Renewable energy - electrical generation onsite and building mounted,"Solar PV panel, inverter, wind turbine, water turbine building mounted or within building footprint.",5.4.1
+,5.4.1.2,5.4.1.2 Renewable energy - storage onsite,battery within building footprint.,5.4.1
+,5.5.1.1,5.5.1.1 Sprinkler system,"Pipes, heads, valves, tank, hose, pumps.",5.5.1
+,5.5.1.2,5.5.1.2 Fire fighting systems,"Dry and wet riser, hydrant, within designated building footprint, AOV controls/ sensors, fire suppression system.",5.5.1
+,5.5.1.3,5.5.1.3 Lightning protection/earth bonding,"Lightning conductor, earth rods.",5.5.1
+,5.5.2.0,5.5.2.0 Fuel installations,"All fuel supplies other than electric, anything pumped or pressurised. Gas equipment: connection, Gas meter, pressure regulator, pipes, valves; Fuel storage tank on site, dry stores; Augers",5.5.2
+,5.5.3.1,"5.5.3.1 Lift, stair lift, lifting platform","To include the systems, but power to the system included in Electrical Installations.",5.5.3
+,5.5.3.2,5.5.3.2 Escalators and moving walkways,"To include the systems, but power to the system included in Electrical Installations.",5.5.3
+,5.5.4.0,5.5.4.0 Specialised and communal waste disposal,"Refuse, incinerators and any systems for specialist/ communal waste streams and disposal installation.",5.5.4
+,5.5.5.0,5.5.5.0 Specialist installations & maintenance,"Equipment that is specialist but not fixed (labs, cold rooms, hospitals, museums, religious buildings). Maintenance equipment, Powered building signage, laboratory gases, carbon capture, central vacuum systems, etc.",5.5.5
+,5.5.6.0,5.5.6.0 Builders work in connection with services,"Sleeves, fire stopping to protect penetrations (not within ducts/systems), access platform, step overs, plinths.",5.5.6
+,6.0.0.0,6.0.0.0 Pre-fabricated buildings and building units,"Only include Category 1 MMC (volumetric off-site) in this category and only report total emissions at concept stage. Following this, the pre-fabricated volumetric elements must be broken downs into their constituent building elements.",6.0
+,7.1.0.0,7.1.0.0 Alterations,"Minor removal/alteration/cutting back of minor portion of existing structure, envelope, fabric, fittings and services of an existing building. Deemed minor enough not to report under demolitions above.",7.1
+,7.2.0.0,"7.2.0.0 Repairs, Cleaning and General Renovation works","Materials and processes required for repairs to retained items (masonry, concrete, metal, timber, plastic repairs). Removal of stains, soots, growths, vegetation, bird droppings and similar.",7.2
+,7.3.0.0,7.3.0.0 Damp-proof courses/fungus and beetle eradication,Injecting or installation of chemical/mortar/mechanical damp-proof courses. Opening up works and cutting out or chemical treatment of infested existing building material.,7.3
+,8.1.1.0,"8.1.1.0 Roads, paths, pavings, surfaces","Preparation of sub-base works, blinding, in-situ concrete, kerbs, macadam, masonry paving, gravel, surfaces for playgrounds/sports. Drainage management (cat's eyes, tree grilles, traffic calming). Steps and ramps outside building line.",8.1.1
+,8.1.2.0,"8.1.2.0 Fencing, railings, walls","Timber, metal, concrete, masonry fencing, railing, gates, walls that are external and not part of the building thermal envelope. Includes retaining walls not part of the building, gabions, and associated substructures.",8.1.2
+,8.1.3.0,8.1.3.0 External fixtures,"Site street furniture, gates, turnstiles, bollards, seats, litter bins, cycle stands, directional signage, flag poles, playground equipment, shelters, sculptures, ornamental water features.",8.1.3
+,8.2.0.0,"8.2.0.0 Soft landscape, planting, irrigation","Seeding and turfing, preparing soil, hedges, shrubs, trees, reed beds. Irrigation systems including pipelines, storage tanks, controls. Sub-structure for tree pits in hard landscape areas.",8.2
+,8.3.1.0,8.3.1.0 External drainage,"Foul water/surface water/land drainage from first manhole beyond the building. Including trenches, pipelines, gullies, pumping stations, soakaways, cesspools, petrol interceptors, and SUDS (not planted).",8.3.1
+,8.3.2.0,8.3.2.0 External services,"Piped water supply, high/low voltage electricity distribution from undertaker, natural gas supply/LPG distribution, telecommunications/IT connections from provider, external fuel storage, external site/street lighting, external security/CCTV.",8.3.2
+,8.3.3.0,"8.3.3.0 Minor building works, ancillary","Refurbishment/alteration to existing separate external small ancillary buildings (boiler houses, sub-stations, guard huts, bicycle stores). Small repairs to fencing/walls/barriers. Under-pinning to existing external walls.",8.3.3
+"5C Mobile Ausstattungen, Leitsysteme, Kunstwerke",4,4 FF&E

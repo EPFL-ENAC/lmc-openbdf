@@ -1,0 +1,5 @@
+Value in your format,OpenBDF enum value,OpenBDF value display name,OpenBDF value description (if any),OpenBDF value parent category (if applicable)
+,static,Static (impacts not distributed over time)
+,dynamic,Dynamic (impacts distributed over time)
+,probabilistic,Probabilistic
+,prospective,Prospective

@@ -1,0 +1,17 @@
+Value in your format,OpenBDF enum value,OpenBDF value display name,OpenBDF value description (if any),OpenBDF value parent category (if applicable)
+,1.1,1.1 Wood,Bio-based materials
+,1.2,1.2 Bio-based insulation,Bio-based materials
+,1.0,1.0 Other bio-based materials,Bio-based materials
+,2.1,"2.1 Plastics (PC, PE, PP, PVC)",Fossil-based materials
+,2.2,2.2 Fossil-based insulation,Fossil-based materials
+,2.0,2.0 Other fossil energy materials,Fossil-based materials
+,3.1,3.1 Aluminum,Metal materials
+,3.2,3.2 Steel,Metal materials
+,3.3,"3.3 Brass, copper",Metal materials
+,3.0,3.0 Other metal materials,Metal materials
+,4.1,4.1 Brick,Non-metallic minerals
+,4.2,4.2 Concrete,Non-metallic minerals
+,4.3,4.3 Glass,Non-metallic minerals
+,4.4,4.4 Mineral insulation,Non-metallic minerals
+,4.0,4.0 Other non-metallic minerals,Non-metallic minerals
+,0.0,0.0 Undefined materials,Undefined materials

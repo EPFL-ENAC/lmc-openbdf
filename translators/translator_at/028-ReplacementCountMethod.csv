@@ -1,0 +1,4 @@
+Value in your format,OpenBDF enum value,OpenBDF value display name,OpenBDF value description (if any),OpenBDF value parent category (if applicable)
+,integer,Integer (whole replacements only),whole replacements only
+,decimal,Decimal (fractional replacements allowed),fractional replacements allowed
+,unknown,Unknown (rule not declared),rule not declared

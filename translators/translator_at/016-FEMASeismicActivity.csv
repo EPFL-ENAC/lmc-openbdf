@@ -1,0 +1,7 @@
+Value in your format,OpenBDF enum value,OpenBDF value display name,OpenBDF value description (if any),OpenBDF value parent category (if applicable)
+,SDC A,Minor,Minor expected ground shaking.
+,SDC B,Moderate,Moderate expected ground shaking for standard buildings.
+,SDC C,Moderate to Severe,"Moderate to severe expected ground shaking for standard buildings, and moderate for higher-risk buildings."
+,SDC D,Severe and Destructive,"Severe and destructive expected ground shaking, often associated with poorer soil conditions but not near major faults."
+,SDC E,Severe Near Faults,Severe expected ground shaking in areas near major active faults.
+,SDC F,Severe High-Risk,Severe expected ground shaking in areas near major active faults for high-risk buildings.

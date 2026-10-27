@@ -1,0 +1,20 @@
+Value in your format,OpenBDF enum value,OpenBDF value display name,OpenBDF value description (if any),OpenBDF value parent category (if applicable)
+,us,US - OmniClass / UniFormat / MasterFormat (CSI),Building element classification for the United States.
+,ca,CA - OmniClass,Building element classification for Canada.
+,gb,GB - Uniclass 2015,Building element classification for the United Kingdom.
+,dk,DK - CCS (Cuneco Classification System),Building element classification for Denmark.
+,se,SE - CoClass,Building element classification for Sweden.
+,fi,FI - Talo 2000,Building element classification for Finland.
+,no,NO - NS 3451,Building element classification for Norway.
+,de,DE - DIN 276,Building element classification for Germany.
+,fr,FR - NF P 03-001,Building element classification for France.
+,ch,CH - eBKP-H,Building element classification for Switzerland.
+,nl,NL - NL-SfB,Building element classification for the Netherlands.
+,at,AT - ÖNORM B 1801,Building element classification for Austria.
+,it,IT - UNI 8290,Building element classification for Italy.
+,es,ES - GuBIMclass,Building element classification for Spain.
+,au,AU - NATSPEC / UniFormat (AU adaptation),Building element classification for Australia.
+,jp,JP - JCCS (Japan Construction Classification System),Building element classification for Japan.
+,br,BR - ABNT NBR 15965,Building element classification for Brazil.
+,cz,CZ - TSKP,Building element classification for the Czech Republic.
+,int,INT - ISO 12006-2 (international framework),International framework for classification of construction objects.
