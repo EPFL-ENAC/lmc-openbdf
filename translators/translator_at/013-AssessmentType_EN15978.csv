@@ -1,0 +1,6 @@
+Value in your format,OpenBDF enum value,OpenBDF value display name,OpenBDF value description (if any),OpenBDF value parent category (if applicable)
+,"Type 1 - early building model, concept design","Type 1 - early building model, concept design"
+,"Type 2 - building model, building permit design","Type 2 - building model, building permit design"
+,Type 3 - as designed building model,Type 3 - as designed building model
+,Type 4 - fully detailed as designed or as built model,Type 4 - fully detailed as designed or as built model
+,unknown,Unknown

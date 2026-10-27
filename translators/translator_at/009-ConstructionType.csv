@@ -1,0 +1,6 @@
+Value in your format,OpenBDF enum value,OpenBDF value display name,OpenBDF value description (if any),OpenBDF value parent category (if applicable)
+,new_construction,New Construction
+,tenant_improvement,Tenant Improvements
+,minor_renovation,Minor Renovation (without addition)
+,major_renovation,Major Renovation (with addition)
+,unknown,Unknown

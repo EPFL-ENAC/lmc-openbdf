@@ -1,0 +1,1274 @@
+Field code in your format,OpenBDF field code,OpenBDF attribute name,Datatype,Requirements,Default value,Preprocess rule
+,material_id,Material ID,string,Required
+"Global Warming Potential (GWP total)
+EN 15978 (A2)
+A1-A3
+kg CO₂e",gwp_total_a1_a3,Global Warming Potential - Total (A1-A3),Decimal,Strongly recommended
+,gwp_total_a1,Global Warming Potential - Total (A1),Decimal,Optional
+,gwp_total_a2,Global Warming Potential - Total (A2),Decimal,Optional
+,gwp_total_a3,Global Warming Potential - Total (A3),Decimal,Optional
+"Global Warming Potential (GWP total)
+EN 15978 (A2)
+A4
+kg CO₂e",gwp_total_a4,Global Warming Potential - Total (A4),Decimal,Suggested
+"Global Warming Potential (GWP total)
+EN 15978 (A2)
+A5
+kg CO₂e",gwp_total_a5,Global Warming Potential - Total (A5),Decimal,Suggested
+,gwp_total_a5_1,Global Warming Potential - Total (A5.1),Decimal,Optional
+,gwp_total_a5_2,Global Warming Potential - Total (A5.2),Decimal,Optional
+,gwp_total_a5_3,Global Warming Potential - Total (A5.3),Decimal,Optional
+,gwp_total_a5_4,Global Warming Potential - Total (A5.4),Decimal,Optional
+"Global Warming Potential (GWP total)
+EN 15978 (A2)
+B1
+kg CO₂e",gwp_total_b1,Global Warming Potential - Total (B1),Decimal,Suggested
+,gwp_total_b1_1,Global Warming Potential - Total (B1.1),Decimal,Optional
+,gwp_total_b1_2,Global Warming Potential - Total (B1.2),Decimal,Optional
+"Global Warming Potential (GWP total)
+EN 15978 (A2)
+B2
+kg CO₂e",gwp_total_b2,Global Warming Potential - Total (B2),Decimal,Suggested
+"Global Warming Potential (GWP total)
+EN 15978 (A2)
+B3
+kg CO₂e",gwp_total_b3,Global Warming Potential - Total (B3),Decimal,Suggested
+"Global Warming Potential (GWP total)
+EN 15978 (A2)
+B4
+kg CO₂e",gwp_total_b4,Global Warming Potential - Total (B4),Decimal,Suggested
+"Global Warming Potential (GWP total)
+EN 15978 (A2)
+B5
+kg CO₂e",gwp_total_b5,Global Warming Potential - Total (B5),Decimal,Suggested
+"Global Warming Potential (GWP total)
+EN 15978 (A2)
+B6
+kg CO₂e",gwp_total_b6,Global Warming Potential - Total (B6),Decimal,Suggested
+,gwp_total_b6_1,Global Warming Potential - Total (B6.1),Decimal,Optional
+,gwp_total_b6_2,Global Warming Potential - Total (B6.2),Decimal,Optional
+,gwp_total_b6_3,Global Warming Potential - Total (B6.3),Decimal,Optional
+,gwp_total_b7,Global Warming Potential - Total (B7),Decimal,Optional
+,gwp_total_b7_1,Global Warming Potential - Total (B7.1),Decimal,Optional
+,gwp_total_b7_2,Global Warming Potential - Total (B7.2),Decimal,Optional
+,gwp_total_b7_3,Global Warming Potential - Total (B7.3),Decimal,Optional
+,gwp_total_b8,Global Warming Potential - Total (B8),Decimal,Optional
+,gwp_total_b8_1,Global Warming Potential - Total (B8.1),Decimal,Optional
+,gwp_total_b8_2,Global Warming Potential - Total (B8.2),Decimal,Optional
+,gwp_total_b8_3,Global Warming Potential - Total (B8.3),Decimal,Optional
+"Global Warming Potential (GWP total)
+EN 15978 (A2)
+C1
+kg CO₂e",gwp_total_c1,Global Warming Potential - Total (C1),Decimal,Suggested
+"Global Warming Potential (GWP total)
+EN 15978 (A2)
+C2
+kg CO₂e",gwp_total_c2,Global Warming Potential - Total (C2),Decimal,Suggested
+"Global Warming Potential (GWP total)
+EN 15978 (A2)
+C3
+kg CO₂e",gwp_total_c3,Global Warming Potential - Total (C3),Decimal,Suggested
+"Global Warming Potential (GWP total)
+EN 15978 (A2)
+C4
+kg CO₂e",gwp_total_c4,Global Warming Potential - Total (C4),Decimal,Suggested
+"Global Warming Potential (GWP total)
+EN 15978 (A2)
+D
+kg CO₂e",gwp_total_d,Global Warming Potential - Total (D),Decimal,Suggested
+"Global Warming Potential (GWP total)
+EN 15978 (A2)
+D1
+kg CO₂e",gwp_total_d1,Global Warming Potential - Total (D1),Decimal,Suggested
+"Global Warming Potential (GWP total)
+EN 15978 (A2)
+D2
+kg CO₂e",gwp_total_d2,Global Warming Potential - Total (D2),Decimal,Suggested
+"Global Warming Potential (GWP total)
+EN 15978 (A2)
+A1-A3, A4, A5, B1, B2, B3, B4, B5, B6, C1, C2, C3, C4, D, D1, D2
+kg CO₂e",gwp_total,Total Global Warming Potential,Decimal,Suggested
+"Global Warming Potential – fossil (GWP-fossil)
+EN 15978 (A2)
+A1-A3
+kg CO₂e",gwp_f_a1_a3,Global Warming Potential - Fossil (A1-A3),Decimal,Suggested
+,gwp_f_a1,Global Warming Potential - Fossil (A1),Decimal,Optional
+,gwp_f_a2,Global Warming Potential - Fossil (A2),Decimal,Optional
+,gwp_f_a3,Global Warming Potential - Fossil (A3),Decimal,Optional
+"Global Warming Potential – fossil (GWP-fossil)
+EN 15978 (A2)
+A4
+kg CO₂e",gwp_f_a4,Global Warming Potential - Fossil (A4),Decimal,Suggested
+"Global Warming Potential – fossil (GWP-fossil)
+EN 15978 (A2)
+A5
+kg CO₂e",gwp_f_a5,Global Warming Potential - Fossil (A5),Decimal,Suggested
+"Global Warming Potential – fossil (GWP-fossil)
+EN 15978 (A2)
+B1
+kg CO₂e",gwp_f_b1,Global Warming Potential - Fossil (B1),Decimal,Suggested
+"Global Warming Potential – fossil (GWP-fossil)
+EN 15978 (A2)
+B2
+kg CO₂e",gwp_f_b2,Global Warming Potential - Fossil (B2),Decimal,Suggested
+"Global Warming Potential – fossil (GWP-fossil)
+EN 15978 (A2)
+B3
+kg CO₂e",gwp_f_b3,Global Warming Potential - Fossil (B3),Decimal,Suggested
+"Global Warming Potential – fossil (GWP-fossil)
+EN 15978 (A2)
+B4
+kg CO₂e",gwp_f_b4,Global Warming Potential - Fossil (B4),Decimal,Suggested
+"Global Warming Potential – fossil (GWP-fossil)
+EN 15978 (A2)
+B5
+kg CO₂e",gwp_f_b5,Global Warming Potential - Fossil (B5),Decimal,Suggested
+"Global Warming Potential – fossil (GWP-fossil)
+EN 15978 (A2)
+B6
+kg CO₂e",gwp_f_b6,Global Warming Potential - Fossil (B6),Decimal,Suggested
+,gwp_f_b7,Global Warming Potential - Fossil (B7),Decimal,Optional
+,gwp_f_b8,Global Warming Potential - Fossil (B8),Decimal,Optional
+"Global Warming Potential – fossil (GWP-fossil)
+EN 15978 (A2)
+C1
+kg CO₂e",gwp_f_c1,Global Warming Potential - Fossil (C1),Decimal,Suggested
+"Global Warming Potential – fossil (GWP-fossil)
+EN 15978 (A2)
+C2
+kg CO₂e",gwp_f_c2,Global Warming Potential - Fossil (C2),Decimal,Suggested
+"Global Warming Potential – fossil (GWP-fossil)
+EN 15978 (A2)
+C3
+kg CO₂e",gwp_f_c3,Global Warming Potential - Fossil (C3),Decimal,Suggested
+"Global Warming Potential – fossil (GWP-fossil)
+EN 15978 (A2)
+C4
+kg CO₂e",gwp_f_c4,Global Warming Potential - Fossil (C4),Decimal,Suggested
+"Global Warming Potential – fossil (GWP-fossil)
+EN 15978 (A2)
+D
+kg CO₂e",gwp_f_d,Global Warming Potential - Fossil (D),Decimal,Suggested
+"Global Warming Potential – fossil (GWP-fossil)
+EN 15978 (A2)
+D1
+kg CO₂e",gwp_f_d1,Global Warming Potential - Fossil (D1),Decimal,Suggested
+"Global Warming Potential – fossil (GWP-fossil)
+EN 15978 (A2)
+D2
+kg CO₂e",gwp_f_d2,Global Warming Potential - Fossil (D2),Decimal,Suggested
+"Global Warming Potential – fossil (GWP-fossil)
+EN 15978 (A2)
+A1-A3, A4, A5, B3, B1, B2, B4, B5, B6, C1, C2, C3, C4, D, D1, D2
+kg CO₂e",gwp_f_total,Total Global Warming Potential - Fossil,Decimal,Suggested
+"Global Warming Potential – biogen (GWP-biogenic)
+EN 15978 (A2)
+A1-A3
+kg CO₂e",gwp_b_a1_a3,Global Warming Potential - Biogenic (A1-A3),Decimal,Suggested
+,gwp_b_a1,Global Warming Potential - Biogenic (A1),Decimal,Optional
+,gwp_b_a2,Global Warming Potential - Biogenic (A2),Decimal,Optional
+,gwp_b_a3,Global Warming Potential - Biogenic (A3),Decimal,Optional
+"Global Warming Potential – biogen (GWP-biogenic)
+EN 15978 (A2)
+A4
+kg CO₂e",gwp_b_a4,Global Warming Potential - Biogenic (A4),Decimal,Suggested
+"Global Warming Potential – biogen (GWP-biogenic)
+EN 15978 (A2)
+A5
+kg CO₂e",gwp_b_a5,Global Warming Potential - Biogenic (A5),Decimal,Suggested
+"Global Warming Potential – biogen (GWP-biogenic)
+EN 15978 (A2)
+B1
+kg CO₂e",gwp_b_b1,Global Warming Potential - Biogenic (B1),Decimal,Suggested
+"Global Warming Potential – biogen (GWP-biogenic)
+EN 15978 (A2)
+B2
+kg CO₂e",gwp_b_b2,Global Warming Potential - Biogenic (B2),Decimal,Suggested
+"Global Warming Potential – biogen (GWP-biogenic)
+EN 15978 (A2)
+B3
+kg CO₂e",gwp_b_b3,Global Warming Potential - Biogenic (B3),Decimal,Suggested
+"Global Warming Potential – biogen (GWP-biogenic)
+EN 15978 (A2)
+B4
+kg CO₂e",gwp_b_b4,Global Warming Potential - Biogenic (B4),Decimal,Suggested
+"Global Warming Potential – biogen (GWP-biogenic)
+EN 15978 (A2)
+B5
+kg CO₂e",gwp_b_b5,Global Warming Potential - Biogenic (B5),Decimal,Suggested
+"Global Warming Potential – biogen (GWP-biogenic)
+EN 15978 (A2)
+B6
+kg CO₂e",gwp_b_b6,Global Warming Potential - Biogenic (B6),Decimal,Suggested
+,gwp_b_b7,Global Warming Potential - Biogenic (B7),Decimal,Optional
+,gwp_b_b8,Global Warming Potential - Biogenic (B8),Decimal,Optional
+"Global Warming Potential – biogen (GWP-biogenic)
+EN 15978 (A2)
+C1
+kg CO₂e",gwp_b_c1,Global Warming Potential - Biogenic (C1),Decimal,Suggested
+"Global Warming Potential – biogen (GWP-biogenic)
+EN 15978 (A2)
+C2
+kg CO₂e",gwp_b_c2,Global Warming Potential - Biogenic (C2),Decimal,Suggested
+"Global Warming Potential – biogen (GWP-biogenic)
+EN 15978 (A2)
+C3
+kg CO₂e",gwp_b_c3,Global Warming Potential - Biogenic (C3),Decimal,Suggested
+"Global Warming Potential – biogen (GWP-biogenic)
+EN 15978 (A2)
+C4
+kg CO₂e",gwp_b_c4,Global Warming Potential - Biogenic (C4),Decimal,Suggested
+"Global Warming Potential – biogen (GWP-biogenic)
+EN 15978 (A2)
+D
+kg CO₂e",gwp_b_d,Global Warming Potential - Biogenic (D),Decimal,Suggested
+"Global Warming Potential – biogen (GWP-biogenic)
+EN 15978 (A2)
+D1
+kg CO₂e",gwp_b_d1,Global Warming Potential - Biogenic (D1),Decimal,Suggested
+"Global Warming Potential – biogen (GWP-biogenic)
+EN 15978 (A2)
+D2
+kg CO₂e",gwp_b_d2,Global Warming Potential - Biogenic (D2),Decimal,Suggested
+"Global Warming Potential – biogen (GWP-biogenic)
+EN 15978 (A2)
+A1-A3, A4, A5, B1, B2, B3, B4, B5, B6, C1, C2, C3, C4, D, D1, D2
+kg CO₂e",gwp_b_total,Total Global Warming Potential - Biogenic,Decimal,Suggested
+"Global Warming Potential – Landnutzung und Landnutzungsänderung (GWP-luluc)
+EN 15978 (A2)
+A1-A3
+kg CO₂e",gwp_luc_a1_a3,Global Warming Potential - Land Use and Land Use Change (A1-A3),Decimal,Suggested
+,gwp_luc_a1,Global Warming Potential - Land Use and Land Use Change (A1),Decimal,Optional
+,gwp_luc_a2,Global Warming Potential - Land Use and Land Use Change (A2),Decimal,Optional
+,gwp_luc_a3,Global Warming Potential - Land Use and Land Use Change (A3),Decimal,Optional
+"Global Warming Potential – Landnutzung und Landnutzungsänderung (GWP-luluc)
+EN 15978 (A2)
+A4
+kg CO₂e",gwp_luc_a4,Global Warming Potential - Land Use and Land Use Change (A4),Decimal,Suggested
+"Global Warming Potential – Landnutzung und Landnutzungsänderung (GWP-luluc)
+EN 15978 (A2)
+A5
+kg CO₂e",gwp_luc_a5,Global Warming Potential - Land Use and Land Use Change (A5),Decimal,Suggested
+"Global Warming Potential – Landnutzung und Landnutzungsänderung (GWP-luluc)
+EN 15978 (A2)
+B1
+kg CO₂e",gwp_luc_b1,Global Warming Potential - Land Use and Land Use Change (B1),Decimal,Suggested
+"Global Warming Potential – Landnutzung und Landnutzungsänderung (GWP-luluc)
+EN 15978 (A2)
+B2
+kg CO₂e",gwp_luc_b2,Global Warming Potential - Land Use and Land Use Change (B2),Decimal,Suggested
+"Global Warming Potential – Landnutzung und Landnutzungsänderung (GWP-luluc)
+EN 15978 (A2)
+B3
+kg CO₂e",gwp_luc_b3,Global Warming Potential - Land Use and Land Use Change (B3),Decimal,Suggested
+"Global Warming Potential – Landnutzung und Landnutzungsänderung (GWP-luluc)
+EN 15978 (A2)
+B4
+kg CO₂e",gwp_luc_b4,Global Warming Potential - Land Use and Land Use Change (B4),Decimal,Suggested
+"Global Warming Potential – Landnutzung und Landnutzungsänderung (GWP-luluc)
+EN 15978 (A2)
+B5
+kg CO₂e",gwp_luc_b5,Global Warming Potential - Land Use and Land Use Change (B5),Decimal,Suggested
+"Global Warming Potential – Landnutzung und Landnutzungsänderung (GWP-luluc)
+EN 15978 (A2)
+B6
+kg CO₂e",gwp_luc_b6,Global Warming Potential - Land Use and Land Use Change (B6),Decimal,Suggested
+,gwp_luc_b7,Global Warming Potential - Land Use and Land Use Change (B7),Decimal,Optional
+,gwp_luc_b8,Global Warming Potential - Land Use and Land Use Change (B8),Decimal,Optional
+"Global Warming Potential – Landnutzung und Landnutzungsänderung (GWP-luluc)
+EN 15978 (A2)
+C1
+kg CO₂e",gwp_luc_c1,Global Warming Potential - Land Use and Land Use Change (C1),Decimal,Suggested
+"Global Warming Potential – Landnutzung und Landnutzungsänderung (GWP-luluc)
+EN 15978 (A2)
+C2
+kg CO₂e",gwp_luc_c2,Global Warming Potential - Land Use and Land Use Change (C2),Decimal,Suggested
+"Global Warming Potential – Landnutzung und Landnutzungsänderung (GWP-luluc)
+EN 15978 (A2)
+C3
+kg CO₂e",gwp_luc_c3,Global Warming Potential - Land Use and Land Use Change (C3),Decimal,Suggested
+"Global Warming Potential – Landnutzung und Landnutzungsänderung (GWP-luluc)
+EN 15978 (A2)
+C4
+kg CO₂e",gwp_luc_c4,Global Warming Potential - Land Use and Land Use Change (C4),Decimal,Suggested
+"Global Warming Potential – Landnutzung und Landnutzungsänderung (GWP-luluc)
+EN 15978 (A2)
+D
+kg CO₂e",gwp_luc_d,Global Warming Potential - Land Use and Land Use Change (D),Decimal,Suggested
+"Global Warming Potential – Landnutzung und Landnutzungsänderung (GWP-luluc)
+EN 15978 (A2)
+D1
+kg CO₂e",gwp_luc_d1,Global Warming Potential - Land Use and Land Use Change (D1),Decimal,Suggested
+"Global Warming Potential – Landnutzung und Landnutzungsänderung (GWP-luluc)
+EN 15978 (A2)
+D2
+kg CO₂e",gwp_luc_d2,Global Warming Potential - Land Use and Land Use Change (D2),Decimal,Suggested
+"Global Warming Potential – Landnutzung und Landnutzungsänderung (GWP-luluc)
+EN 15978 (A2)
+A1-A3, A4, A5, B1, B2, B3, B4, B5, B6, C1, C2, C3, C4, D, D1, D2
+kg CO₂e",gwp_luc_total,Total Global Warming Potential - Land Use and Land Use Change,Decimal,Suggested
+"Abbaupotenzial der stratosphärischen Ozonschicht (ODP)
+EN 15978 (A2)
+A1-A3
+kg CFC11e",odp_a1_a3,Ozone Depletion Potential (A1-A3),Decimal,Optional
+,odp_a1,Ozone Depletion Potential (A1),Decimal,Optional
+,odp_a2,Ozone Depletion Potential (A2),Decimal,Optional
+,odp_a3,Ozone Depletion Potential (A3),Decimal,Optional
+"Abbaupotenzial der stratosphärischen Ozonschicht (ODP)
+EN 15978 (A2)
+A4
+kg CFC11e",odp_a4,Ozone Depletion Potential (A4),Decimal,Optional
+"Abbaupotenzial der stratosphärischen Ozonschicht (ODP)
+EN 15978 (A2)
+A5
+kg CFC11e",odp_a5,Ozone Depletion Potential (A5),Decimal,Optional
+"Abbaupotenzial der stratosphärischen Ozonschicht (ODP)
+EN 15978 (A2)
+B1
+kg CFC11e",odp_b1,Ozone Depletion Potential (B1),Decimal,Optional
+"Abbaupotenzial der stratosphärischen Ozonschicht (ODP)
+EN 15978 (A2)
+B2
+kg CFC11e",odp_b2,Ozone Depletion Potential (B2),Decimal,Optional
+"Abbaupotenzial der stratosphärischen Ozonschicht (ODP)
+EN 15978 (A2)
+B3
+kg CFC11e",odp_b3,Ozone Depletion Potential (B3),Decimal,Optional
+"Abbaupotenzial der stratosphärischen Ozonschicht (ODP)
+EN 15978 (A2)
+B4
+kg CFC11e",odp_b4,Ozone Depletion Potential (B4),Decimal,Optional
+"Abbaupotenzial der stratosphärischen Ozonschicht (ODP)
+EN 15978 (A2)
+B5
+kg CFC11e",odp_b5,Ozone Depletion Potential (B5),Decimal,Optional
+"Abbaupotenzial der stratosphärischen Ozonschicht (ODP)
+EN 15978 (A2)
+B6
+kg CFC11e",odp_b6,Ozone Depletion Potential (B6),Decimal,Optional
+,odp_b7,Ozone Depletion Potential (B7),Decimal,Optional
+,odp_b8,Ozone Depletion Potential (B8),Decimal,Optional
+"Abbaupotenzial der stratosphärischen Ozonschicht (ODP)
+EN 15978 (A2)
+C1
+kg CFC11e",odp_c1,Ozone Depletion Potential (C1),Decimal,Optional
+"Abbaupotenzial der stratosphärischen Ozonschicht (ODP)
+EN 15978 (A2)
+C2
+kg CFC11e",odp_c2,Ozone Depletion Potential (C2),Decimal,Optional
+"Abbaupotenzial der stratosphärischen Ozonschicht (ODP)
+EN 15978 (A2)
+C3
+kg CFC11e",odp_c3,Ozone Depletion Potential (C3),Decimal,Optional
+"Abbaupotenzial der stratosphärischen Ozonschicht (ODP)
+EN 15978 (A2)
+C4
+kg CFC11e",odp_c4,Ozone Depletion Potential (C4),Decimal,Optional
+"Abbaupotenzial der stratosphärischen Ozonschicht (ODP)
+EN 15978 (A2)
+D
+kg CFC11e",odp_d,Ozone Depletion Potential (D),Decimal,Optional
+"Abbaupotenzial der stratosphärischen Ozonschicht (ODP)
+EN 15978 (A2)
+D1
+kg CFC11e",odp_d1,Ozone Depletion Potential (D1),Decimal,Optional
+"Abbaupotenzial der stratosphärischen Ozonschicht (ODP)
+EN 15978 (A2)
+D2
+kg CFC11e",odp_d2,Ozone Depletion Potential (D2),Decimal,Optional
+"Abbaupotenzial der stratosphärischen Ozonschicht (ODP)
+EN 15978 (A2)
+A1-A3, A4, A5, B1, B2, B3, B4, B5, B6, C1, C2, C3, C4, D, D1, D2
+kg CFC11e",odp_total,Total Ozone Depletion Potential,Decimal,Optional
+,ap_a1_a3,Acidification Potential (A1-A3),Decimal,Optional
+,ap_a1,Acidification Potential (A1),Decimal,Optional
+,ap_a2,Acidification Potential (A2),Decimal,Optional
+,ap_a3,Acidification Potential (A3),Decimal,Optional
+,ap_a4,Acidification Potential (A4),Decimal,Optional
+,ap_a5,Acidification Potential (A5),Decimal,Optional
+,ap_b1,Acidification Potential (B1),Decimal,Optional
+,ap_b2,Acidification Potential (B2),Decimal,Optional
+,ap_b3,Acidification Potential (B3),Decimal,Optional
+,ap_b4,Acidification Potential (B4),Decimal,Optional
+,ap_b5,Acidification Potential (B5),Decimal,Optional
+,ap_b6,Acidification Potential (B6),Decimal,Optional
+,ap_b7,Acidification Potential (B7),Decimal,Optional
+,ap_b8,Acidification Potential (B8),Decimal,Optional
+,ap_c1,Acidification Potential (C1),Decimal,Optional
+,ap_c2,Acidification Potential (C2),Decimal,Optional
+,ap_c3,Acidification Potential (C3),Decimal,Optional
+,ap_c4,Acidification Potential (C4),Decimal,Optional
+,ap_d,Acidification Potential (D),Decimal,Optional
+,ap_d1,Acidification Potential (D1),Decimal,Optional
+,ap_d2,Acidification Potential (D2),Decimal,Optional
+,ap_total,Total Acidification Potential,Decimal,Optional
+,ap_ae_a1_a3,Acidification Potential - Accumulated Exceedance (A1-A3),Decimal,Optional
+,ap_ae_a1,Acidification Potential - Accumulated Exceedance (A1),Decimal,Optional
+,ap_ae_a2,Acidification Potential - Accumulated Exceedance (A2),Decimal,Optional
+,ap_ae_a3,Acidification Potential - Accumulated Exceedance (A3),Decimal,Optional
+,ap_ae_a4,Acidification Potential - Accumulated Exceedance (A4),Decimal,Optional
+,ap_ae_a5,Acidification Potential - Accumulated Exceedance (A5),Decimal,Optional
+,ap_ae_b1,Acidification Potential - Accumulated Exceedance (B1),Decimal,Optional
+,ap_ae_b2,Acidification Potential - Accumulated Exceedance (B2),Decimal,Optional
+,ap_ae_b3,Acidification Potential - Accumulated Exceedance (B3),Decimal,Optional
+,ap_ae_b4,Acidification Potential - Accumulated Exceedance (B4),Decimal,Optional
+,ap_ae_b5,Acidification Potential - Accumulated Exceedance (B5),Decimal,Optional
+,ap_ae_b6,Acidification Potential - Accumulated Exceedance (B6),Decimal,Optional
+,ap_ae_b7,Acidification Potential - Accumulated Exceedance (B7),Decimal,Optional
+,ap_ae_b8,Acidification Potential - Accumulated Exceedance (B8),Decimal,Optional
+,ap_ae_c1,Acidification Potential - Accumulated Exceedance (C1),Decimal,Optional
+,ap_ae_c2,Acidification Potential - Accumulated Exceedance (C2),Decimal,Optional
+,ap_ae_c3,Acidification Potential - Accumulated Exceedance (C3),Decimal,Optional
+,ap_ae_c4,Acidification Potential - Accumulated Exceedance (C4),Decimal,Optional
+,ap_ae_d,Acidification Potential - Accumulated Exceedance (D),Decimal,Optional
+,ap_ae_d1,Acidification Potential - Accumulated Exceedance (D1),Decimal,Optional
+,ap_ae_d2,Acidification Potential - Accumulated Exceedance (D2),Decimal,Optional
+,ap_ae_total,Total Acidification Potential - Accumulated Exceedance,Decimal,Optional
+,ep_a1_a3,Eutrophication Potential (A1-A3),Decimal,Optional
+,ep_a1,Eutrophication Potential (A1),Decimal,Optional
+,ep_a2,Eutrophication Potential (A2),Decimal,Optional
+,ep_a3,Eutrophication Potential (A3),Decimal,Optional
+,ep_a4,Eutrophication Potential (A4),Decimal,Optional
+,ep_a5,Eutrophication Potential (A5),Decimal,Optional
+,ep_b1,Eutrophication Potential (B1),Decimal,Optional
+,ep_b2,Eutrophication Potential (B2),Decimal,Optional
+,ep_b3,Eutrophication Potential (B3),Decimal,Optional
+,ep_b4,Eutrophication Potential (B4),Decimal,Optional
+,ep_b5,Eutrophication Potential (B5),Decimal,Optional
+,ep_b6,Eutrophication Potential (B6),Decimal,Optional
+,ep_b7,Eutrophication Potential (B7),Decimal,Optional
+,ep_b8,Eutrophication Potential (B8),Decimal,Optional
+,ep_c1,Eutrophication Potential (C1),Decimal,Optional
+,ep_c2,Eutrophication Potential (C2),Decimal,Optional
+,ep_c3,Eutrophication Potential (C3),Decimal,Optional
+,ep_c4,Eutrophication Potential (C4),Decimal,Optional
+,ep_d,Eutrophication Potential (D),Decimal,Optional
+,ep_d1,Eutrophication Potential (D1),Decimal,Optional
+,ep_d2,Eutrophication Potential (D2),Decimal,Optional
+,ep_total,Total Eutrophication Potential,Decimal,Optional
+"Eutrophierungspotenzial Süßwasser (EP-freshwater)
+EN 15978 (A2)
+A1-A3
+kg PO4e",ep_af_a1_a3,Eutrophication Potential - Aquatic Freshwater (A1-A3),Decimal,Optional
+,ep_af_a1,Eutrophication Potential - Aquatic Freshwater (A1),Decimal,Optional
+,ep_af_a2,Eutrophication Potential - Aquatic Freshwater (A2),Decimal,Optional
+,ep_af_a3,Eutrophication Potential - Aquatic Freshwater (A3),Decimal,Optional
+"Eutrophierungspotenzial Süßwasser (EP-freshwater)
+EN 15978 (A2)
+A4
+kg PO4e",ep_af_a4,Eutrophication Potential - Aquatic Freshwater (A4),Decimal,Optional
+"Eutrophierungspotenzial Süßwasser (EP-freshwater)
+EN 15978 (A2)
+A5
+kg PO4e",ep_af_a5,Eutrophication Potential - Aquatic Freshwater (A5),Decimal,Optional
+"Eutrophierungspotenzial Süßwasser (EP-freshwater)
+EN 15978 (A2)
+B1
+kg PO4e",ep_af_b1,Eutrophication Potential - Aquatic Freshwater (B1),Decimal,Optional
+"Eutrophierungspotenzial Süßwasser (EP-freshwater)
+EN 15978 (A2)
+B2
+kg PO4e",ep_af_b2,Eutrophication Potential - Aquatic Freshwater (B2),Decimal,Optional
+"Eutrophierungspotenzial Süßwasser (EP-freshwater)
+EN 15978 (A2)
+B3
+kg PO4e",ep_af_b3,Eutrophication Potential - Aquatic Freshwater (B3),Decimal,Optional
+"Eutrophierungspotenzial Süßwasser (EP-freshwater)
+EN 15978 (A2)
+B4
+kg PO4e",ep_af_b4,Eutrophication Potential - Aquatic Freshwater (B4),Decimal,Optional
+"Eutrophierungspotenzial Süßwasser (EP-freshwater)
+EN 15978 (A2)
+B5
+kg PO4e",ep_af_b5,Eutrophication Potential - Aquatic Freshwater (B5),Decimal,Optional
+"Eutrophierungspotenzial Süßwasser (EP-freshwater)
+EN 15978 (A2)
+B6
+kg PO4e",ep_af_b6,Eutrophication Potential - Aquatic Freshwater (B6),Decimal,Optional
+,ep_af_b7,Eutrophication Potential - Freshwater (B7),Decimal,Optional
+,ep_af_b8,Eutrophication Potential - Freshwater (B8),Decimal,Optional
+"Eutrophierungspotenzial Süßwasser (EP-freshwater)
+EN 15978 (A2)
+C1
+kg PO4e",ep_af_c1,Eutrophication Potential - Aquatic Freshwater (C1),Decimal,Optional
+"Eutrophierungspotenzial Süßwasser (EP-freshwater)
+EN 15978 (A2)
+C2
+kg PO4e",ep_af_c2,Eutrophication Potential - Aquatic Freshwater (C2),Decimal,Optional
+"Eutrophierungspotenzial Süßwasser (EP-freshwater)
+EN 15978 (A2)
+C3
+kg PO4e",ep_af_c3,Eutrophication Potential - Aquatic Freshwater (C3),Decimal,Optional
+"Eutrophierungspotenzial Süßwasser (EP-freshwater)
+EN 15978 (A2)
+C4
+kg PO4e",ep_af_c4,Eutrophication Potential - Aquatic Freshwater (C4),Decimal,Optional
+"Eutrophierungspotenzial Süßwasser (EP-freshwater)
+EN 15978 (A2)
+D
+kg PO4e",ep_af_d,Eutrophication Potential - Aquatic Freshwater (D),Decimal,Optional
+"Eutrophierungspotenzial Süßwasser (EP-freshwater)
+EN 15978 (A2)
+D1
+kg PO4e",ep_af_d1,Eutrophication Potential - Aquatic Freshwater (D1),Decimal,Optional
+"Eutrophierungspotenzial Süßwasser (EP-freshwater)
+EN 15978 (A2)
+D2
+kg PO4e",ep_af_d2,Eutrophication Potential - Aquatic Freshwater (D2),Decimal,Optional
+"Eutrophierungspotenzial Süßwasser (EP-freshwater)
+EN 15978 (A2)
+A1-A3, A4, A5, B1, B2, B3, B4, B5, B6, C1, C2, C3, C4, D, D1, D2
+kg PO4e",ep_af_total,Total Eutrophication Potential - Aquatic Freshwater,Decimal,Optional
+"Eutrophierungspotenzial Salzwasser (EP-marine)
+EN 15978 (A2)
+A1-A3
+kg Ne",ep_am_a1_a3,Eutrophication Potential - Aquatic Marine (A1-A3),Decimal,Optional
+,ep_am_a1,Eutrophication Potential - Aquatic Marine (A1),Decimal,Optional
+,ep_am_a2,Eutrophication Potential - Aquatic Marine (A2),Decimal,Optional
+,ep_am_a3,Eutrophication Potential - Aquatic Marine (A3),Decimal,Optional
+"Eutrophierungspotenzial Salzwasser (EP-marine)
+EN 15978 (A2)
+A4
+kg Ne",ep_am_a4,Eutrophication Potential - Aquatic Marine (A4),Decimal,Optional
+"Eutrophierungspotenzial Salzwasser (EP-marine)
+EN 15978 (A2)
+A5
+kg Ne",ep_am_a5,Eutrophication Potential - Aquatic Marine (A5),Decimal,Optional
+"Eutrophierungspotenzial Salzwasser (EP-marine)
+EN 15978 (A2)
+B1
+kg Ne",ep_am_b1,Eutrophication Potential - Aquatic Marine (B1),Decimal,Optional
+"Eutrophierungspotenzial Salzwasser (EP-marine)
+EN 15978 (A2)
+B2
+kg Ne",ep_am_b2,Eutrophication Potential - Aquatic Marine (B2),Decimal,Optional
+"Eutrophierungspotenzial Salzwasser (EP-marine)
+EN 15978 (A2)
+B3
+kg Ne",ep_am_b3,Eutrophication Potential - Aquatic Marine (B3),Decimal,Optional
+"Eutrophierungspotenzial Salzwasser (EP-marine)
+EN 15978 (A2)
+B4
+kg Ne",ep_am_b4,Eutrophication Potential - Aquatic Marine (B4),Decimal,Optional
+"Eutrophierungspotenzial Salzwasser (EP-marine)
+EN 15978 (A2)
+B5
+kg Ne",ep_am_b5,Eutrophication Potential - Aquatic Marine (B5),Decimal,Optional
+"Eutrophierungspotenzial Salzwasser (EP-marine)
+EN 15978 (A2)
+B6
+kg Ne",ep_am_b6,Eutrophication Potential - Aquatic Marine (B6),Decimal,Optional
+,ep_am_b7,Eutrophication Potential - Aquatic Marine (B7),Decimal,Optional
+,ep_am_b8,Eutrophication Potential - Aquatic Marine (B8),Decimal,Optional
+"Eutrophierungspotenzial Salzwasser (EP-marine)
+EN 15978 (A2)
+C1
+kg Ne",ep_am_c1,Eutrophication Potential - Aquatic Marine (C1),Decimal,Optional
+"Eutrophierungspotenzial Salzwasser (EP-marine)
+EN 15978 (A2)
+C2
+kg Ne",ep_am_c2,Eutrophication Potential - Aquatic Marine (C2),Decimal,Optional
+"Eutrophierungspotenzial Salzwasser (EP-marine)
+EN 15978 (A2)
+C3
+kg Ne",ep_am_c3,Eutrophication Potential - Aquatic Marine (C3),Decimal,Optional
+"Eutrophierungspotenzial Salzwasser (EP-marine)
+EN 15978 (A2)
+C4
+kg Ne",ep_am_c4,Eutrophication Potential - Aquatic Marine (C4),Decimal,Optional
+"Eutrophierungspotenzial Salzwasser (EP-marine)
+EN 15978 (A2)
+D
+kg Ne",ep_am_d,Eutrophication Potential - Aquatic Marine (D),Decimal,Optional
+"Eutrophierungspotenzial Salzwasser (EP-marine)
+EN 15978 (A2)
+D1
+kg Ne",ep_am_d1,Eutrophication Potential - Aquatic Marine (D1),Decimal,Optional
+"Eutrophierungspotenzial Salzwasser (EP-marine)
+EN 15978 (A2)
+D2
+kg Ne",ep_am_d2,Eutrophication Potential - Aquatic Marine (D2),Decimal,Optional
+"Eutrophierungspotenzial Salzwasser (EP-marine)
+EN 15978 (A2)
+A1-A3, A4, A5, B1, B2, B3, B4, B5, B6, C1, C2, C3, C4, D, D1, D2
+kg Ne",ep_am_total,Total Eutrophication Potential - Aquatic Marine,Decimal,Optional
+"Eutrophierungspotenzial – Land (EP-terrestrial)
+EN 15978 (A2)
+A1-A3
+ mol Ne",ep_t_a1_a3,Eutrophication Potential - Terrestrial (A1-A3),Decimal,Optional
+,ep_t_a1,Eutrophication Potential - Terrestrial (A1),Decimal,Optional
+,ep_t_a2,Eutrophication Potential - Terrestrial (A2),Decimal,Optional
+,ep_t_a3,Eutrophication Potential - Terrestrial (A3),Decimal,Optional
+"Eutrophierungspotenzial – Land (EP-terrestrial)
+EN 15978 (A2)
+A4
+ mol Ne",ep_t_a4,Eutrophication Potential - Terrestrial (A4),Decimal,Optional
+"Eutrophierungspotenzial – Land (EP-terrestrial)
+EN 15978 (A2)
+A5
+ mol Ne",ep_t_a5,Eutrophication Potential - Terrestrial (A5),Decimal,Optional
+"Eutrophierungspotenzial – Land (EP-terrestrial)
+EN 15978 (A2)
+B1
+ mol Ne",ep_t_b1,Eutrophication Potential - Terrestrial (B1),Decimal,Optional
+"Eutrophierungspotenzial – Land (EP-terrestrial)
+EN 15978 (A2)
+B2
+ mol Ne",ep_t_b2,Eutrophication Potential - Terrestrial (B2),Decimal,Optional
+"Eutrophierungspotenzial – Land (EP-terrestrial)
+EN 15978 (A2)
+B3
+ mol Ne",ep_t_b3,Eutrophication Potential - Terrestrial (B3),Decimal,Optional
+"Eutrophierungspotenzial – Land (EP-terrestrial)
+EN 15978 (A2)
+B4
+ mol Ne",ep_t_b4,Eutrophication Potential - Terrestrial (B4),Decimal,Optional
+"Eutrophierungspotenzial – Land (EP-terrestrial)
+EN 15978 (A2)
+B5
+ mol Ne",ep_t_b5,Eutrophication Potential - Terrestrial (B5),Decimal,Optional
+"Eutrophierungspotenzial – Land (EP-terrestrial)
+EN 15978 (A2)
+B6
+ mol Ne",ep_t_b6,Eutrophication Potential - Terrestrial (B6),Decimal,Optional
+,ep_t_b7,Eutrophication Potential - Aquatic Marine (B7),Decimal,Optional
+,ep_t_b8,Eutrophication Potential - Aquatic Marine (B8),Decimal,Optional
+"Eutrophierungspotenzial – Land (EP-terrestrial)
+EN 15978 (A2)
+C1
+ mol Ne",ep_t_c1,Eutrophication Potential - Terrestrial (C1),Decimal,Optional
+"Eutrophierungspotenzial – Land (EP-terrestrial)
+EN 15978 (A2)
+C2
+ mol Ne",ep_t_c2,Eutrophication Potential - Terrestrial (C2),Decimal,Optional
+"Eutrophierungspotenzial – Land (EP-terrestrial)
+EN 15978 (A2)
+C3
+ mol Ne",ep_t_c3,Eutrophication Potential - Terrestrial (C3),Decimal,Optional
+"Eutrophierungspotenzial – Land (EP-terrestrial)
+EN 15978 (A2)
+C4
+ mol Ne",ep_t_c4,Eutrophication Potential - Terrestrial (C4),Decimal,Optional
+"Eutrophierungspotenzial – Land (EP-terrestrial)
+EN 15978 (A2)
+D
+ mol Ne",ep_t_d,Eutrophication Potential - Terrestrial (D),Decimal,Optional
+"Eutrophierungspotenzial – Land (EP-terrestrial)
+EN 15978 (A2)
+D1
+ mol Ne",ep_t_d1,Eutrophication Potential - Terrestrial (D1),Decimal,Optional
+"Eutrophierungspotenzial – Land (EP-terrestrial)
+EN 15978 (A2)
+D2
+ mol Ne",ep_t_d2,Eutrophication Potential - Terrestrial (D2),Decimal,Optional
+"Eutrophierungspotenzial – Land (EP-terrestrial)
+EN 15978 (A2)
+A1-A3, A4, A5, B1, B2, B3, B4, B5, B6, C1, C2, C3, C4, D, D1, D2
+ mol Ne",ep_t_total,Total Eutrophication Potential - Terrestrial,Decimal,Optional
+"Bildungspotenzial für troposphärisches Ozon (POCP)
+EN 15978 (A2)
+A1-A3
+kg NMVOCe",pocp_a1_a3,Photochemical Ozone Creation Potential (A1-A3),Decimal,Optional
+,pocp_a1,Photochemical Ozone Creation Potential (A1),Decimal,Optional
+,pocp_a2,Photochemical Ozone Creation Potential (A2),Decimal,Optional
+,pocp_a3,Photochemical Ozone Creation Potential (A3),Decimal,Optional
+"Bildungspotenzial für troposphärisches Ozon (POCP)
+EN 15978 (A2)
+A4
+kg NMVOCe",pocp_a4,Photochemical Ozone Creation Potential (A4),Decimal,Optional
+"Bildungspotenzial für troposphärisches Ozon (POCP)
+EN 15978 (A2)
+A5
+kg NMVOCe",pocp_a5,Photochemical Ozone Creation Potential (A5),Decimal,Optional
+"Bildungspotenzial für troposphärisches Ozon (POCP)
+EN 15978 (A2)
+B1
+kg NMVOCe",pocp_b1,Photochemical Ozone Creation Potential (B1),Decimal,Optional
+"Bildungspotenzial für troposphärisches Ozon (POCP)
+EN 15978 (A2)
+B2
+kg NMVOCe",pocp_b2,Photochemical Ozone Creation Potential (B2),Decimal,Optional
+"Bildungspotenzial für troposphärisches Ozon (POCP)
+EN 15978 (A2)
+B3
+kg NMVOCe",pocp_b3,Photochemical Ozone Creation Potential (B3),Decimal,Optional
+"Bildungspotenzial für troposphärisches Ozon (POCP)
+EN 15978 (A2)
+B4
+kg NMVOCe",pocp_b4,Photochemical Ozone Creation Potential (B4),Decimal,Optional
+"Bildungspotenzial für troposphärisches Ozon (POCP)
+EN 15978 (A2)
+B5
+kg NMVOCe",pocp_b5,Photochemical Ozone Creation Potential (B5),Decimal,Optional
+"Bildungspotenzial für troposphärisches Ozon (POCP)
+EN 15978 (A2)
+B6
+kg NMVOCe",pocp_b6,Photochemical Ozone Creation Potential (B6),Decimal,Optional
+,pocp_b7,Eutrophication Potential - Aquatic Marine (B7),Decimal,Optional
+,pocp_b8,Eutrophication Potential - Aquatic Marine (B8),Decimal,Optional
+"Bildungspotenzial für troposphärisches Ozon (POCP)
+EN 15978 (A2)
+C1
+kg NMVOCe",pocp_c1,Photochemical Ozone Creation Potential (C1),Decimal,Optional
+"Bildungspotenzial für troposphärisches Ozon (POCP)
+EN 15978 (A2)
+C2
+kg NMVOCe",pocp_c2,Photochemical Ozone Creation Potential (C2),Decimal,Optional
+"Bildungspotenzial für troposphärisches Ozon (POCP)
+EN 15978 (A2)
+C3
+kg NMVOCe",pocp_c3,Photochemical Ozone Creation Potential (C3),Decimal,Optional
+"Bildungspotenzial für troposphärisches Ozon (POCP)
+EN 15978 (A2)
+C4
+kg NMVOCe",pocp_c4,Photochemical Ozone Creation Potential (C4),Decimal,Optional
+"Bildungspotenzial für troposphärisches Ozon (POCP)
+EN 15978 (A2)
+D
+kg NMVOCe",pocp_d,Photochemical Ozone Creation Potential (D),Decimal,Optional
+"Bildungspotenzial für troposphärisches Ozon (POCP)
+EN 15978 (A2)
+D1
+kg NMVOCe",pocp_d1,Photochemical Ozone Creation Potential (D1),Decimal,Optional
+"Bildungspotenzial für troposphärisches Ozon (POCP)
+EN 15978 (A2)
+D2
+kg NMVOCe",pocp_d2,Photochemical Ozone Creation Potential (D2),Decimal,Optional
+"Bildungspotenzial für troposphärisches Ozon (POCP)
+EN 15978 (A2)
+A1-A3, A4, A5, B1, B2, B3, B4, B5, B6, C1, C2, C3, C4, D, D1, D2
+kg NMVOCe",pocp_total,Total Photochemical Ozone Creation Potential,Decimal,Optional
+,sfp_a1_a3,Smog Forming Potential (A1-A3),Decimal,Optional
+,sfp_a1,Smog Forming Potential (A1),Decimal,Optional
+,sfp_a2,Smog Forming Potential (A2),Decimal,Optional
+,sfp_a3,Smog Forming Potential (A3),Decimal,Optional
+,sfp_a4,Smog Forming Potential (A4),Decimal,Optional
+,sfp_a5,Smog Forming Potential (A5),Decimal,Optional
+,sfp_b1,Smog Forming Potential (B1),Decimal,Optional
+,sfp_b2,Smog Forming Potential (B2),Decimal,Optional
+,sfp_b3,Smog Forming Potential (B3),Decimal,Optional
+,sfp_b4,Smog Forming Potential (B4),Decimal,Optional
+,sfp_b5,Smog Forming Potential (B5),Decimal,Optional
+,sfp_b6,Smog Forming Potential (B6),Decimal,Optional
+,sfp_b7,Photochemical Ozone Creation Potential (B7),Decimal,Optional
+,sfp_b8,Photochemical Ozone Creation Potential (B8),Decimal,Optional
+,sfp_c1,Smog Forming Potential (C1),Decimal,Optional
+,sfp_c2,Smog Forming Potential (C2),Decimal,Optional
+,sfp_c3,Smog Forming Potential (C3),Decimal,Optional
+,sfp_c4,Smog Forming Potential (C4),Decimal,Optional
+,sfp_d,Smog Forming Potential (D),Decimal,Optional
+,sfp_d1,Smog Forming Potential (D1),Decimal,Optional
+,sfp_d2,Smog Forming Potential (D2),Decimal,Optional
+,sfp_total,Total Smog Forming Potential,Decimal,Optional
+,pofp_a1_a3,Photochemical Ozone Formation Potential (A1-A3),Decimal,Optional
+,pofp_a1,Photochemical Ozone Formation Potential (A1),Decimal,Optional
+,pofp_a2,Photochemical Ozone Formation Potential (A2),Decimal,Optional
+,pofp_a3,Photochemical Ozone Formation Potential (A3),Decimal,Optional
+,pofp_a4,Photochemical Ozone Formation Potential (A4),Decimal,Optional
+,pofp_a5,Photochemical Ozone Formation Potential (A5),Decimal,Optional
+,pofp_b1,Photochemical Ozone Formation Potential (B1),Decimal,Optional
+,pofp_b2,Photochemical Ozone Formation Potential (B2),Decimal,Optional
+,pofp_b3,Photochemical Ozone Formation Potential (B3),Decimal,Optional
+,pofp_b4,Photochemical Ozone Formation Potential (B4),Decimal,Optional
+,pofp_b5,Photochemical Ozone Formation Potential (B5),Decimal,Optional
+,pofp_b6,Photochemical Ozone Formation Potential (B6),Decimal,Optional
+,pofp_b7,Smog Forming Potential (B7),Decimal,Optional
+,pofp_b8,Smog Forming Potential (B8),Decimal,Optional
+,pofp_c1,Photochemical Ozone Formation Potential (C1),Decimal,Optional
+,pofp_c2,Photochemical Ozone Formation Potential (C2),Decimal,Optional
+,pofp_c3,Photochemical Ozone Formation Potential (C3),Decimal,Optional
+,pofp_c4,Photochemical Ozone Formation Potential (C4),Decimal,Optional
+,pofp_d,Photochemical Ozone Formation Potential (D),Decimal,Optional
+,pofp_d1,Photochemical Ozone Formation Potential (D1),Decimal,Optional
+,pofp_d2,Photochemical Ozone Formation Potential (D2),Decimal,Optional
+,pofp_total,Total Photochemical Ozone Formation Potential,Decimal,Optional
+,adpmm_a1_a3,Abiotic Depletion Potential - Minerals and Metals (A1-A3),Decimal,Optional
+,adpmm_a1,Abiotic Depletion Potential - Minerals and Metals (A1),Decimal,Optional
+,adpmm_a2,Abiotic Depletion Potential - Minerals and Metals (A2),Decimal,Optional
+,adpmm_a3,Abiotic Depletion Potential - Minerals and Metals (A3),Decimal,Optional
+,adpmm_a4,Abiotic Depletion Potential - Minerals and Metals (A4),Decimal,Optional
+,adpmm_a5,Abiotic Depletion Potential - Minerals and Metals (A5),Decimal,Optional
+,adpmm_b1,Abiotic Depletion Potential - Minerals and Metals (B1),Decimal,Optional
+,adpmm_b2,Abiotic Depletion Potential - Minerals and Metals (B2),Decimal,Optional
+,adpmm_b3,Abiotic Depletion Potential - Minerals and Metals (B3),Decimal,Optional
+,adpmm_b4,Abiotic Depletion Potential - Minerals and Metals (B4),Decimal,Optional
+,adpmm_b5,Abiotic Depletion Potential - Minerals and Metals (B5),Decimal,Optional
+,adpmm_b6,Abiotic Depletion Potential - Minerals and Metals (B6),Decimal,Optional
+,adpmm_b7,Photochemical Ozone Formation Potential (B7),Decimal,Optional
+,adpmm_b8,Photochemical Ozone Formation Potential (B8),Decimal,Optional
+,adpmm_c1,Abiotic Depletion Potential - Minerals and Metals (C1),Decimal,Optional
+,adpmm_c2,Abiotic Depletion Potential - Minerals and Metals (C2),Decimal,Optional
+,adpmm_c3,Abiotic Depletion Potential - Minerals and Metals (C3),Decimal,Optional
+,adpmm_c4,Abiotic Depletion Potential - Minerals and Metals (C4),Decimal,Optional
+,adpmm_d,Abiotic Depletion Potential - Minerals and Metals (D),Decimal,Optional
+,adpmm_d1,Abiotic Depletion Potential - Minerals and Metals (D1),Decimal,Optional
+,adpmm_d2,Abiotic Depletion Potential - Minerals and Metals (D2),Decimal,Optional
+,adpmm_total,Total Abiotic Depletion Potential - Minerals and Metals,Decimal,Optional
+,adpf_a1_a3,Abiotic Depletion Potential - Fossil Fuels (A1-A3),Decimal,Optional
+,adpf_a1,Abiotic Depletion Potential - Fossil Fuels (A1),Decimal,Optional
+,adpf_a2,Abiotic Depletion Potential - Fossil Fuels (A2),Decimal,Optional
+,adpf_a3,Abiotic Depletion Potential - Fossil Fuels (A3),Decimal,Optional
+,adpf_a4,Abiotic Depletion Potential - Fossil Fuels (A4),Decimal,Optional
+,adpf_a5,Abiotic Depletion Potential - Fossil Fuels (A5),Decimal,Optional
+,adpf_b1,Abiotic Depletion Potential - Fossil Fuels (B1),Decimal,Optional
+,adpf_b2,Abiotic Depletion Potential - Fossil Fuels (B2),Decimal,Optional
+,adpf_b3,Abiotic Depletion Potential - Fossil Fuels (B3),Decimal,Optional
+,adpf_b4,Abiotic Depletion Potential - Fossil Fuels (B4),Decimal,Optional
+,adpf_b5,Abiotic Depletion Potential - Fossil Fuels (B5),Decimal,Optional
+,adpf_b6,Abiotic Depletion Potential - Fossil Fuels (B6),Decimal,Optional
+,adpf_b7,Abiotic Depletion Potential - Fossil Fuels (B7),Decimal,Optional
+,adpf_b8,Abiotic Depletion Potential - Fossil Fuels (B8),Decimal,Optional
+,adpf_c1,Abiotic Depletion Potential - Fossil Fuels (C1),Decimal,Optional
+,adpf_c2,Abiotic Depletion Potential - Fossil Fuels (C2),Decimal,Optional
+,adpf_c3,Abiotic Depletion Potential - Fossil Fuels (C3),Decimal,Optional
+,adpf_c4,Abiotic Depletion Potential - Fossil Fuels (C4),Decimal,Optional
+,adpf_d,Abiotic Depletion Potential - Fossil Fuels (D),Decimal,Optional
+,adpf_d1,Abiotic Depletion Potential - Fossil Fuels (D1),Decimal,Optional
+,adpf_d2,Abiotic Depletion Potential - Fossil Fuels (D2),Decimal,Optional
+,adpf_total,Total Abiotic Depletion Potential (Fossil Fuels),Decimal,Optional
+,wdp_a1_a3,Water Depletion Potential (A1-A3),Decimal,Optional
+,wdp_a1,Water Depletion Potential (A1),Decimal,Optional
+,wdp_a2,Water Depletion Potential (A2),Decimal,Optional
+,wdp_a3,Water Depletion Potential (A3),Decimal,Optional
+,wdp_a4,Water Depletion Potential (A4),Decimal,Optional
+,wdp_a5,Water Depletion Potential (A5),Decimal,Optional
+,wdp_b1,Water Depletion Potential (B1),Decimal,Optional
+,wdp_b2,Water Depletion Potential (B2),Decimal,Optional
+,wdp_b3,Water Depletion Potential (B3),Decimal,Optional
+,wdp_b4,Water Depletion Potential (B4),Decimal,Optional
+,wdp_b5,Water Depletion Potential (B5),Decimal,Optional
+,wdp_b6,Water Depletion Potential (B6),Decimal,Optional
+,wdp_b7,Abiotic Depletion Potential (Fossil Fuels) (B7),Decimal,Optional
+,wdp_b8,Abiotic Depletion Potential (Fossil Fuels) (B8),Decimal,Optional
+,wdp_c1,Water Depletion Potential (C1),Decimal,Optional
+,wdp_c2,Water Depletion Potential (C2),Decimal,Optional
+,wdp_c3,Water Depletion Potential (C3),Decimal,Optional
+,wdp_c4,Water Depletion Potential (C4),Decimal,Optional
+,wdp_d,Water Depletion Potential (D),Decimal,Optional
+,wdp_d1,Water Depletion Potential (D1),Decimal,Optional
+,wdp_d2,Water Depletion Potential (D2),Decimal,Optional
+,wdp_total,Total Water Depletion Potential,Decimal,Optional
+"Erneuerbare Primärenergie als Energieträger (PERE)
+EN 15978 (A2)
+A1-A3
+MJ",pere_a1_a3,Primary Energy Renewable - Energy Resources (A1-A3),Decimal,Optional
+,pere_a1,Primary Energy Renewable - Energy Resources (A1),Decimal,Optional
+,pere_a2,Primary Energy Renewable - Energy Resources (A2),Decimal,Optional
+,pere_a3,Primary Energy Renewable - Energy Resources (A3),Decimal,Optional
+"Erneuerbare Primärenergie als Energieträger (PERE)
+EN 15978 (A2)
+A4
+MJ",pere_a4,Primary Energy Renewable - Energy Resources (A4),Decimal,Optional
+"Erneuerbare Primärenergie als Energieträger (PERE)
+EN 15978 (A2)
+A5
+MJ",pere_a5,Primary Energy Renewable - Energy Resources (A5),Decimal,Optional
+"Erneuerbare Primärenergie als Energieträger (PERE)
+EN 15978 (A2)
+B1
+MJ",pere_b1,Primary Energy Renewable - Energy Resources (B1),Decimal,Optional
+"Erneuerbare Primärenergie als Energieträger (PERE)
+EN 15978 (A2)
+B2
+MJ",pere_b2,Primary Energy Renewable - Energy Resources (B2),Decimal,Optional
+"Erneuerbare Primärenergie als Energieträger (PERE)
+EN 15978 (A2)
+B3
+MJ",pere_b3,Primary Energy Renewable - Energy Resources (B3),Decimal,Optional
+"Erneuerbare Primärenergie als Energieträger (PERE)
+EN 15978 (A2)
+B4
+MJ",pere_b4,Primary Energy Renewable - Energy Resources (B4),Decimal,Optional
+"Erneuerbare Primärenergie als Energieträger (PERE)
+EN 15978 (A2)
+B5
+MJ",pere_b5,Primary Energy Renewable - Energy Resources (B5),Decimal,Optional
+"Erneuerbare Primärenergie als Energieträger (PERE)
+EN 15978 (A2)
+B6
+MJ",pere_b6,Primary Energy Renewable - Energy Resources (B6),Decimal,Optional
+,pere_b7,Primary Energy Renewable - Energy Resources (B7),Decimal,Optional
+,pere_b8,Primary Energy Renewable - Energy Resources (B8),Decimal,Optional
+"Erneuerbare Primärenergie als Energieträger (PERE)
+EN 15978 (A2)
+C1
+MJ",pere_c1,Primary Energy Renewable - Energy Resources (C1),Decimal,Optional
+"Erneuerbare Primärenergie als Energieträger (PERE)
+EN 15978 (A2)
+C2
+MJ",pere_c2,Primary Energy Renewable - Energy Resources (C2),Decimal,Optional
+"Erneuerbare Primärenergie als Energieträger (PERE)
+EN 15978 (A2)
+C3
+MJ",pere_c3,Primary Energy Renewable - Energy Resources (C3),Decimal,Optional
+"Erneuerbare Primärenergie als Energieträger (PERE)
+EN 15978 (A2)
+C4
+MJ",pere_c4,Primary Energy Renewable - Energy Resources (C4),Decimal,Optional
+"Erneuerbare Primärenergie als Energieträger (PERE)
+EN 15978 (A2)
+D
+MJ",pere_d,Primary Energy Renewable - Energy Resources (D),Decimal,Optional
+"Erneuerbare Primärenergie als Energieträger (PERE)
+EN 15978 (A2)
+D1
+MJ",pere_d1,Primary Energy Renewable - Energy Resources (D1),Decimal,Optional
+"Erneuerbare Primärenergie als Energieträger (PERE)
+EN 15978 (A2)
+D2
+MJ",pere_d2,Primary Energy Renewable - Energy Resources (D2),Decimal,Optional
+"Erneuerbare Primärenergie als Energieträger (PERE)
+EN 15978 (A2)
+A1-A3, A4, A5, B1, B2, B3, B4, B5, B6, C1, C2, C3, C4, D, D1, D2
+MJ",pere_total,Total Primary Energy Renewable - Energy Resources,Decimal,Optional
+"Nicht-erneuerbare Primärenergie als Energieträger (PENRE)
+EN 15978 (A2)
+A1-A3
+MJ",penre_a1_a3,Primary Energy Non-Renewable - Energy Resources (A1-A3),Decimal,Optional
+,penre_a1,Primary Energy Non-Renewable - Energy Resources (A1),Decimal,Optional
+,penre_a2,Primary Energy Non-Renewable - Energy Resources (A2),Decimal,Optional
+,penre_a3,Primary Energy Non-Renewable - Energy Resources (A3),Decimal,Optional
+"Nicht-erneuerbare Primärenergie als Energieträger (PENRE)
+EN 15978 (A2)
+A4
+MJ",penre_a4,Primary Energy Non-Renewable - Energy Resources (A4),Decimal,Optional
+"Nicht-erneuerbare Primärenergie als Energieträger (PENRE)
+EN 15978 (A2)
+A5
+MJ",penre_a5,Primary Energy Non-Renewable - Energy Resources (A5),Decimal,Optional
+"Nicht-erneuerbare Primärenergie als Energieträger (PENRE)
+EN 15978 (A2)
+B1
+MJ",penre_b1,Primary Energy Non-Renewable - Energy Resources (B1),Decimal,Optional
+"Nicht-erneuerbare Primärenergie als Energieträger (PENRE)
+EN 15978 (A2)
+B2
+MJ",penre_b2,Primary Energy Non-Renewable - Energy Resources (B2),Decimal,Optional
+"Nicht-erneuerbare Primärenergie als Energieträger (PENRE)
+EN 15978 (A2)
+B3
+MJ",penre_b3,Primary Energy Non-Renewable - Energy Resources (B3),Decimal,Optional
+"Nicht-erneuerbare Primärenergie als Energieträger (PENRE)
+EN 15978 (A2)
+B4
+MJ",penre_b4,Primary Energy Non-Renewable - Energy Resources (B4),Decimal,Optional
+"Nicht-erneuerbare Primärenergie als Energieträger (PENRE)
+EN 15978 (A2)
+B5
+MJ",penre_b5,Primary Energy Non-Renewable - Energy Resources (B5),Decimal,Optional
+"Nicht-erneuerbare Primärenergie als Energieträger (PENRE)
+EN 15978 (A2)
+B6
+MJ",penre_b6,Primary Energy Non-Renewable - Energy Resources (B6),Decimal,Optional
+,penre_b7,Primary Energy Non-Renewable - Energy Resources (B7),Decimal,Optional
+,penre_b8,Primary Energy Non-Renewable - Energy Resources (B8),Decimal,Optional
+"Nicht-erneuerbare Primärenergie als Energieträger (PENRE)
+EN 15978 (A2)
+C1
+MJ",penre_c1,Primary Energy Non-Renewable - Energy Resources (C1),Decimal,Optional
+"Nicht-erneuerbare Primärenergie als Energieträger (PENRE)
+EN 15978 (A2)
+C2
+MJ",penre_c2,Primary Energy Non-Renewable - Energy Resources (C2),Decimal,Optional
+"Nicht-erneuerbare Primärenergie als Energieträger (PENRE)
+EN 15978 (A2)
+C3
+MJ",penre_c3,Primary Energy Non-Renewable - Energy Resources (C3),Decimal,Optional
+"Nicht-erneuerbare Primärenergie als Energieträger (PENRE)
+EN 15978 (A2)
+C4
+MJ",penre_c4,Primary Energy Non-Renewable - Energy Resources (C4),Decimal,Optional
+"Nicht-erneuerbare Primärenergie als Energieträger (PENRE)
+EN 15978 (A2)
+D
+MJ",penre_d,Primary Energy Non-Renewable - Energy Resources (D),Decimal,Optional
+"Nicht-erneuerbare Primärenergie als Energieträger (PENRE)
+EN 15978 (A2)
+D1
+MJ",penre_d1,Primary Energy Non-Renewable - Energy Resources (D1),Decimal,Optional
+"Nicht-erneuerbare Primärenergie als Energieträger (PENRE)
+EN 15978 (A2)
+D2
+MJ",penre_d2,Primary Energy Non-Renewable - Energy Resources (D2),Decimal,Optional
+"Nicht-erneuerbare Primärenergie als Energieträger (PENRE)
+EN 15978 (A2)
+A1-A3, A4, A5, B1, B2, B3, B4, B5, B6, C1, C2, C3, C4, D, D1, D2
+MJ",penre_total,Total Primary Energy Non-Renewable - Energy Resources,Decimal,Optional
+"Total erneuerbare Primärenergie (PERT)
+EN 15978 (A2)
+A1-A3
+MJ",pert_a1_a3,Primary Energy Renewable Total (A1-A3),Decimal,Optional
+,pert_a1,Primary Energy Renewable Total (A1),Decimal,Optional
+,pert_a2,Primary Energy Renewable Total (A2),Decimal,Optional
+,pert_a3,Primary Energy Renewable Total (A3),Decimal,Optional
+"Total erneuerbare Primärenergie (PERT)
+EN 15978 (A2)
+A4
+MJ",pert_a4,Primary Energy Renewable Total (A4),Decimal,Optional
+"Total erneuerbare Primärenergie (PERT)
+EN 15978 (A2)
+A5
+MJ",pert_a5,Primary Energy Renewable Total (A5),Decimal,Optional
+"Total erneuerbare Primärenergie (PERT)
+EN 15978 (A2)
+B1
+MJ",pert_b1,Primary Energy Renewable Total (B1),Decimal,Optional
+"Total erneuerbare Primärenergie (PERT)
+EN 15978 (A2)
+B2
+MJ",pert_b2,Primary Energy Renewable Total (B2),Decimal,Optional
+"Total erneuerbare Primärenergie (PERT)
+EN 15978 (A2)
+B3
+MJ",pert_b3,Primary Energy Renewable Total (B3),Decimal,Optional
+"Total erneuerbare Primärenergie (PERT)
+EN 15978 (A2)
+B4
+MJ",pert_b4,Primary Energy Renewable Total (B4),Decimal,Optional
+"Total erneuerbare Primärenergie (PERT)
+EN 15978 (A2)
+B5
+MJ",pert_b5,Primary Energy Renewable Total (B5),Decimal,Optional
+"Total erneuerbare Primärenergie (PERT)
+EN 15978 (A2)
+B6
+MJ",pert_b6,Primary Energy Renewable Total (B6),Decimal,Optional
+,pert_b7,Primary Energy Renewable (Energy resources) (B7),Decimal,Optional
+,pert_b8,Primary Energy Renewable (Energy resources) (B8),Decimal,Optional
+"Total erneuerbare Primärenergie (PERT)
+EN 15978 (A2)
+C1
+MJ",pert_c1,Primary Energy Renewable Total (C1),Decimal,Optional
+"Total erneuerbare Primärenergie (PERT)
+EN 15978 (A2)
+C2
+MJ",pert_c2,Primary Energy Renewable Total (C2),Decimal,Optional
+"Total erneuerbare Primärenergie (PERT)
+EN 15978 (A2)
+C3
+MJ",pert_c3,Primary Energy Renewable Total (C3),Decimal,Optional
+"Total erneuerbare Primärenergie (PERT)
+EN 15978 (A2)
+C4
+MJ",pert_c4,Primary Energy Renewable Total (C4),Decimal,Optional
+"Total erneuerbare Primärenergie (PERT)
+EN 15978 (A2)
+D
+MJ",pert_d,Primary Energy Renewable Total (D),Decimal,Optional
+"Total erneuerbare Primärenergie (PERT)
+EN 15978 (A2)
+D1
+MJ",pert_d1,Primary Energy Renewable Total (D1),Decimal,Optional
+"Total erneuerbare Primärenergie (PERT)
+EN 15978 (A2)
+D2
+MJ",pert_d2,Primary Energy Renewable Total (D2),Decimal,Optional
+"Total erneuerbare Primärenergie (PERT)
+EN 15978 (A2)
+A1-A3, A4, A5, B1, B2, B3, B4, B5, B6, C1, C2, C3, C4, D, D1, D2
+MJ",pert_total,Total Primary Energy Renewable Total,Decimal,Optional
+"Total nicht-erneuerbare Primärenergie (PENRT)
+EN 15978 (A2)
+A1-A3
+MJ",penrt_a1_a3,Primary Energy Non-Renewable Total (A1-A3),Decimal,Optional
+,penrt_a1,Primary Energy Non-Renewable Total (A1),Decimal,Optional
+,penrt_a2,Primary Energy Non-Renewable Total (A2),Decimal,Optional
+,penrt_a3,Primary Energy Non-Renewable Total (A3),Decimal,Optional
+"Total nicht-erneuerbare Primärenergie (PENRT)
+EN 15978 (A2)
+A4
+MJ",penrt_a4,Primary Energy Non-Renewable Total (A4),Decimal,Optional
+"Total nicht-erneuerbare Primärenergie (PENRT)
+EN 15978 (A2)
+A5
+MJ",penrt_a5,Primary Energy Non-Renewable Total (A5),Decimal,Optional
+"Total nicht-erneuerbare Primärenergie (PENRT)
+EN 15978 (A2)
+B1
+MJ",penrt_b1,Primary Energy Non-Renewable Total (B1),Decimal,Optional
+"Total nicht-erneuerbare Primärenergie (PENRT)
+EN 15978 (A2)
+B2
+MJ",penrt_b2,Primary Energy Non-Renewable Total (B2),Decimal,Optional
+"Total nicht-erneuerbare Primärenergie (PENRT)
+EN 15978 (A2)
+B3
+MJ",penrt_b3,Primary Energy Non-Renewable Total (B3),Decimal,Optional
+"Total nicht-erneuerbare Primärenergie (PENRT)
+EN 15978 (A2)
+B4
+MJ",penrt_b4,Primary Energy Non-Renewable Total (B4),Decimal,Optional
+"Total nicht-erneuerbare Primärenergie (PENRT)
+EN 15978 (A2)
+B5
+MJ",penrt_b5,Primary Energy Non-Renewable Total (B5),Decimal,Optional
+"Total nicht-erneuerbare Primärenergie (PENRT)
+EN 15978 (A2)
+B6
+MJ",penrt_b6,Primary Energy Non-Renewable Total (B6),Decimal,Optional
+,penrt_b7,Primary Energy Non-Renewable (Energy resources) (B7),Decimal,Optional
+,penrt_b8,Primary Energy Non-Renewable (Energy resources) (B8),Decimal,Optional
+"Total nicht-erneuerbare Primärenergie (PENRT)
+EN 15978 (A2)
+C1
+MJ",penrt_c1,Primary Energy Non-Renewable Total (C1),Decimal,Optional
+"Total nicht-erneuerbare Primärenergie (PENRT)
+EN 15978 (A2)
+C2
+MJ",penrt_c2,Primary Energy Non-Renewable Total (C2),Decimal,Optional
+"Total nicht-erneuerbare Primärenergie (PENRT)
+EN 15978 (A2)
+C3
+MJ",penrt_c3,Primary Energy Non-Renewable Total (C3),Decimal,Optional
+"Total nicht-erneuerbare Primärenergie (PENRT)
+EN 15978 (A2)
+C4
+MJ",penrt_c4,Primary Energy Non-Renewable Total (C4),Decimal,Optional
+"Total nicht-erneuerbare Primärenergie (PENRT)
+EN 15978 (A2)
+D
+MJ",penrt_d,Primary Energy Non-Renewable Total (D),Decimal,Optional
+"Total nicht-erneuerbare Primärenergie (PENRT)
+EN 15978 (A2)
+D1
+MJ",penrt_d1,Primary Energy Non-Renewable Total (D1),Decimal,Optional
+"Total nicht-erneuerbare Primärenergie (PENRT)
+EN 15978 (A2)
+D2
+MJ",penrt_d2,Primary Energy Non-Renewable Total (D2),Decimal,Optional
+"Total nicht-erneuerbare Primärenergie (PENRT)
+EN 15978 (A2)
+A1-A3, A4, A5, B1, B2, B3, B4, B5, B6, C1, C2, C3, C4, D, D2, D1
+MJ",penrt_total,Total Primary Energy Non-Renewable Total,Decimal,Optional
+,pm_a1_a3,Particulate Matter Emissions (A1-A3),Decimal,Optional
+,pm_a1,Particulate Matter Emissions (A1),Decimal,Optional
+,pm_a2,Particulate Matter Emissions (A2),Decimal,Optional
+,pm_a3,Particulate Matter Emissions (A3),Decimal,Optional
+,pm_a4,Particulate Matter Emissions (A4),Decimal,Optional
+,pm_a5,Particulate Matter Emissions (A5),Decimal,Optional
+,pm_b1,Particulate Matter Emissions (B1),Decimal,Optional
+,pm_b2,Particulate Matter Emissions (B2),Decimal,Optional
+,pm_b3,Particulate Matter Emissions (B3),Decimal,Optional
+,pm_b4,Particulate Matter Emissions (B4),Decimal,Optional
+,pm_b5,Particulate Matter Emissions (B5),Decimal,Optional
+,pm_b6,Particulate Matter Emissions (B6),Decimal,Optional
+,pm_b7,Particulate Matter Emissions (B7),Decimal,Optional
+,pm_b8,Particulate Matter Emissions (B8),Decimal,Optional
+,pm_c1,Particulate Matter Emissions (C1),Decimal,Optional
+,pm_c2,Particulate Matter Emissions (C2),Decimal,Optional
+,pm_c3,Particulate Matter Emissions (C3),Decimal,Optional
+,pm_c4,Particulate Matter Emissions (C4),Decimal,Optional
+,pm_d,Particulate Matter Emissions (D),Decimal,Optional
+,pm_d1,Particulate Matter Emissions (D1),Decimal,Optional
+,pm_d2,Particulate Matter Emissions (D2),Decimal,Optional
+,pm_total,Particulate Matter Emissions (total),Decimal,Optional
+,irp_a1_a3,Ionising Radiation - Human Health (A1-A3),Decimal,Optional
+,irp_a1,Ionising Radiation - Human Health (A1),Decimal,Optional
+,irp_a2,Ionising Radiation - Human Health (A2),Decimal,Optional
+,irp_a3,Ionising Radiation - Human Health (A3),Decimal,Optional
+,irp_a4,Ionising Radiation - Human Health (A4),Decimal,Optional
+,irp_a5,Ionising Radiation - Human Health (A5),Decimal,Optional
+,irp_b1,Ionising Radiation - Human Health (B1),Decimal,Optional
+,irp_b2,Ionising Radiation - Human Health (B2),Decimal,Optional
+,irp_b3,Ionising Radiation - Human Health (B3),Decimal,Optional
+,irp_b4,Ionising Radiation - Human Health (B4),Decimal,Optional
+,irp_b5,Ionising Radiation - Human Health (B5),Decimal,Optional
+,irp_b6,Ionising Radiation - Human Health (B6),Decimal,Optional
+,irp_b7,Ionising Radiation - Human Health (B7),Decimal,Optional
+,irp_b8,Ionising Radiation - Human Health (B8),Decimal,Optional
+,irp_c1,Ionising Radiation - Human Health (C1),Decimal,Optional
+,irp_c2,Ionising Radiation - Human Health (C2),Decimal,Optional
+,irp_c3,Ionising Radiation - Human Health (C3),Decimal,Optional
+,irp_c4,Ionising Radiation - Human Health (C4),Decimal,Optional
+,irp_d,Ionising Radiation - Human Health (D),Decimal,Optional
+,irp_d1,Ionising Radiation - Human Health (D1),Decimal,Optional
+,irp_d2,Ionising Radiation - Human Health (D2),Decimal,Optional
+,irp_total,Ionising Radiation - Human Health (total),Decimal,Optional
+,etp_fw_a1_a3,Ecotoxicity - Freshwater (A1-A3),Decimal,Optional
+,etp_fw_a1,Ecotoxicity - Freshwater (A1),Decimal,Optional
+,etp_fw_a2,Ecotoxicity - Freshwater (A2),Decimal,Optional
+,etp_fw_a3,Ecotoxicity - Freshwater (A3),Decimal,Optional
+,etp_fw_a4,Ecotoxicity - Freshwater (A4),Decimal,Optional
+,etp_fw_a5,Ecotoxicity - Freshwater (A5),Decimal,Optional
+,etp_fw_b1,Ecotoxicity - Freshwater (B1),Decimal,Optional
+,etp_fw_b2,Ecotoxicity - Freshwater (B2),Decimal,Optional
+,etp_fw_b3,Ecotoxicity - Freshwater (B3),Decimal,Optional
+,etp_fw_b4,Ecotoxicity - Freshwater (B4),Decimal,Optional
+,etp_fw_b5,Ecotoxicity - Freshwater (B5),Decimal,Optional
+,etp_fw_b6,Ecotoxicity - Freshwater (B6),Decimal,Optional
+,etp_fw_b7,Ecotoxicity - Freshwater (B7),Decimal,Optional
+,etp_fw_b8,Ecotoxicity - Freshwater (B8),Decimal,Optional
+,etp_fw_c1,Ecotoxicity - Freshwater (C1),Decimal,Optional
+,etp_fw_c2,Ecotoxicity - Freshwater (C2),Decimal,Optional
+,etp_fw_c3,Ecotoxicity - Freshwater (C3),Decimal,Optional
+,etp_fw_c4,Ecotoxicity - Freshwater (C4),Decimal,Optional
+,etp_fw_d,Ecotoxicity - Freshwater (D),Decimal,Optional
+,etp_fw_d1,Ecotoxicity - Freshwater (D1),Decimal,Optional
+,etp_fw_d2,Ecotoxicity - Freshwater (D2),Decimal,Optional
+,etp_fw_total,Ecotoxicity - Freshwater (total),Decimal,Optional
+,htp_c_a1_a3,Human Toxicity - Cancer Effects (A1-A3),Decimal,Optional
+,htp_c_a1,Human Toxicity - Cancer Effects (A1),Decimal,Optional
+,htp_c_a2,Human Toxicity - Cancer Effects (A2),Decimal,Optional
+,htp_c_a3,Human Toxicity - Cancer Effects (A3),Decimal,Optional
+,htp_c_a4,Human Toxicity - Cancer Effects (A4),Decimal,Optional
+,htp_c_a5,Human Toxicity - Cancer Effects (A5),Decimal,Optional
+,htp_c_b1,Human Toxicity - Cancer Effects (B1),Decimal,Optional
+,htp_c_b2,Human Toxicity - Cancer Effects (B2),Decimal,Optional
+,htp_c_b3,Human Toxicity - Cancer Effects (B3),Decimal,Optional
+,htp_c_b4,Human Toxicity - Cancer Effects (B4),Decimal,Optional
+,htp_c_b5,Human Toxicity - Cancer Effects (B5),Decimal,Optional
+,htp_c_b6,Human Toxicity - Cancer Effects (B6),Decimal,Optional
+,htp_c_b7,Human Toxicity - Cancer Effects (B7),Decimal,Optional
+,htp_c_b8,Human Toxicity - Cancer Effects (B8),Decimal,Optional
+,htp_c_c1,Human Toxicity - Cancer Effects (C1),Decimal,Optional
+,htp_c_c2,Human Toxicity - Cancer Effects (C2),Decimal,Optional
+,htp_c_c3,Human Toxicity - Cancer Effects (C3),Decimal,Optional
+,htp_c_c4,Human Toxicity - Cancer Effects (C4),Decimal,Optional
+,htp_c_d,Human Toxicity - Cancer Effects (D),Decimal,Optional
+,htp_c_d1,Human Toxicity - Cancer Effects (D1),Decimal,Optional
+,htp_c_d2,Human Toxicity - Cancer Effects (D2),Decimal,Optional
+,htp_c_total,Human Toxicity - Cancer Effects (total),Decimal,Optional
+,htp_nc_a1_a3,Human Toxicity - Non-cancer Effects (A1-A3),Decimal,Optional
+,htp_nc_a1,Human Toxicity - Non-cancer Effects (A1),Decimal,Optional
+,htp_nc_a2,Human Toxicity - Non-cancer Effects (A2),Decimal,Optional
+,htp_nc_a3,Human Toxicity - Non-cancer Effects (A3),Decimal,Optional
+,htp_nc_a4,Human Toxicity - Non-cancer Effects (A4),Decimal,Optional
+,htp_nc_a5,Human Toxicity - Non-cancer Effects (A5),Decimal,Optional
+,htp_nc_b1,Human Toxicity - Non-cancer Effects (B1),Decimal,Optional
+,htp_nc_b2,Human Toxicity - Non-cancer Effects (B2),Decimal,Optional
+,htp_nc_b3,Human Toxicity - Non-cancer Effects (B3),Decimal,Optional
+,htp_nc_b4,Human Toxicity - Non-cancer Effects (B4),Decimal,Optional
+,htp_nc_b5,Human Toxicity - Non-cancer Effects (B5),Decimal,Optional
+,htp_nc_b6,Human Toxicity - Non-cancer Effects (B6),Decimal,Optional
+,htp_nc_b7,Human Toxicity - Non-cancer Effects (B7),Decimal,Optional
+,htp_nc_b8,Human Toxicity - Non-cancer Effects (B8),Decimal,Optional
+,htp_nc_c1,Human Toxicity - Non-cancer Effects (C1),Decimal,Optional
+,htp_nc_c2,Human Toxicity - Non-cancer Effects (C2),Decimal,Optional
+,htp_nc_c3,Human Toxicity - Non-cancer Effects (C3),Decimal,Optional
+,htp_nc_c4,Human Toxicity - Non-cancer Effects (C4),Decimal,Optional
+,htp_nc_d,Human Toxicity - Non-cancer Effects (D),Decimal,Optional
+,htp_nc_d1,Human Toxicity - Non-cancer Effects (D1),Decimal,Optional
+,htp_nc_d2,Human Toxicity - Non-cancer Effects (D2),Decimal,Optional
+,htp_nc_total,Human Toxicity - Non-cancer Effects (total),Decimal,Optional
+,sqp_a1_a3,Soil Quality Index (A1-A3),Decimal,Optional
+,sqp_a1,Soil Quality Index (A1),Decimal,Optional
+,sqp_a2,Soil Quality Index (A2),Decimal,Optional
+,sqp_a3,Soil Quality Index (A3),Decimal,Optional
+,sqp_a4,Soil Quality Index (A4),Decimal,Optional
+,sqp_a5,Soil Quality Index (A5),Decimal,Optional
+,sqp_b1,Soil Quality Index (B1),Decimal,Optional
+,sqp_b2,Soil Quality Index (B2),Decimal,Optional
+,sqp_b3,Soil Quality Index (B3),Decimal,Optional
+,sqp_b4,Soil Quality Index (B4),Decimal,Optional
+,sqp_b5,Soil Quality Index (B5),Decimal,Optional
+,sqp_b6,Soil Quality Index (B6),Decimal,Optional
+,sqp_b7,Soil Quality Index (B7),Decimal,Optional
+,sqp_b8,Soil Quality Index (B8),Decimal,Optional
+,sqp_c1,Soil Quality Index (C1),Decimal,Optional
+,sqp_c2,Soil Quality Index (C2),Decimal,Optional
+,sqp_c3,Soil Quality Index (C3),Decimal,Optional
+,sqp_c4,Soil Quality Index (C4),Decimal,Optional
+,sqp_d,Soil Quality Index (D),Decimal,Optional
+,sqp_d1,Soil Quality Index (D1),Decimal,Optional
+,sqp_d2,Soil Quality Index (D2),Decimal,Optional
+,sqp_total,Soil Quality Index (total),Decimal,Optional

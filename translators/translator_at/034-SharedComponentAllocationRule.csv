@@ -1,0 +1,6 @@
+Value in your format,OpenBDF enum value,OpenBDF value display name,OpenBDF value description (if any),OpenBDF value parent category (if applicable)
+,not_applicable,not_applicable (the submission covers a single building),the submission covers a single building
+,single_assessment,single_assessment (the whole complex of buildings constitutes one single assessment),the whole complex of buildings constitutes one single assessment
+,building_units,building_units (the total is divided proportionately between the owner building units),the total is divided proportionately between the owner building units
+,parking_spaces,parking_spaces (allocated on the basis of the relative shares of parking spaces designated to each building),allocated on the basis of the relative shares of parking spaces designated to each building
+,other,"other (a national rule, stated in the assessor note)","a national rule, stated in the assessor note"

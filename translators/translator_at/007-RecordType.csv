@@ -1,0 +1,5 @@
+Value in your format,OpenBDF enum value,OpenBDF value display name,OpenBDF value description (if any),OpenBDF value parent category (if applicable)
+,real_building,real building (a building that exists or is being built),a building that exists or is being built
+,archetype,archetype (a representative building of a stock model),a representative building of a stock model
+,design_variant,design variant (an alternative design of the same building),an alternative design of the same building
+,parametric_scenario,parametric scenario (a generated variation),a generated variation

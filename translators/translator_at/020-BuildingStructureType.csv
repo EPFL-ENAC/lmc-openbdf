@@ -1,0 +1,25 @@
+Value in your format,OpenBDF enum value,OpenBDF value display name,OpenBDF value description (if any),OpenBDF value parent category (if applicable)
+,Concrete,Concrete
+,Concrete_InSitu,Concrete_InSitu
+,Concrete_Precast,Concrete_Precast
+,Concrete_PostTensioned,Concrete_PostTensioned
+,Concrete_Frame,Concrete_Frame
+,Concrete_Mass,Concrete_Mass
+,Steel,Steel
+,Steel_Frame,Steel_Frame
+,Steel_Composite,Steel_Composite
+,Steel_Precast,Steel_Precast
+,Timber,Timber
+,Timber_Frame,Timber_Frame
+,Timber_Massive,Timber_Massive
+,Timber_CLT,Timber_CLT
+,Timber_Glulam,Timber_Glulam
+,Masonry,Masonry
+,Masonry_MassiveBrick,Masonry_MassiveBrick
+,Masonry_Mixed,Masonry_Mixed
+,Mixed_ConcreteSteel,Mixed_ConcreteSteel
+,Mixed_ConcreteTimber,Mixed_ConcreteTimber
+,Mixed_SteelTimber,Mixed_SteelTimber
+,Mixed_ConcreteMasonry,Mixed_ConcreteMasonry
+,Mixed_Other,Mixed_Other
+,Other_Unknown,Other_Unknown

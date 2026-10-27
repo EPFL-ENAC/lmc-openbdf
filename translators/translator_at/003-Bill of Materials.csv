@@ -1,0 +1,29 @@
+Field code in your format,OpenBDF field code,OpenBDF attribute name,Datatype,Requirements,Default value,Preprocess rule
+,material_id,Bill of materials row ID,string,Automatic
+,material_ref_id,Material reference ID,string,Automatic
+Etage,custom_floor_level,Floor level (as given),string,Suggested
+,common_floor_level,Floor level (harmonised),integer,Automatic
+,floor_repetition,Floor repetition,integer,Suggested
+,common_above_below_ground,Above/Below Ground,AboveBelowGround,Automatic
+Einstufung Ebene 3,bec_custom,Element Class,string,Strongly recommended
+,custom_bec_description,Custom BEC Description,string,Suggested
+Einstufung Ebene 2,bec_openbdf,OpenBDF Building Element Classification,OpenBDFBuildingElementClassification,Automatic
+Element,custom_element_name,Element Name (or ID),string,Suggested
+,work_section,Work section,string,Optional
+,layer_thickness,Layer thickness,Decimal,Optional
+,common_material_name,OpenBDF Material Classification,OpenBDFMaterialClassification,Automatic
+Material / Produkt,custom_material_name,Material Name (or ID),string,Required
+Verknüpftes Produkt,lca_dataset_material_name,Material name in EPD dataset,string,Suggested
+Quelldatenbank,lca_database_name,EPD database name,string,Recommended
+Externer Link,lca_dataset_link,Material EPD Database Link,string,Optional
+,material_data_type,Construction product data type,MaterialDataType,Automatic
+,material_epd_match,EPD representativeness,MaterialEPDMatch,Automatic
+Lebensdauer (Jahre),material_reference_service_life,Reference Service Life (RSL),Decimal,Strongly recommended
+,maintenance_interval,Maintenance interval,Decimal,Optional
+,repair_interval,Repair interval,Decimal,Optional
+Volumen (m³),material_quantity_m3,Material Quantity (m3),Decimal,Suggested
+Fläche (m²),material_quantity_m2,Material Quantity (m2),Decimal,Suggested
+Länge (m),material_quantity_m,Material Quantity (m),Decimal,Suggested
+Anzahl,material_quantity_count,Material Quantity (count),Decimal,Suggested
+Gewicht (kg),material_weight_kg,Material Weight (kg),Decimal,Strongly recommended
+,material_density,Density,Decimal,Strongly recommended

@@ -225,6 +225,29 @@ def test_open_command_uses_translator_option(tmp_path: Path, monkeypatch):
     assert len(captured_tables) == 1
 
 
+def test_open_command_reads_a_translator_directory(tmp_path: Path, monkeypatch):
+    workbook = tmp_path / "complete.xlsx"
+    translator_directory = tmp_path / "translator"
+    translator_directory.mkdir()
+    write_workbook(workbook, default_openbdf_sheets())
+    captured_paths: list[Path] = []
+    captured_tables: list[Any] = []
+    default_translator = main_module.DocumentTranslator.default_openbdf_translator()
+
+    def load_translator(*, directory, **kwargs):
+        captured_paths.append(directory)
+        return default_translator
+
+    monkeypatch.setattr(main_module.DocumentTranslator, "from_csv_dir", load_translator)
+    mock_conversion_and_save(monkeypatch, captured_tables)
+
+    result = runner.invoke(app, ["open", str(workbook), "--translator", str(translator_directory)])
+
+    assert result.exit_code == 0
+    assert captured_paths == [str(translator_directory)]
+    assert len(captured_tables) == 1
+
+
 def test_open_command_merges_multiple_translators(tmp_path: Path, monkeypatch):
     workbook = tmp_path / "complete.xlsx"
     write_workbook(workbook, default_openbdf_sheets())

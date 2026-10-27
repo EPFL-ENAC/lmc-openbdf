@@ -33,6 +33,11 @@ jobs:
           mkdir -p assets
           openbdf save-template "assets/openbdf_template_${TEMPLATE_VERSION}.xlsx"
           openbdf save-translator-template "assets/translator_template_${TEMPLATE_VERSION}.xlsx"
+          openbdf save-bec-template "assets/translator_bec_template_${TEMPLATE_VERSION}.xlsx"
+          openbdf save-bmc-template "assets/translator_bmc_template_${TEMPLATE_VERSION}.xlsx"
+          openbdf csv-to-translator translators/translator_at "assets/translator_at_${TEMPLATE_VERSION}.xlsx"
+          openbdf csv-to-translator translators/translator_bec_at "assets/translator_bec_at_${TEMPLATE_VERSION}.xlsx"
+          openbdf csv-to-translator translators/translator_bmc_at "assets/translator_bmc_at_${TEMPLATE_VERSION}.xlsx"
 
       - name: Publish release assets
         env:

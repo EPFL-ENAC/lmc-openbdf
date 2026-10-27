@@ -1,0 +1,5 @@
+Value in your format,OpenBDF enum value,OpenBDF value display name,OpenBDF value description (if any),OpenBDF value parent category (if applicable)
+,outermost_region,Outermost region,an outermost region within the meaning of Article 349 TFEU
+,data_gap,Data gap (default values used to fill data gaps where no other type of data is available),default values used to fill data gaps where no other type of data is available
+,simplified_calculation,Simplified Calculation (default values used where it is necessary to simplify the calculation),default values used where it is necessary to simplify the calculation
+,other,Other (stated in the assessor note),stated in the assessor note

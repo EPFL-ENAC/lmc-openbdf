@@ -1,0 +1,14 @@
+Value in your format,OpenBDF enum value,OpenBDF value display name,OpenBDF value description (if any),OpenBDF value parent category (if applicable)
+,ipms,IPMS (International Property Measurement Standards),International Property Measurement Standards. Global standard used to unify how buildings are measured worldwide.
+,rics,RICS Measurement Standards,UK-based but internationally used rules for measuring buildings. Often aligned with IPMS.
+,ansi,ANSI Standards (USA),US national standard for measuring residential and commercial floor area. Defines how total area should be measured.
+,boma,BOMA Gross Area Methods (1–5),"Widely used in global commercial real estate; includes methods for leasing, international comparison, construction, volumetric measurement, and ENERGY STAR® compatibility."
+,cbps,"CBPS GFA Method (Washington State, USA)",Regulatory method measuring GFA from exterior wall surfaces for energy compliance.
+,institutional,"Institutional Methods (GBA, UFA, NLA, FECA)","Used by universities and facility managers; define gross, usable, and net areas on campuses."
+,plan_based,Plan-Based Measurement,Practical methods used globally: measuring onsite or using architectural floor plans to calculate GFA.
+,iso_9836,ISO 9836
+,ipms_1,IPMS 1 (whole building including external walls)
+,ipms_2,IPMS 2 (building excluding external walls)
+,ipms_3_1,"IPMS 3.1 (occupier level, external)"
+,ipms_3_2,"IPMS 3.2 (occupier level, internal)"
+,unknown,Unknown

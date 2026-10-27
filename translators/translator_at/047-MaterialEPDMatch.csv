@@ -1,0 +1,8 @@
+Value in your format,OpenBDF enum value,OpenBDF value display name,OpenBDF value description (if any),OpenBDF value parent category (if applicable)
+,identical,Identical (the declaration describes this product),the declaration describes this product
+,same_product_group,Same product group (a sectoral average covering it),a sectoral average covering it
+,proxy_technological,Proxy technological (a different product used as a stand-in),a different product used as a stand-in
+,proxy_geographical,"Proxy geographical (the same product, another region)","the same product, another region"
+,proxy_temporal,"Proxy temporal (the same product, outside the validity of its declaration)","the same product, outside the validity of its declaration"
+,reference_only,"Reference only (a broad reference, not a match)","a broad reference, not a match"
+,unknown,Unknown (the relationship cannot be established),the relationship cannot be established

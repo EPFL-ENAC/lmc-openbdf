@@ -9,6 +9,8 @@ from typing import Any, Callable, Literal, TypedDict
 import pandas as pd
 from pydantic import BaseModel
 
+from openbdf.lib.converters.translator_csv import csv_dir_sheets
+
 ABOUT_SHEET_NAME = "About"
 
 
@@ -307,9 +309,9 @@ class TranslationsLibrary:
     def from_dataframe(df: pd.DataFrame) -> "TranslationsLibrary":
         translations = []
 
-        clean_df = df.astype(object).replace({pd.NA: None})
+        clean_df = df.astype(object).where(pd.notna(df), None)
 
-        for _, row in clean_df.iterrows():
+        for row in clean_df.to_dict("records"):
             if not isinstance(row[SHEETS_PROPERTIES_HEADERS["original_name"]], str) or not isinstance(
                 row[SHEETS_PROPERTIES_HEADERS["translated_name"]], str
             ):
@@ -390,6 +392,36 @@ class DocumentTranslator:
                 else None
             )
             dfs = {sheet_name: xlsx.parse(sheet_name, header=header_row) for sheet_name in true_sheets}
+
+        return DocumentTranslator.from_dataframes(
+            dfs,
+            attribute_name_col,
+            translated_name_col,
+            default_value_col=default_value_col,
+            preprocess_rule_col=preprocess_rule_col,
+            translation_library_df=library,
+        )
+
+    @staticmethod
+    def from_csv_dir(
+        directory: str | Path,
+        attribute_name_col: int,
+        translated_name_col: int,
+        default_value_col: int | None = None,
+        preprocess_rule_col: int | None = None,
+        header_row: int = 0,
+    ) -> "DocumentTranslator":
+        """Load a translator from a directory that holds one CSV file per sheet."""
+        sheets = csv_dir_sheets(Path(directory))
+        true_sheets = [
+            (sheet_name, path)
+            for sheet_name, path in sheets
+            if sheet_name not in ("Translations Library", ABOUT_SHEET_NAME)
+        ]
+        library_path = next((path for sheet_name, path in sheets if sheet_name == "Translations Library"), None)
+
+        dfs = {sheet_name: pd.read_csv(path, dtype=str, header=header_row) for sheet_name, path in true_sheets}
+        library = pd.read_csv(library_path, dtype=str, header=header_row) if library_path is not None else None
 
         return DocumentTranslator.from_dataframes(
             dfs,

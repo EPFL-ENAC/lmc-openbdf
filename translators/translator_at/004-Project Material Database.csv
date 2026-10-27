@@ -1,0 +1,24 @@
+Field code in your format,OpenBDF field code,OpenBDF attribute name,Datatype,Requirements,Default value,Preprocess rule
+,material_ref_id,Material reference ID,string,Automatic
+,custom_material_name,Material Name (or ID),string,Automatic
+,lca_dataset_material_name,Material name in EPD dataset,string,Automatic
+,lca_database_name,EPD database name,string,Automatic
+,declared_unit,Declared unit,DeclaredUnit,Optional
+,bom_row_count,Bill of Materials Row Count,integer,Automatic
+,material_mass_kg,Material Mass (kg),Decimal,Automatic
+,material_mass_share,Mass share,Decimal,Automatic
+,material_data_type,EPD data type,MaterialDataType,Strongly recommended
+,material_epd_match,EPD representativeness,MaterialEPDMatch,Strongly recommended
+,assessor_note,Assessor note,string,Optional
+,product_form,Product form or unit type,string,Optional
+,strength_class,Strength class or grade,string,Optional
+,declared_strength,Declared strength,Decimal,Optional
+,exposure_class,Exposure class,string,Optional
+,cement_type,Cement type,string,Optional
+,reinforcement_steel_grade,Reinforcement steel grade,string,Optional
+,reinforcement_content,Reinforcement content,Decimal,Optional
+,recycled_content,Recycled content,Decimal,Optional
+,manufacturing_route,Manufacturing route,string,Optional
+,thermal_conductivity,Thermal conductivity,Decimal,Optional
+,biogenic_carbon_content,Biogenic carbon content,Decimal,Optional
+,end_of_life_scenario,End-of-life scenario,string,Optional

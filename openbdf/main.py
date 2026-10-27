@@ -1,10 +1,19 @@
 from pathlib import Path
 
 import typer
+from openpyxl import load_workbook
 
-from openbdf.cli.save import save_openbdf_to_xlsx, save_translator
+from openbdf.cli.save import (
+    csv_dir_from_build,
+    save_bec_translator,
+    save_bmc_translator,
+    save_openbdf_to_xlsx,
+    save_translator,
+    workbook_from_csv_dir,
+)
 from openbdf.lib.converters.dataframe import project_package_from_tables
-from openbdf.lib.converters.translators import DocumentTranslator
+from openbdf.lib.converters.translator_csv import workbook_sheets_to_csv_dir
+from openbdf.lib.converters.translators import ABOUT_SHEET_NAME, DocumentTranslator
 from openbdf.lib.openbdf_tables import OpenBDFTables
 from openbdf.lib.sources.excel_source import DuplicateSheetNamesError, ExcelSheetSource
 from openbdf.lib.validation import (
@@ -63,7 +72,7 @@ def open(
         [],
         "--translator",
         "-t",
-        help="Optional path(s) to Excel files containing a translator sheet. Multiple files are merged (category conflicts resolve last-wins). If provided, they will be used to translate attribute names from the input dataframes. Each sheet should contain at least two columns: one for the original attribute names and one for the translated names.",
+        help="Optional path(s) to Excel files or directories of sheet CSV files containing a translator sheet. Multiple files are merged (category conflicts resolve last-wins). If provided, they will be used to translate attribute names from the input dataframes. Each sheet should contain at least two columns: one for the original attribute names and one for the translated names.",
     ),
     translator_attribute_name_col: int = typer.Option(
         0,
@@ -122,14 +131,25 @@ def open(
     if translator_paths:
         document_translator = DocumentTranslator()
         for translator_path in translator_paths:
-            document_translator = document_translator + DocumentTranslator.from_xlsx(
-                xlsx_path=translator_path,
-                attribute_name_col=translator_attribute_name_col,
-                translated_name_col=translator_translated_name_col,
-                default_value_col=translator_default_value_col,
-                preprocess_rule_col=translator_preprocess_rule_col,
-                header_row=translator_header_row,
-            )
+            if Path(translator_path).is_dir():
+                loaded_translator = DocumentTranslator.from_csv_dir(
+                    directory=translator_path,
+                    attribute_name_col=translator_attribute_name_col,
+                    translated_name_col=translator_translated_name_col,
+                    default_value_col=translator_default_value_col,
+                    preprocess_rule_col=translator_preprocess_rule_col,
+                    header_row=translator_header_row,
+                )
+            else:
+                loaded_translator = DocumentTranslator.from_xlsx(
+                    xlsx_path=translator_path,
+                    attribute_name_col=translator_attribute_name_col,
+                    translated_name_col=translator_translated_name_col,
+                    default_value_col=translator_default_value_col,
+                    preprocess_rule_col=translator_preprocess_rule_col,
+                    header_row=translator_header_row,
+                )
+            document_translator = document_translator + loaded_translator
     else:
         document_translator = DocumentTranslator.default_openbdf_translator()
 
@@ -179,33 +199,138 @@ def open(
 
 @app.command(name="save-template", no_args_is_help=True)
 def save_template(
-    path: str = typer.Argument(..., help="The path where the template Excel file will be saved"),
+    path: str = typer.Argument(
+        ..., help="The path where the template Excel file, or the CSV directory with --csv, will be saved"
+    ),
+    csv: bool = typer.Option(
+        False,
+        "--csv",
+        help="Write one CSV file per sheet into the given directory instead of an Excel file.",
+    ),
 ):
     """
     Save a template Excel file with the correct structure for OpenBDF.
     Usage:
         openbdf save-template ./template.xlsx
+        openbdf save-template ./template --csv
     """
 
-    save_openbdf_to_xlsx(
-        xlsx_path=Path(path),
-        project=None,
-    )
+    if csv:
+        csv_dir_from_build(lambda buffer: save_openbdf_to_xlsx(xlsx_path=buffer, project=None), Path(path))
+    else:
+        save_openbdf_to_xlsx(
+            xlsx_path=Path(path),
+            project=None,
+        )
 
 
 @app.command(name="save-translator-template", no_args_is_help=True)
 def save_translator_template(
-    path: str = typer.Argument(..., help="The path where the translator template Excel file will be saved"),
+    path: str = typer.Argument(
+        ..., help="The path where the translator template Excel file, or the CSV directory with --csv, will be saved"
+    ),
+    csv: bool = typer.Option(
+        False,
+        "--csv",
+        help="Write one CSV file per sheet into the given directory instead of an Excel file.",
+    ),
 ):
     """
     Save a template Excel file for the attribute translator.
     Usage:
         openbdf save-translator-template translators/translator_template.xlsx
+        openbdf save-translator-template translators/translator_template --csv
     """
 
-    save_translator(
-        xlsx_path=Path(path),
-    )
+    if csv:
+        csv_dir_from_build(save_translator, Path(path))
+    else:
+        save_translator(
+            xlsx_path=Path(path),
+        )
+
+
+@app.command(name="save-bec-template", no_args_is_help=True)
+def save_bec_template(
+    path: str = typer.Argument(
+        ...,
+        help="The path where the bec translator template Excel file, or the CSV directory with --csv, will be saved",
+    ),
+    csv: bool = typer.Option(
+        False,
+        "--csv",
+        help="Write one CSV file per sheet into the given directory instead of an Excel file.",
+    ),
+):
+    """
+    Save a template Excel file for the building element classification translator.
+    Usage:
+        openbdf save-bec-template build/translators/translator_bec_template.xlsx
+        openbdf save-bec-template build/translators/translator_bec_template --csv
+    """
+
+    if csv:
+        csv_dir_from_build(save_bec_translator, Path(path))
+    else:
+        save_bec_translator(
+            xlsx_path=Path(path),
+        )
+
+
+@app.command(name="save-bmc-template", no_args_is_help=True)
+def save_bmc_template(
+    path: str = typer.Argument(
+        ...,
+        help="The path where the bmc translator template Excel file, or the CSV directory with --csv, will be saved",
+    ),
+    csv: bool = typer.Option(
+        False,
+        "--csv",
+        help="Write one CSV file per sheet into the given directory instead of an Excel file.",
+    ),
+):
+    """
+    Save a template Excel file for the material classification translator.
+    Usage:
+        openbdf save-bmc-template build/translators/translator_bmc_template.xlsx
+        openbdf save-bmc-template build/translators/translator_bmc_template --csv
+    """
+
+    if csv:
+        csv_dir_from_build(save_bmc_translator, Path(path))
+    else:
+        save_bmc_translator(
+            xlsx_path=Path(path),
+        )
+
+
+@app.command(name="csv-to-translator", no_args_is_help=True)
+def csv_to_translator(
+    directory: Path = typer.Argument(..., help="The directory holding one CSV file per sheet"),
+    path: Path = typer.Argument(..., help="The path where the translator Excel file will be saved"),
+):
+    """
+    Build a translator Excel file from a directory of sheet CSV files.
+    Usage:
+        openbdf csv-to-translator translators/translator_at build/translators/translator_at.xlsx
+    """
+
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_bytes(workbook_from_csv_dir(directory).getvalue())
+
+
+@app.command(name="translator-to-csv", no_args_is_help=True)
+def translator_to_csv(
+    path: Path = typer.Argument(..., help="The translator Excel file to convert"),
+    directory: Path = typer.Argument(..., help="The directory where the CSV files are written"),
+):
+    """
+    Write one CSV file per sheet of an existing translator Excel file.
+    Usage:
+        openbdf translator-to-csv translators/translator_at_v2.0.0.xlsx translators/translator_at
+    """
+
+    workbook_sheets_to_csv_dir(load_workbook(path), directory, exclude=(ABOUT_SHEET_NAME,))
 
 
 if __name__ == "__main__":
