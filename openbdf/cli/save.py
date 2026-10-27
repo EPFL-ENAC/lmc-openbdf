@@ -1,21 +1,27 @@
 import importlib.resources
 import itertools
 import re
+from collections.abc import Callable, Collection
 from copy import copy
+from io import BytesIO
 from pathlib import Path
-from typing import Any, TypeVar
+from typing import Any, BinaryIO, TypeVar
 
 import numpy as np
 import pandas as pd
+from openpyxl import load_workbook
 from openpyxl.styles import Alignment, Border, Font, NamedStyle, PatternFill, Protection, Side
 from openpyxl.styles.cell_style import StyleArray
 from openpyxl.utils import get_column_letter
+from openpyxl.workbook.workbook import Workbook
+from openpyxl.worksheet.worksheet import Worksheet
 from openpyxl.writer.theme import theme_xml
 from pydantic.fields import FieldInfo
 from sqlmodel import SQLModel
 
 from openbdf.lib.converters.dataframe import horizontal_to_dataframe
 from openbdf.lib.converters.enums_registry import Boolean, EnumRegistry
+from openbdf.lib.converters.translator_csv import csv_dir_rows, workbook_sheets_to_csv_dir
 from openbdf.lib.converters.translators import (
     ABOUT_SHEET_NAME,
     COMMON_CATEGORY_PROPERTIES,
@@ -141,6 +147,11 @@ REFERENCE_LABELS = {"reference": "Reference", "reference_alignment": "Reference 
 
 # The sheet builder reads this value as "no project_id given", so an imported project_id wins.
 DEFAULT_PROJECT_ID = "XXXXXXX"
+
+# The bec translator only maps the building element classification code name; its enum sheet is separate.
+BEC_TRANSLATOR_FIELD_CODES: tuple[str, ...] = ("building_element_classification_code_name",)
+
+# Integer-looking CSV fields become numbers, so Excel does not flag them as text.
 
 # Canonical TypeDefinitions column order for the template export.
 TEMPLATE_TYPE_DEFINITIONS: tuple[type, ...] = (
@@ -360,15 +371,19 @@ def save_openbdf_to_xlsx(
         style_first_rows(writer)
 
 
+def _style_first_row(sheet: Worksheet, header_style: str | None = None) -> None:
+    """Make the header row taller, align its text bottom left and optionally restyle it."""
+    sheet.row_dimensions[1].height = FIRST_ROW_HEIGHT
+    for cell in sheet[1]:
+        cell.alignment = Alignment(horizontal="left", vertical="bottom")
+        if header_style is not None:
+            cell.style = header_style
+
+
 def style_first_rows(writer: pd.ExcelWriter, header_style: str | None = None) -> None:
     """Make the header row of every sheet taller, align its text bottom left and optionally restyle it."""
     for sheet in writer.book.worksheets:
-        sheet.row_dimensions[1].height = FIRST_ROW_HEIGHT
-        style_header = header_style is not None and sheet.title != ABOUT_SHEET_NAME
-        for cell in sheet[1]:
-            cell.alignment = Alignment(horizontal="left", vertical="bottom")
-            if style_header:
-                cell.style = header_style
+        _style_first_row(sheet, header_style if sheet.title != ABOUT_SHEET_NAME else None)
 
 
 def _info_value(
@@ -627,35 +642,156 @@ def wide_to_xlsx(
     sheet.column_dimensions["A"].width = 20
 
 
-def save_translator(
-    xlsx_path: str | Path,
-):
+def save_translator(xlsx_path: str | Path | BinaryIO):
     """Save a template Excel file for the attribute translator."""
-    with pd.ExcelWriter(xlsx_path, engine="openpyxl") as writer:
+    _save_skeleton(translator_skeleton(), xlsx_path)
+
+
+def translator_skeleton(sheet_set: str = "full") -> BytesIO:
+    """Build a styled translator workbook without translated values and return its memory buffer."""
+    buffer = BytesIO()
+    with pd.ExcelWriter(buffer, engine="openpyxl") as writer:
         register_named_styles(writer)
         set_theme_fonts(writer)
         about_to_xlsx(writer)
-        make_translations_library_template_xlsx(writer, "Translations Library")
-        make_translator_openbdf_pydantic(
-            writer, COMMON_CATEGORY_PROPERTIES["project"]["name"], ProjectRecordBase.model_fields
-        )
-        make_translator_openbdf_pydantic(
-            writer, COMMON_CATEGORY_PROPERTIES["bom"]["name"], BuildingBillMaterialsSlimRecordBase.model_fields
-        )
-        make_translator_openbdf_pydantic(
-            writer, COMMON_CATEGORY_PROPERTIES["material_database"]["name"], ProjectMaterialDatabaseBase.model_fields
-        )
-        make_translator_openbdf_pydantic(
-            writer, COMMON_CATEGORY_PROPERTIES["results_wide"]["name"], LCAResultsWideFullBase.model_fields
-        )
-        make_translator_openbdf_pydantic(
-            writer, COMMON_CATEGORY_PROPERTIES["results_tall"]["name"], LCAResultsTallBase.model_fields
-        )
-        export_all_enums_in_model_to_translator(writer, ProjectRecordBase.model_fields)
-        export_all_enums_in_model_to_translator(writer, BuildingBillMaterialsSlimRecordBase.model_fields)
-        export_all_enums_in_model_to_translator(writer, ProjectMaterialDatabaseBase.model_fields)
-        make_translator_floor_level(writer, FLOOR_LEVEL_CATEGORY)
+        _translator_sheet_set(writer, sheet_set)
         style_first_rows(writer, ATTRIBUTES_NAME_STYLE.name)
+    buffer.seek(0)
+    return buffer
+
+
+def save_bec_translator(xlsx_path: str | Path | BinaryIO):
+    """Save a template Excel file for the building element classification translator."""
+    _save_skeleton(translator_skeleton("bec"), xlsx_path)
+
+
+def save_bmc_translator(xlsx_path: str | Path | BinaryIO):
+    """Save a template Excel file for the material classification translator."""
+    _save_skeleton(translator_skeleton("bmc"), xlsx_path)
+
+
+def _save_skeleton(skeleton: BytesIO, xlsx_path: str | Path | BinaryIO) -> None:
+    """Write a skeleton buffer to a path or to a binary stream."""
+    data = skeleton.getvalue()
+    if isinstance(xlsx_path, (str, Path)):
+        Path(xlsx_path).write_bytes(data)
+    else:
+        xlsx_path.seek(0)
+        xlsx_path.truncate()
+        xlsx_path.write(data)
+
+
+def _translator_sheet_set(writer: pd.ExcelWriter, sheet_set: str) -> None:
+    """Add the sheets of a translator template set, in template order, after the About sheet."""
+    if sheet_set == "bec":
+        make_translator_openbdf_pydantic(
+            writer,
+            COMMON_CATEGORY_PROPERTIES["project"]["name"],
+            _fields_of(ProjectRecordBase.model_fields, BEC_TRANSLATOR_FIELD_CODES),
+        )
+        make_translator_openbdfenum(
+            writer, OpenBDFBuildingElementClassification.__name__, OpenBDFBuildingElementClassification
+        )
+        return
+
+    if sheet_set == "bmc":
+        make_translator_openbdfenum(writer, OpenBDFMaterialClassification.__name__, OpenBDFMaterialClassification)
+        return
+
+    if sheet_set != "full":
+        raise ValueError(f"Unknown translator template set: {sheet_set!r}")
+
+    make_translations_library_template_xlsx(writer, "Translations Library")
+    make_translator_openbdf_pydantic(
+        writer, COMMON_CATEGORY_PROPERTIES["project"]["name"], ProjectRecordBase.model_fields
+    )
+    make_translator_openbdf_pydantic(
+        writer, COMMON_CATEGORY_PROPERTIES["bom"]["name"], BuildingBillMaterialsSlimRecordBase.model_fields
+    )
+    make_translator_openbdf_pydantic(
+        writer, COMMON_CATEGORY_PROPERTIES["material_database"]["name"], ProjectMaterialDatabaseBase.model_fields
+    )
+    make_translator_openbdf_pydantic(
+        writer, COMMON_CATEGORY_PROPERTIES["results_wide"]["name"], LCAResultsWideFullBase.model_fields
+    )
+    make_translator_openbdf_pydantic(
+        writer, COMMON_CATEGORY_PROPERTIES["results_tall"]["name"], LCAResultsTallBase.model_fields
+    )
+    export_all_enums_in_model_to_translator(writer, ProjectRecordBase.model_fields)
+    export_all_enums_in_model_to_translator(writer, BuildingBillMaterialsSlimRecordBase.model_fields)
+    export_all_enums_in_model_to_translator(writer, ProjectMaterialDatabaseBase.model_fields)
+    make_translator_floor_level(writer, FLOOR_LEVEL_CATEGORY)
+
+
+def _fields_of(model: dict[str, FieldInfo], field_codes: Collection[str]) -> dict[str, FieldInfo]:
+    """The metadata of the given field codes, in model order."""
+    return {field_code: field for field_code, field in model.items() if field_code in field_codes}
+
+
+def csv_dir_from_build(build: Callable[[BytesIO], None], directory: Path) -> list[Path]:
+    """Run a workbook builder into memory and write one CSV file per sheet of its workbook."""
+    buffer = BytesIO()
+    build(buffer)
+    buffer.seek(0)
+    return workbook_sheets_to_csv_dir(load_workbook(buffer), directory, exclude=(ABOUT_SHEET_NAME,))
+
+
+def workbook_from_csv_dir(directory: Path) -> BytesIO:
+    """Build a translator workbook from a directory of sheet CSV files; the About sheet comes from about.md."""
+    workbook = load_workbook(translator_skeleton())
+    rows_by_sheet = {
+        sheet_name: rows for sheet_name, rows in csv_dir_rows(directory).items() if sheet_name != ABOUT_SHEET_NAME
+    }
+
+    sheets: list[Worksheet] = []
+    for sheet_name, rows in rows_by_sheet.items():
+        width = max((len(row) for row in rows), default=0)
+        if sheet_name in workbook.sheetnames:
+            sheet = workbook[sheet_name]
+            row_styles = [sheet.cell(row=2, column=column).style for column in range(1, width + 1)]
+            if sheet.max_row > 1:
+                sheet.delete_rows(2, sheet.max_row - 1)
+        else:
+            sheet = workbook.create_sheet(sheet_name)
+            row_styles = None
+            _style_first_row(sheet, ATTRIBUTES_NAME_STYLE.name)
+        _write_csv_header(sheet, rows[0] if rows else [])
+        _write_csv_rows(sheet, rows[1:], row_styles)
+        sheets.append(sheet)
+
+    for sheet_name in [sheet.title for sheet in workbook.worksheets if sheet.title not in rows_by_sheet]:
+        if sheet_name != ABOUT_SHEET_NAME:
+            workbook.remove(workbook[sheet_name])
+
+    workbook._sheets = [workbook[ABOUT_SHEET_NAME], *sheets]
+
+    buffer = BytesIO()
+    workbook.save(buffer)
+    buffer.seek(0)
+    return buffer
+
+
+def _write_csv_header(sheet: Worksheet, header: list[str]) -> None:
+    """Write the header row of a sheet, clear the header cells the template has in excess, set a column width."""
+    for column in range(len(header) + 1, sheet.max_column + 1):
+        sheet.cell(row=1, column=column).value = None
+    for column, value in enumerate(header, start=1):
+        sheet.cell(row=1, column=column).value = value or None
+        sheet.column_dimensions[get_column_letter(column)].width = max(15, len(value) + 5)
+
+
+def _write_csv_rows(sheet: Worksheet, rows: list[list[str]], row_styles: list[str] | None) -> None:
+    """Write CSV rows from row 2, repeating the style of row 2 on every written cell."""
+    for row_index, row in enumerate(rows, start=2):
+        for column_index, value in enumerate(row, start=1):
+            style = (
+                row_styles[column_index - 1]
+                if row_styles is not None and column_index <= len(row_styles)
+                else EDITABLE_VALUE_STYLE.name
+            )
+            cell = sheet.cell(row=row_index, column=column_index)
+            cell.value = value or None
+            cell.style = style
 
 
 def make_translations_library_template_xlsx(writer: pd.ExcelWriter, sheet_name: str):
@@ -770,11 +906,24 @@ def make_translator_floor_level(writer: pd.ExcelWriter, sheet_name: str):
     info_sheet.column_dimensions["C"].width = 80
 
 
+EXCEL_SHEET_TITLE_MAX_LENGTH = 31
+
+
+def _sheet_title(workbook: Workbook, sheet_name: str) -> str | None:
+    """The title of a new sheet, cut to the Excel limit, or None when the workbook holds that title already.
+
+    Sheets are keyed by the cut title, so two enums that share their first 31 characters collapse into one sheet.
+    """
+    title = sheet_name[:EXCEL_SHEET_TITLE_MAX_LENGTH]
+    return None if title in workbook.sheetnames else title
+
+
 def make_translator_openbdfenum(writer: pd.ExcelWriter, sheet_name: str, enum: type[OpenBDFEnum]):
-    if sheet_name in writer.book.sheetnames:
+    title = _sheet_title(writer.book, sheet_name)
+    if title is None:
         return
 
-    info_sheet = writer.book.create_sheet(sheet_name)
+    info_sheet = writer.book.create_sheet(title)
 
     info_sheet.cell(row=1, column=1, value="Value in your format")
     info_sheet.cell(row=1, column=2, value="OpenBDF enum value")

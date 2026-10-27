@@ -237,13 +237,13 @@ def cola_translator_args() -> dict:
     }
 
 
-def translator_path(filename: str) -> Path:
-    return Path(__file__).parents[1] / "translators" / filename
+def translator_dir(name: str) -> Path:
+    return Path(__file__).parents[1] / "translators" / name
 
 
 def test_cola_translator_maps_material_reference_service_life():
-    translator = DocumentTranslator.from_xlsx(
-        translator_path("translator_at_v2.0.0.xlsx"),
+    translator = DocumentTranslator.from_csv_dir(
+        translator_dir("translator_at"),
         **cola_translator_args(),
     )
 
@@ -251,8 +251,8 @@ def test_cola_translator_maps_material_reference_service_life():
 
 
 def test_bec_translator_maps_building_element_classification():
-    translator = DocumentTranslator.from_xlsx(
-        translator_path("translator_bec_at_v2.0.0.xlsx"),
+    translator = DocumentTranslator.from_csv_dir(
+        translator_dir("translator_bec_at"),
         **cola_translator_args(),
     )
 
@@ -262,8 +262,8 @@ def test_bec_translator_maps_building_element_classification():
 
 
 def test_bmc_translator_maps_material_classification():
-    translator = DocumentTranslator.from_xlsx(
-        translator_path("translator_bmc_at_v2.0.0.xlsx"),
+    translator = DocumentTranslator.from_csv_dir(
+        translator_dir("translator_bmc_at"),
         **cola_translator_args(),
     )
 
@@ -274,13 +274,9 @@ def test_bmc_translator_maps_material_classification():
 
 def test_cola_translator_set_maps_attributes_and_classification():
     translator = DocumentTranslator()
-    for filename in (
-        "translator_at_v2.0.0.xlsx",
-        "translator_bec_at_v2.0.0.xlsx",
-        "translator_bmc_at_v2.0.0.xlsx",
-    ):
-        translator = translator + DocumentTranslator.from_xlsx(
-            translator_path(filename),
+    for name in ("translator_at", "translator_bec_at", "translator_bmc_at"):
+        translator = translator + DocumentTranslator.from_csv_dir(
+            translator_dir(name),
             **cola_translator_args(),
         )
 
