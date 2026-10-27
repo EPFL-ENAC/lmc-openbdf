@@ -1,0 +1,43 @@
+name: Release templates
+
+on:
+  push:
+    tags: ["v*"]
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Attach Excel templates to the release
+    runs-on: ubuntu-latest
+    env:
+      TEMPLATE_VERSION: v2.0.0
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install package
+        run: pip install -e ".[cli]"
+
+      - name: Generate templates
+        run: |
+          mkdir -p assets
+          openbdf save-template "assets/openbdf_template_${TEMPLATE_VERSION}.xlsx"
+          openbdf save-translator-template "assets/translator_template_${TEMPLATE_VERSION}.xlsx"
+
+      - name: Publish release assets
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ github.event.release.tag_name || github.ref_name }}
+        run: |
+          gh release view "$TAG" > /dev/null 2>&1 || gh release create "$TAG" --title "$TAG" --generate-notes
+          gh release upload "$TAG" assets/*.xlsx --clobber
