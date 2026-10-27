@@ -11,7 +11,12 @@ ROOT = Path(__file__).resolve().parent.parent
 
 ABOUT_PATTERN = r"(?m)^(\*\*Version )\d+\.\d+\.\d+(?=\*\*)"
 RELEASE_PATTERN = r"(?m)^(\s*TEMPLATE_VERSION: )v\d+\.\d+\.\d+$"
-README_PATTERN = r"(?m)(releases/latest/download/(?:openbdf_template|translator_template)_)v\d+\.\d+\.\d+(?=\.xlsx)"
+# Longest asset names first, so no alternative can shadow a longer one.
+README_PATTERN = (
+    r"(?m)(releases/latest/download/"
+    r"(?:translator_bec_template|translator_bmc_template|translator_template"
+    r"|translator_bec_at|translator_bmc_at|openbdf_template|translator_at)_)v\d+\.\d+\.\d+(?=\.xlsx)"
+)
 
 
 def replace_version(path: Path, pattern: str, version: str) -> int:

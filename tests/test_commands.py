@@ -12,6 +12,10 @@ runner = CliRunner()
         "",
         "explain",
         "open",
+        "save-bec-template",
+        "save-bmc-template",
+        "csv-to-translator",
+        "translator-to-csv",
     ],
 )
 def test_help(subcommand: str):
