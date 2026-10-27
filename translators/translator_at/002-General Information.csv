@@ -158,39 +158,39 @@ users_count,building_occupancy_count,Occupancy count,Decimal,Suggested
 ,lca_htp_c_declared,Human Toxicity - Cancer Effects,Boolean,Optional
 ,lca_htp_nc_declared,Human Toxicity - Non-cancer Effects,Boolean,Optional
 ,lca_sqp_declared,Soil Quality Index,Boolean,Optional
-,lca_a1_3,A1-A3: Product Stage,Boolean,Recommended
-,lca_a1,A1 Raw Material Supply,Boolean,Recommended
-,lca_a2,A2 Transport,Boolean,Recommended
+,lca_a1_3,A1-A3 Product Stage,Boolean,Recommended
+,lca_a1,A1 Extraction and upstream production,Boolean,Recommended
+,lca_a2,A2 Transport to factory,Boolean,Recommended
 ,lca_a3,A3 Manufacturing,Boolean,Recommended
-,lca_a4,A4 Transport,Boolean,Recommended
-,lca_a5,A5 Construction/Installation: Installation of the product into the building,Boolean,Recommended
+,lca_a4,A4 Transport to and from site,Boolean,Recommended
+,lca_a5,A5 Construction installation process,Boolean,Recommended
 ,lca_a5_1,A5.1 Pre-construction demolition,Boolean,Optional
 ,lca_a5_2,A5.2 Construction activities,Boolean,Optional
 ,lca_a5_3,A5.3 Waste and waste management,Boolean,Optional
 ,lca_a5_4,A5.4 Worker transport,Boolean,Optional
-,lca_b1,"B1 Use: Environmental impacts arising from the product in use (eg, release of substances)",Boolean,Recommended
+,lca_b1,B1 Installed products in use,Boolean,Recommended
 ,lca_b1_1,B1.1 Emissions from materials and carbonation,Boolean,Optional
 ,lca_b1_2,B1.2 Fugitive emissions of refrigerants,Boolean,Optional
-,lca_b2,"B2 Maintenance: Actions to maintain the product's functional quality (cleaning, painting)",Boolean,Recommended
-,lca_b3,B3 Repair: Corrective actions to return the product to a functional state,Boolean,Recommended
-,lca_b4,B4 Replacement: Replacing the product or parts of it at the end of its service life,Boolean,Recommended
-,lca_b5,B5 Refurbishment: Major changes to restore or improve performance,Boolean,Recommended
-,lca_b6,"B6 Operational Energy Use: Energy consumption related to the building's operation (heating, cooling, lighting)",Boolean,Recommended
-,lca_b6_1,B6.1 Regulated building-integrated systems,Boolean,Optional
-,lca_b6_2,B6.2 Non-regulated building-integrated systems,Boolean,Optional
-,lca_b6_3,B6.3 Other energy use related to user activities,Boolean,Optional
-,lca_b7,B7 Operational Water Use: Water consumption related to the building's operation,Boolean,Recommended
-,lca_b7_1,B7.1 Essential building-integrated systems,Boolean,Optional
-,lca_b7_2,B7.2 Other building-integrated systems,Boolean,Optional
-,lca_b7_3,B7.3 Non-building-integrated systems,Boolean,Optional
-,lca_b8,B8 Building-integrated users activities,Boolean,Optional
-,lca_b8_1,B8.1 Transport of persons,Boolean,Optional
-,lca_b8_2,B8.2 Charging of electric vehicles,Boolean,Optional
-,lca_b8_3,B8.3 Other user activities,Boolean,Optional
-,lca_c1,C1 De-construction/Demolition: Dismantling or demolishing the building/product,Boolean,Recommended
-,lca_c2,C2 Transport: Transporting the waste to processing or disposal sites,Boolean,Recommended
-,lca_c3,"C3 Waste Processing: Processing waste for reuse, recovery, or recycling",Boolean,Recommended
-,lca_c4,"C4 Disposal: Final disposal of waste that cannot be recovered (eg, landfill)",Boolean,Recommended
-,lca_d,D Benefits and Loads Beyond the System Boundary,Boolean,Recommended
-,lca_d1,"D1 Reuse, Recovery, and Recycling Potential: Net benefits or loads resulting from reusing or recycling materials (avoided emissions)",Boolean,Recommended
-,lca_d2,D2 Exported Energy (or Energy Recovery Potential),Boolean,Recommended
+,lca_b2,B2 Maintenance,Boolean,Recommended
+,lca_b3,B3 Repair,Boolean,Recommended
+,lca_b4,B4 Replacement,Boolean,Recommended
+,lca_b5,B5 Refurbishment,Boolean,Recommended
+,lca_b6,B6 Operational energy use,Boolean,Recommended
+,lca_b6_1,B6.1 Regulated building-integrated systems (services),Boolean,Optional
+,lca_b6_2,B6.2 Non-regulated building-integrated systems (services),Boolean,Optional
+,lca_b6_3,B6.3 Other energy use related to building user activities,Boolean,Optional
+,lca_b7,B7 Operational water use,Boolean,Recommended
+,lca_b7_1,"B7.1 Essential building-integrated systems (toilets, showers, bathrooms, heating, cooling, ventilation, humidification, and irrigation)",Boolean,Optional
+,lca_b7_2,"B7.2 Other building-integrated systems (swimming pools, saunas etc.)",Boolean,Optional
+,lca_b7_3,"B7.3 Non-building-integrated systems (for example, dishwashers, washing machines, etc.)",Boolean,Optional
+,lca_b8,"B8 Building-integrated users' activities, not covered by B1-B7",Boolean,Optional
+,lca_b8_1,B8.1 Transport of persons to and from the building,Boolean,Optional
+,lca_b8_2,B8.2 Charging of electric vehicles within the building site,Boolean,Optional
+,lca_b8_3,"B8.3 Others, such as use of “consumables” like paper for offices, or furniture and equipment not fixed to the building",Boolean,Optional
+,lca_c1,C1 Deconstruction,Boolean,Recommended
+,lca_c2,C2 Transport to waste processing or disposal,Boolean,Recommended
+,lca_c3,"C3 Waste processing for reuse, recovery or recycling",Boolean,Recommended
+,lca_c4,C4 Disposal of waste,Boolean,Recommended
+,lca_d,D Benefits and Loads Beyond Boundary,Boolean,Recommended
+,lca_d1,"D1 Reuse, recycling and energy recovery resulting from the net flows of materials exiting the system boundary",Boolean,Recommended
+,lca_d2,"D2 Potential benefits and loads from exported utilities (for example, electrical energy, thermal energy, potable water)",Boolean,Recommended
