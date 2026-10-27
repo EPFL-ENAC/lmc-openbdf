@@ -7,5 +7,5 @@ Auto-generated documentation.
 :maxdepth: 2
 :caption: Contents
 
-../../auto_source/frame_cli/modules
+../../auto_source/openbdf/modules
 ```
