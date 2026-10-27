@@ -3,6 +3,7 @@ from __future__ import annotations
 from datetime import date
 from decimal import Decimal
 from enum import Enum
+from pathlib import Path
 from typing import Any
 
 import pandas as pd
@@ -12,6 +13,7 @@ from openbdf.lib.converters.dataframe import (
     bom_from_dataframe,
     project_package_from_tables,
 )
+from openbdf.lib.converters.translators import DocumentTranslator
 from openbdf.lib.openbdf_tables import OpenBDFTables
 from openbdf.lib.types.annotations import unwrap_optional
 from openbdf.lib.types.fields import get_field_code
@@ -260,6 +262,22 @@ def test_bom_drop_invalid_blank_rows_not_counted():
     result = bom_from_dataframe(dataframe, drop_invalid=True)
 
     assert [item.material_id for item in result] == ["mat-1"]
+
+
+def test_bom_ignores_an_unnamed_sheet_column():
+    # A styled but empty sheet column has a NaN header. It must not match the blank
+    # source cells of the translator, which all used to map to one field code.
+    dataframe = bom_df("MAT-1").drop(columns=["material_id"])
+    dataframe[float("nan")] = None
+    translator = DocumentTranslator.from_csv_dir(
+        Path(__file__).parents[1] / "translators" / "translator_at", 0, 1, 5, 6, 0
+    )
+    findings: list[OpenBDFValidationError] = []
+
+    result = bom_from_dataframe(dataframe, translator, findings=findings)
+
+    assert [str(finding) for finding in findings] == []
+    assert [item.material_id for item in result] == ["MAT-1"]
 
 
 def test_project_package_from_tables_drop_invalid_drops_missing_required():

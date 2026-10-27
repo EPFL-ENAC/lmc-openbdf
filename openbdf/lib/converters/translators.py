@@ -180,15 +180,16 @@ class CategoryTranslator:
         has_preprocess_rule_col = preprocess_rule_col is not None and df.shape[1] > preprocess_rule_col
 
         for idx, (raw_key, output) in enumerate(zip(df.iloc[:, attribute_name_col], df.iloc[:, translated_name_col])):
+            # A blank source cell declares no local code. Reading it as str would key every
+            # blank row under "nan", so an unnamed sheet column would match all of them.
+            has_source = not _is_missing(raw_key)
             raw_key = str(raw_key)
             output = None if _is_missing(output) else str(output)
 
-            if raw_key.startswith("@"):
+            if has_source and raw_key.startswith("@"):
                 rules.append(TranslationRule.fromString(raw_key, output))
-            elif output is not None:
-                if raw_key not in translation_dict:
-                    translation_dict[raw_key] = []
-                translation_dict[raw_key].append(output)
+            elif has_source and output is not None:
+                translation_dict.setdefault(raw_key, []).append(output)
 
             if output is None:
                 continue
