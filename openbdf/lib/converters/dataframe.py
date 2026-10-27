@@ -20,9 +20,11 @@ from openbdf.lib.validation.errors import (
     OpenBDFValidationError,
     TypeMismatch,
     UnknownEnumValue,
+    UnresolvedHeaderValue,
     findings_from_validation_error,
 )
 from openbdf.model.building_bill_materials_slim import BuildingBillMaterialsSlimRecordBase
+from openbdf.model.enums.openbdf_enum import OpenBDFEnum
 from openbdf.model.general_info import ProjectRecordBase
 from openbdf.model.ingest import make_ingest_model
 from openbdf.model.lca_results_full_tall import LCAResultsTallBase
@@ -39,6 +41,11 @@ from openbdf.model.tables import (
 PROJECT_EXCLUDED_FIELDS = {"id", "bill_of_materials"}
 BOM_EXCLUDED_FIELDS = {"id", "project_id", "project"}
 RESULTS_EXCLUDED_FIELDS = {"id", "building_bill_materials_slim_record_id", "building_bill_materials_slim_record"}
+
+# Fields that take their value from the name of the filled column when no column maps to them.
+HEADER_VALUE_FIELDS: dict[str, frozenset[str]] = {
+    COMMON_CATEGORY_PROPERTIES["bom"]["name"]: frozenset({"common_material_name"}),
+}
 
 
 def build_field_code_to_name_map(
@@ -157,6 +164,46 @@ def parse_finding(
     )
 
 
+def _header_value_plans(
+    df: pd.DataFrame,
+    fields: dict[str, Any],
+    bound_fields: set[str],
+    translator_category: str,
+    document_translator: DocumentTranslator,
+) -> list[tuple[str, Any, list[int]]]:
+    """
+    Plan the fields that no column maps to, but whose possible values name columns.
+
+    A national sheet can carry an enum as a group of columns, one column per
+    possible value, where the filled column names the value. The plan holds the
+    field, its annotation and the positions of those columns.
+    """
+    plans: list[tuple[str, Any, list[int]]] = []
+    for field_name in HEADER_VALUE_FIELDS.get(translator_category, frozenset()):
+        if field_name in bound_fields or field_name not in fields:
+            continue
+        annotation, _ = unwrap_optional(fields[field_name].annotation)
+        if not (isinstance(annotation, type) and issubclass(annotation, OpenBDFEnum)):
+            continue
+        known = set(document_translator.source_keys(annotation.__name__))
+        positions = [position for position, column in enumerate(df.columns) if str(column) in known]
+        if positions:
+            plans.append((field_name, fields[field_name].annotation, positions))
+    return plans
+
+
+def _is_filled(value: Any) -> bool:
+    """Return True for a cell that carries a value, counting zero as empty."""
+    if value is None or pd.isna(value):
+        return False
+    if isinstance(value, str):
+        try:
+            return float(value.strip().replace(",", ".")) != 0
+        except ValueError:
+            return bool(value.strip())
+    return value != 0
+
+
 def horizontal_from_dataframe(
     df: pd.DataFrame,
     model_cls: type[ModelT],
@@ -218,6 +265,8 @@ def horizontal_from_dataframe(
             ))
         column_plans.append(column_plan)
 
+    header_plans = _header_value_plans(df, fields, seen_field_names, translator_category, document_translator)
+
     # parse_value returns only immutable scalars, so the parsed defaults can
     # be shared across all rows.
     default_plans: list[tuple[str, Any]] = []
@@ -237,34 +286,54 @@ def horizontal_from_dataframe(
         row_findings: list[OpenBDFValidationError] = []
         failed_fields: set[str] = set()
 
+        assignments: list[tuple[str, Any, PreprocessRule | None, Any]] = []
         for column_plan, raw_cell in zip(column_plans, row_values):
             for field_name, annotation, preprocess_rule in column_plan:
-                raw_value = raw_cell
-                if preprocess_rule:
-                    result = preprocess_rule.execute(raw_value)
-                    if result.valid:
-                        raw_value = result.value
-                    else:
-                        raw_value = None
+                assignments.append((field_name, annotation, preprocess_rule, raw_cell))
 
-                try:
-                    kwargs[field_name] = parse_value(
+        for field_name, annotation, positions in header_plans:
+            filled = [position for position in positions if _is_filled(row_values[position])]
+            if len(filled) == 1:
+                assignments.append((field_name, annotation, None, str(df.columns[filled[0]])))
+                continue
+            names = ", ".join(str(df.columns[position]).split("\n")[0] for position in filled)
+            detail = f": {names}" if names else ""
+            row_findings.append(
+                UnresolvedHeaderValue(
+                    f"Field {name_to_code.get(field_name, field_name)} needs exactly one filled column, "
+                    f"found {len(filled)}{detail}",
+                    source=translator_category,
+                    row=row,
+                )
+            )
+
+        for field_name, annotation, preprocess_rule, raw_cell in assignments:
+            raw_value = raw_cell
+            if preprocess_rule:
+                result = preprocess_rule.execute(raw_value)
+                if result.valid:
+                    raw_value = result.value
+                else:
+                    raw_value = None
+
+            try:
+                kwargs[field_name] = parse_value(
+                    annotation,
+                    raw_value,
+                    document_translator,
+                )
+            except (ValueError, ArithmeticError):
+                kwargs[field_name] = None
+                failed_fields.add(field_name)
+                row_findings.append(
+                    parse_finding(
                         annotation,
                         raw_value,
-                        document_translator,
+                        name_to_code.get(field_name, field_name),
+                        translator_category,
+                        row,
                     )
-                except (ValueError, ArithmeticError):
-                    kwargs[field_name] = None
-                    failed_fields.add(field_name)
-                    row_findings.append(
-                        parse_finding(
-                            annotation,
-                            raw_value,
-                            name_to_code.get(field_name, field_name),
-                            translator_category,
-                            row,
-                        )
-                    )
+                )
 
         for field_name, default_parsed in default_plans:
             if kwargs.get(field_name) is not None:

@@ -267,9 +267,9 @@ def test_bmc_translator_maps_material_classification():
         **cola_translator_args(),
     )
 
-    assert translator.translate("OpenBDFMaterialClassification", "i9") == ["1.1"]
-    assert translator.translate("OpenBDFMaterialClassification", "n") == ["2.1"]
-    assert translator.translate("OpenBDFMaterialClassification", "n6") == ["2.2"]
+    assert translator.translate("OpenBDFMaterialClassification", "i4\nLaminiertes Leimholz\n (kg)") == ["1.1"]
+    assert translator.translate("OpenBDFMaterialClassification", "n1\nAuf Bitumenbasis\n (kg)") == ["2.0"]
+    assert translator.translate("OpenBDFMaterialClassification", "h2\nStahl\n (kg)") == ["3.2"]
 
 
 def test_cola_translator_set_maps_attributes_and_classification():
@@ -282,4 +282,4 @@ def test_cola_translator_set_maps_attributes_and_classification():
 
     assert translator.translate("Bill of Materials", "Lebensdauer (Jahre)") == ["material_reference_service_life"]
     assert translator.translate("OpenBDFBuildingElementClassific", "2 Bauwerk-Rohbau") == ["2"]
-    assert translator.translate("OpenBDFMaterialClassification", "i9") == ["1.1"]
+    assert translator.translate("OpenBDFMaterialClassification", "i4\nLaminiertes Leimholz\n (kg)") == ["1.1"]

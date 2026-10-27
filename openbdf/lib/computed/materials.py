@@ -3,15 +3,14 @@
 from __future__ import annotations
 
 from decimal import ROUND_HALF_UP, Decimal
-from typing import Any, Optional
+from typing import Any
 
-from openbdf.lib.converters.translators import COMMON_CATEGORY_PROPERTIES, DocumentTranslator
+from openbdf.lib.converters.translators import COMMON_CATEGORY_PROPERTIES
 from openbdf.lib.validation.collect import MaterialPair, group_by_material_pair, material_pair
 from openbdf.lib.validation.errors import OpenBDFValidationError
-from openbdf.model.enums.materials import OpenBDFMaterialClassification
 from openbdf.model.tables import ProjectMaterialDatabaseRecord, ProjectRecord
 
-from .write import mapped_value, report_missing, write_automatic
+from .write import write_automatic
 
 BOM_SHEET = COMMON_CATEGORY_PROPERTIES["bom"]["name"]
 PMD_SHEET = COMMON_CATEGORY_PROPERTIES["material_database"]["name"]
@@ -20,7 +19,6 @@ SHARE_QUANTUM = Decimal("0.0001")
 
 def fill_materials(
     project: ProjectRecord,
-    document_translator: DocumentTranslator | None,
     findings: list[OpenBDFValidationError],
     *,
     generate_missing_lines: bool,
@@ -82,7 +80,6 @@ def fill_materials(
         write_automatic(line, "material_mass_share", _share(mass, total_mass), findings, source=PMD_SHEET)
 
     _fill_material_data_type(lines, rows, findings)
-    _fill_common_material_name(rows, document_translator, findings)
 
 
 def _fill_material_data_type(
@@ -99,30 +96,6 @@ def _fill_material_data_type(
     for row in rows:
         value = type_by_ref_id.get(row.material_ref_id) if row.material_ref_id else None
         write_automatic(row, "material_data_type", value, findings, source=BOM_SHEET, warn_missing=False)
-
-
-def _fill_common_material_name(
-    rows: list[Any],
-    document_translator: DocumentTranslator | None,
-    findings: list[OpenBDFValidationError],
-) -> None:
-    """Map the material name as built to the OpenBDF material classification, and never guess."""
-    if document_translator is None:
-        return
-
-    missing: set[Any] = set()
-    for row in rows:
-        value, unmapped = mapped_value(
-            Optional[OpenBDFMaterialClassification],
-            row.custom_material_name,
-            document_translator,
-            OpenBDFMaterialClassification.__name__,
-        )
-        if unmapped:
-            missing.add(row.custom_material_name)
-        write_automatic(row, "common_material_name", value, findings, source=BOM_SHEET, warn_missing=False)
-
-    report_missing(missing, findings, source=BOM_SHEET)
 
 
 def _ref_id_number(material_ref_id: str | None) -> int:

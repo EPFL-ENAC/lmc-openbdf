@@ -39,7 +39,7 @@ repos:
     rev: v2.4.1
     hooks:
       - id: codespell
-        exclude: openbdf/model/enums
+        exclude: openbdf/model/enums|^translators/
         additional_dependencies:
           - tomli
   - repo: https://github.com/compilerla/conventional-pre-commit

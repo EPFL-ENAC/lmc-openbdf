@@ -224,6 +224,10 @@ class CategoryTranslator:
         """Return the default value for a translated attribute name, if any."""
         return self._default_values.get(attribute_name)
 
+    def source_keys(self) -> list[str]:
+        """Return the literal source values this translator knows, in file order."""
+        return list(self._translation_dict)
+
     def get_preprocess_rule(self, field_name: str) -> PreprocessRule | None:
         """Return the preprocess rule for a translated field name, if any."""
         return self._preprocess_rules.get(field_name)
@@ -454,6 +458,13 @@ class DocumentTranslator:
         if translator is None:
             return None
         return translator.get_default(attribute_name)
+
+    def source_keys(self, category_name: str) -> list[str]:
+        """Return the source values of a category, so a caller can look for them as column names."""
+        translator = self._translators.get(category_name, self._translators.get(category_name[:31], None))
+        if translator is None:
+            return []
+        return translator.source_keys()
 
     def get_preprocess_rule(self, category_name: str, attribute_name: str) -> PreprocessRule | None:
         translator = self._translators.get(category_name, self._translators.get(category_name[:31], None))

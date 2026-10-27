@@ -177,8 +177,7 @@ class BuildingBillMaterialsSlimRecordBase(SQLModel):
             attribute_name="OpenBDF Material Classification",
             field_code="common_material_name",
             description="The corresponding material classification from the standardized openBDF taxonomy. Example: Concrete, ready-mixed.",
-            requirements=Requirement.AUTOMATIC,
-            reference=Reference.INDICATE_BUILDING_MATERIAL_CLASSIFICATION,
+            requirements=Requirement.RECOMMENDED,
         ),
     )
 
