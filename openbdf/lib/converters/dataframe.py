@@ -14,6 +14,7 @@ from openbdf.lib.openbdf_tables import OpenBDFTables
 from openbdf.lib.types.annotations import unwrap_optional
 from openbdf.lib.types.fields import get_field_code
 from openbdf.lib.types.values import parse_value, serialize_value
+from openbdf.lib.validation.collect import _is_blank
 from openbdf.lib.validation.errors import (
     DroppedLine,
     DuplicateFieldCode,
@@ -267,6 +268,12 @@ def horizontal_from_dataframe(
 
     header_plans = _header_value_plans(df, fields, seen_field_names, translator_category, document_translator)
 
+    material_id_field = model_cls.model_fields.get("material_id")
+    generate_material_ids = (
+        material_id_field is not None and material_id_field.is_required() and "material_id" not in seen_field_names
+    )
+    generated_material_id_count = 0
+
     # parse_value returns only immutable scalars, so the parsed defaults can
     # be shared across all rows.
     default_plans: list[tuple[str, Any]] = []
@@ -340,8 +347,14 @@ def horizontal_from_dataframe(
                 continue
             kwargs[field_name] = default_parsed
 
-        if not any(value is not None for value in kwargs.values()):
+        if all(_is_blank(raw_cell) for raw_cell in row_values):
             continue
+
+        if generate_material_ids:
+            # One positional id per non-blank row. A row dropped by drop_invalid
+            # still consumes an id, so the results rows keep their positional partner.
+            generated_material_id_count += 1
+            kwargs["material_id"] = f"MAT-{generated_material_id_count}"
 
         record = ingest_cls(**kwargs)
         try:
@@ -519,21 +532,6 @@ def project_from_dataframe(
     )
 
 
-def add_material_id_column_if_missing(df: pd.DataFrame) -> pd.DataFrame:
-    """
-    Ensure that the dataframe has a 'material_id' column.
-    If not, add one with default values.
-    """
-    if "material_id" not in df.columns:
-        df = df.copy()
-        df.insert(
-            0,
-            "material_id",
-            [f"MAT-{i + 1}" for i in range(len(df))],
-        )
-    return df
-
-
 def _dropped_line_message(row: int, material_id: Any, reasons: list[OpenBDFValidationError]) -> str:
     """Describe a dropped line and the reasons that made it invalid."""
     identifier = f" (material_id {material_id!r})" if material_id else ""
@@ -554,7 +552,8 @@ def bom_from_dataframe(
     If drop_invalid is True, lines that miss a required field are dropped
     and reported as E33 warnings.
     """
-    bom_df = add_material_id_column_if_missing(bom_df)
+    if document_translator is None:
+        document_translator = DocumentTranslator.default_openbdf_translator()
     return horizontal_from_dataframe(
         bom_df,
         BuildingBillMaterialsSlimRecordBase,
@@ -595,7 +594,6 @@ def results_wide_from_dataframe(
     Build a list of LCAResultsWideFullBase from a dataframe produced
     by results_wide_to_dataframe().
     """
-    results_wide_df = add_material_id_column_if_missing(results_wide_df)
     return horizontal_from_dataframe(
         results_wide_df,
         LCAResultsWideFullBase,

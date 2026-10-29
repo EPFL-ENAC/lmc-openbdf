@@ -4,7 +4,7 @@ from typing import Any
 
 import pandas as pd
 
-from openbdf.lib.converters.translators import COMMON_CATEGORY_PROPERTIES, DocumentTranslator
+from openbdf.lib.converters.translators import COMMON_CATEGORY_PROPERTIES, DocumentTranslator, field_code_frame
 from openbdf.lib.openbdf_tables import OpenBDFTables
 from openbdf.lib.validation.declared_results import check_declared_results
 from openbdf.lib.validation.errors import (
@@ -262,15 +262,6 @@ def validate_project(
     findings.extend(check_result_row_alignment(bill_of_materials, results_wide))
     findings.extend(check_missing_mass(bill_of_materials, dropped_rows))
     return findings
-
-
-def field_code_frame(frame: pd.DataFrame, category: str, document_translator: DocumentTranslator) -> pd.DataFrame:
-    """Rename the raw sheet columns to their field codes, ignoring the columns the sheets do not use."""
-    columns: dict[str, pd.Series] = {}
-    for column in frame.columns:
-        for field_code in document_translator.translate(category, str(column)):
-            columns[field_code] = frame[column]
-    return pd.DataFrame(columns, index=frame.index)
 
 
 def _without_blank_rows(frame: pd.DataFrame) -> pd.DataFrame:

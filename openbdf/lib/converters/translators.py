@@ -548,3 +548,15 @@ SHEETS_PROPERTIES_HEADERS = {
     "end_row": "End row (for horizontal sheets, optional)",
     "end_col": "End column (for horizontal sheets, optional)",
 }
+
+
+def field_code_frame(frame: pd.DataFrame, category: str, document_translator: "DocumentTranslator") -> pd.DataFrame:
+    """Rename the raw sheet columns to their field codes, ignoring the columns the sheets do not use."""
+    columns: dict[str, pd.Series] = {}
+    for position, column in enumerate(frame.columns):
+        # A sheet may repeat a header, so read by position: frame[column] would
+        # return a two-dimensional frame for a duplicated column name.
+        series = frame.iloc[:, position]
+        for field_code in document_translator.translate(category, str(column)):
+            columns[field_code] = series
+    return pd.DataFrame(columns, index=frame.index)
