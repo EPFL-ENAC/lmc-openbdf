@@ -103,7 +103,7 @@ class FloorAreaNotPositive(OpenBDFValidationError):
 
 
 class UnmappedNationalValue(OpenBDFValidationError):
-    """E19: a national value has no OpenBDF mapping, so the field is left empty."""
+    """E19: a national value has no OpenBDF mapping, so the field keeps its value."""
 
     code = "E19"
     severity = Severity.WARNING

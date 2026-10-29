@@ -29,18 +29,21 @@ def write_automatic(
     *,
     source: str,
     warn_missing: bool = True,
+    unmapped: bool = False,
 ) -> None:
     """
     Write a derived value and report what the field held before.
 
     A field with no computed value is emptied, because an automatic cell belongs to the
-    parser and never to the contributor. warn_missing is False when the caller already
-    reported the unmapped value once for every row that carries it.
+    parser and never to the contributor. When unmapped is set, the national value has no
+    OpenBDF mapping, so the computed value is unknown and the field keeps its value.
+    warn_missing is False when the caller already reported the unmapped value once for
+    every row that carries it.
     """
     current = getattr(record, field_name, None)
 
     if value is None:
-        if current is None:
+        if current is None or unmapped:
             return
         if warn_missing:
             findings.append(
@@ -95,5 +98,7 @@ def report_missing(values: set[Any], findings: list[OpenBDFValidationError], *, 
     """Warn E19 once for every distinct national value that has no mapping."""
     for value in sorted(values, key=str):
         findings.append(
-            UnmappedNationalValue(f"{value!r} has no mapping; the field was left empty and not guessed", source=source)
+            UnmappedNationalValue(
+                f"{value!r} has no mapping; the field was left unchanged and not guessed", source=source
+            )
         )

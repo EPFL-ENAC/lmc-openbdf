@@ -11,6 +11,7 @@ from openbdf.lib.computed.project import PHASE_COMMON
 from openbdf.lib.converters.translators import FLOOR_LEVEL_CATEGORY, DocumentTranslator
 from openbdf.lib.validation.errors import AutomaticFieldSupplied, OpenBDFValidationError, UnmappedNationalValue
 from openbdf.model.enums.buildings import AboveBelowGround, GFAMeasurementMethod
+from openbdf.model.enums.element_classifications import OpenBDFBuildingElementClassification
 from openbdf.model.enums.lca import (
     AssessmentType_EN15978,
     DataWeightingBasis,
@@ -268,7 +269,7 @@ def test_common_floor_level_uses_the_number_mapping_then_the_label_and_reports_o
     # The first label comes from the number mapping and the second one carries its number in the text.
     assert [row.common_floor_level for row in project.bill_of_materials] == [2, 2, None, None]
     assert [str(finding) for finding in findings] == [
-        "E19: 'roof' has no mapping; the field was left empty and not guessed"
+        "E19: 'roof' has no mapping; the field was left unchanged and not guessed"
     ]
     assert isinstance(findings[0], UnmappedNationalValue)
     assert findings[0].source == "Bill of Materials"
@@ -296,7 +297,7 @@ def test_a_bare_int_rule_with_an_empty_level_keeps_the_label_and_takes_its_numbe
     assert translator.translate(FLOOR_LEVEL_CATEGORY, "2.OG") == ["2.OG"]
     assert [row.common_floor_level for row in project.bill_of_materials] == [2, 0, None]
     assert [str(finding) for finding in findings] == [
-        "E19: 'roof' has no mapping; the field was left empty and not guessed"
+        "E19: 'roof' has no mapping; the field was left unchanged and not guessed"
     ]
 
 
@@ -326,6 +327,34 @@ def test_common_above_below_ground_prefers_the_mapping_and_else_uses_the_sign_of
         (0, AboveBelowGround.ABOVE),
         (3, AboveBelowGround.ABOVE),
     ]
+
+
+def test_an_unmapped_label_keeps_the_derived_values_that_the_file_already_carries():
+    project = project_record(
+        bill_of_materials=[
+            bom_row(
+                "MAT-1",
+                "Concrete",
+                custom_floor_level="OG",
+                bec_custom="2E.01 Außenwandkonstruktionen",
+                common_floor_level=1,
+                common_above_below_ground=AboveBelowGround.ABOVE,
+                bec_openbdf=OpenBDFBuildingElementClassification.OPAQUE_ENVELOPE_2510,
+            ),
+        ],
+    )
+    findings: list[OpenBDFValidationError] = []
+
+    # A reopened workbook carries no national translator, so neither label has a mapping.
+    fill_bill_of_materials_elements(project, MappingTranslator({}), findings)
+
+    row = project.bill_of_materials[0]
+    assert (row.common_floor_level, row.common_above_below_ground, row.bec_openbdf) == (
+        1,
+        AboveBelowGround.ABOVE,
+        OpenBDFBuildingElementClassification.OPAQUE_ENVELOPE_2510,
+    )
+    assert [finding.code for finding in findings] == ["E19", "E19"]
 
 
 def test_lca_stage_module_and_submodule_are_derived_from_the_full_life_cycle_module_code():
