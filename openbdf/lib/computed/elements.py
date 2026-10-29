@@ -41,7 +41,7 @@ def fill_bill_of_materials_elements(
         if floor_unmapped:
             missing_floor.add(row.custom_floor_level)
 
-        position, _ = mapped_value(
+        position, position_unmapped = mapped_value(
             Optional[AboveBelowGround],
             row.custom_floor_level,
             document_translator,
@@ -50,7 +50,15 @@ def fill_bill_of_materials_elements(
         if level is not None and position is not None and level != 0:
             level = -abs(level) if position is AboveBelowGround.BELOW else abs(level)
 
-        write_automatic(row, "common_floor_level", level, findings, source=BOM_SHEET, warn_missing=False)
+        write_automatic(
+            row,
+            "common_floor_level",
+            level,
+            findings,
+            source=BOM_SHEET,
+            warn_missing=False,
+            unmapped=floor_unmapped,
+        )
         write_automatic(
             row,
             "common_above_below_ground",
@@ -58,6 +66,7 @@ def fill_bill_of_materials_elements(
             findings,
             source=BOM_SHEET,
             warn_missing=False,
+            unmapped=position_unmapped,
         )
 
         bec, bec_unmapped = mapped_value(
@@ -68,7 +77,15 @@ def fill_bill_of_materials_elements(
         )
         if bec_unmapped:
             missing_bec.add(row.bec_custom)
-        write_automatic(row, "bec_openbdf", bec, findings, source=BOM_SHEET, warn_missing=False)
+        write_automatic(
+            row,
+            "bec_openbdf",
+            bec,
+            findings,
+            source=BOM_SHEET,
+            warn_missing=False,
+            unmapped=bec_unmapped,
+        )
 
     report_missing(missing_floor | missing_bec, findings, source=BOM_SHEET)
 
