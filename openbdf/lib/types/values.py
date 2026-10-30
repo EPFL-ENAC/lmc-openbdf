@@ -59,6 +59,9 @@ def parse_value(annotation: Any, raw_value: Any, translator: DocumentTranslator 
     if isinstance(raw_value, str) and raw_value == "":
         return None
 
+    if isinstance(raw_value, bool):
+        raw_value = int(raw_value)
+
     (annotation, _) = unwrap_optional(annotation)
     is_enum = isinstance(annotation, type) and issubclass(annotation, Enum)
 
@@ -119,7 +122,7 @@ def serialize_value(value: Any) -> Any:
         return value.value
 
     if isinstance(value, Decimal):
-        return str(value)
+        return value
 
     if isinstance(value, (date, datetime)):
         return value.isoformat()

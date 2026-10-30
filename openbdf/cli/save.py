@@ -305,7 +305,7 @@ def about_to_xlsx(writer: pd.ExcelWriter) -> None:
 
 
 def save_openbdf_to_xlsx(
-    xlsx_path: str | Path,
+    xlsx_path: str | Path | BinaryIO,
     project: ProjectRecord | None,
     info_sheet_name: str = COMMON_CATEGORY_PROPERTIES["project"]["name"],
     bom_sheet_name: str = COMMON_CATEGORY_PROPERTIES["bom"]["name"],
@@ -473,10 +473,11 @@ def info_to_xlsx(
         ref = info_sheet.cell(row=cell_row, column=11, value=reference or "")
         ref.style = METADATA_STYLE.name
 
-        v = info_sheet.cell(
-            row=cell_row, column=10, value=_info_value(project, field_code, project_id, findings, sheet_name)
-        )
+        value = _info_value(project, field_code, project_id, findings, sheet_name)
+        v = info_sheet.cell(row=cell_row, column=10, value=value)
+        number_format = v.number_format  # openpyxl sets a date format on assignment; v.style resets it to General
         v.style = AUTOMATIC_VALUE_STYLE.name if requirements is Requirement.AUTOMATIC else EDITABLE_VALUE_STYLE.name
+        v.number_format = number_format
 
         dv = xlsx_validation_from_type(data_type, is_optional, metadata, enum_registry)  # type: ignore[arg-type]
         if dv:

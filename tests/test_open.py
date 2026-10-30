@@ -370,11 +370,11 @@ def test_open_command_opens_filled_generated_template_as_single_file(tmp_path: P
     out_bom = out["Bill of Materials"]
     assert out_bom.cell(row=9, column=out_bom_codes["material_id"]).value == "MAT-1"
     assert out_bom.cell(row=9, column=out_bom_codes["custom_material_name"]).value == "Concrete C30/37"
-    assert out_bom.cell(row=9, column=out_bom_codes["material_reference_service_life"]).value == "50"
+    assert out_bom.cell(row=9, column=out_bom_codes["material_reference_service_life"]).value == 50
     out_wide_codes = {cell.value: cell.column for cell in out["LCA Result (Wide)"][2] if cell.value}
     out_wide = out["LCA Result (Wide)"]
     assert out_wide.cell(row=9, column=out_wide_codes["material_id"]).value == "MAT-1"
-    assert out_wide.cell(row=9, column=out_wide_codes["gwp_total_a1_a3"]).value == "123.45"
+    assert out_wide.cell(row=9, column=out_wide_codes["gwp_total_a1_a3"]).value == 123.45
     out_pmd_codes = {cell.value: cell.column for cell in out["Project Material Database"][2] if cell.value}
     out_pmd = out["Project Material Database"]
     assert out_pmd.cell(row=9, column=out_pmd_codes["material_ref_id"]).value == "M0001"
