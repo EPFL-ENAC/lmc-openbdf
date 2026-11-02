@@ -170,8 +170,19 @@ def test_findings_are_capped_per_sheet_in_the_terminal_output():
 
     assert lines[0] == f"{WIDE_SHEET}:"
     assert lines[1] == "  W004: finding 0"
-    assert lines[-1] == "  ... 3 more findings not shown"
+    assert lines[-1] == "  ... 3 more findings not shown, including: W004"
     assert len(lines) == 12
+
+
+def test_hidden_findings_enumerate_each_collected_code_once():
+    findings = [
+        *[ResultsWithoutIndicatorDeclaration(f"reject {index}", source=WIDE_SHEET) for index in range(12)],
+        *[DeclaredIndicatorWithoutResults(f"warning {index}", source=WIDE_SHEET) for index in range(3)],
+    ]
+
+    lines = format_findings(findings)
+
+    assert lines[-1] == "  ... 5 more findings not shown, including: E010, W004"
 
 
 def test_terminal_output_shows_the_most_severe_findings_of_a_sheet_first():
