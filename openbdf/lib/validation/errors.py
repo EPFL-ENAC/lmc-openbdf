@@ -371,7 +371,9 @@ def format_findings(findings: Sequence[OpenBDFValidationError], *, limit: int = 
         source_findings = sorted(source_findings, key=_within_sheet_key)
         lines.extend(f"  {_with_row(finding)}" for finding in source_findings[:limit])
         if len(source_findings) > limit:
-            lines.append(f"  ... {len(source_findings) - limit} more findings not shown")
+            hidden = source_findings[limit:]
+            codes = ", ".join(dict.fromkeys(finding.code for finding in hidden))
+            lines.append(f"  ... {len(hidden)} more findings not shown, including: {codes}")
     return lines
 
 
