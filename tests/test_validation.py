@@ -67,7 +67,7 @@ def test_a_missing_required_value_is_a_missing_required_field_finding():
     findings: list[Any] = []
     bom_from_dataframe(dataframe, findings=findings)
 
-    assert [str(finding) for finding in findings] == ["E01: Field material_id is required and was not provided"]
+    assert [str(finding) for finding in findings] == ["E001: Field material_id is required and was not provided"]
     assert findings[0].row == 1
 
 
@@ -79,7 +79,7 @@ def test_a_dropped_line_is_reported_with_its_excel_row():
     bom_from_dataframe(dataframe, findings=findings, drop_invalid=True)
 
     assert [str(finding) for finding in findings] == [
-        "E33: Row 1: line dropped: Field material_id is required and was not provided"
+        "W005: Row 1: line dropped: Field material_id is required and was not provided"
     ]
     assert findings[0].row == 1
 
@@ -89,7 +89,7 @@ def test_a_value_outside_its_enum_is_an_unknown_enum_value_finding():
 
     bom_from_dataframe(bom_frame(material_data_type="bogus"), findings=findings)
 
-    assert [str(finding) for finding in findings] == ["E02: Value 'bogus' is not a valid MaterialDataType"]
+    assert [str(finding) for finding in findings] == ["E002: Value 'bogus' is not a valid MaterialDataType"]
 
 
 def test_a_value_of_the_wrong_type_is_a_type_mismatch_finding():
@@ -97,7 +97,7 @@ def test_a_value_of_the_wrong_type_is_a_type_mismatch_finding():
 
     bom_from_dataframe(bom_frame(material_reference_service_life="not a number"), findings=findings)
 
-    assert [str(finding) for finding in findings] == ["E03: Field material_reference_service_life expects Decimal"]
+    assert [str(finding) for finding in findings] == ["E003: Field material_reference_service_life expects Decimal"]
 
 
 def test_a_share_above_one_hundred_is_a_share_out_of_range_finding():
@@ -106,7 +106,7 @@ def test_a_share_above_one_hundred_is_a_share_out_of_range_finding():
 
     project_from_dataframe(dataframe, findings=findings)
 
-    assert [str(finding) for finding in findings] == ["E13: Field lca_data_generic_share must lie between 0 and 100"]
+    assert [str(finding) for finding in findings] == ["E006: Field lca_data_generic_share must lie between 0 and 100"]
     # The overridden value is the last row of the sheet, so the finding names that row.
     assert findings[0].row == len(dataframe)
 
@@ -116,7 +116,7 @@ def test_a_floor_area_of_zero_is_a_floor_area_not_positive_finding():
 
     project_from_dataframe(project_frame(building_gross_floor_area="0"), findings=findings)
 
-    assert [str(finding) for finding in findings] == ["E17: Floor area must be greater than zero"]
+    assert [str(finding) for finding in findings] == ["E008: Floor area must be greater than zero"]
 
 
 def test_a_field_code_declared_twice_is_a_duplicate_field_code_finding():
@@ -127,7 +127,7 @@ def test_a_field_code_declared_twice_is_a_duplicate_field_code_finding():
     findings: list[Any] = []
     project_from_dataframe(dataframe, findings=findings)
 
-    assert [str(finding) for finding in findings] == ["E20: Field code record_type is declared twice"]
+    assert [str(finding) for finding in findings] == ["E009: Field code record_type is declared twice"]
     assert findings[0].row == len(dataframe)
 
 
@@ -137,7 +137,7 @@ def test_a_different_number_of_inventory_and_result_rows_is_a_row_count_mismatch
 
     findings = check_result_row_alignment(bill_of_materials, results_wide)
 
-    assert [str(finding) for finding in findings] == ["E05: Bill of Materials has 1 rows, LCA Result (Wide) has 2"]
+    assert [str(finding) for finding in findings] == ["E004: Bill of Materials has 1 rows, LCA Result (Wide) has 2"]
 
 
 def test_two_rows_with_different_material_ids_are_a_misalignment_finding():
@@ -147,7 +147,7 @@ def test_two_rows_with_different_material_ids_are_a_misalignment_finding():
     findings = check_result_row_alignment(bill_of_materials, results_wide)
 
     assert [str(finding) for finding in findings] == [
-        "E06: Row 11: material_id MAT-2 in the inventory, MAT-3 in the results"
+        "E005: Row 11: material_id MAT-2 in the inventory, MAT-3 in the results"
     ]
     assert findings[0].row == 11
 
@@ -161,7 +161,7 @@ def test_a_row_without_a_mass_warns_and_a_blank_row_is_ignored():
     findings = check_missing_mass(bill_of_materials)
 
     assert [str(finding) for finding in findings] == [
-        "E16: Row 10 has no mass, material efficiency analysis is not possible"
+        "W002: Row 10 has no mass, material efficiency analysis is not possible"
     ]
 
 
@@ -174,7 +174,7 @@ def test_a_dropped_row_is_not_reported_as_missing_a_mass():
     findings = check_missing_mass(bill_of_materials, frozenset({11}))
 
     assert [str(finding) for finding in findings] == [
-        "E16: Row 10 has no mass, material efficiency analysis is not possible"
+        "W002: Row 10 has no mass, material efficiency analysis is not possible"
     ]
 
 
@@ -188,4 +188,4 @@ def test_two_rows_with_one_material_id_are_a_duplicate_material_id_finding():
 
     findings = check_duplicate_material_ids(project)
 
-    assert [str(finding) for finding in findings] == ["E32: material_id 'MAT-1' is used by 2 bill of materials rows"]
+    assert [str(finding) for finding in findings] == ["E016: material_id 'MAT-1' is used by 2 bill of materials rows"]

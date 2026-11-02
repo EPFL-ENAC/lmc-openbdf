@@ -62,7 +62,7 @@ def group_by_material_pair(records: list[Any]) -> dict[MaterialPair, list[Any]]:
 
 def check_project_material_database(project: Any) -> list[OpenBDFValidationError]:
     """
-    E27 to E31. A material is the pair of its name and its EPD dataset name: every bill of
+    E011 to E015. A material is the pair of its name and its EPD dataset name: every bill of
     materials material needs exactly one project material database line, the line and its
     rows must carry the same material_ref_id, and a material_ref_id must name one line only.
     """
@@ -136,7 +136,7 @@ def check_project_material_database(project: Any) -> list[OpenBDFValidationError
 
 
 def check_duplicate_material_ids(project: Any) -> list[OpenBDFValidationError]:
-    """E32. Two bill of materials rows with one material_id would share a single tall result set."""
+    """E016. Two bill of materials rows with one material_id would share a single tall result set."""
     counts: dict[str, int] = {}
     for row in project.bill_of_materials:
         if row.material_id:
@@ -157,7 +157,7 @@ def check_result_row_alignment(
     results_wide: pd.DataFrame | None,
 ) -> list[OpenBDFValidationError]:
     """
-    E05 and E06. The bill of materials and the wide results sheet hold one row per material,
+    E004 and E005. The bill of materials and the wide results sheet hold one row per material,
     so they are compared by position. The check reads the source rows, before any invalid
     line is dropped, because dropping a row would shift every later row.
     """
@@ -198,7 +198,7 @@ def check_missing_mass(
     dropped_rows: frozenset[int] = frozenset(),
 ) -> list[OpenBDFValidationError]:
     """
-    E16. A bill of materials row without a mass cannot feed the material efficiency analysis.
+    W002. A bill of materials row without a mass cannot feed the material efficiency analysis.
     A dropped row is skipped, because it is no longer part of the project.
     """
     bill_of_materials = _without_blank_rows(bill_of_materials)
@@ -232,9 +232,9 @@ def validate_project(
     """
     Collect every finding about a project instead of stopping at the first one.
 
-    The sheet-level checks E05, E06 and E16 need the source tables, so a project restored
+    The sheet-level checks E004, E005 and W002 need the source tables, so a project restored
     from a database is validated without them. A missing project material database sheet is
-    an E34 warning, because its lines are generated from the bill of materials. dropped_rows
+    an W006 warning, because its lines are generated from the bill of materials. dropped_rows
     holds the Excel rows the ingest dropped, which the row checks leave out.
     """
     findings = check_duplicate_material_ids(project)

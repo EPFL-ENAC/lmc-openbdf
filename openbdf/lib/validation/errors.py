@@ -13,9 +13,9 @@ from openbdf.lib.types.fields import field_metadata
 class Severity(str, Enum):
     """Severity of a validation finding."""
 
-    INFO = "Info"
-    WARNING = "Warning"
     REJECT = "Reject"
+    WARNING = "Warning"
+    INFO = "Info"
 
 
 # Severity from the most to the least important, so the reject findings show first.
@@ -40,148 +40,149 @@ class OpenBDFValidationError(ValueError):
         return f"{self.code}: {self.message}"
 
 
+# Finding codes: E for Reject, W for Warning, I for Info, numbered per severity.
 class MissingRequiredField(OpenBDFValidationError):
-    """E01: a field whose requirement is required carries no value."""
+    """E001: a field whose requirement is required carries no value."""
 
-    code = "E01"
+    code = "E001"
 
 
 class UnknownEnumValue(OpenBDFValidationError):
-    """E02: a cell holds a value that is not a member of the field enum."""
+    """E002: a cell holds a value that is not a member of the field enum."""
 
-    code = "E02"
+    code = "E002"
 
 
 class TypeMismatch(OpenBDFValidationError):
-    """E03: a cell cannot be read as the type of its field."""
+    """E003: a cell cannot be read as the type of its field."""
 
-    code = "E03"
-
-
-class AutomaticFieldSupplied(OpenBDFValidationError):
-    """E04: a field the tool derives carries a contributor value."""
-
-    code = "E04"
-    severity = Severity.WARNING
+    code = "E003"
 
 
 class RowCountMismatch(OpenBDFValidationError):
-    """E05: the bill of materials and the wide results sheet do not have the same number of rows."""
+    """E004: the bill of materials and the wide results sheet do not have the same number of rows."""
 
-    code = "E05"
+    code = "E004"
 
 
 class MaterialIdMisalignment(OpenBDFValidationError):
-    """E06: two rows at the same position carry different material_id values."""
+    """E005: two rows at the same position carry different material_id values."""
 
-    code = "E06"
+    code = "E005"
 
 
 class ShareOutOfRange(OpenBDFValidationError):
-    """E13: a share is outside the 0 to 100 range."""
+    """E006: a share is outside the 0 to 100 range."""
 
-    code = "E13"
+    code = "E006"
 
 
 class ShareSumMismatch(OpenBDFValidationError):
-    """E14: the eight data type shares do not add up to 100."""
+    """E007: the eight data type shares do not add up to 100."""
 
-    code = "E14"
-
-
-class MissingMass(OpenBDFValidationError):
-    """E16: a bill of materials row carries no mass."""
-
-    code = "E16"
-    severity = Severity.WARNING
+    code = "E007"
 
 
 class FloorAreaNotPositive(OpenBDFValidationError):
-    """E17: a floor area is zero or negative."""
+    """E008: a floor area is zero or negative."""
 
-    code = "E17"
-
-
-class UnmappedNationalValue(OpenBDFValidationError):
-    """E19: a national value has no OpenBDF mapping, so the field keeps its value."""
-
-    code = "E19"
-    severity = Severity.WARNING
+    code = "E008"
 
 
 class DuplicateFieldCode(OpenBDFValidationError):
-    """E20: one sheet declares the same field code twice."""
+    """E009: one sheet declares the same field code twice."""
 
-    code = "E20"
-
-
-class DeclaredIndicatorWithoutResults(OpenBDFValidationError):
-    """E25: lca_<indicator>_declared is true and the aligned result columns are empty."""
-
-    code = "E25"
-    severity = Severity.WARNING
+    code = "E009"
 
 
 class ResultsWithoutIndicatorDeclaration(OpenBDFValidationError):
-    """E26: an indicator carries results while lca_<indicator>_declared is false."""
+    """E010: an indicator carries results while lca_<indicator>_declared is false."""
 
-    code = "E26"
+    code = "E010"
 
 
 class ProjectMaterialDatabaseWithoutBillOfMaterialsLine(OpenBDFValidationError):
-    """E27: a project material database line has no bill of materials material."""
+    """E011: a project material database line has no bill of materials material."""
 
-    code = "E27"
+    code = "E011"
 
 
 class BillOfMaterialsWithoutProjectMaterialDatabaseLine(OpenBDFValidationError):
-    """E28: a bill of materials material has no project material database line."""
+    """E012: a bill of materials material has no project material database line."""
 
-    code = "E28"
+    code = "E012"
 
 
 class DuplicatedProjectMaterialDatabaseLine(OpenBDFValidationError):
-    """E29: a bill of materials material has more than one project material database line."""
+    """E013: a bill of materials material has more than one project material database line."""
 
-    code = "E29"
+    code = "E013"
 
 
 class MaterialRefIdMismatch(OpenBDFValidationError):
-    """E30: bill of materials rows carry a material_ref_id that differs from their database line."""
+    """E014: bill of materials rows carry a material_ref_id that differs from their database line."""
 
-    code = "E30"
+    code = "E014"
 
 
 class DuplicateMaterialRefId(OpenBDFValidationError):
-    """E31: one material_ref_id names more than one project material database line."""
+    """E015: one material_ref_id names more than one project material database line."""
 
-    code = "E31"
+    code = "E015"
 
 
 class DuplicateMaterialId(OpenBDFValidationError):
-    """E32: two bill of materials rows share a material_id, so their tall results collide."""
+    """E016: two bill of materials rows share a material_id, so their tall results collide."""
 
-    code = "E32"
+    code = "E016"
+
+
+class AutomaticFieldSupplied(OpenBDFValidationError):
+    """W001: a field the tool derives carries a contributor value."""
+
+    code = "W001"
+    severity = Severity.WARNING
+
+
+class MissingMass(OpenBDFValidationError):
+    """W002: a bill of materials row carries no mass."""
+
+    code = "W002"
+    severity = Severity.WARNING
+
+
+class UnmappedNationalValue(OpenBDFValidationError):
+    """W003: a national value has no OpenBDF mapping, so the field keeps its value."""
+
+    code = "W003"
+    severity = Severity.WARNING
+
+
+class DeclaredIndicatorWithoutResults(OpenBDFValidationError):
+    """W004: lca_<indicator>_declared is true and the aligned result columns are empty."""
+
+    code = "W004"
+    severity = Severity.WARNING
 
 
 class DroppedLine(OpenBDFValidationError):
-    """E33: a bill of materials line that misses a required field was dropped from the project."""
+    """W005: a bill of materials line that misses a required field was dropped from the project."""
 
-    code = "E33"
+    code = "W005"
     severity = Severity.WARNING
 
 
 class MissingSheet(OpenBDFValidationError):
-    """E34: a sheet the specification requires is missing or empty, so its content was generated."""
+    """W006: a sheet the specification requires is missing or empty, so its content was generated."""
 
-    code = "E34"
+    code = "W006"
     severity = Severity.WARNING
 
 
 class UnresolvedHeaderValue(OpenBDFValidationError):
-    """E35: no column name, or several column names, carry the value of a field."""
+    """W007: no column name, or several column names, carry the value of a field."""
 
-    code = "E35"
+    code = "W007"
     severity = Severity.WARNING
 
 

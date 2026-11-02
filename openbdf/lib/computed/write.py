@@ -95,7 +95,7 @@ def mapped_value(
 
 
 def report_missing(values: set[Any], findings: list[OpenBDFValidationError], *, source: str) -> None:
-    """Warn E19 once for every distinct national value that has no mapping."""
+    """Warn W003 once for every distinct national value that has no mapping."""
     for value in sorted(values, key=str):
         findings.append(
             UnmappedNationalValue(

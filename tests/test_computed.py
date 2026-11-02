@@ -100,7 +100,7 @@ def test_a_contributor_value_on_a_derived_field_is_overwritten_and_reported_as_e
     findings = fill_computed(project)
 
     assert [str(finding) for finding in findings] == [
-        "E04: Field bom_row_count is derived; the given value was discarded"
+        "W001: Field bom_row_count is derived; the given value was discarded"
     ]
     assert isinstance(findings[0], AutomaticFieldSupplied)
     assert findings[0].source == "Project Material Database"
@@ -246,7 +246,7 @@ def test_a_normal_fill_does_not_report_a_share_sum_mismatch():
     written = [getattr(project, field_name) for field_name in SHARE_FIELDS]
     assert all(share is not None for share in written)
     assert sum((share for share in written if share is not None), Decimal(0)) == Decimal(100)
-    assert [finding for finding in findings if finding.code == "E14"] == []
+    assert [finding for finding in findings if finding.code == "E007"] == []
 
 
 def test_common_floor_level_uses_the_number_mapping_then_the_label_and_reports_one_e19_per_unmapped_label():
@@ -269,7 +269,7 @@ def test_common_floor_level_uses_the_number_mapping_then_the_label_and_reports_o
     # The first label comes from the number mapping and the second one carries its number in the text.
     assert [row.common_floor_level for row in project.bill_of_materials] == [2, 2, None, None]
     assert [str(finding) for finding in findings] == [
-        "E19: 'roof' has no mapping; the field was left unchanged and not guessed"
+        "W003: 'roof' has no mapping; the field was left unchanged and not guessed"
     ]
     assert isinstance(findings[0], UnmappedNationalValue)
     assert findings[0].source == "Bill of Materials"
@@ -297,7 +297,7 @@ def test_a_bare_int_rule_with_an_empty_level_keeps_the_label_and_takes_its_numbe
     assert translator.translate(FLOOR_LEVEL_CATEGORY, "2.OG") == ["2.OG"]
     assert [row.common_floor_level for row in project.bill_of_materials] == [2, 0, None]
     assert [str(finding) for finding in findings] == [
-        "E19: 'roof' has no mapping; the field was left unchanged and not guessed"
+        "W003: 'roof' has no mapping; the field was left unchanged and not guessed"
     ]
 
 
@@ -354,7 +354,7 @@ def test_an_unmapped_label_keeps_the_derived_values_that_the_file_already_carrie
         AboveBelowGround.ABOVE,
         OpenBDFBuildingElementClassification.OPAQUE_ENVELOPE_2510,
     )
-    assert [finding.code for finding in findings] == ["E19", "E19"]
+    assert [finding.code for finding in findings] == ["W003", "W003"]
 
 
 def test_lca_stage_module_and_submodule_are_derived_from_the_full_life_cycle_module_code():
