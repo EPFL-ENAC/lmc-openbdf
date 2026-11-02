@@ -14,6 +14,7 @@ from openbdf.lib.validation import (
     ResultsWithoutIndicatorDeclaration,
     Severity,
     check_declared_results,
+    check_stage_totals,
     format_findings,
 )
 from openbdf.lib.validation.declared_results import TALL_SHEET, WIDE_SHEET, wide_blocks
@@ -245,3 +246,79 @@ def test_open_command_exports_the_file_in_draft_mode_despite_a_reject(tmp_path: 
     assert result.exit_code == 0
     assert "E010: Indicator gwp_total carries a result in b8 but is not declared for material MAT-1" in result.output
     assert output.read_text() == "exported"
+
+
+def test_an_aggregate_stage_beside_its_sub_modules_rejects_the_material():
+    wide = wide_record("MAT-1", gwp_total_a1_a3=Decimal("10"), gwp_total_a1=Decimal("4"))
+
+    findings = check_stage_totals(project(None, [material(wide=wide)]))
+
+    assert [str(finding) for finding in findings] == [
+        "E017: Module A1-A3 and its sub-modules A1 are both populated for material MAT-1"
+    ]
+
+
+def test_a5_beside_its_sub_modules_rejects_the_material():
+    wide = wide_record("MAT-1", gwp_total_a5=Decimal("1"), gwp_total_a5_1=Decimal("1"))
+
+    findings = check_stage_totals(project(None, [material(wide=wide)]))
+
+    assert [str(finding) for finding in findings] == [
+        "E017: Module A5 and its sub-modules A5.1 are both populated for material MAT-1"
+    ]
+
+
+def test_a_total_that_reconciles_only_with_module_d_rejects_the_material():
+    wide = wide_record(
+        "MAT-1",
+        gwp_total_a1_a3=Decimal("10"),
+        gwp_total_d=Decimal("2"),
+        gwp_total=Decimal("12"),
+    )
+
+    findings = check_stage_totals(project(None, [material(wide=wide)]))
+
+    assert [str(finding) for finding in findings] == ["E018: Module D must not be added to the whole-life total"]
+
+
+def test_a_total_close_to_the_modules_sum_warns():
+    wide = wide_record("MAT-1", gwp_total_a1_a3=Decimal("100"), gwp_total=Decimal("103"))
+
+    findings = check_stage_totals(project(None, [material(wide=wide)]))
+
+    assert [str(finding) for finding in findings] == ["W011: gwp_total is 103, the modules sum to 100"]
+
+
+def test_a_total_far_from_the_modules_sum_rejects_the_material():
+    wide = wide_record("MAT-1", gwp_total_a1_a3=Decimal("100"), gwp_total=Decimal("110"))
+
+    findings = check_stage_totals(project(None, [material(wide=wide)]))
+
+    assert [str(finding) for finding in findings] == ["E019: gwp_total is 110, the modules sum to 100"]
+
+
+def test_a_total_of_another_indicator_is_checked():
+    wide = wide_record("MAT-1", gwp_f_a1_a3=Decimal("10"), gwp_f_total=Decimal("12"))
+
+    findings = check_stage_totals(project(None, [material(wide=wide)]))
+
+    assert [str(finding) for finding in findings] == ["E019: gwp_f_total is 12, the modules sum to 10"]
+
+
+def test_a_matching_total_with_a_full_stage_set_passes():
+    wide = wide_record(
+        "MAT-1",
+        gwp_total_a1_a3=Decimal("10"),
+        gwp_total_a4=Decimal("1"),
+        gwp_total_c4=Decimal("1"),
+        gwp_total_d=Decimal("5"),
+        gwp_total=Decimal("12"),
+    )
+
+    assert check_stage_totals(project(None, [material(wide=wide)])) == []
+
+
+def test_an_empty_aggregate_column_sums_from_its_sub_modules():
+    wide = wide_record("MAT-1", gwp_total_a1=Decimal("4"), gwp_total_a2=Decimal("3"), gwp_total=Decimal("7"))
+
+    assert check_stage_totals(project(None, [material(wide=wide)])) == []
