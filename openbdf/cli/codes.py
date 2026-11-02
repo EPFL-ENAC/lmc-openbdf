@@ -11,8 +11,16 @@ def codes_table() -> list[str]:
         OpenBDFValidationError.__subclasses__(),
         key=lambda cls: (SEVERITY_RANK[cls.severity], cls.code),
     )
-    rows = [(f"{cls.code}  {cls.__name__}", _raised_when(cls), cls.severity.value) for cls in classes]
-    headers = ["**Error**", "**Raised when**", "**Severity**"]
+    rows = [
+        (
+            f"{cls.code}  {cls.__name__}",
+            _raised_when(cls),
+            cls.severity.value,
+            cls.message_template,
+        )
+        for cls in classes
+    ]
+    headers = ["**Error**", "**Raised when**", "**Severity**", "**Message**"]
     widths = [max(len(header), *(len(row[column]) for row in rows)) for column, header in enumerate(headers)]
 
     return [
