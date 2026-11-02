@@ -1,12 +1,13 @@
 from __future__ import annotations
 
+import re
 from typing import Any
 
 import pandas as pd
 
 from openbdf.lib.converters.translators import COMMON_CATEGORY_PROPERTIES, DocumentTranslator, field_code_frame
 from openbdf.lib.openbdf_tables import OpenBDFTables
-from openbdf.lib.validation.declared_results import check_declared_results
+from openbdf.lib.validation.declared_results import check_declared_results, check_stage_totals, wide_blocks
 from openbdf.lib.validation.errors import (
     BillOfMaterialsWithoutProjectMaterialDatabaseLine,
     DuplicatedProjectMaterialDatabaseLine,
@@ -14,16 +15,54 @@ from openbdf.lib.validation.errors import (
     DuplicateMaterialRefId,
     MaterialIdMisalignment,
     MaterialRefIdMismatch,
+    MissingAllocationApproach,
     MissingMass,
     MissingSheet,
     OpenBDFValidationError,
     ProjectMaterialDatabaseWithoutBillOfMaterialsLine,
+    ReferenceStudyPeriodMissing,
+    ReferenceStudyPeriodNotFifty,
     RowCountMismatch,
+    SharedComponentsNotAllocated,
 )
+from openbdf.model.lca_results import TOTAL_STAGE_SUFFIXES
 
 BOM_SHEET = COMMON_CATEGORY_PROPERTIES["bom"]["name"]
 PMD_SHEET = COMMON_CATEGORY_PROPERTIES["material_database"]["name"]
 WIDE_SHEET = COMMON_CATEGORY_PROPERTIES["results_wide"]["name"]
+GENERAL_INFO_SHEET = "General Information"
+
+# The member states of the European Union, as ISO 3166-1 alpha-3 codes. The reference
+# study period of Regulation (EU) 2026/52 applies to these submissions only.
+EU_COUNTRY_CODES = frozenset({
+    "AUT",
+    "BEL",
+    "BGR",
+    "HRV",
+    "CYP",
+    "CZE",
+    "DNK",
+    "EST",
+    "FIN",
+    "FRA",
+    "DEU",
+    "GRC",
+    "HUN",
+    "IRL",
+    "ITA",
+    "LVA",
+    "LTU",
+    "LUX",
+    "MLT",
+    "NLD",
+    "POL",
+    "PRT",
+    "ROU",
+    "SVK",
+    "SVN",
+    "ESP",
+    "SWE",
+})
 
 MaterialPair = tuple[str, str | None]
 
@@ -222,6 +261,88 @@ def check_missing_mass(
     return findings
 
 
+def check_general_information(project: Any) -> list[OpenBDFValidationError]:
+    """
+    E020, W008, W009 and W010. The reference study period is required when the boundary
+    reaches beyond stage A, an EU submission must declare 50 years, and the allocation
+    fields must be filled when their trigger is present.
+    """
+    findings: list[OpenBDFValidationError] = []
+    period = getattr(project, "lca_reference_study_period", None)
+    if isinstance(period, str) and not period.strip():
+        period = None
+    if period is None and _boundary_reaches_b_or_c(project):
+        findings.append(
+            ReferenceStudyPeriodMissing(
+                "A reference study period is required beyond stage A",
+                source=GENERAL_INFO_SHEET,
+            )
+        )
+
+    country = getattr(project, "project_country", None)
+    if period is not None and country is not None and str(country).upper() in EU_COUNTRY_CODES:
+        years = _study_period_years(period)
+        if years is not None and years != 50:
+            findings.append(
+                ReferenceStudyPeriodNotFifty(
+                    f"Regulation (EU) 2026/52 fixes the reference period at 50 years, "
+                    f"the submission declares {period.strip()!r}",
+                    source=GENERAL_INFO_SHEET,
+                )
+            )
+
+    bipv = getattr(project, "building_bipv_description", None)
+    if isinstance(bipv, str) and bipv.strip() and getattr(project, "lca_onsite_renewable_allocation", None) is None:
+        findings.append(
+            MissingAllocationApproach(
+                "State approach A, B1 or B2 for the embodied emissions of on-site generation",
+                source=GENERAL_INFO_SHEET,
+            )
+        )
+
+    buildings = getattr(project, "project_no_of_buildings", None)
+    if (
+        isinstance(buildings, int)
+        and buildings > 1
+        and getattr(project, "lca_shared_component_allocation_rule", None) is None
+    ):
+        findings.append(
+            SharedComponentsNotAllocated(
+                "State the rule used to allocate the emissions of shared components",
+                source=GENERAL_INFO_SHEET,
+            )
+        )
+    return findings
+
+
+def _boundary_reaches_b_or_c(project: Any) -> bool:
+    """The declared boundary names the modules B or C, or a B or C result column carries a value."""
+    boundary = getattr(project, "lca_cycle_system_boundary", None)
+    if boundary is not None and str(boundary) in {"cradle_to_grave", "cradle_to_grave_d"}:
+        return True
+    for code, columns in wide_blocks().items():
+        for suffix, _ in columns:
+            if not suffix or suffix in TOTAL_STAGE_SUFFIXES or not suffix.startswith(("b", "c")):
+                continue
+            for material in project.bill_of_materials:
+                wide = material.lca_results_full_record
+                if wide is not None and getattr(wide, f"{code}_{suffix}", None) is not None:
+                    return True
+    return False
+
+
+def _study_period_years(period: str) -> int | None:
+    """Return the duration in years a period declares, or None when it cannot be judged.
+
+    A number of 4 digits or more is read as a calendar year, not as a duration.
+    """
+    for match in re.finditer(r"\d+", period):
+        years = int(match.group())
+        if years < 1000:
+            return years
+    return None
+
+
 def validate_project(
     project: Any,
     tables: OpenBDFTables | None = None,
@@ -239,6 +360,8 @@ def validate_project(
     """
     findings = check_duplicate_material_ids(project)
     findings.extend(check_declared_results(project))
+    findings.extend(check_stage_totals(project))
+    findings.extend(check_general_information(project))
 
     if tables is None:
         return findings

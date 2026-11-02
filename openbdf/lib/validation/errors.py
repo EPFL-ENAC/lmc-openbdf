@@ -155,6 +155,34 @@ class DuplicateMaterialId(OpenBDFValidationError):
     message_template = "material_id <id> is used by <n> bill of materials rows"
 
 
+class AggregateAndSubModulesBothFilled(OpenBDFValidationError):
+    """E017: an aggregate stage and its sub-modules carry values on one material."""
+
+    code = "E017"
+    message_template = "Module <m> and its sub-modules are both populated for material <id>"
+
+
+class ModuleDInTotal(OpenBDFValidationError):
+    """E018: an indicator total matches the sum that includes module D, not the sum of the modules A to C."""
+
+    code = "E018"
+    message_template = "Module D must not be added to the whole-life total"
+
+
+class TotalSumMismatch(OpenBDFValidationError):
+    """E019: <indicator>_total differs from the sum over the modules A to C by 5 per cent or more."""
+
+    code = "E019"
+    message_template = "<code> is <x>, the modules sum to <y>"
+
+
+class ReferenceStudyPeriodMissing(OpenBDFValidationError):
+    """E020: the boundary includes a B or C module and no reference study period is given."""
+
+    code = "E020"
+    message_template = "A reference study period is required beyond stage A"
+
+
 class AutomaticFieldSupplied(OpenBDFValidationError):
     """W001: a field the tool derives carries a contributor value."""
 
@@ -208,6 +236,38 @@ class UnresolvedHeaderValue(OpenBDFValidationError):
 
     code = "W007"
     message_template = "Field <code> needs exactly one filled column, found <n>"
+    severity = Severity.WARNING
+
+
+class ReferenceStudyPeriodNotFifty(OpenBDFValidationError):
+    """W008: an EU submission declares a reference study period other than 50 years."""
+
+    code = "W008"
+    message_template = "Regulation (EU) 2026/52 fixes the reference period at 50 years"
+    severity = Severity.WARNING
+
+
+class MissingAllocationApproach(OpenBDFValidationError):
+    """W009: on-site renewable energy is reported and no allocation approach is given."""
+
+    code = "W009"
+    message_template = "State approach A, B1 or B2 for the embodied emissions of on-site generation"
+    severity = Severity.WARNING
+
+
+class SharedComponentsNotAllocated(OpenBDFValidationError):
+    """W010: several buildings share the project and no allocation rule is given."""
+
+    code = "W010"
+    message_template = "State the rule used to allocate the emissions of shared components"
+    severity = Severity.WARNING
+
+
+class MinorTotalSumMismatch(OpenBDFValidationError):
+    """W011: <indicator>_total differs from the sum over the modules A to C by less than 5 per cent."""
+
+    code = "W011"
+    message_template = "<code> is <x>, the modules sum to <y>"
     severity = Severity.WARNING
 
 

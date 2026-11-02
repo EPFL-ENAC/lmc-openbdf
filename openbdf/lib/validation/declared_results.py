@@ -1,17 +1,29 @@
 from __future__ import annotations
 
 from collections import defaultdict
+from decimal import Decimal
 from functools import cache
 from typing import Any
 
 from openbdf.lib.types.fields import field_metadata
 from openbdf.lib.validation.errors import (
+    AggregateAndSubModulesBothFilled,
     DeclaredIndicatorWithoutResults,
+    MinorTotalSumMismatch,
+    ModuleDInTotal,
     OpenBDFValidationError,
     ResultsWithoutIndicatorDeclaration,
+    TotalSumMismatch,
 )
 from openbdf.model.enums.lca import LCIAMethodology
-from openbdf.model.lca_results import GWP_TOTAL_STAGES, INDICATORS
+from openbdf.model.lca_results import (
+    AC_STAGE_SUFFIXES,
+    AGGREGATE_CHILDREN,
+    GWP_TOTAL_STAGES,
+    INDICATORS,
+    STAGE_DISPLAY_BY_SUFFIX,
+    SUB_MODULE_CHILDREN,
+)
 from openbdf.model.lca_results_full_wide import LCAResultsWideFullBase
 
 WIDE_SHEET = "LCA Result (Wide)"
@@ -22,6 +34,104 @@ TALL_SHEET = "LCA Result (Tall)"
 _SUFFIX_BY_STAGE = {stage.value: suffix for stage, suffix in GWP_TOTAL_STAGES}
 # The whole-life total column has no tall row of its own.
 _TALL_SUFFIXES = frozenset(_SUFFIX_BY_STAGE.values())
+
+# The specification names a tolerance without giving a value, so a relative deviation of
+# 1 per cent is the working choice. Below 5 per cent the mismatch is W011, at or above it E019.
+_RELATIVE_TOLERANCE = Decimal("0.01")
+_MINOR_DEVIATION = Decimal("0.05")
+
+
+def check_stage_totals(project: Any) -> list[OpenBDFValidationError]:
+    """
+    E017 to E019 and W011, on the wide results of each material. An aggregate stage and
+    its sub-modules must not carry values beside each other, and the total column must
+    match the sum over the modules A to C, with module D left out.
+    """
+    findings: list[OpenBDFValidationError] = []
+    for material in project.bill_of_materials:
+        wide = material.lca_results_full_record
+        if wide is None:
+            continue
+        for indicator in INDICATORS:
+            code = indicator.code
+            suffixes = {suffix for suffix, _ in wide_blocks().get(code, ()) if suffix and suffix != "total"}
+            values = {suffix: getattr(wide, f"{code}_{suffix}", None) for suffix in suffixes}
+            findings.extend(_check_stage_coexistence(material.material_id, code, values))
+            findings.extend(_check_total(material.material_id, code, wide, values))
+    return findings
+
+
+def _check_stage_coexistence(material_id: str, code: str, values: dict[str, Any]) -> list[OpenBDFValidationError]:
+    findings: list[OpenBDFValidationError] = []
+    for aggregate, children in AGGREGATE_CHILDREN.items():
+        if values.get(aggregate) is None:
+            continue
+        filled = [child for child in children if values.get(child) is not None]
+        if filled:
+            names = ", ".join(STAGE_DISPLAY_BY_SUFFIX.get(child, child) for child in filled)
+            findings.append(
+                AggregateAndSubModulesBothFilled(
+                    f"Module {STAGE_DISPLAY_BY_SUFFIX.get(aggregate, aggregate)} and its sub-modules {names} "
+                    f"are both populated for material {material_id}",
+                    source=WIDE_SHEET,
+                )
+            )
+    return findings
+
+
+def _check_total(
+    material_id: str,
+    code: str,
+    wide: Any,
+    values: dict[str, Any],
+) -> list[OpenBDFValidationError]:
+    total_code = code if code.endswith("_total") else f"{code}_total"
+    total = getattr(wide, total_code, None)
+    if total is None:
+        return []
+    ac_sum = _sum_ac_stages(values)
+    if ac_sum is None:
+        return []
+    deviation = _relative_deviation(total, ac_sum)
+    if deviation <= _RELATIVE_TOLERANCE:
+        return []
+    with_d = ac_sum + (values.get("d") or 0)
+    if _relative_deviation(total, with_d) <= _RELATIVE_TOLERANCE:
+        return [ModuleDInTotal("Module D must not be added to the whole-life total", source=WIDE_SHEET)]
+    message = f"{total_code} is {total}, the modules sum to {ac_sum}"
+    mismatch = MinorTotalSumMismatch if deviation < _MINOR_DEVIATION else TotalSumMismatch
+    return [mismatch(message, source=WIDE_SHEET)]
+
+
+def _sum_ac_stages(values: dict[str, Any]) -> Decimal | None:
+    """Sum the modules A to C. An aggregate column stands in for its empty sub-modules."""
+    stage_values: list[Decimal] = []
+    for suffix in AC_STAGE_SUFFIXES:
+        if suffix not in values:
+            continue
+        value = values[suffix]
+        if value is None:
+            value = _sum_children(suffix, values)
+        if value is not None:
+            stage_values.append(value)
+    return sum(stage_values, Decimal(0)) if stage_values else None
+
+
+def _sum_children(suffix: str, values: dict[str, Any]) -> Decimal | None:
+    children = AGGREGATE_CHILDREN.get(suffix) or SUB_MODULE_CHILDREN.get(suffix)
+    if children is None:
+        return None
+    child_values = [values[child] for child in children if values.get(child) is not None]
+    return sum(child_values, Decimal(0)) if child_values else None
+
+
+def _relative_deviation(value: Decimal, reference: Decimal) -> Decimal:
+    """Return how far the value is from the reference, relative to the reference."""
+    if value == reference:
+        return Decimal(0)
+    if reference == 0:
+        return Decimal("Infinity")
+    return abs(value - reference) / abs(reference)
 
 
 @cache

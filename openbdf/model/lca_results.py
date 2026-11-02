@@ -161,6 +161,24 @@ GWP_TOTAL_STAGES: tuple[tuple[LCAStageOrModuleOrSubModule, str], ...] = (
     (LCAStageOrModuleOrSubModule.D2, "d2"),
 )
 
+# Display label of each wide stage column suffix: the value of its stage enum.
+STAGE_DISPLAY_BY_SUFFIX = {suffix: stage.value for stage, suffix in [*GWP_TOTAL_STAGES, *STAGES]}
+
+# A stage column and the columns that hold its parts. The specification forbids filling
+# both for A1-A3 and A5; the other aggregates only feed the sum of their stage.
+AGGREGATE_CHILDREN = {
+    "a1_a3": ("a1", "a2", "a3"),
+    "a5": ("a5_1", "a5_2", "a5_3", "a5_4"),
+}
+SUB_MODULE_CHILDREN = {
+    "b1": ("b1_1", "b1_2"),
+    "b6": ("b6_1", "b6_2", "b6_3"),
+    "b7": ("b7_1", "b7_2", "b7_3"),
+}
+
+# Stage suffixes of the modules A to C. b8, d, d1 and d2 hold totals or module D.
+AC_STAGE_SUFFIXES = ("a1_a3", "a4", "a5", "b1", "b2", "b3", "b4", "b5", "b6", "b7", "c1", "c2", "c3", "c4")
+
 # Every LCA impact indicator present in the tall and wide models.
 # `gwp_total` is special: it carries the sub-module stage columns (GWP_TOTAL_STAGES) and
 # its `a1_a3` stage field is strongly recommended instead of suggested.

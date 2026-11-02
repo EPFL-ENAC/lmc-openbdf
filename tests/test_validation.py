@@ -13,11 +13,15 @@ from openbdf.lib.types.annotations import unwrap_optional
 from openbdf.lib.types.fields import get_field_code
 from openbdf.lib.validation import (
     check_duplicate_material_ids,
+    check_general_information,
     check_missing_mass,
     check_result_row_alignment,
 )
 from openbdf.model.building_bill_materials_slim import BuildingBillMaterialsSlimRecordBase
+from openbdf.model.enums.countries import Country
+from openbdf.model.enums.lca import LifeCycleSystemBoundary
 from openbdf.model.general_info import ProjectRecordBase
+from openbdf.model.lca_results_full_wide import LCAResultsWideFullBase
 
 
 def value_for_annotation(annotation: Any) -> Any:
@@ -189,3 +193,67 @@ def test_two_rows_with_one_material_id_are_a_duplicate_material_id_finding():
     findings = check_duplicate_material_ids(project)
 
     assert [str(finding) for finding in findings] == ["E016: material_id 'MAT-1' is used by 2 bill of materials rows"]
+
+
+def general_info(**values: Any) -> SimpleNamespace:
+    return SimpleNamespace(**{"bill_of_materials": [], **values})
+
+
+def test_a_missing_study_period_beyond_a_declared_stage_b_rejects_the_project():
+    project = general_info(lca_cycle_system_boundary=LifeCycleSystemBoundary.CRADLE_TO_GRAVE)
+
+    findings = check_general_information(project)
+
+    assert [str(finding) for finding in findings] == ["E020: A reference study period is required beyond stage A"]
+
+
+def test_a_result_in_a_b_module_requires_a_study_period():
+    wide = LCAResultsWideFullBase(material_id="MAT-1", gwp_total_b1=Decimal("1"))
+    material = SimpleNamespace(material_id="MAT-1", lca_results_full_record=wide)
+    project = general_info(bill_of_materials=[material])
+
+    findings = check_general_information(project)
+
+    assert [str(finding) for finding in findings] == ["E020: A reference study period is required beyond stage A"]
+
+
+def test_a_boundary_within_stage_a_needs_no_study_period():
+    project = general_info(lca_cycle_system_boundary=LifeCycleSystemBoundary.CRADLE_TO_GATE)
+
+    assert check_general_information(project) == []
+
+
+def test_an_eu_submission_with_another_study_period_warns():
+    project = general_info(lca_reference_study_period="60 years", project_country=Country.DEU)
+
+    findings = check_general_information(project)
+
+    assert [str(finding) for finding in findings] == [
+        "W008: Regulation (EU) 2026/52 fixes the reference period at 50 years, the submission declares '60 years'"
+    ]
+
+
+def test_a_study_period_outside_the_eu_is_not_fixed_at_fifty_years():
+    project = general_info(lca_reference_study_period="100 years", project_country=Country.CHE)
+
+    assert check_general_information(project) == []
+
+
+def test_on_site_renewables_without_an_allocation_approach_warns():
+    project = general_info(building_bipv_description="Photovoltaic facade")
+
+    findings = check_general_information(project)
+
+    assert [str(finding) for finding in findings] == [
+        "W009: State approach A, B1 or B2 for the embodied emissions of on-site generation"
+    ]
+
+
+def test_several_buildings_without_an_allocation_rule_warns():
+    project = general_info(project_no_of_buildings=3)
+
+    findings = check_general_information(project)
+
+    assert [str(finding) for finding in findings] == [
+        "W010: State the rule used to allocate the emissions of shared components"
+    ]

@@ -1,12 +1,13 @@
 from openbdf.lib.validation.collect import (
     check_duplicate_material_ids,
+    check_general_information,
     check_missing_mass,
     check_project_material_database,
     check_result_row_alignment,
     field_code_frame,
     validate_project,
 )
-from openbdf.lib.validation.declared_results import check_declared_results
+from openbdf.lib.validation.declared_results import check_declared_results, check_stage_totals
 from openbdf.lib.validation.errors import (
     BillOfMaterialsWithoutProjectMaterialDatabaseLine,
     DeclaredIndicatorWithoutResults,
@@ -18,6 +19,7 @@ from openbdf.lib.validation.errors import (
     FloorAreaNotPositive,
     MaterialIdMisalignment,
     MaterialRefIdMismatch,
+    MinorTotalSumMismatch,
     MissingMass,
     MissingRequiredField,
     MissingSheet,
@@ -45,6 +47,7 @@ __all__ = [
     "FloorAreaNotPositive",
     "MaterialIdMisalignment",
     "MaterialRefIdMismatch",
+    "MinorTotalSumMismatch",
     "MissingMass",
     "MissingRequiredField",
     "MissingSheet",
@@ -58,9 +61,11 @@ __all__ = [
     "UnknownEnumValue",
     "check_declared_results",
     "check_duplicate_material_ids",
+    "check_general_information",
     "check_missing_mass",
     "check_project_material_database",
     "check_result_row_alignment",
+    "check_stage_totals",
     "field_code_frame",
     "findings_from_validation_error",
     "format_findings",
