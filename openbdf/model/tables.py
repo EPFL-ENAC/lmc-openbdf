@@ -2,14 +2,32 @@ from typing import Optional
 
 from sqlmodel import Field, Relationship, SQLModel
 
-from openbdf.model.building_bill_materials_slim import BuildingBillMaterialsSlimRecordBase
-from openbdf.model.general_info import ProjectRecordBase
+from openbdf.model.building_bill_materials_slim import BuildingBillMaterialsSlimRecordBaseIngest
+from openbdf.model.general_info import ProjectRecordBaseIngest
+from openbdf.model.ingest import make_ingest_model
 from openbdf.model.lca_results_full_tall import LCAResultsTallBase
 from openbdf.model.lca_results_full_wide import LCAResultsWideFullBase
-from openbdf.model.project_material_database import ProjectMaterialDatabaseBase
+from openbdf.model.project_material_database import ProjectMaterialDatabaseBaseIngest
+
+# Storage holds drafts as well as complete projects, so every workbook field is
+# nullable here. Whether a field is required belongs to the strict models (the *Base
+# classes) and to validation, which reads each field's Requirement (E01); a draft is
+# a project stored despite those findings. Only the keys that link rows stay NOT NULL.
+# The LCA result modules are generated, so their ingest variants are made here, the
+# same way the other modules make theirs.
+_LCAResultsWideFullBaseIngest = make_ingest_model(LCAResultsWideFullBase)
+_LCAResultsTallBaseIngest = make_ingest_model(LCAResultsTallBase)
 
 
-class ProjectRecord(ProjectRecordBase, SQLModel, table=True):
+class LCAResultsWideFullBaseIngest(_LCAResultsWideFullBaseIngest):  # type: ignore[valid-type,misc]
+    pass
+
+
+class LCAResultsTallBaseIngest(_LCAResultsTallBaseIngest):  # type: ignore[valid-type,misc]
+    pass
+
+
+class ProjectRecord(ProjectRecordBaseIngest, SQLModel, table=True):
     __tablename__ = "project_record"
 
     id: Optional[int] = Field(default=None, primary_key=True)
@@ -17,7 +35,7 @@ class ProjectRecord(ProjectRecordBase, SQLModel, table=True):
     project_material_database: list["ProjectMaterialDatabaseRecord"] = Relationship(back_populates="project_record")
 
 
-class BuildingBillMaterialsSlimRecord(BuildingBillMaterialsSlimRecordBase, SQLModel, table=True):
+class BuildingBillMaterialsSlimRecord(BuildingBillMaterialsSlimRecordBaseIngest, SQLModel, table=True):
     __tablename__ = "building_bill_materials_slim_record"
 
     id: Optional[int] = Field(default=None, primary_key=True)
@@ -34,7 +52,7 @@ class BuildingBillMaterialsSlimRecord(BuildingBillMaterialsSlimRecordBase, SQLMo
     )
 
 
-class ProjectMaterialDatabaseRecord(ProjectMaterialDatabaseBase, SQLModel, table=True):
+class ProjectMaterialDatabaseRecord(ProjectMaterialDatabaseBaseIngest, SQLModel, table=True):
     __tablename__ = "project_material_database"
 
     id: Optional[int] = Field(default=None, primary_key=True)
@@ -44,7 +62,7 @@ class ProjectMaterialDatabaseRecord(ProjectMaterialDatabaseBase, SQLModel, table
     project_record: ProjectRecord | None = Relationship(back_populates="project_material_database")
 
 
-class LCAResultsWideFullRecord(LCAResultsWideFullBase, SQLModel, table=True):
+class LCAResultsWideFullRecord(LCAResultsWideFullBaseIngest, SQLModel, table=True):
     __tablename__ = "lca_results_full_record"
 
     id: Optional[int] = Field(default=None, primary_key=True)
@@ -58,7 +76,7 @@ class LCAResultsWideFullRecord(LCAResultsWideFullBase, SQLModel, table=True):
     )
 
 
-class LCAResultsTallFullRecord(LCAResultsTallBase, SQLModel, table=True):
+class LCAResultsTallFullRecord(LCAResultsTallBaseIngest, SQLModel, table=True):
     __tablename__ = "lca_results_tall_full_record"
 
     id: Optional[int] = Field(default=None, primary_key=True)
