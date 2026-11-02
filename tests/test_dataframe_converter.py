@@ -175,7 +175,7 @@ def test_project_package_from_tables_warns_about_a_missing_project_material_data
     findings = collected_findings(tables_without_project_material_database(bom))
 
     assert [str(finding) for finding in findings] == [
-        "E34: Sheet is missing or empty, its lines were generated from the bill of materials",
+        "W006: Sheet is missing or empty, its lines were generated from the bill of materials",
     ]
     assert findings[0].source == "Project Material Database"
     assert findings[0].severity is Severity.WARNING
@@ -216,7 +216,7 @@ def test_project_package_from_tables_in_draft_mode_generates_lines_when_the_shee
     findings.extend(validate_project(project, loaded))
 
     assert [str(finding) for finding in findings] == [
-        "E34: Sheet is missing or empty, its lines were generated from the bill of materials",
+        "W006: Sheet is missing or empty, its lines were generated from the bill of materials",
     ]
 
     assert [
@@ -296,7 +296,7 @@ def test_dropped_line_is_reported_as_a_warning():
     bom_from_dataframe(dataframe, findings=findings, drop_invalid=True)
 
     assert [str(finding) for finding in findings] == [
-        "E33: Row 2: line dropped (material_id 'mat-2'): Field custom_material_name is required and was not provided"
+        "W005: Row 2: line dropped (material_id 'mat-2'): Field custom_material_name is required and was not provided"
     ]
     assert findings[0].severity is Severity.WARNING
     assert findings[0].source == "Bill of Materials"
@@ -310,7 +310,7 @@ def test_a_line_dropped_without_a_material_id_names_no_material():
     bom_from_dataframe(invalid, findings=findings, drop_invalid=True)
 
     assert [str(finding) for finding in findings] == [
-        "E33: Row 1: line dropped: Field material_id is required and was not provided"
+        "W005: Row 1: line dropped: Field material_id is required and was not provided"
     ]
 
 
@@ -367,7 +367,7 @@ def test_a_missing_column_warns_when_no_column_or_several_columns_are_filled():
 
     bom_from_dataframe(dataframe, translator, findings=findings)
 
-    assert [finding.code for finding in findings] == ["E35", "E35"]
+    assert [finding.code for finding in findings] == ["W007", "W007"]
     assert findings[0].severity is Severity.WARNING
     assert findings[0].row == 1
     assert "found 0" in findings[0].message
@@ -452,7 +452,7 @@ def test_project_package_from_tables_reports_missing_project_material_database_l
     findings = collected_findings(tables(bom_df("mat-1", "mat-2"), project_material_database=pmd))
 
     assert [str(finding) for finding in findings] == [
-        "E28: Bill of materials material 'Material mat-2' with EPD dataset 'value' "
+        "E012: Bill of materials material 'Material mat-2' with EPD dataset 'value' "
         "has no project material database line",
     ]
     assert findings[0].source == "Bill of Materials"
@@ -464,7 +464,7 @@ def test_project_package_from_tables_reports_orphan_project_material_database_li
     findings = collected_findings(tables(bom_df("mat-1"), project_material_database=pmd))
 
     assert [str(finding) for finding in findings] == [
-        "E27: Project material database line 'Orphan material' with EPD dataset 'value' "
+        "E011: Project material database line 'Orphan material' with EPD dataset 'value' "
         "has no bill of materials material",
     ]
 
@@ -478,7 +478,7 @@ def test_project_package_from_tables_reports_duplicate_project_material_database
     findings = collected_findings(tables(bom_df("mat-1"), project_material_database=pmd))
 
     assert [str(finding) for finding in findings] == [
-        "E29: Bill of materials material 'Material mat-1' with EPD dataset 'value' "
+        "E013: Bill of materials material 'Material mat-1' with EPD dataset 'value' "
         "has 2 project material database lines",
     ]
 
@@ -492,7 +492,7 @@ def test_project_package_from_tables_aligns_a_contradicting_material_ref_id_and_
     findings.extend(validate_project(project, tables(bom, project_material_database=pmd)))
 
     assert [str(finding) for finding in sort_findings(findings)] == [
-        "E04: Field material_ref_id is derived; the given value was discarded",
+        "W001: Field material_ref_id is derived; the given value was discarded",
     ]
     assert [record.material_ref_id for record in project.bill_of_materials] == ["M0001"]
 
@@ -506,7 +506,7 @@ def test_project_package_from_tables_reports_duplicate_project_material_database
     findings = collected_findings(tables(bom_df("mat-1", "mat-2"), project_material_database=pmd))
 
     assert [str(finding) for finding in findings] == [
-        "E31: material_ref_id 'M0001' is used by 2 project material database lines",
+        "E015: material_ref_id 'M0001' is used by 2 project material database lines",
     ]
 
 
@@ -842,9 +842,9 @@ def test_project_package_from_tables_reports_a_dataset_mismatch_as_missing_and_o
     findings = collected_findings(tables(bom, project_material_database=pmd))
 
     assert [str(finding) for finding in findings] == [
-        "E28: Bill of materials material 'Kies' with EPD dataset 'Kies (Korngröße 0/16)' "
+        "E012: Bill of materials material 'Kies' with EPD dataset 'Kies (Korngröße 0/16)' "
         "has no project material database line",
-        "E27: Project material database line 'Kies' with EPD dataset 'Kies (Korngröße 2/32)' "
+        "E011: Project material database line 'Kies' with EPD dataset 'Kies (Korngröße 2/32)' "
         "has no bill of materials material",
     ]
 

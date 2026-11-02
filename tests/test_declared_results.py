@@ -93,7 +93,7 @@ def test_a_declared_indicator_missing_one_aligned_column_warns_on_the_wide_sheet
     findings = check_declared_results(project(EN_15804_A2, [material(wide=wide, tall=tall)], gwp_total=True))
 
     assert [finding.source for finding in findings] == [WIDE_SHEET]
-    assert str(findings[0]) == ("E25: Indicator gwp_total is declared but carries no result in d for material MAT-1")
+    assert str(findings[0]) == ("W004: Indicator gwp_total is declared but carries no result in d for material MAT-1")
     assert findings[0].severity is Severity.WARNING
 
 
@@ -114,7 +114,7 @@ def test_a_result_behind_an_undeclared_indicator_rejects_the_file_even_when_the_
     findings = check_declared_results(project(EN_15804_A2, [material(wide=wide)], gwp_total=False))
 
     assert str(findings[0]) == (
-        "E26: Indicator gwp_total carries a result in b8 but is not declared for material MAT-1"
+        "E010: Indicator gwp_total carries a result in b8 but is not declared for material MAT-1"
     )
     assert [finding.source for finding in findings] == [WIDE_SHEET]
     assert findings[0].severity is Severity.REJECT
@@ -168,7 +168,7 @@ def test_findings_are_capped_per_sheet_in_the_terminal_output():
     lines = format_findings(findings)
 
     assert lines[0] == f"{WIDE_SHEET}:"
-    assert lines[1] == "  E25: finding 0"
+    assert lines[1] == "  W004: finding 0"
     assert lines[-1] == "  ... 3 more findings not shown"
     assert len(lines) == 12
 
@@ -181,8 +181,8 @@ def test_terminal_output_shows_the_most_severe_findings_of_a_sheet_first():
 
     assert format_findings(findings) == [
         f"{WIDE_SHEET}:",
-        "  E26: reject finding",
-        "  E25: warning finding",
+        "  E010: reject finding",
+        "  W004: warning finding",
     ]
 
 
@@ -235,7 +235,7 @@ def test_open_command_rejects_the_file_and_skips_the_export(tmp_path: Path, monk
     result, output = run_open(tmp_path, monkeypatch, rejecting_project())
 
     assert result.exit_code == 1
-    assert "E26: Indicator gwp_total carries a result in b8 but is not declared for material MAT-1" in result.output
+    assert "E010: Indicator gwp_total carries a result in b8 but is not declared for material MAT-1" in result.output
     assert not output.exists()
 
 
@@ -243,5 +243,5 @@ def test_open_command_exports_the_file_in_draft_mode_despite_a_reject(tmp_path: 
     result, output = run_open(tmp_path, monkeypatch, rejecting_project(), "--draft")
 
     assert result.exit_code == 0
-    assert "E26: Indicator gwp_total carries a result in b8 but is not declared for material MAT-1" in result.output
+    assert "E010: Indicator gwp_total carries a result in b8 but is not declared for material MAT-1" in result.output
     assert output.read_text() == "exported"

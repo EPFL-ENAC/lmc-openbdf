@@ -62,7 +62,7 @@ It will list potential validation errors, that prevent the export. To export any
 
 Bill of materials lines that miss required fields are dropped and reported as warnings by default. To keep these lines and validate them instead, append the option `--no-drop-invalid-materials`.
 
-A missing `Project Material Database` sheet does not stop the export. Its lines are generated from the bill of materials, and the sheet is reported as an `E34` warning.
+A missing `Project Material Database` sheet does not stop the export. Its lines are generated from the bill of materials, and the sheet is reported as an `W006` warning.
 
 > [!NOTE] Multiple translators can be merged with a single command, as shown above. `-t` accepts either an Excel file or a directory of sheet CSV files. When two translators translate the same category, the last one wins.
 

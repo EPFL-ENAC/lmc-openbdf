@@ -226,7 +226,7 @@ def horizontal_from_dataframe(
     added to the findings list, so one bad cell does not stop the pipeline.
 
     If drop_invalid is True, the rows that miss a required field are not kept and
-    each of them is reported as an E33 warning.
+    each of them is reported as an W005 warning.
     """
     if document_translator is None:
         document_translator = DocumentTranslator.default_openbdf_translator()
@@ -371,7 +371,7 @@ def horizontal_from_dataframe(
                     skip_fields=frozenset(failed_fields),
                 )
             )
-            if drop_invalid and any(finding.code == "E01" for finding in row_findings):
+            if drop_invalid and any(finding.code == "E001" for finding in row_findings):
                 findings.append(
                     DroppedLine(
                         _dropped_line_message(row, kwargs.get("material_id"), row_findings),
@@ -550,7 +550,7 @@ def bom_from_dataframe(
     produced by bom_to_dataframe().
 
     If drop_invalid is True, lines that miss a required field are dropped
-    and reported as E33 warnings.
+    and reported as W005 warnings.
     """
     if document_translator is None:
         document_translator = DocumentTranslator.default_openbdf_translator()

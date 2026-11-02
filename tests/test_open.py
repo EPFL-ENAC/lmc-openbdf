@@ -421,7 +421,7 @@ def test_open_command_generates_a_missing_project_material_database_sheet_with_a
     result = runner.invoke(app, ["open", str(template_path), "-o", str(output_path)])
 
     assert result.exit_code == 0
-    assert "  E34: Sheet is missing or empty, its lines were generated from the bill of materials" in (
+    assert "  W006: Sheet is missing or empty, its lines were generated from the bill of materials" in (
         result.output.splitlines()
     )
     sheet = load_workbook(output_path)["Project Material Database"]
@@ -492,14 +492,14 @@ def test_open_command_collects_every_finding_of_a_workbook_with_bad_cells(tmp_pa
     floor_area_row = project_code_rows["building_gross_floor_area"]
     assert result.output.splitlines() == [
         "General Information:",
-        f"  Row {floor_area_row}: E17: Floor area must be greater than zero",
+        f"  Row {floor_area_row}: E008: Floor area must be greater than zero",
         "Bill of Materials:",
-        "  E32: material_id 'MAT-1' is used by 2 bill of materials rows",
-        "  Row 9: E02: Value 'bogus' is not a valid MaterialDataType",
-        "  E16: Row 9 has no mass, material efficiency analysis is not possible",
+        "  E016: material_id 'MAT-1' is used by 2 bill of materials rows",
+        "  Row 9: E002: Value 'bogus' is not a valid MaterialDataType",
+        "  W002: Row 9 has no mass, material efficiency analysis is not possible",
         "LCA Result (Wide):",
-        "  E05: Bill of Materials has 2 rows, LCA Result (Wide) has 1",
-        "  E06: Row 9: material_id MAT-1 in the inventory, MAT-2 in the results",
+        "  E004: Bill of Materials has 2 rows, LCA Result (Wide) has 1",
+        "  E005: Row 9: material_id MAT-1 in the inventory, MAT-2 in the results",
         "The workbook has reject findings, so it was not saved. Use --draft to save it anyway.",
     ]
     assert not output_path.exists()
@@ -555,7 +555,7 @@ def test_export_takes_the_given_project_id_and_reports_a_replaced_imported_one(t
 
     assert general_information_value(given_path, "project_id") == "GEN0001"
     assert [str(finding) for finding in findings] == [
-        "E04: Field project_id was in the original data; the given project_id replaced it"
+        "W001: Field project_id was in the original data; the given project_id replaced it"
     ]
     assert isinstance(findings[0], AutomaticFieldSupplied)
     assert findings[0].source == "General Information"
