@@ -30,5 +30,6 @@ def test_codes_lists_the_reject_findings_before_the_warnings():
 
     assert result.exit_code == 0
     assert "| E001  MissingRequiredField " in result.output
+    assert "Field <code> is required and was not provided" in result.output
     assert "| W001  AutomaticFieldSupplied " in result.output
     assert result.output.index("E001") < result.output.index("W001")

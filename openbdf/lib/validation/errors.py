@@ -26,6 +26,8 @@ class OpenBDFValidationError(ValueError):
     """Base class of the validation findings."""
 
     code: str = ""
+    # Not used to build messages. Keep it in sync with the texts at the raise sites by hand.
+    message_template: str = ""
     severity: Severity = Severity.REJECT
 
     def __init__(self, message: str, *, source: str = "", row: int | None = None) -> None:
@@ -45,102 +47,119 @@ class MissingRequiredField(OpenBDFValidationError):
     """E001: a field whose requirement is required carries no value."""
 
     code = "E001"
+    message_template = "Field <code> is required and was not provided"
 
 
 class UnknownEnumValue(OpenBDFValidationError):
     """E002: a cell holds a value that is not a member of the field enum."""
 
     code = "E002"
+    message_template = "Value <value> is not a valid <type>"
 
 
 class TypeMismatch(OpenBDFValidationError):
     """E003: a cell cannot be read as the type of its field."""
 
     code = "E003"
+    message_template = "Field <code> expects <type>"
 
 
 class RowCountMismatch(OpenBDFValidationError):
     """E004: the bill of materials and the wide results sheet do not have the same number of rows."""
 
     code = "E004"
+    message_template = "Bill of Materials has <n> rows, LCA Result (Wide) has <m>"
 
 
 class MaterialIdMisalignment(OpenBDFValidationError):
     """E005: two rows at the same position carry different material_id values."""
 
     code = "E005"
+    message_template = "Row <i>: material_id <id> in the inventory, <id> in the results"
 
 
 class ShareOutOfRange(OpenBDFValidationError):
     """E006: a share is outside the 0 to 100 range."""
 
     code = "E006"
+    message_template = "Field <code> must lie between 0 and 100"
 
 
 class ShareSumMismatch(OpenBDFValidationError):
     """E007: the eight data type shares do not add up to 100."""
 
     code = "E007"
+    message_template = "The eight data type shares must add up to 100"
 
 
 class FloorAreaNotPositive(OpenBDFValidationError):
     """E008: a floor area is zero or negative."""
 
     code = "E008"
+    message_template = "Floor area must be greater than zero"
 
 
 class DuplicateFieldCode(OpenBDFValidationError):
     """E009: one sheet declares the same field code twice."""
 
     code = "E009"
+    message_template = "Field code <code> is declared twice"
 
 
 class ResultsWithoutIndicatorDeclaration(OpenBDFValidationError):
     """E010: an indicator carries results while lca_<indicator>_declared is false."""
 
     code = "E010"
+    message_template = "Indicator <indicator> carries a result in <column> but is not declared for material <id>"
 
 
 class ProjectMaterialDatabaseWithoutBillOfMaterialsLine(OpenBDFValidationError):
     """E011: a project material database line has no bill of materials material."""
 
     code = "E011"
+    message_template = "Project material database line <material> has no bill of materials material"
 
 
 class BillOfMaterialsWithoutProjectMaterialDatabaseLine(OpenBDFValidationError):
     """E012: a bill of materials material has no project material database line."""
 
     code = "E012"
+    message_template = "Bill of materials material <material> has no project material database line"
 
 
 class DuplicatedProjectMaterialDatabaseLine(OpenBDFValidationError):
     """E013: a bill of materials material has more than one project material database line."""
 
     code = "E013"
+    message_template = "Bill of materials material <material> has <n> project material database lines"
 
 
 class MaterialRefIdMismatch(OpenBDFValidationError):
     """E014: bill of materials rows carry a material_ref_id that differs from their database line."""
 
     code = "E014"
+    message_template = "Bill of materials rows of material <material> carry material_ref_id <id> instead of <expected>"
 
 
 class DuplicateMaterialRefId(OpenBDFValidationError):
     """E015: one material_ref_id names more than one project material database line."""
 
     code = "E015"
+    message_template = "material_ref_id <id> is used by <n> project material database lines"
 
 
 class DuplicateMaterialId(OpenBDFValidationError):
     """E016: two bill of materials rows share a material_id, so their tall results collide."""
 
     code = "E016"
+    message_template = "material_id <id> is used by <n> bill of materials rows"
 
 
 class AutomaticFieldSupplied(OpenBDFValidationError):
     """W001: a field the tool derives carries a contributor value."""
 
     code = "W001"
+    message_template = "Field <code> is derived; the given value was discarded"
     severity = Severity.WARNING
 
 
@@ -148,6 +167,7 @@ class MissingMass(OpenBDFValidationError):
     """W002: a bill of materials row carries no mass."""
 
     code = "W002"
+    message_template = "Row <i> has no mass, material efficiency analysis is not possible"
     severity = Severity.WARNING
 
 
@@ -155,6 +175,7 @@ class UnmappedNationalValue(OpenBDFValidationError):
     """W003: a national value has no OpenBDF mapping, so the field keeps its value."""
 
     code = "W003"
+    message_template = "<value> has no mapping; the field was left unchanged and not guessed"
     severity = Severity.WARNING
 
 
@@ -162,6 +183,7 @@ class DeclaredIndicatorWithoutResults(OpenBDFValidationError):
     """W004: lca_<indicator>_declared is true and the aligned result columns are empty."""
 
     code = "W004"
+    message_template = "Indicator <indicator> is declared but carries no result in <column> for material <id>"
     severity = Severity.WARNING
 
 
@@ -169,6 +191,7 @@ class DroppedLine(OpenBDFValidationError):
     """W005: a bill of materials line that misses a required field was dropped from the project."""
 
     code = "W005"
+    message_template = "Row <i>: line dropped: <reasons>"
     severity = Severity.WARNING
 
 
@@ -176,6 +199,7 @@ class MissingSheet(OpenBDFValidationError):
     """W006: a sheet the specification requires is missing or empty, so its content was generated."""
 
     code = "W006"
+    message_template = "Sheet is missing or empty, its lines were generated from the bill of materials"
     severity = Severity.WARNING
 
 
@@ -183,6 +207,7 @@ class UnresolvedHeaderValue(OpenBDFValidationError):
     """W007: no column name, or several column names, carry the value of a field."""
 
     code = "W007"
+    message_template = "Field <code> needs exactly one filled column, found <n>"
     severity = Severity.WARNING
 
 
