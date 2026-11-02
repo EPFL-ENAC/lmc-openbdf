@@ -65,6 +65,19 @@ def explain(
         print_to_console(analysis)
 
 
+@app.command(name="codes")
+def codes():
+    """
+    Print the list of validation finding codes with severity and description.
+    Usage:
+        openbdf codes
+    """
+    from openbdf.cli.codes import codes_table
+
+    for line in codes_table():
+        typer.echo(line)
+
+
 @app.command(name="open", no_args_is_help=True)
 def open(
     files: list[Path] = typer.Argument(..., help="One or more Excel files to open as a single document"),
