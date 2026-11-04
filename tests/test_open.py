@@ -188,6 +188,32 @@ def test_open_command_no_drop_invalid_materials_passes_false(tmp_path: Path, mon
     assert captured == [False]
 
 
+def test_open_command_no_excel_export_runs_pipeline_and_writes_no_output_file(tmp_path: Path, monkeypatch):
+    workbook = tmp_path / "complete.xlsx"
+    write_workbook(workbook, default_openbdf_sheets())
+    captured_tables: list[Any] = []
+    mock_conversion_and_save(monkeypatch, captured_tables)
+    monkeypatch.chdir(tmp_path)
+
+    result = runner.invoke(app, ["open", str(workbook), "--no-excel-export"])
+
+    assert result.exit_code == 0
+    assert len(captured_tables) == 1
+    assert not (tmp_path / "output.xlsx").exists()
+
+
+def test_open_command_no_excel_export_conflicts_with_output_path(tmp_path: Path):
+    workbook = tmp_path / "complete.xlsx"
+    write_workbook(workbook, default_openbdf_sheets())
+    output_path = tmp_path / "out.xlsx"
+
+    result = runner.invoke(app, ["open", str(workbook), "--no-excel-export", "-o", str(output_path)])
+
+    assert result.exit_code != 0
+    assert "conflicts with --no-excel-export" in result.output
+    assert not output_path.exists()
+
+
 def test_open_command_reports_duplicate_sheets(tmp_path: Path):
     first = tmp_path / "first.xlsx"
     second = tmp_path / "second.xlsx"
@@ -503,6 +529,11 @@ def test_open_command_collects_every_finding_of_a_workbook_with_bad_cells(tmp_pa
         "The workbook has reject findings, so it was not saved. Use --draft to save it anyway.",
     ]
     assert not output_path.exists()
+
+    result = runner.invoke(app, ["open", str(template_path), "--no-excel-export"])
+
+    assert result.exit_code == 1
+    assert result.output.splitlines()[-1] == "The workbook has reject findings."
 
 
 def project_record_for_export(**overrides: Any) -> ProjectRecord:

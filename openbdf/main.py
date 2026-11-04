@@ -128,8 +128,13 @@ def open(
         "--drop-invalid-materials/--no-drop-invalid-materials",
         help="Drop bill of materials lines that miss required fields and report them as warnings. Enabled by default, use --no-drop-invalid-materials to keep these lines.",
     ),
-    output_path: Path = typer.Option(
-        Path("./output.xlsx"),
+    excel_export: bool = typer.Option(
+        True,
+        "--excel-export/--no-excel-export",
+        help="Save the opened document as an xlsx file. Use --no-excel-export to run ingestion and validation only.",
+    ),
+    output_path: Path | None = typer.Option(
+        None,
         "--output-path",
         "-o",
         help="File path where the opened document is saved. Defaults to ./output.xlsx.",
@@ -141,6 +146,10 @@ def open(
         openbdf open project.xlsx
         openbdf open project.xlsx materials.xlsx results.xlsx
     """
+    if not excel_export and output_path is not None:
+        typer.echo("Error: --output-path conflicts with --no-excel-export.", err=True)
+        raise typer.Exit(code=1)
+
     if translator_paths:
         document_translator = DocumentTranslator()
         for translator_path in translator_paths:
@@ -201,13 +210,16 @@ def open(
         typer.echo(line, err=True)
 
     if not draft and any(finding.severity is Severity.REJECT for finding in findings):
-        typer.echo("The workbook has reject findings, so it was not saved. Use --draft to save it anyway.", err=True)
+        typer.echo(
+            "The workbook has reject findings, so it was not saved. Use --draft to save it anyway."
+            if excel_export
+            else "The workbook has reject findings.",
+            err=True,
+        )
         raise typer.Exit(code=1)
 
-    save_openbdf_to_xlsx(
-        xlsx_path=output_path,
-        project=project,
-    )
+    if excel_export:
+        save_openbdf_to_xlsx(xlsx_path=output_path or Path("./output.xlsx"), project=project)
 
 
 @app.command(name="save-template", no_args_is_help=True)
