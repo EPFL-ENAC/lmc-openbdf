@@ -87,7 +87,7 @@ kg CO₂e",gwp_total_d2,Global Warming Potential - Total (D2),Decimal,Suggested
 "Global Warming Potential (GWP total)
 EN 15978 (A2)
 A1-A3, A4, A5, B1, B2, B3, B4, B5, B6, C1, C2, C3, C4, D, D1, D2
-kg CO₂e",gwp_total,Total Global Warming Potential,Decimal,Suggested
+kg CO₂e",gwp_total_total,Total Global Warming Potential - Total,Decimal,Suggested
 "Global Warming Potential – fossil (GWP-fossil)
 EN 15978 (A2)
 A1-A3

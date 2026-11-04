@@ -284,7 +284,7 @@ def test_a_total_that_reconciles_only_with_module_d_rejects_the_material():
         "MAT-1",
         gwp_total_a1_a3=Decimal("10"),
         gwp_total_d=Decimal("2"),
-        gwp_total=Decimal("12"),
+        gwp_total_total=Decimal("12"),
     )
 
     findings = check_stage_totals(project(None, [material(wide=wide)]))
@@ -293,19 +293,19 @@ def test_a_total_that_reconciles_only_with_module_d_rejects_the_material():
 
 
 def test_a_total_close_to_the_modules_sum_warns():
-    wide = wide_record("MAT-1", gwp_total_a1_a3=Decimal("100"), gwp_total=Decimal("103"))
+    wide = wide_record("MAT-1", gwp_total_a1_a3=Decimal("100"), gwp_total_total=Decimal("103"))
 
     findings = check_stage_totals(project(None, [material(wide=wide)]))
 
-    assert [str(finding) for finding in findings] == ["W011: gwp_total is 103, the modules sum to 100"]
+    assert [str(finding) for finding in findings] == ["W011: gwp_total_total is 103, the modules sum to 100"]
 
 
 def test_a_total_far_from_the_modules_sum_rejects_the_material():
-    wide = wide_record("MAT-1", gwp_total_a1_a3=Decimal("100"), gwp_total=Decimal("110"))
+    wide = wide_record("MAT-1", gwp_total_a1_a3=Decimal("100"), gwp_total_total=Decimal("110"))
 
     findings = check_stage_totals(project(None, [material(wide=wide)]))
 
-    assert [str(finding) for finding in findings] == ["E019: gwp_total is 110, the modules sum to 100"]
+    assert [str(finding) for finding in findings] == ["E019: gwp_total_total is 110, the modules sum to 100"]
 
 
 def test_a_total_of_another_indicator_is_checked():
@@ -323,13 +323,13 @@ def test_a_matching_total_with_a_full_stage_set_passes():
         gwp_total_a4=Decimal("1"),
         gwp_total_c4=Decimal("1"),
         gwp_total_d=Decimal("5"),
-        gwp_total=Decimal("12"),
+        gwp_total_total=Decimal("12"),
     )
 
     assert check_stage_totals(project(None, [material(wide=wide)])) == []
 
 
 def test_an_empty_aggregate_column_sums_from_its_sub_modules():
-    wide = wide_record("MAT-1", gwp_total_a1=Decimal("4"), gwp_total_a2=Decimal("3"), gwp_total=Decimal("7"))
+    wide = wide_record("MAT-1", gwp_total_a1=Decimal("4"), gwp_total_a2=Decimal("3"), gwp_total_total=Decimal("7"))
 
     assert check_stage_totals(project(None, [material(wide=wide)])) == []

@@ -463,9 +463,6 @@ _HEADER = (
 )
 
 
-_TRAILING_TOTAL_SUFFIX = " - Total"
-
-
 def _q(value: str) -> str:
     """Wrap a string in double quotes for source emission."""
     return '"' + value.replace('"', '\\"') + '"'
@@ -473,17 +470,12 @@ def _q(value: str) -> str:
 
 def _total_code(code: str) -> str:
     """Field code of the wide total field for an indicator."""
-    if code.endswith("_total"):
-        return code
     return f"{code}_total"
 
 
 def _total_attribute_name(attribute_name: str) -> str:
     """Attribute name of the wide total field for an indicator."""
-    base = attribute_name
-    if base.endswith(_TRAILING_TOTAL_SUFFIX):
-        base = base[: -len(_TRAILING_TOTAL_SUFFIX)]
-    return f"Total {base}"
+    return f"Total {attribute_name}"
 
 
 def _wide_description_base(indicator: LCAResultIndicator) -> str:
@@ -502,10 +494,7 @@ def _wide_description_base(indicator: LCAResultIndicator) -> str:
 
 def _total_description(indicator: LCAResultIndicator) -> str:
     """Description of the wide total field for an indicator."""
-    base = _wide_description_base(indicator)
-    if base.endswith(_TRAILING_TOTAL_SUFFIX):
-        base = base[: -len(_TRAILING_TOTAL_SUFFIX)]
-    return f"Total {base}."
+    return f"Total {_wide_description_base(indicator)}."
 
 
 def _wide_stage_description(indicator: LCAResultIndicator, stage: LCAStageOrModuleOrSubModule, suffix: str) -> str:

@@ -35,7 +35,7 @@ def wide_result(*, material_id: str = "mat-1", **values: Any) -> LCAResultsWideF
     fields: dict[str, Any] = {
         "material_id": material_id,
         "gwp_total_a1_a3": Decimal(1),
-        "gwp_total": Decimal(999),
+        "gwp_total_total": Decimal(999),
         "building_bill_materials_slim_record_id": 42,
         **values,
     }
