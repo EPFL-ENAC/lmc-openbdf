@@ -494,13 +494,13 @@ class LCAResultsWideFullBase(SQLModel):
         ),
     )
 
-    gwp_total: Optional[Decimal] = Field(
+    gwp_total_total: Optional[Decimal] = Field(
         default=None,
-        description="Total Global Warming Potential.",
+        description="Total Global Warming Potential - Total.",
         schema_extra=openbdf_field_metadata(
-            attribute_name="Total Global Warming Potential",
-            field_code="gwp_total",
-            description="Total Global Warming Potential.",
+            attribute_name="Total Global Warming Potential - Total",
+            field_code="gwp_total_total",
+            description="Total Global Warming Potential - Total.",
             units="kg CO₂ eq",
             requirements=Requirement.SUGGESTED,
             reference_alignment=ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,

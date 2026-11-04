@@ -85,7 +85,7 @@ def _check_total(
     wide: Any,
     values: dict[str, Any],
 ) -> list[OpenBDFValidationError]:
-    total_code = code if code.endswith("_total") else f"{code}_total"
+    total_code = f"{code}_total"
     total = getattr(wide, total_code, None)
     if total is None:
         return []
