@@ -66,6 +66,8 @@ To validate the files without exporting the resulting workbook, append the optio
 
 A missing `Project Material Database` sheet does not stop the export. Its lines are generated from the bill of materials, and the sheet is reported as a `W006` warning.
 
+The `open` command also accepts `.parquet` files. Each file becomes one sheet named by its file stem, and the file's column headers act as the sheet's header row.
+
 > [!NOTE] Multiple translators can be merged with a single command, as shown above. `-t` accepts either an Excel file or a directory of sheet CSV files. When two translators translate the same category, the last one wins.
 
 
