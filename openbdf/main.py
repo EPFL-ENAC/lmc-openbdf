@@ -15,6 +15,7 @@ from openbdf.lib.converters.dataframe import project_package_from_tables
 from openbdf.lib.converters.translator_csv import workbook_sheets_to_csv_dir
 from openbdf.lib.converters.translators import ABOUT_SHEET_NAME, DocumentTranslator
 from openbdf.lib.openbdf_tables import OpenBDFTables
+from openbdf.lib.sources import CompositeSheetSource, ParquetSheetSource
 from openbdf.lib.sources.excel_source import DuplicateSheetNamesError, ExcelSheetSource
 from openbdf.lib.validation import (
     DroppedLine,
@@ -175,9 +176,19 @@ def open(
     else:
         document_translator = DocumentTranslator.default_openbdf_translator()
 
+    parquet_files = [file for file in files if file.suffix.lower() == ".parquet"]
+    excel_files = [file for file in files if file.suffix.lower() != ".parquet"]
+
     try:
-        with ExcelSheetSource(files) as source:
-            tables = OpenBDFTables.from_source(source, document_translator)
+        if excel_files and parquet_files:
+            with CompositeSheetSource([ExcelSheetSource(excel_files), ParquetSheetSource(parquet_files)]) as source:
+                tables = OpenBDFTables.from_source(source, document_translator)
+        elif parquet_files:
+            with ParquetSheetSource(parquet_files) as source:
+                tables = OpenBDFTables.from_source(source, document_translator)
+        else:
+            with ExcelSheetSource(files) as source:
+                tables = OpenBDFTables.from_source(source, document_translator)
     except DuplicateSheetNamesError as exc:
         typer.echo(f"Error: {exc}", err=True)
         raise typer.Exit(code=1) from exc

@@ -58,6 +58,17 @@ def default_openbdf_sheets() -> dict[str, pd.DataFrame]:
     }
 
 
+def write_parquet_sheets(directory: Path, sheets: dict[str, pd.DataFrame]) -> None:
+    """Write each sheet as one parquet file whose column headers replace the sheet's first row."""
+    for sheet_name, dataframe in sheets.items():
+        header = [
+            f"column{position}" if pd.isna(value) else str(value) for position, value in enumerate(dataframe.iloc[0])
+        ]
+        body = dataframe.iloc[1:].copy()
+        body.columns = header
+        body.to_parquet(directory / f"{sheet_name}.parquet", index=False)
+
+
 def mock_validation(monkeypatch) -> None:
     """This module tests the command wiring, so the fake converters skip the checks."""
     monkeypatch.setattr(main_module, "validate_project", lambda *args, **kwargs: [])
@@ -98,6 +109,78 @@ def test_open_command_processes_sheets_split_across_files(tmp_path: Path, monkey
     raw_project_material_database = tables.project_material_database.to_dict(orient="records")
     assert raw_project_material_database == [{"material_ref_id": "M0001"}]
     assert tables.results_wide.to_dict(orient="records") == [{"material_id": "MAT-1"}]
+
+
+def test_open_command_processes_parquet_files(tmp_path: Path, monkeypatch):
+    sheets = default_openbdf_sheets()
+    write_parquet_sheets(tmp_path, sheets)
+    parquet_files = [tmp_path / f"{sheet_name}.parquet" for sheet_name in sheets]
+    captured_tables: list[Any] = []
+    mock_conversion_and_save(monkeypatch, captured_tables)
+
+    result = runner.invoke(app, ["open", *[str(path) for path in parquet_files]])
+
+    assert result.exit_code == 0
+    assert len(captured_tables) == 1
+    tables, drop_invalid = captured_tables[0]
+    assert drop_invalid is True
+    assert tables.project.to_dict(orient="records") == [{"field_code": "project_name", "value": "Example project"}]
+    assert tables.bill_of_materials.to_dict(orient="records") == [{"material_id": "MAT-1"}]
+    # start_row=8 skips the metadata rows, so the first record is the first data row.
+    raw_project_material_database = tables.project_material_database.to_dict(orient="records")
+    assert raw_project_material_database == [{"material_ref_id": "M0001"}]
+    assert tables.results_wide.to_dict(orient="records") == [{"material_id": "MAT-1"}]
+
+
+def test_open_command_processes_sheets_split_across_excel_and_parquet_files(tmp_path: Path, monkeypatch):
+    sheets = default_openbdf_sheets()
+    workbook = tmp_path / "project.xlsx"
+    write_workbook(
+        workbook,
+        {"General Information": sheets["General Information"], "Bill of Materials": sheets["Bill of Materials"]},
+    )
+    write_parquet_sheets(
+        tmp_path,
+        {
+            "Project Material Database": sheets["Project Material Database"],
+            "LCA Result (Wide)": sheets["LCA Result (Wide)"],
+        },
+    )
+    captured_tables: list[Any] = []
+    mock_conversion_and_save(monkeypatch, captured_tables)
+
+    result = runner.invoke(
+        app,
+        [
+            "open",
+            str(tmp_path / "LCA Result (Wide).parquet"),
+            str(workbook),
+            str(tmp_path / "Project Material Database.parquet"),
+        ],
+    )
+
+    assert result.exit_code == 0
+    assert len(captured_tables) == 1
+    tables, drop_invalid = captured_tables[0]
+    assert drop_invalid is True
+    assert tables.project.to_dict(orient="records") == [{"field_code": "project_name", "value": "Example project"}]
+    assert tables.bill_of_materials.to_dict(orient="records") == [{"material_id": "MAT-1"}]
+    raw_project_material_database = tables.project_material_database.to_dict(orient="records")
+    assert raw_project_material_database == [{"material_ref_id": "M0001"}]
+    assert tables.results_wide.to_dict(orient="records") == [{"material_id": "MAT-1"}]
+
+
+def test_open_command_reports_duplicate_sheet_between_excel_and_parquet(tmp_path: Path):
+    workbook = tmp_path / "project.xlsx"
+    write_workbook(workbook, {"Shared": pd.DataFrame([[1]])})
+    parquet = tmp_path / "Shared.parquet"
+    pd.DataFrame({"value": [2]}).to_parquet(parquet)
+
+    result = runner.invoke(app, ["open", str(workbook), str(parquet)])
+
+    assert result.exit_code == 1
+    assert "Duplicate sheet names" in result.output
+    assert "Shared" in result.output
 
 
 def test_open_command_accepts_one_file(tmp_path: Path, monkeypatch):

@@ -6,7 +6,7 @@ import pytest
 
 from openbdf.lib.converters.translators import DocumentTranslator, SheetTranslation, TranslationsLibrary
 from openbdf.lib.openbdf_tables import OpenBDFTables
-from openbdf.lib.sources import DuplicateSheetNamesError, ExcelSheetSource
+from openbdf.lib.sources import CompositeSheetSource, DuplicateSheetNamesError, ExcelSheetSource, ParquetSheetSource
 
 
 class MemorySheetSource:
@@ -225,6 +225,91 @@ def test_excel_sheet_source_rejects_every_duplicate_sheet(tmp_path: Path):
 def test_excel_sheet_source_rejects_empty_input():
     with pytest.raises(ValueError, match="At least one input workbook is required"):
         ExcelSheetSource([])
+
+
+def test_parquet_sheet_source_reads_columns_as_the_header_row(tmp_path: Path):
+    file = tmp_path / "materials.parquet"
+    pd.DataFrame({"material_id": ["MAT-1", "MAT-2"], "material_weight_kg": [100, 200]}).to_parquet(file)
+
+    with ParquetSheetSource(file) as source:
+        assert list(source.sheet_names) == ["materials"]
+        frame = source.read_sheet("materials")
+
+    assert frame.iloc[0].tolist() == ["material_id", "material_weight_kg"]
+    assert frame.iloc[1].tolist() == ["MAT-1", 100]
+    assert frame.iloc[2].tolist() == ["MAT-2", 200]
+    assert all(str(dtype) == "object" for dtype in frame.dtypes)
+    with pytest.raises(RuntimeError, match="context manager"):
+        source.read_sheet("materials")
+
+
+def test_parquet_sheet_source_returns_the_header_row_when_the_file_has_no_rows(tmp_path: Path):
+    file = tmp_path / "empty.parquet"
+    pd.DataFrame({"material_id": []}).to_parquet(file)
+
+    with ParquetSheetSource(file) as source:
+        assert list(source.sheet_names) == ["empty"]
+        frame = source.read_sheet("empty")
+
+    assert frame.iloc[0].tolist() == ["material_id"]
+    assert len(frame) == 1
+
+
+def test_parquet_sheet_source_rejects_duplicate_stems(tmp_path: Path):
+    first = tmp_path / "first" / "materials.parquet"
+    second = tmp_path / "second" / "materials.parquet"
+    first.parent.mkdir()
+    second.parent.mkdir()
+    pd.DataFrame({"material_id": ["MAT-1"]}).to_parquet(first)
+    pd.DataFrame({"material_id": ["MAT-2"]}).to_parquet(second)
+
+    with pytest.raises(DuplicateSheetNamesError) as error:
+        with ParquetSheetSource([first, second]):
+            pass
+
+    assert error.value.duplicates == {"materials": [first, second]}
+    assert str(first) in str(error.value)
+    assert str(second) in str(error.value)
+
+
+def test_parquet_sheet_source_rejects_empty_input():
+    with pytest.raises(ValueError, match="At least one input workbook is required"):
+        ParquetSheetSource([])
+
+
+def test_composite_sheet_source_combines_excel_and_parquet_sheets(tmp_path: Path):
+    workbook = tmp_path / "project.xlsx"
+    write_workbook(workbook, {"Project Input": pd.DataFrame([["project_name", "Example project"]])})
+    materials = tmp_path / "Materials Input.parquet"
+    pd.DataFrame({"material_id": ["MAT-1"]}).to_parquet(materials)
+
+    with CompositeSheetSource([ExcelSheetSource(workbook), ParquetSheetSource(materials)]) as source:
+        assert list(source.sheet_names) == ["Project Input", "Materials Input"]
+        assert source.read_sheet("Project Input").iloc[0, 0] == "project_name"
+        assert source.read_sheet("Materials Input").iloc[0, 0] == "material_id"
+        assert source.read_sheet("Materials Input").iloc[1, 0] == "MAT-1"
+
+    with pytest.raises(RuntimeError, match="context manager"):
+        source.read_sheet("Project Input")
+
+
+def test_composite_sheet_source_rejects_duplicate_sheets_across_children(tmp_path: Path):
+    workbook = tmp_path / "project.xlsx"
+    write_workbook(workbook, {"Shared": pd.DataFrame([[1]])})
+    parquet = tmp_path / "Shared.parquet"
+    pd.DataFrame({"value": [2]}).to_parquet(parquet)
+    excel_source = ExcelSheetSource(workbook)
+    parquet_source = ParquetSheetSource(parquet)
+
+    with pytest.raises(DuplicateSheetNamesError) as error:
+        with CompositeSheetSource([excel_source, parquet_source]):
+            pass
+
+    assert set(error.value.duplicates) == {"Shared"}
+    with pytest.raises(RuntimeError, match="context manager"):
+        excel_source.read_sheet("Shared")
+    with pytest.raises(RuntimeError, match="context manager"):
+        parquet_source.read_sheet("Shared")
 
 
 def cola_translator_args() -> dict:
