@@ -245,12 +245,16 @@ class SheetTranslation(BaseModel):
     # attributes for vertical sheets
     header_col: int | None = None
     values_col: int | None = None
+    # Column of the field codes to read where header_col is blank.
+    fallback_header_col: int | None = None
 
     # attributes for horizontal sheets
     start_row: int | None = None
     start_col: int | None = None
     end_row: int | None = None
     end_col: int | None = None
+    # Row of the field codes to read where header_row is blank.
+    fallback_header_row: int | None = None
 
     def model_post_init(self, __context: dict) -> None:
         if self.orientation == "vertical":
@@ -265,12 +269,17 @@ class SheetTranslation(BaseModel):
     def translate_df(self, df: pd.DataFrame, df_orientation: SheetOrientation | None = None) -> pd.DataFrame:
         if self.orientation == "vertical":
             translated_df = df.iloc[self.header_row :, [self.header_col, self.values_col]]
+            if self.fallback_header_col is not None:
+                codes = _with_fallback(translated_df.iloc[:, 0], df.iloc[self.header_row :, self.fallback_header_col])
+                translated_df = pd.DataFrame({0: codes, 1: translated_df.iloc[:, 1]}, index=translated_df.index)
         elif self.orientation == "horizontal":
             header_start_row = self.header_row or 0
             header_start_col = self.start_col or 0
             header_end_col = self.end_col
 
             header = df.iloc[header_start_row, header_start_col:header_end_col]
+            if self.fallback_header_row is not None:
+                header = _with_fallback(header, df.iloc[self.fallback_header_row, header_start_col:header_end_col])
             values = df.iloc[(self.start_row or 1) : self.end_row, (self.start_col or 0) : self.end_col]
 
             # The index stays the sheet row, so a finding can name the row the user sees.
@@ -282,6 +291,14 @@ class SheetTranslation(BaseModel):
             translated_df = translated_df.transpose().reset_index(drop=False)
 
         return translated_df
+
+
+def _with_fallback(codes: pd.Series, fallback: pd.Series) -> pd.Series:
+    """Take each code from codes, or from fallback where it is blank, without surrounding spaces."""
+    merged = [
+        code if not _is_missing(code) else other for code, other in zip(codes.tolist(), fallback.tolist(), strict=True)
+    ]
+    return pd.Series([code.strip() if isinstance(code, str) else code for code in merged], index=codes.index)
 
 
 class TranslationsLibrary:
@@ -517,6 +534,54 @@ class DocumentTranslator:
                 ),
             ])
         )
+
+    @staticmethod
+    def specification_translator() -> "DocumentTranslator":
+        """
+        Layout of the specification workbook, where each row sheet describes its fields in
+        13 rows above the data. A field code is read from 'UPDATED Field Code' (xlsx row 4),
+        or from 'Field Code' (row 3) where the updated cell is blank. Data starts on row 14.
+        General Information holds the same two codes in columns G and H, its values in Q.
+        The project material database keeps the template layout.
+        """
+        row_sheets = [
+            SheetTranslation(
+                original_name=COMMON_CATEGORY_PROPERTIES[category]["name"],
+                translated_name=COMMON_CATEGORY_PROPERTIES[category]["name"],
+                orientation="horizontal",
+                header_row=3,
+                fallback_header_row=2,
+                start_row=13,
+                start_col=1,
+            )
+            for category in ("bom", "results_wide")
+        ]
+        return DocumentTranslator(
+            library=TranslationsLibrary([
+                SheetTranslation(
+                    original_name=COMMON_CATEGORY_PROPERTIES["project"]["name"],
+                    translated_name=COMMON_CATEGORY_PROPERTIES["project"]["name"],
+                    orientation="vertical",
+                    header_row=1,
+                    header_col=7,
+                    fallback_header_col=6,
+                    values_col=16,
+                ),
+                *row_sheets,
+                SheetTranslation(
+                    original_name=COMMON_CATEGORY_PROPERTIES["material_database"]["name"],
+                    translated_name=COMMON_CATEGORY_PROPERTIES["material_database"]["name"],
+                    orientation="horizontal",
+                    header_row=1,
+                    start_row=8,
+                    start_col=1,
+                ),
+            ])
+        )
+
+
+# Column A of a specification-layout row sheet labels its description rows with these names.
+SPECIFICATION_LAYOUT_MARKER = "UPDATED Field Code"
 
 
 class CategoryProperties(TypedDict):

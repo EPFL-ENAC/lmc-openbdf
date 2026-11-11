@@ -6,6 +6,7 @@ from types import SimpleNamespace
 from typing import Any
 
 import pandas as pd
+import pytest
 from typer.testing import CliRunner
 
 import openbdf.main as main_module
@@ -40,7 +41,7 @@ def wide_record(material_id: str, **values: Any) -> LCAResultsWideFullBase:
     return LCAResultsWideFullBase(material_id=material_id, **values)
 
 
-def tall_record(material_id: str, stage: str, **values: Any) -> LCAResultsTallBase:
+def tall_record(material_id: str, stage: Any, **values: Any) -> LCAResultsTallBase:
     return LCAResultsTallBase(material_id=material_id, lca_stage_module_submodule=stage, **values)
 
 
@@ -96,6 +97,24 @@ def test_a_declared_indicator_missing_one_aligned_column_warns_on_the_wide_sheet
     assert [finding.source for finding in findings] == [WIDE_SHEET]
     assert str(findings[0]) == ("W004: Indicator gwp_total is declared but carries no result in d for material MAT-1")
     assert findings[0].severity is Severity.WARNING
+
+
+@pytest.mark.parametrize("blank", [("a1", "a2", "a3"), ("a1_a3",)], ids=["sub-modules blank", "aggregate blank"])
+def test_an_aggregate_stage_and_its_sub_modules_stand_for_each_other(blank):
+    # E017 forbids filling both, so a workbook that fills one of them carries every result.
+    wide = wide_record(
+        "MAT-1", **results("gwp_total", EN_15804_A2, **{f"gwp_total_{suffix}": None for suffix in blank})
+    )
+    blank_stages = {_STAGE_BY_SUFFIX[suffix] for suffix in blank if suffix in _STAGE_BY_SUFFIX}
+    tall = [
+        record
+        for record in tall_results("gwp_total", EN_15804_A2)
+        if record.lca_stage_module_submodule not in blank_stages
+    ]
+
+    findings = check_declared_results(project(EN_15804_A2, [material(wide=wide, tall=tall)], gwp_total=True))
+
+    assert findings == []
 
 
 def test_a_declared_indicator_missing_one_aligned_row_warns_on_the_tall_sheet():
@@ -279,17 +298,23 @@ def test_a5_beside_its_sub_modules_rejects_the_material():
     ]
 
 
-def test_a_total_that_reconciles_only_with_module_d_rejects_the_material():
-    wide = wide_record(
-        "MAT-1",
-        gwp_total_a1_a3=Decimal("10"),
-        gwp_total_d=Decimal("2"),
-        gwp_total_total=Decimal("12"),
-    )
+@pytest.mark.parametrize(
+    "module_d",
+    [
+        {"gwp_total_d": Decimal("2")},
+        {"gwp_total_d1": Decimal("1.5"), "gwp_total_d2": Decimal("0.5")},
+        {"gwp_total_d": Decimal("1"), "gwp_total_d1": Decimal("0.5"), "gwp_total_d2": Decimal("0.5")},
+    ],
+    ids=["d", "d1 and d2", "d twice"],
+)
+def test_a_total_that_reconciles_only_with_module_d_warns(module_d):
+    wide = wide_record("MAT-1", gwp_total_a1_a3=Decimal("10"), gwp_total_total=Decimal("12"), **module_d)
 
     findings = check_stage_totals(project(None, [material(wide=wide)]))
 
-    assert [str(finding) for finding in findings] == ["E018: Module D must not be added to the whole-life total"]
+    assert [str(finding) for finding in findings] == [
+        "W013: gwp_total_total adds module D to the whole-life total, the modules A to C sum to 10"
+    ]
 
 
 def test_a_total_close_to_the_modules_sum_warns():
@@ -300,12 +325,12 @@ def test_a_total_close_to_the_modules_sum_warns():
     assert [str(finding) for finding in findings] == ["W011: gwp_total_total is 103, the modules sum to 100"]
 
 
-def test_a_total_far_from_the_modules_sum_rejects_the_material():
+def test_a_total_far_from_the_modules_sum_warns():
     wide = wide_record("MAT-1", gwp_total_a1_a3=Decimal("100"), gwp_total_total=Decimal("110"))
 
     findings = check_stage_totals(project(None, [material(wide=wide)]))
 
-    assert [str(finding) for finding in findings] == ["E019: gwp_total_total is 110, the modules sum to 100"]
+    assert [str(finding) for finding in findings] == ["W011: gwp_total_total is 110, the modules sum to 100"]
 
 
 def test_a_total_of_another_indicator_is_checked():
@@ -313,7 +338,7 @@ def test_a_total_of_another_indicator_is_checked():
 
     findings = check_stage_totals(project(None, [material(wide=wide)]))
 
-    assert [str(finding) for finding in findings] == ["E019: gwp_f_total is 12, the modules sum to 10"]
+    assert [str(finding) for finding in findings] == ["W011: gwp_f_total is 12, the modules sum to 10"]
 
 
 def test_a_matching_total_with_a_full_stage_set_passes():

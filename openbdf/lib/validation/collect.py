@@ -10,6 +10,7 @@ from openbdf.lib.openbdf_tables import OpenBDFTables
 from openbdf.lib.validation.declared_results import check_declared_results, check_stage_totals, wide_blocks
 from openbdf.lib.validation.errors import (
     BillOfMaterialsWithoutProjectMaterialDatabaseLine,
+    DroppedLineWithData,
     DuplicatedProjectMaterialDatabaseLine,
     DuplicateMaterialId,
     DuplicateMaterialRefId,
@@ -261,6 +262,46 @@ def check_missing_mass(
     return findings
 
 
+def check_dropped_data(
+    bill_of_materials: pd.DataFrame,
+    results_wide: pd.DataFrame | None,
+    dropped_rows: frozenset[int],
+) -> list[OpenBDFValidationError]:
+    """
+    W012. A dropped line leaves the project with its mass and its results, so the project
+    totals are lower than the workbook's. Its results row is found by position, as in E005.
+    """
+    if not dropped_rows:
+        return []
+    bill_of_materials = _without_blank_rows(bill_of_materials)
+    results = None
+    if results_wide is not None:
+        result_codes = {f"{code}_{suffix}" for code, columns in wide_blocks().items() for suffix, _ in columns}
+        results = _without_blank_rows(results_wide)
+        results = results[[column for column in results.columns if column in result_codes]]
+
+    findings: list[OpenBDFValidationError] = []
+    for position, (row_index, row) in enumerate(bill_of_materials.iterrows()):
+        row_number = int(row_index) + 1
+        if row_number not in dropped_rows:
+            continue
+        carried = []
+        mass = row.get("material_weight_kg")
+        if _carries_data(mass):
+            carried.append(f"a mass of {mass} kg")
+        if results is not None and position < len(results) and any(map(_carries_data, results.iloc[position])):
+            carried.append("LCA results")
+        if carried:
+            findings.append(
+                DroppedLineWithData(
+                    f"Row {row_number}: the dropped line carried {' and '.join(carried)}, left out of every total",
+                    source=BOM_SHEET,
+                    row=row_number,
+                )
+            )
+    return findings
+
+
 def check_general_information(project: Any) -> list[OpenBDFValidationError]:
     """
     E020, W008, W009 and W010. The reference study period is required when the boundary
@@ -353,7 +394,7 @@ def validate_project(
     """
     Collect every finding about a project instead of stopping at the first one.
 
-    The sheet-level checks E004, E005 and W002 need the source tables, so a project restored
+    The sheet-level checks E004, E005, W002 and W012 need the source tables, so a project restored
     from a database is validated without them. A missing project material database sheet is
     an W006 warning, because its lines are generated from the bill of materials. dropped_rows
     holds the Excel rows the ingest dropped, which the row checks leave out.
@@ -384,6 +425,7 @@ def validate_project(
     )
     findings.extend(check_result_row_alignment(bill_of_materials, results_wide))
     findings.extend(check_missing_mass(bill_of_materials, dropped_rows))
+    findings.extend(check_dropped_data(bill_of_materials, results_wide, dropped_rows))
     return findings
 
 
@@ -400,7 +442,18 @@ def _material_ids(frame: pd.DataFrame) -> list[str | None]:
 
 
 def _is_blank(value: Any) -> bool:
-    return bool(pd.isna(value)) or (isinstance(value, str) and not value.strip())
+    """A cell is blank when it is empty, holds only spaces, or holds the '…' placeholder of an example row."""
+    return bool(pd.isna(value)) or (isinstance(value, str) and value.strip() in {"", "…", "..."})
+
+
+def _carries_data(value: Any) -> bool:
+    """A cell carries data when it is not blank and not a zero, which adds nothing to a total."""
+    if _is_blank(value):
+        return False
+    try:
+        return float(value) != 0
+    except (TypeError, ValueError):
+        return True
 
 
 def _text(value: str | None) -> str:
