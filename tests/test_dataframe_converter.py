@@ -568,23 +568,25 @@ def test_project_package_from_tables_in_draft_mode_keeps_existing_project_materi
     ])
     pmd = pd.DataFrame([
         project_material_database_row("M0001", "Concrete", material_mass_kg="999", material_mass_share="0.5"),
+        {"material_ref_id": "M0002", "custom_material_name": "Glass"},
+        # The example row of the template is blank, so it is skipped.
         {"material_ref_id": "…", "custom_material_name": "…"},
     ])
 
     project = project_package_from_tables(tables(bom, project_material_database=pmd), draft=True)
 
     lines = project.project_material_database
-    assert [record.custom_material_name for record in lines] == ["Concrete", "…", "Wood"]
-    concrete, placeholder, wood = lines
+    assert [record.custom_material_name for record in lines] == ["Concrete", "Glass", "Wood"]
+    concrete, orphan, wood = lines
     assert concrete.material_ref_id == "M0001"
     assert concrete.bom_row_count == 1
     assert concrete.material_mass_kg == Decimal("123")
     assert concrete.material_mass_share == Decimal("100.0000")
-    assert placeholder.material_ref_id == "…"
-    assert placeholder.bom_row_count == 0
-    assert placeholder.material_mass_kg == Decimal("0")
-    assert placeholder.material_mass_share == Decimal("0")
-    assert wood.material_ref_id == "M0002"
+    assert orphan.material_ref_id == "M0002"
+    assert orphan.bom_row_count == 0
+    assert orphan.material_mass_kg == Decimal("0")
+    assert orphan.material_mass_share == Decimal("0")
+    assert wood.material_ref_id == "M0003"
 
 
 def test_project_package_from_tables_in_draft_mode_back_fills_material_ref_ids():
@@ -648,8 +650,8 @@ def test_project_package_from_tables_in_draft_mode_ignores_rows_without_a_materi
     project = project_package_from_tables(tables(bom, project_material_database=pmd), draft=True)
 
     lines = project.project_material_database
-    assert [record.custom_material_name for record in lines] == ["…", "Concrete"]
-    concrete = lines[1]
+    assert [record.custom_material_name for record in lines] == ["Concrete"]
+    concrete = lines[0]
     assert concrete.material_ref_id == "M0100"
     assert concrete.bom_row_count == 1
     assert concrete.material_mass_kg == Decimal("100")

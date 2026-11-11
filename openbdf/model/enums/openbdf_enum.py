@@ -52,14 +52,7 @@ class OpenBDFEnum(str, Enum):
         """
         Check if a string matches any value or display_name in the enum.
         """
-        return any(
-            label == item.value
-            or label == item.name
-            or str(label).lower() == item.display_name.lower()
-            or str(label).lower() == f"{item.value} {item.display_name}".lower()
-            or str(label).lower() == f"{item.value}: {item.description}".lower()
-            for item in cls
-        )
+        return cls.find_value(label) is not None
 
     @classmethod
     def find_value(cls, label: str, translator: DocumentTranslator | None = None) -> OpenBDFEnum | None:
@@ -71,15 +64,20 @@ class OpenBDFEnum(str, Enum):
                 0
             ]  # Use the first translated name as enums are a one-to-one mapping
 
-        for item in cls:
-            if (
-                label == item.value
-                or label == item.name
-                or str(label).lower() == item.display_name.lower()
-                or str(label).lower() == f"{item.value} {item.display_name}".lower()
-                or str(label).lower() == f"{item.value}: {item.description}".lower()
-            ):
-                return item
+        # A number cell arrives as a float: 2.1 reads as "2.1", and a whole 2.0 also as "2".
+        texts = [str(label).lower()]
+        if isinstance(label, float) and label.is_integer():
+            texts.append(str(int(label)))
+
+        for text in texts:
+            for item in cls:
+                if label == item.name or text in (
+                    str(item.value).lower(),
+                    item.display_name.lower(),
+                    f"{item.value} {item.display_name}".lower(),
+                    f"{item.value}: {item.description}".lower(),
+                ):
+                    return item
 
         return None
 
