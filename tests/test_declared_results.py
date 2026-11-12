@@ -289,13 +289,13 @@ def test_a5_beside_its_sub_modules_rejects_the_material():
     ],
     ids=["d", "d1 and d2", "d twice"],
 )
-def test_a_total_that_reconciles_only_with_module_d_rejects_the_material(module_d):
+def test_a_total_that_reconciles_only_with_module_d_warns(module_d):
     wide = wide_record("MAT-1", gwp_total_a1_a3=Decimal("10"), gwp_total_total=Decimal("12"), **module_d)
 
     findings = check_stage_totals(project(None, [material(wide=wide)]))
 
     assert [str(finding) for finding in findings] == [
-        "E018: gwp_total_total adds module D to the whole-life total, the modules A to C sum to 10"
+        "W012: gwp_total_total adds module D to the whole-life total, the modules A to C sum to 10"
     ]
 
 
@@ -307,12 +307,12 @@ def test_a_total_close_to_the_modules_sum_warns():
     assert [str(finding) for finding in findings] == ["W011: gwp_total_total is 103, the modules sum to 100"]
 
 
-def test_a_total_far_from_the_modules_sum_rejects_the_material():
+def test_a_total_far_from_the_modules_sum_warns():
     wide = wide_record("MAT-1", gwp_total_a1_a3=Decimal("100"), gwp_total_total=Decimal("110"))
 
     findings = check_stage_totals(project(None, [material(wide=wide)]))
 
-    assert [str(finding) for finding in findings] == ["E019: gwp_total_total is 110, the modules sum to 100"]
+    assert [str(finding) for finding in findings] == ["W011: gwp_total_total is 110, the modules sum to 100"]
 
 
 def test_a_total_of_another_indicator_is_checked():
@@ -320,7 +320,7 @@ def test_a_total_of_another_indicator_is_checked():
 
     findings = check_stage_totals(project(None, [material(wide=wide)]))
 
-    assert [str(finding) for finding in findings] == ["E019: gwp_f_total is 12, the modules sum to 10"]
+    assert [str(finding) for finding in findings] == ["W011: gwp_f_total is 12, the modules sum to 10"]
 
 
 def test_a_matching_total_with_a_full_stage_set_passes():

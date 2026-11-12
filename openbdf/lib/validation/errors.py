@@ -162,20 +162,6 @@ class AggregateAndSubModulesBothFilled(OpenBDFValidationError):
     message_template = "Module <m> and its sub-modules are both populated for material <id>"
 
 
-class ModuleDInTotal(OpenBDFValidationError):
-    """E018: an indicator total matches the sum that includes module D, not the sum of the modules A to C."""
-
-    code = "E018"
-    message_template = "<code> adds module D to the whole-life total, the modules A to C sum to <y>"
-
-
-class TotalSumMismatch(OpenBDFValidationError):
-    """E019: <indicator>_total differs from the sum over the modules A to C by 5 per cent or more."""
-
-    code = "E019"
-    message_template = "<code> is <x>, the modules sum to <y>"
-
-
 class ReferenceStudyPeriodMissing(OpenBDFValidationError):
     """E020: the boundary includes a B or C module and no reference study period is given."""
 
@@ -263,11 +249,20 @@ class SharedComponentsNotAllocated(OpenBDFValidationError):
     severity = Severity.WARNING
 
 
-class MinorTotalSumMismatch(OpenBDFValidationError):
-    """W011: <indicator>_total differs from the sum over the modules A to C by less than 5 per cent."""
+# E018 and E019 are retired: a total is reported, never read, so its errors are W011 and W012.
+class TotalSumMismatch(OpenBDFValidationError):
+    """W011: <indicator>_total differs from the sum over the modules A to C."""
 
     code = "W011"
     message_template = "<code> is <x>, the modules sum to <y>"
+    severity = Severity.WARNING
+
+
+class ModuleDInTotal(OpenBDFValidationError):
+    """W012: an indicator total matches the sum that includes module D, not the sum of the modules A to C."""
+
+    code = "W012"
+    message_template = "<code> adds module D to the whole-life total, the modules A to C sum to <y>"
     severity = Severity.WARNING
 
 
