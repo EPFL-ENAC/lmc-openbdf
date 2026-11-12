@@ -6,6 +6,7 @@ from types import SimpleNamespace
 from typing import Any
 
 import pandas as pd
+import pytest
 from typer.testing import CliRunner
 
 import openbdf.main as main_module
@@ -96,6 +97,24 @@ def test_a_declared_indicator_missing_one_aligned_column_warns_on_the_wide_sheet
     assert [finding.source for finding in findings] == [WIDE_SHEET]
     assert str(findings[0]) == ("W004: Indicator gwp_total is declared but carries no result in d for material MAT-1")
     assert findings[0].severity is Severity.WARNING
+
+
+@pytest.mark.parametrize("blank", [("a1", "a2", "a3"), ("a1_a3",)], ids=["sub-modules blank", "aggregate blank"])
+def test_an_aggregate_stage_and_its_sub_modules_stand_for_each_other(blank):
+    # E017 forbids filling both, so a workbook that fills one of them carries every result.
+    wide = wide_record(
+        "MAT-1", **results("gwp_total", EN_15804_A2, **{f"gwp_total_{suffix}": None for suffix in blank})
+    )
+    blank_stages = {_STAGE_BY_SUFFIX[suffix] for suffix in blank if suffix in _STAGE_BY_SUFFIX}
+    tall = [
+        record
+        for record in tall_results("gwp_total", EN_15804_A2)
+        if record.lca_stage_module_submodule not in blank_stages
+    ]
+
+    findings = check_declared_results(project(EN_15804_A2, [material(wide=wide, tall=tall)], gwp_total=True))
+
+    assert findings == []
 
 
 def test_a_declared_indicator_missing_one_aligned_row_warns_on_the_tall_sheet():
