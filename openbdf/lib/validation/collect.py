@@ -400,7 +400,8 @@ def _material_ids(frame: pd.DataFrame) -> list[str | None]:
 
 
 def _is_blank(value: Any) -> bool:
-    return bool(pd.isna(value)) or (isinstance(value, str) and not value.strip())
+    """A cell is blank when it is empty, holds only spaces, or holds the '…' placeholder of an example row."""
+    return bool(pd.isna(value)) or (isinstance(value, str) and value.strip() in {"", "…", "..."})
 
 
 def _text(value: str | None) -> str:
