@@ -139,6 +139,19 @@ def test_openbdf_tables_from_source_leaves_the_project_material_database_empty_w
     assert tables.project_material_database is None
 
 
+def test_openbdf_tables_from_source_finds_a_sheet_whatever_the_case_of_its_name():
+    source = MemorySheetSource({
+        "project input": pd.DataFrame([["project_name", "Example project"]]),
+        "MATERIALS INPUT": pd.DataFrame([["material_id"], ["MAT-1"]]),
+    })
+
+    tables = OpenBDFTables.from_source(source, table_translator())
+
+    assert tables is not None
+    assert tables.bill_of_materials.to_dict(orient="records") == [{"material_id": "MAT-1"}]
+    assert source.read_sheets[:2] == ["project input", "MATERIALS INPUT"]
+
+
 @pytest.mark.parametrize("reverse_order", [False, True])
 def test_excel_sheet_source_reads_multiple_files_lazily_and_closes_them(
     tmp_path: Path,

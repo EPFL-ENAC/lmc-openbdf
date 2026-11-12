@@ -51,9 +51,17 @@ class OpenBDFTables:
         category: str,
     ) -> pd.DataFrame | None:
         translation = document_translator.get_sheet_translation(COMMON_CATEGORY_PROPERTIES[category]["name"])
-        if translation is None or translation.original_name not in source.sheet_names:
+        if translation is None:
+            return None
+        sheet_name = _sheet_name(source, translation.original_name)
+        if sheet_name is None:
             return None
 
         return translation.translate_df(
-            source.read_sheet(translation.original_name), COMMON_CATEGORY_PROPERTIES[category]["orientation"]
+            source.read_sheet(sheet_name), COMMON_CATEGORY_PROPERTIES[category]["orientation"]
         )
+
+
+def _sheet_name(source: SheetSource, name: str) -> str | None:
+    """Find a sheet by name without regard to case, so 'Project material database' is found."""
+    return next((sheet for sheet in source.sheet_names if sheet.casefold() == name.casefold()), None)
