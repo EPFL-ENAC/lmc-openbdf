@@ -95,9 +95,15 @@ def _check_total(
     deviation = _relative_deviation(total, ac_sum)
     if deviation <= _RELATIVE_TOLERANCE:
         return []
-    with_d = ac_sum + (values.get("d") or 0)
-    if _relative_deviation(total, with_d) <= _RELATIVE_TOLERANCE:
-        return [ModuleDInTotal("Module D must not be added to the whole-life total", source=WIDE_SHEET)]
+    d, d1, d2 = (values.get(suffix) or 0 for suffix in ("d", "d1", "d2"))
+    # Module D is declared as d, or as d1 and d2, and some workbooks add both.
+    if any(_relative_deviation(total, ac_sum + with_d) <= _RELATIVE_TOLERANCE for with_d in (d, d1 + d2, d + d1 + d2)):
+        return [
+            ModuleDInTotal(
+                f"{total_code} adds module D to the whole-life total, the modules A to C sum to {ac_sum}",
+                source=WIDE_SHEET,
+            )
+        ]
     message = f"{total_code} is {total}, the modules sum to {ac_sum}"
     mismatch = MinorTotalSumMismatch if deviation < _MINOR_DEVIATION else TotalSumMismatch
     return [mismatch(message, source=WIDE_SHEET)]
