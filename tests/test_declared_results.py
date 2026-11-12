@@ -6,6 +6,7 @@ from types import SimpleNamespace
 from typing import Any
 
 import pandas as pd
+import pytest
 from typer.testing import CliRunner
 
 import openbdf.main as main_module
@@ -279,17 +280,23 @@ def test_a5_beside_its_sub_modules_rejects_the_material():
     ]
 
 
-def test_a_total_that_reconciles_only_with_module_d_rejects_the_material():
-    wide = wide_record(
-        "MAT-1",
-        gwp_total_a1_a3=Decimal("10"),
-        gwp_total_d=Decimal("2"),
-        gwp_total_total=Decimal("12"),
-    )
+@pytest.mark.parametrize(
+    "module_d",
+    [
+        {"gwp_total_d": Decimal("2")},
+        {"gwp_total_d1": Decimal("1.5"), "gwp_total_d2": Decimal("0.5")},
+        {"gwp_total_d": Decimal("1"), "gwp_total_d1": Decimal("0.5"), "gwp_total_d2": Decimal("0.5")},
+    ],
+    ids=["d", "d1 and d2", "d twice"],
+)
+def test_a_total_that_reconciles_only_with_module_d_rejects_the_material(module_d):
+    wide = wide_record("MAT-1", gwp_total_a1_a3=Decimal("10"), gwp_total_total=Decimal("12"), **module_d)
 
     findings = check_stage_totals(project(None, [material(wide=wide)]))
 
-    assert [str(finding) for finding in findings] == ["E018: Module D must not be added to the whole-life total"]
+    assert [str(finding) for finding in findings] == [
+        "E018: gwp_total_total adds module D to the whole-life total, the modules A to C sum to 10"
+    ]
 
 
 def test_a_total_close_to_the_modules_sum_warns():

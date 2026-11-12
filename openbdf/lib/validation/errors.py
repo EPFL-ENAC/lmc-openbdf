@@ -166,7 +166,7 @@ class ModuleDInTotal(OpenBDFValidationError):
     """E018: an indicator total matches the sum that includes module D, not the sum of the modules A to C."""
 
     code = "E018"
-    message_template = "Module D must not be added to the whole-life total"
+    message_template = "<code> adds module D to the whole-life total, the modules A to C sum to <y>"
 
 
 class TotalSumMismatch(OpenBDFValidationError):
