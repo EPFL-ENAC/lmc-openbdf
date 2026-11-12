@@ -40,7 +40,7 @@ def wide_record(material_id: str, **values: Any) -> LCAResultsWideFullBase:
     return LCAResultsWideFullBase(material_id=material_id, **values)
 
 
-def tall_record(material_id: str, stage: str, **values: Any) -> LCAResultsTallBase:
+def tall_record(material_id: str, stage: Any, **values: Any) -> LCAResultsTallBase:
     return LCAResultsTallBase(material_id=material_id, lca_stage_module_submodule=stage, **values)
 
 
