@@ -9,7 +9,6 @@ from openbdf.lib.types.fields import field_metadata
 from openbdf.lib.validation.errors import (
     AggregateAndSubModulesBothFilled,
     DeclaredIndicatorWithoutResults,
-    MinorTotalSumMismatch,
     ModuleDInTotal,
     OpenBDFValidationError,
     ResultsWithoutIndicatorDeclaration,
@@ -36,16 +35,16 @@ _SUFFIX_BY_STAGE = {stage.value: suffix for stage, suffix in GWP_TOTAL_STAGES}
 _TALL_SUFFIXES = frozenset(_SUFFIX_BY_STAGE.values())
 
 # The specification names a tolerance without giving a value, so a relative deviation of
-# 1 per cent is the working choice. Below 5 per cent the mismatch is W011, at or above it E019.
+# 1 per cent is the working choice.
 _RELATIVE_TOLERANCE = Decimal("0.01")
-_MINOR_DEVIATION = Decimal("0.05")
 
 
 def check_stage_totals(project: Any) -> list[OpenBDFValidationError]:
     """
-    E017 to E019 and W011, on the wide results of each material. An aggregate stage and
+    E017, W011 and W013, on the wide results of each material. An aggregate stage and
     its sub-modules must not carry values beside each other, and the total column must
-    match the sum over the modules A to C, with module D left out.
+    match the sum over the modules A to C, with module D left out. A total is reported,
+    never read, so a wrong one is a warning.
     """
     findings: list[OpenBDFValidationError] = []
     for material in project.bill_of_materials:
@@ -104,9 +103,7 @@ def _check_total(
                 source=WIDE_SHEET,
             )
         ]
-    message = f"{total_code} is {total}, the modules sum to {ac_sum}"
-    mismatch = MinorTotalSumMismatch if deviation < _MINOR_DEVIATION else TotalSumMismatch
-    return [mismatch(message, source=WIDE_SHEET)]
+    return [TotalSumMismatch(f"{total_code} is {total}, the modules sum to {ac_sum}", source=WIDE_SHEET)]
 
 
 def _sum_ac_stages(values: dict[str, Any]) -> Decimal | None:

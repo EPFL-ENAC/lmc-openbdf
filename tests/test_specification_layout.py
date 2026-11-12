@@ -101,6 +101,7 @@ def test_a_specification_layout_workbook_is_read_with_its_updated_codes(tmp_path
     assert concrete.bec_openbdf.value == "2.1"
     dropped_findings = sorted((finding.code, finding.row) for finding in findings if finding.code in {"W005", "W012"})
     assert dropped_findings == [("W005", 15), ("W005", 16), ("W012", 15)]
+    assert [finding.code for finding in findings if finding.code == "W013"] == ["W013"]
 
 
 def test_a_whole_number_cell_finds_its_element_code():
