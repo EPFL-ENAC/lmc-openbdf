@@ -45,7 +45,8 @@ def fill_materials(
             if pair in line_by_pair:
                 continue
             highest_id += 1
-            line = ProjectMaterialDatabaseRecord(
+            # The project relationship below sets project_record_id, which mypy cannot see.
+            line = ProjectMaterialDatabaseRecord(  # type: ignore[call-arg]
                 material_ref_id=f"M{highest_id:04d}",
                 custom_material_name=_first_text(pair_rows, "custom_material_name"),
                 lca_dataset_material_name=_first_text(pair_rows, "lca_dataset_material_name"),
