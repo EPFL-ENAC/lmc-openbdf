@@ -207,7 +207,7 @@ def _check_indicator(
 
     findings: list[OpenBDFValidationError] = []
     if declared:
-        missing = [suffix for suffix in aligned if wide_values.get(suffix) is None]
+        missing = _unfilled(aligned, wide_values)
         if missing:
             findings.append(
                 DeclaredIndicatorWithoutResults(
@@ -216,7 +216,7 @@ def _check_indicator(
                     source=WIDE_SHEET,
                 )
             )
-        missing_tall = [suffix for suffix in aligned if suffix in _TALL_SUFFIXES and tall_values.get(suffix) is None]
+        missing_tall = [suffix for suffix in _unfilled(aligned, tall_values) if suffix in _TALL_SUFFIXES]
         if missing_tall:
             findings.append(
                 DeclaredIndicatorWithoutResults(
@@ -245,3 +245,18 @@ def _check_indicator(
                 )
             )
     return findings
+
+
+def _unfilled(suffixes: list[str], values: dict[str, Any]) -> list[str]:
+    """
+    Return the suffixes that carry no value. E017 forbids an aggregate stage beside its
+    sub-modules, so a filled aggregate stands for its sub-modules, and the other way round.
+    """
+    filled = {suffix for suffix, value in values.items() if value is not None}
+    covered: set[str] = set()
+    for aggregate, children in AGGREGATE_CHILDREN.items():
+        if aggregate in filled:
+            covered.update(children)
+        if filled.intersection(children):
+            covered.add(aggregate)
+    return [suffix for suffix in suffixes if suffix not in filled and suffix not in covered]
