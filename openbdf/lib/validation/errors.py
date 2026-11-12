@@ -271,6 +271,14 @@ class MinorTotalSumMismatch(OpenBDFValidationError):
     severity = Severity.WARNING
 
 
+class DroppedLineWithData(OpenBDFValidationError):
+    """W012: a dropped bill of materials line carried a mass or LCA results, which no total includes."""
+
+    code = "W012"
+    message_template = "Row <i>: the dropped line carried <data>, left out of every total"
+    severity = Severity.WARNING
+
+
 # Order of the sheets in the workbook, used to sort the findings the way the file is read.
 SHEET_ORDER = (
     "General Information",
