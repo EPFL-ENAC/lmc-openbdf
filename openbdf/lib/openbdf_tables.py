@@ -4,7 +4,11 @@ from dataclasses import dataclass
 
 import pandas as pd
 
-from openbdf.lib.converters.translators import COMMON_CATEGORY_PROPERTIES, DocumentTranslator
+from openbdf.lib.converters.translators import (
+    COMMON_CATEGORY_PROPERTIES,
+    SPECIFICATION_LAYOUT_MARKER,
+    DocumentTranslator,
+)
 from openbdf.lib.sources.source import SheetSource
 
 
@@ -65,3 +69,17 @@ class OpenBDFTables:
 def _sheet_name(source: SheetSource, name: str) -> str | None:
     """Find a sheet by name without regard to case, so 'Project material database' is found."""
     return next((sheet for sheet in source.sheet_names if sheet.casefold() == name.casefold()), None)
+
+
+def workbook_translator(source: SheetSource) -> DocumentTranslator:
+    """
+    Pick the layout of an OpenBDF workbook from the workbook itself: the specification
+    layout when column A of the bill of materials names the 'UPDATED Field Code' row,
+    the template layout otherwise.
+    """
+    bom = _sheet_name(source, COMMON_CATEGORY_PROPERTIES["bom"]["name"])
+    if bom is not None:
+        first_column = source.read_sheet(bom).iloc[:14, :1]
+        if (first_column == SPECIFICATION_LAYOUT_MARKER).any().any():
+            return DocumentTranslator.specification_translator()
+    return DocumentTranslator.default_openbdf_translator()
