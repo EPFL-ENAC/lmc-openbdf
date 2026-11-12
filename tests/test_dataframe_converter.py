@@ -868,3 +868,8 @@ def test_project_package_from_tables_in_draft_mode_counts_a_missing_floor_repeti
 def test_parse_value_tries_an_enum_before_the_blank_aliases():
     assert parse_value(BuildingEnergyClassificationSystem | None, "None") is BuildingEnergyClassificationSystem.NONE
     assert parse_value(str | None, "None") is None
+
+
+def test_parse_value_reads_an_excel_serial_number_as_a_date():
+    # 43466 is the Excel serial number of 1 January 2019.
+    assert parse_value(date, 43466) == date(2019, 1, 1)

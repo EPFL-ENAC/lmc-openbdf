@@ -1,4 +1,4 @@
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from decimal import Decimal
 from enum import Enum
 from typing import Any, cast
@@ -8,6 +8,9 @@ import pandas as pd
 from openbdf.lib.converters.translators import DocumentTranslator
 from openbdf.lib.types.annotations import unwrap_optional
 from openbdf.model.enums.openbdf_enum import OpenBDFEnum
+
+# Day 0 of the Excel serial dates, with the 1900 leap-year bug folded in.
+EXCEL_EPOCH = date(1899, 12, 30)
 
 VALUE_ALIASES = {
     "yes": True,
@@ -101,7 +104,11 @@ def parse_value(annotation: Any, raw_value: Any, translator: DocumentTranslator 
             return date.fromisoformat(str(raw_value))
         except ValueError:
             pass
-        return date(year=int(raw_value), month=1, day=1)
+        number = int(raw_value)
+        if number > 9999:
+            # A date cell that pandas did not convert holds the Excel serial day number.
+            return EXCEL_EPOCH + timedelta(days=number)
+        return date(year=number, month=1, day=1)
 
     if annotation is datetime:
         if isinstance(raw_value, datetime):
