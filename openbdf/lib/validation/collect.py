@@ -25,7 +25,6 @@ from openbdf.lib.validation.errors import (
     RowCountMismatch,
     SharedComponentsNotAllocated,
 )
-from openbdf.model.lca_results import TOTAL_STAGE_SUFFIXES
 
 BOM_SHEET = COMMON_CATEGORY_PROPERTIES["bom"]["name"]
 PMD_SHEET = COMMON_CATEGORY_PROPERTIES["material_database"]["name"]
@@ -322,7 +321,8 @@ def _boundary_reaches_b_or_c(project: Any) -> bool:
         return True
     for code, columns in wide_blocks().items():
         for suffix, _ in columns:
-            if not suffix or suffix in TOTAL_STAGE_SUFFIXES or not suffix.startswith(("b", "c")):
+            # Every B or C column counts, B8 included: it is a module of the use stage.
+            if not suffix or not suffix.startswith(("b", "c")):
                 continue
             for material in project.bill_of_materials:
                 wide = material.lca_results_full_record

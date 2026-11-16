@@ -117,7 +117,8 @@ SUB_MODULE_ALIGNMENTS: dict[str, ReferenceAlignment] = {
     "b8_3": ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
 }
 
-# Stage columns that report an indicator total instead of a single stage.
+# Stage columns whose reference alignment is the indicator's `wide_total_alignment`.
+# The name is historical: b8 is a module of the use stage, d1 and d2 are module D.
 TOTAL_STAGE_SUFFIXES = ("b8", "d1", "d2")
 
 # Stage columns of the gwp_total indicator, which additionally carries the sub-module
