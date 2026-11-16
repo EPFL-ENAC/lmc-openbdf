@@ -403,3 +403,9 @@ def test_b8_counts_once_when_its_sub_modules_are_also_filled():
     )
 
     assert check_stage_totals(project(None, [material(wide=wide)])) == []
+
+
+def test_a_total_of_another_indicator_includes_module_b8():
+    wide = wide_record("MAT-1", gwp_f_a1_a3=Decimal("100"), gwp_f_b8=Decimal("3"), gwp_f_total=Decimal("103"))
+
+    assert check_stage_totals(project(None, [material(wide=wide)])) == []
