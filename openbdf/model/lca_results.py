@@ -174,10 +174,12 @@ SUB_MODULE_CHILDREN = {
     "b1": ("b1_1", "b1_2"),
     "b6": ("b6_1", "b6_2", "b6_3"),
     "b7": ("b7_1", "b7_2", "b7_3"),
+    "b8": ("b8_1", "b8_2", "b8_3"),
 }
 
-# Stage suffixes of the modules A to C. b8, d, d1 and d2 hold totals or module D.
-AC_STAGE_SUFFIXES = ("a1_a3", "a4", "a5", "b1", "b2", "b3", "b4", "b5", "b6", "b7", "c1", "c2", "c3", "c4")
+# Stage suffixes of the modules A to C, in life-cycle order. B8 is a module of the use stage.
+# d, d1 and d2 hold module D, which stays out of the whole-life total.
+AC_STAGE_SUFFIXES = ("a1_a3", "a4", "a5", "b1", "b2", "b3", "b4", "b5", "b6", "b7", "b8", "c1", "c2", "c3", "c4")
 
 # Every LCA impact indicator present in the tall and wide models.
 # `gwp_total` is special: it carries the sub-module stage columns (GWP_TOTAL_STAGES) and
