@@ -105,6 +105,8 @@ erDiagram
     VARCHAR project_units
     VARCHAR project_name
     VARCHAR project_description
+    VARCHAR project_reference
+    VARCHAR project_doi
     VARCHAR project_construction_type
     VARCHAR project_country
     VARCHAR project_city
@@ -116,9 +118,7 @@ erDiagram
     DATE project_sustainability_certification_date
     VARCHAR project_sustainability_certification_id
     DATE project_permit_date
-    VARCHAR project_permit_id
-    INTEGER project_no_of_buildings
-    more columns "176 more"
+    more columns "178 more"
   }
   building_bill_materials_slim_record ||--o{ lca_results_full_record : "building_bill_materials_slim_record_id"
   building_bill_materials_slim_record ||--o{ lca_results_tall_full_record : "building_bill_materials_slim_record_id"

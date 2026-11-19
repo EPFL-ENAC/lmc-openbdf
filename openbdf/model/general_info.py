@@ -159,6 +159,40 @@ class ProjectRecordBase(SQLModel):
         ),
     )
 
+    project_reference: Optional[str] = Field(
+        default=None,
+        max_length=1000,
+        description="Full reference or citation for the source publication or dataset associated with the project.",
+        schema_extra=openbdf_field_metadata(
+            group="Project",
+            sub_group="Administrative data",
+            attribute_name="Project reference",
+            field_code="project_reference",
+            description="Full reference or citation for the source publication or dataset associated with the project.",
+            constraint="max 1000 characters",
+            requirements=Requirement.OPTIONAL,
+            example="Smith, J. (2025). Life cycle assessment of the Harbour Hotel. Building Research Institute.",
+            reference=Reference.GBDI,
+        ),
+    )
+
+    project_doi: Optional[str] = Field(
+        default=None,
+        max_length=200,
+        description="Digital Object Identifier (DOI) of the publication or dataset associated with the project.",
+        schema_extra=openbdf_field_metadata(
+            group="Project",
+            sub_group="Administrative data",
+            attribute_name="Project DOI",
+            field_code="project_doi",
+            description="Digital Object Identifier (DOI) of the publication or dataset associated with the project.",
+            constraint="max 200 characters",
+            requirements=Requirement.OPTIONAL,
+            example="10.1234/example.2025.001",
+            reference=Reference.GBDI,
+        ),
+    )
+
     project_construction_type: Optional[ConstructionType] = Field(  # type: ignore[call-overload]
         default=None,
         sa_type=sa_enum(ConstructionType),
