@@ -5,6 +5,8 @@ Field code in your format,OpenBDF field code,OpenBDF attribute name,Datatype,Req
 ,project_units,Project Unit System,ProjectUnits,Required
 ,project_name,Project name,string,Suggested
 ,project_description,Project description,string,Optional
+,project_reference,Project reference,string,Optional
+,project_doi,Project DOI,string,Optional
 ,project_construction_type,Project construction type,ConstructionType,Strongly recommended
 ,project_country,Country,Country,Required
 ,project_city,City,string,Optional
