@@ -333,3 +333,79 @@ def test_an_empty_aggregate_column_sums_from_its_sub_modules():
     wide = wide_record("MAT-1", gwp_total_a1=Decimal("4"), gwp_total_a2=Decimal("3"), gwp_total_total=Decimal("7"))
 
     assert check_stage_totals(project(None, [material(wide=wide)])) == []
+
+
+def test_a_total_that_includes_module_b8_passes():
+    wide = wide_record(
+        "MAT-1", gwp_total_a1_a3=Decimal("100"), gwp_total_b8=Decimal("3"), gwp_total_total=Decimal("103")
+    )
+
+    assert check_stage_totals(project(None, [material(wide=wide)])) == []
+
+
+def test_a_total_that_leaves_a_small_b8_out_warns():
+    # The modules sum to 103, the total is 100: 3 / 103 = 2.9 %, between 1 % and 5 %.
+    wide = wide_record(
+        "MAT-1", gwp_total_a1_a3=Decimal("100"), gwp_total_b8=Decimal("3"), gwp_total_total=Decimal("100")
+    )
+
+    findings = check_stage_totals(project(None, [material(wide=wide)]))
+
+    assert [str(finding) for finding in findings] == ["W011: gwp_total_total is 100, the modules sum to 103"]
+
+
+def test_a_total_that_leaves_a_large_b8_out_rejects_the_material():
+    # The modules sum to 110, the total is 100: 10 / 110 = 9.1 %, at or above 5 %.
+    wide = wide_record(
+        "MAT-1", gwp_total_a1_a3=Decimal("100"), gwp_total_b8=Decimal("10"), gwp_total_total=Decimal("100")
+    )
+
+    findings = check_stage_totals(project(None, [material(wide=wide)]))
+
+    assert [str(finding) for finding in findings] == ["E019: gwp_total_total is 100, the modules sum to 110"]
+
+
+def test_module_d_added_to_a_total_with_b8_rejects_the_material():
+    # The modules sum to 103, module D is 20, the total is 123 = 103 + 20.
+    wide = wide_record(
+        "MAT-1",
+        gwp_total_a1_a3=Decimal("100"),
+        gwp_total_b8=Decimal("3"),
+        gwp_total_d=Decimal("20"),
+        gwp_total_total=Decimal("123"),
+    )
+
+    findings = check_stage_totals(project(None, [material(wide=wide)]))
+
+    assert [str(finding) for finding in findings] == ["E018: Module D must not be added to the whole-life total"]
+
+
+def test_b8_sub_modules_stand_in_for_an_empty_b8():
+    wide = wide_record(
+        "MAT-1",
+        gwp_total_a1_a3=Decimal("100"),
+        gwp_total_b8_1=Decimal("1"),
+        gwp_total_b8_2=Decimal("2"),
+        gwp_total_total=Decimal("103"),
+    )
+
+    assert check_stage_totals(project(None, [material(wide=wide)])) == []
+
+
+def test_b8_counts_once_when_its_sub_modules_are_also_filled():
+    # B8 = 3 counts, B8.1 = 1 does not: the modules sum to 103.
+    wide = wide_record(
+        "MAT-1",
+        gwp_total_a1_a3=Decimal("100"),
+        gwp_total_b8=Decimal("3"),
+        gwp_total_b8_1=Decimal("1"),
+        gwp_total_total=Decimal("103"),
+    )
+
+    assert check_stage_totals(project(None, [material(wide=wide)])) == []
+
+
+def test_a_total_of_another_indicator_includes_module_b8():
+    wide = wide_record("MAT-1", gwp_f_a1_a3=Decimal("100"), gwp_f_b8=Decimal("3"), gwp_f_total=Decimal("103"))
+
+    assert check_stage_totals(project(None, [material(wide=wide)])) == []

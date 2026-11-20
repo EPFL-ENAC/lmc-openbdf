@@ -217,6 +217,16 @@ def test_a_result_in_a_b_module_requires_a_study_period():
     assert [str(finding) for finding in findings] == ["E020: A reference study period is required beyond stage A"]
 
 
+def test_a_result_in_module_b8_requires_a_study_period():
+    wide = LCAResultsWideFullBase(material_id="MAT-1", gwp_total_b8=Decimal("3"))
+    material = SimpleNamespace(material_id="MAT-1", lca_results_full_record=wide)
+    project = general_info(bill_of_materials=[material])
+
+    findings = check_general_information(project)
+
+    assert [str(finding) for finding in findings] == ["E020: A reference study period is required beyond stage A"]
+
+
 def test_a_boundary_within_stage_a_needs_no_study_period():
     project = general_info(lca_cycle_system_boundary=LifeCycleSystemBoundary.CRADLE_TO_GATE)
 

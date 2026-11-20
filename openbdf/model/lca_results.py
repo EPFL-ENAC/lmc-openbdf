@@ -117,7 +117,8 @@ SUB_MODULE_ALIGNMENTS: dict[str, ReferenceAlignment] = {
     "b8_3": ReferenceAlignment.TRACI_EU2026_52_ANNEX_III,
 }
 
-# Stage columns that report an indicator total instead of a single stage.
+# Stage columns whose reference alignment is the indicator's `wide_total_alignment`.
+# The name is historical: b8 is a module of the use stage, d1 and d2 are module D.
 TOTAL_STAGE_SUFFIXES = ("b8", "d1", "d2")
 
 # Stage columns of the gwp_total indicator, which additionally carries the sub-module
@@ -174,10 +175,12 @@ SUB_MODULE_CHILDREN = {
     "b1": ("b1_1", "b1_2"),
     "b6": ("b6_1", "b6_2", "b6_3"),
     "b7": ("b7_1", "b7_2", "b7_3"),
+    "b8": ("b8_1", "b8_2", "b8_3"),
 }
 
-# Stage suffixes of the modules A to C. b8, d, d1 and d2 hold totals or module D.
-AC_STAGE_SUFFIXES = ("a1_a3", "a4", "a5", "b1", "b2", "b3", "b4", "b5", "b6", "b7", "c1", "c2", "c3", "c4")
+# Stage suffixes of the modules A to C, in life-cycle order. B8 is a module of the use stage.
+# d, d1 and d2 hold module D, which stays out of the whole-life total.
+AC_STAGE_SUFFIXES = ("a1_a3", "a4", "a5", "b1", "b2", "b3", "b4", "b5", "b6", "b7", "b8", "c1", "c2", "c3", "c4")
 
 # Every LCA impact indicator present in the tall and wide models.
 # `gwp_total` is special: it carries the sub-module stage columns (GWP_TOTAL_STAGES) and
