@@ -10,8 +10,6 @@ from openbdf.lib.converters.translator_csv import csv_dir_rows, workbook_sheets_
 from openbdf.lib.converters.translators import ABOUT_SHEET_NAME, DocumentTranslator
 from openbdf.main import app
 
-TRANSLATOR_ROOT = Path(__file__).parents[1] / "translators"
-TRANSLATOR_DIRS = {"translator_at": "full", "translator_bec_at": "bec", "translator_bmc_at": "bmc"}
 runner = CliRunner()
 
 
@@ -85,8 +83,15 @@ def numeric_text(mapping: dict[str, list[str]]) -> dict[str, list[str]]:
 
 
 def test_from_csv_dir_matches_from_xlsx(tmp_path: Path):
-    directory = TRANSLATOR_ROOT / "translator_at"
-    rebuilt = tmp_path / "translator_at.xlsx"
+    directory = tmp_path / "csv"
+    directory.mkdir()
+    (directory / "001-Category.csv").write_text(
+        "Source,Target,Unused 1,Unused 2,Unused 3,Default,Preprocess\n"
+        "source_a,target_a,,,,fallback,\n"
+        "source_b,target_b,,,,,\n",
+        encoding="utf-8",
+    )
+    rebuilt = tmp_path / "translator.xlsx"
     rebuilt.write_bytes(workbook_from_csv_dir(directory).getvalue())
     args = {"attribute_name_col": 0, "translated_name_col": 1, "default_value_col": 5, "preprocess_rule_col": 6}
 
@@ -101,21 +106,6 @@ def test_from_csv_dir_matches_from_xlsx(tmp_path: Path):
         assert numeric_text(from_csv._translators[name]._translation_dict) == numeric_text(translator._translation_dict)
         assert from_csv._translators[name]._default_values == translator._default_values
         assert from_csv._translators[name]._preprocess_rules == translator._preprocess_rules
-
-
-@pytest.mark.parametrize("directory", TRANSLATOR_DIRS)
-def test_committed_csv_dirs_cover_the_model(directory: str):
-    rows_by_sheet = csv_dir_rows(TRANSLATOR_ROOT / directory)
-    skeleton = load_workbook(translator_skeleton(TRANSLATOR_DIRS[directory]))
-
-    assert list(rows_by_sheet) == [name for name in skeleton.sheetnames if name != ABOUT_SHEET_NAME]
-    for sheet in skeleton.worksheets:
-        assert len(sheet.title) <= 31
-        if sheet.title == ABOUT_SHEET_NAME:
-            continue
-        model_keys = {str(sheet.cell(row=row, column=2).value) for row in range(2, sheet.max_row + 1)}
-        csv_keys = {row[1] for row in rows_by_sheet[sheet.title][1:] if len(row) > 1}
-        assert model_keys <= csv_keys
 
 
 @pytest.mark.parametrize(

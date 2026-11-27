@@ -12,13 +12,11 @@ lint: ## Run pre-commit on all files
 build: ## Run python -m build
 	uv run python -m build
 
-translators: ## Build the translator in .xslx from the committed .csv directories
+translators: ## Build the blank translator templates
 	@mkdir -p build/translators
+	uv run --extra cli openbdf save-translator-template build/translators/translator_template.xlsx
 	uv run --extra cli openbdf save-bec-template build/translators/translator_bec_template.xlsx
 	uv run --extra cli openbdf save-bmc-template build/translators/translator_bmc_template.xlsx
-	uv run --extra cli openbdf csv-to-translator translators/translator_at build/translators/translator_at.xlsx
-	uv run --extra cli openbdf csv-to-translator translators/translator_bec_at build/translators/translator_bec_at.xlsx
-	uv run --extra cli openbdf csv-to-translator translators/translator_bmc_at build/translators/translator_bmc_at.xlsx
 
 translator-csv: ## Convert an .xslx translator to a .csv directory: make translator-csv IN=<xlsx> OUT=<dir>
 	@if [ -z "$(IN)" ] || [ -z "$(OUT)" ]; then echo "usage: make translator-csv IN=translator.xlsx OUT=translator_dir" >&2; exit 1; fi

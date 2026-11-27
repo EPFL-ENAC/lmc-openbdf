@@ -251,8 +251,8 @@ def save_translator_template(
     """
     Save a template Excel file for the attribute translator.
     Usage:
-        openbdf save-translator-template translators/translator_template.xlsx
-        openbdf save-translator-template translators/translator_template --csv
+        openbdf save-translator-template path/to/translator_template.xlsx
+        openbdf save-translator-template path/to/translator_template --csv
     """
 
     if csv:
@@ -278,8 +278,8 @@ def save_bec_template(
     """
     Save a template Excel file for the building element classification translator.
     Usage:
-        openbdf save-bec-template build/translators/translator_bec_template.xlsx
-        openbdf save-bec-template build/translators/translator_bec_template --csv
+        openbdf save-bec-template path/to/translator_bec_template.xlsx
+        openbdf save-bec-template path/to/translator_bec_template --csv
     """
 
     if csv:
@@ -305,8 +305,8 @@ def save_bmc_template(
     """
     Save a template Excel file for the material classification translator.
     Usage:
-        openbdf save-bmc-template build/translators/translator_bmc_template.xlsx
-        openbdf save-bmc-template build/translators/translator_bmc_template --csv
+        openbdf save-bmc-template path/to/translator_bmc_template.xlsx
+        openbdf save-bmc-template path/to/translator_bmc_template --csv
     """
 
     if csv:
@@ -325,7 +325,7 @@ def csv_to_translator(
     """
     Build a translator Excel file from a directory of sheet CSV files.
     Usage:
-        openbdf csv-to-translator translators/translator_at build/translators/translator_at.xlsx
+        openbdf csv-to-translator path/to/translator_csv path/to/translator.xlsx
     """
 
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -340,7 +340,7 @@ def translator_to_csv(
     """
     Write one CSV file per sheet of an existing translator Excel file.
     Usage:
-        openbdf translator-to-csv translators/translator_at_v2.0.0.xlsx translators/translator_at
+        openbdf translator-to-csv path/to/translator.xlsx path/to/translator_csv
     """
 
     workbook_sheets_to_csv_dir(load_workbook(path), directory, exclude=(ABOUT_SHEET_NAME,))
