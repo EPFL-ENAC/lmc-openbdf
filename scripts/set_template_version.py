@@ -14,8 +14,8 @@ RELEASE_PATTERN = r"(?m)^(\s*TEMPLATE_VERSION: )v\d+\.\d+\.\d+$"
 # Longest asset names first, so no alternative can shadow a longer one.
 README_PATTERN = (
     r"(?m)(releases/latest/download/"
-    r"(?:translator_bec_template|translator_bmc_template|translator_template"
-    r"|translator_bec_at|translator_bmc_at|openbdf_template|translator_at)_)v\d+\.\d+\.\d+(?=\.xlsx)"
+    r"(?:translator_bec_template|translator_bmc_template|translator_template|openbdf_template)_)"
+    r"v\d+\.\d+\.\d+(?=\.xlsx)"
 )
 
 

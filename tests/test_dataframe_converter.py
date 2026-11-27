@@ -266,8 +266,10 @@ def test_bom_ignores_an_unnamed_sheet_column():
     # source cells of the translator, which all used to map to one field code.
     dataframe = bom_df("MAT-1").drop(columns=["material_id"])
     dataframe[float("nan")] = None
-    translator = DocumentTranslator.from_csv_dir(
-        Path(__file__).parents[1] / "translators" / "translator_at", 0, 1, 5, 6, 0
+    translator = DocumentTranslator.from_dataframes(
+        {"Bill of Materials": pd.DataFrame([[None, "material_id"]])},
+        attribute_name_col=0,
+        translated_name_col=1,
     )
     findings: list[OpenBDFValidationError] = []
 
@@ -330,13 +332,13 @@ def classification_translator(mapping: dict[str, str]) -> DocumentTranslator:
 
 
 def test_a_missing_column_takes_its_value_from_the_filled_column_name():
-    translator = classification_translator({"e9\nNaturstein\n (kg)": "4.0", "h2\nStahl\n (kg)": "3.2"})
+    translator = classification_translator({"unused_type": "4.0", "selected_type": "3.2"})
     dataframe = pd.DataFrame([
         {
             "material_id": "m1",
-            "custom_material_name": "Stahlprofil",
-            "e9\nNaturstein\n (kg)": 0.0,
-            "h2\nStahl\n (kg)": 12.5,
+            "custom_material_name": "Example",
+            "unused_type": 0.0,
+            "selected_type": 12.5,
         }
     ])
     findings: list[OpenBDFValidationError] = []
@@ -348,19 +350,19 @@ def test_a_missing_column_takes_its_value_from_the_filled_column_name():
 
 
 def test_a_missing_column_warns_when_no_column_or_several_columns_are_filled():
-    translator = classification_translator({"e9\nNaturstein\n (kg)": "4.0", "h2\nStahl\n (kg)": "3.2"})
+    translator = classification_translator({"first_type": "4.0", "second_type": "3.2"})
     dataframe = pd.DataFrame([
         {
             "material_id": "m1",
-            "custom_material_name": "Leer",
-            "e9\nNaturstein\n (kg)": 0.0,
-            "h2\nStahl\n (kg)": None,
+            "custom_material_name": "None selected",
+            "first_type": 0.0,
+            "second_type": None,
         },
         {
             "material_id": "m2",
-            "custom_material_name": "Beides",
-            "e9\nNaturstein\n (kg)": 1.0,
-            "h2\nStahl\n (kg)": 2.0,
+            "custom_material_name": "Both selected",
+            "first_type": 1.0,
+            "second_type": 2.0,
         },
     ])
     findings: list[OpenBDFValidationError] = []
@@ -372,7 +374,7 @@ def test_a_missing_column_warns_when_no_column_or_several_columns_are_filled():
     assert findings[0].row == 1
     assert "found 0" in findings[0].message
     assert findings[1].row == 2
-    assert "found 2: e9, h2" in findings[1].message
+    assert "found 2: first_type, second_type" in findings[1].message
 
 
 def test_project_package_from_tables_links_wide_results_to_bom_by_material_id():
